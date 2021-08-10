@@ -1,0 +1,213 @@
+$bg_color: #EDEDED;
+$normal_font_size: 15px;
+$grey_transparent_color: rgba(0, 0, 0, 0.5);
+
+html,
+body,
+#root,
+.App {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: #EDEDED;
+  color: white;
+  font-family: "Roboto";
+}
+
+.layout {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  scrollbar-color: #9e9fa0 transparent;
+  scrollbar-width: thin;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #9e9fa0;
+    border-radius: 3px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9e9fa0;
+  }
+}
+
+.main {
+  background: $bg_color;
+  min-height: calc(100vh - 200px);
+  padding: 50px 90px;
+  @media screen and (max-width: 992px) {
+    padding: 40px 60px;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 30px 30px;
+  }
+  @media screen and (max-width: 554px) {
+    padding: 30px 10px;
+  }
+}
+
+.btn {
+  border-radius: 0px !important;
+  font-weight: 500;
+  font-size: $normal_font_size;
+  line-height: 28px;
+}
+
+.default-btn-size {
+  min-width: 136px;
+  outline: none;
+}
+.btn-outline-primary:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+.btn-primary:hover {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.btn-round {
+  border-radius: 42px !important;
+}
+
+.dropdown-divider {
+	border-top: 1px solid #e9ecef2b;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* color */
+.grey-color {
+  color: rgb(128, 128, 128) !important;
+}
+
+.trans-faint-color {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+.danger-color {
+  color: $danger;
+}
+.primary-color {
+  color: $primary !important;
+}
+/* cursor */
+.pointer-cursor {
+  cursor: pointer !important;
+}
+
+/* Position */
+.pos-absolute {
+  position: absolute !important;
+}
+.pos-relative {
+  position: relative !important;
+}
+
+/* Margin */
+.mr-6 {
+  margin-right: 4rem !important;
+}
+.mr-7 {
+  margin-right: 5rem !important;
+}
+
+/* Overflow */
+.overflow-hidden {
+  overflow: hidden !important;
+}
+
+/* Opacity */
+.o-3 {
+  opacity: 0.3!important;
+}
+.o-5 {
+  opacity: 0.5!important;
+}
+
+/*Float */
+.clear-both {
+  clear: both;
+}
+
+/* Override Dialog Style */
+.modal-dialog {
+  .modal-content {
+    backdrop-filter: blur(60px);
+    background: linear-gradient(
+        135.63deg,
+        rgba(254, 176, 254, 0.084) -0.59%,
+        rgba(34, 39, 39, 0.096) 59.4%,
+        rgba(93, 247, 164, 0.14) 108.48%
+      ),
+      rgba(20, 20, 20, 0.85);
+    border-radius: 20px;
+  }
+}
+
+.modal-header {
+	border-bottom: 1px solid #ffffff1c;
+}
+
+.modal-backdrop.show {
+	opacity: 1 !important;
+}
+
+.modal-backdrop {
+	backdrop-filter: saturate(180%) blur(20px);
+	-webkit-backdrop-filter: saturate(180%) blur(20px);
+	background: rgba(0,0,0,0.6);
+	z-index: 1050;
+}
+/* Overrride Some Package Styles */
+.bn-onboard-modal {
+  z-index: 1000 !important;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url(../assets/fonts/Roboto-Regular.ttf) format("truetype");
+}
+
+.dropdown-toggle::after {
+  display: inline-block;
+  content: "‹";
+  margin-left: 0.255em;
+  vertical-align: middle;
+  transform: rotate(270deg) scale(1.3);
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+}
+
+.flex-reserve {
+  @media screen and (max-width: 767px) {
+    flex-wrap: wrap-reverse;
+  }
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.btn:focus, .btn:active {
+  border-color: transparent !important;
+  box-shadow: none;
+}

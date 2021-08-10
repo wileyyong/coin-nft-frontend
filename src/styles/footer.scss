@@ -1,0 +1,33 @@
+.footer-container {
+  padding: 40px 30px;
+  background: #EDEDED;
+  color: black;
+  @media screen and (max-width: 554px) {
+    padding: 40px 20px;
+  }
+  input.form-control {
+    height: 46px;
+    border-color: #191919;
+    border-right: none;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+  select.form-control {
+    height: 46px;
+    max-width: 300px;
+    color: black;
+    background-color: transparent;
+    border-color: #EDEDED;;
+    @media screen and (max-width: 554px) {
+      max-width: 100%;
+    }
+    option {
+      color: black;
+    }
+  }
+  a {
+    color: black !important;
+    display: block;
+    font-size: 14px;
+  }
+}

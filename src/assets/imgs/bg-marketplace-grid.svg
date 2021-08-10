@@ -1,0 +1,38 @@
+<svg width="1272" height="994" viewBox="0 0 1272 994" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_f)">
+<ellipse cx="637.5" cy="360" rx="133.5" ry="130" fill="#01C1FD"/>
+</g>
+<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="332" y="117" width="896" height="722">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M409.5 724.5V839H410.5V724.5H533.5V839H534.5V724.5H655.5V839H656.5V724.5H779.5V839H780.5V724.5H903.5V839H904.5V724.5H1025.5V839H1026.5V724.5H1149.5V839H1150.5V724.5H1228V723.5H1150.5V602.5H1228V601.5H1150.5V478.5H1228V477.5H1150.5V354.5H1228V353.5H1150.5V232.5H1228V231.5H1150.5V117H1149.5V231.5L1026.5 231.5V117H1025.5V231.5H904.5V117H903.5V231.5L780.5 231.5V117H779.5V231.5L656.5 231.5V117H655.5V231.5H534.5V117H533.5V231.5L410.5 231.5V117H409.5V231.5H332V232.5H409.5V353.5H332V354.5H409.5V477.5H332V478.5H409.5V601.5H332V602.5H409.5V723.5H332V724.5H409.5ZM410.5 232.5V353.5H533.5V232.5L410.5 232.5ZM534.5 232.5V353.5L655.5 353.5V232.5H534.5ZM656.5 232.5V353.5H779.5V232.5L656.5 232.5ZM780.5 232.5V353.5H903.5V232.5L780.5 232.5ZM904.5 232.5V353.5L1025.5 353.5V232.5H904.5ZM1026.5 232.5V353.5H1149.5V232.5L1026.5 232.5ZM1026.5 354.5H1149.5V477.5H1026.5V354.5ZM904.5 354.5L1025.5 354.5V477.5H904.5V354.5ZM780.5 354.5H903.5V477.5H780.5V354.5ZM656.5 354.5H779.5V477.5H656.5V354.5ZM534.5 354.5L655.5 354.5V477.5H534.5V354.5ZM410.5 354.5H533.5V477.5H410.5V354.5ZM410.5 478.5V601.5H533.5V478.5H410.5ZM534.5 478.5V601.5H655.5V478.5H534.5ZM656.5 478.5V601.5H779.5V478.5H656.5ZM780.5 478.5V601.5H903.5V478.5H780.5ZM904.5 478.5V601.5H1025.5V478.5H904.5ZM1026.5 478.5V601.5H1149.5V478.5H1026.5ZM1026.5 602.5H1149.5V723.5H1026.5V602.5ZM904.5 602.5H1025.5V723.5H904.5V602.5ZM780.5 602.5H903.5V723.5H780.5V602.5ZM656.5 602.5H779.5V723.5H656.5V602.5ZM534.5 602.5H655.5V723.5H534.5V602.5ZM410.5 602.5H533.5V723.5H410.5V602.5Z" fill="white" fill-opacity="0.4"/>
+</mask>
+<g mask="url(#mask0)">
+<g filter="url(#filter1_f)">
+<circle cx="635" cy="387" r="196" fill="url(#paint0_linear)"/>
+</g>
+<g filter="url(#filter2_f)">
+<circle cx="937" cy="513" r="196" fill="#C4C4C4"/>
+<circle cx="937" cy="513" r="196" fill="#D66156"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_f" x="0" y="-274" width="1275" height="1268" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="252" result="effect1_foregroundBlur"/>
+</filter>
+<filter id="filter1_f" x="349" y="101" width="572" height="572" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="45" result="effect1_foregroundBlur"/>
+</filter>
+<filter id="filter2_f" x="631" y="207" width="612" height="612" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="55" result="effect1_foregroundBlur"/>
+</filter>
+<linearGradient id="paint0_linear" x1="463.552" y1="212.96" x2="842.587" y2="429.946" gradientUnits="userSpaceOnUse">
+<stop stop-color="#01DAFD"/>
+<stop offset="0.526042" stop-color="#0039A7"/>
+</linearGradient>
+</defs>
+</svg>
