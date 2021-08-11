@@ -27,22 +27,22 @@ const Footer = () => {
           <Col lg="4">
             <MidTextTitle>Get the latest updates</MidTextTitle>
             <Form className="mt-4 d-flex align-items-center mb-3">
-              <FormControl type="text" placeholder="Your e-mail" />
-              <Button className="default-btn-size fill-btn">
+              <FormControl type="text" placeholder="Your e-mail"/>
+              <Button className="default-btn-size">
                 <span>Sent</span>
               </Button>
             </Form>
           </Col>
-          <Col lg="4" md="6" className="d-flex justify-content-between">
-            <div className="mr-md-7 mb-3">
-              <NormalTextTitle className="mb-2">EXPLORE</NormalTextTitle>
+          <Col lg="4" md="6" className="d-flex justify-content-between justify-content-lg-around">
+            <div className="mr-md-7 mb-3 mt-2">
+              <NormalTextTitle className="mb-3">EXPLORE</NormalTextTitle>
               <Link to="/">Explore</Link>
               <Link to="/">How it works</Link>
               <Link to="/">Create</Link>
               <Link to="/">Support</Link>
             </div>
-            <div className="mb-3">
-              <NormalTextTitle className="mb-2">ACTIVITY</NormalTextTitle>
+            <div className="mb-3 mt-2">
+              <NormalTextTitle className="mb-3">ACTIVITY</NormalTextTitle>
               <Link to="/">Token</Link>
               <Link to="/">Discussion</Link>
               <Link to="/">Voting </Link>
@@ -51,7 +51,7 @@ const Footer = () => {
           </Col>
           <Col lg="4" md="6">
             <MidTextTitle>Language</MidTextTitle>
-            <Form.Control as="select" className="mt-4">
+            <Form.Control as="select" className="mt-4 mw-100">
               {languages.map((lng, index) => {
                 return <option value={lng.value} key={index}>{lng.label}</option>;
               })}

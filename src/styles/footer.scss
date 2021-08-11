@@ -1,17 +1,19 @@
 .footer-container {
   padding: 40px 30px;
-  background: #EDEDED;
+  background: #FFFFFF;
   color: black;
   @media screen and (max-width: 554px) {
     padding: 40px 20px;
   }
+  
   input.form-control {
-    height: 46px;
-    border-color: #191919;
+    height: 42px;
+    border-color: #EDEDED;
     border-right: none;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
   }
+
   select.form-control {
     height: 46px;
     max-width: 300px;

@@ -13,7 +13,7 @@ body,
 
 body {
   background: #EDEDED;
-  color: white;
+  color: black;
   font-family: "Roboto";
 }
 
@@ -72,14 +72,7 @@ body {
   min-width: 136px;
   outline: none;
 }
-.btn-outline-primary:hover {
-  background-color: transparent;
-  border-color: transparent;
-}
-.btn-primary:hover {
-  background-color: transparent;
-  border-color: transparent;
-}
+
 
 .btn-round {
   border-radius: 42px !important;

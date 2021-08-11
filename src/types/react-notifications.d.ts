@@ -1,6 +1,7 @@
 declare module 'react-notifications' {
     import { ReactNode } from 'react';
     import { EventEmitter } from 'events';
+
     enum NotificationType {
         INFO	= 'info',
         SUCCESS	= 'success',

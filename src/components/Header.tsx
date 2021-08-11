@@ -111,7 +111,7 @@ const Header: React.FC<HeaderProps> = () => {
           <span />
           <span />
         </Navbar.Toggle>
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand as={Link} to="/" className="navbar-brand">
           {/* <img className="logo" src={logoImg} alt="logo" /> */}
           LOGO
         </Navbar.Brand>
@@ -120,14 +120,14 @@ const Header: React.FC<HeaderProps> = () => {
           <FormControl
             type="text"
             placeholder="Search by creator..."
-            className="ml-sm-2"
+            className="ml-sm-2 form-text"
             value={searchKey}
             onChange={(e) => handleChange(e)}
             onKeyPress={(e?: any) => onKeyDown(e)}
           />
           {
             searchKey && (
-              <AiOutlineClose className="clear-icon pointer-cursor" onClick={() => onClearSearchKey()} />
+              <AiOutlineClose className="clear-icon pointer-cursor icon-color" onClick={() => onClearSearchKey()} />
             )
           }
         </FlexAlignCenterDiv>

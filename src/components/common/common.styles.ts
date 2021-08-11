@@ -116,11 +116,11 @@ export const SubDescription = styled.div`
 export const DivideLine = styled.div`
   opacity: 0.1;
   height: 1px;
-  background: #ffffff;
+  background-color: #000;
 `;
 
 export const SocialIcon = styled.div`
-  background: rgb(210, 210, 210, 0.1);
+  background: rgb(210, 210, 210, 1);
   width: 32px;
   height: 32px;
   border-radius: 50%;
