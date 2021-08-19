@@ -1,9 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef } from "react";
-
 import Layout from "components/Layout";
-
-import "./Home.scss";
 
 
 interface HomeProps {}

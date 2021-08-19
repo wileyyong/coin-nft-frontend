@@ -4,11 +4,6 @@ interface NftAvatarProps {
   imagePath?: string;
 }
 
-export const TinyMatriceTitle = styled.div`
-  font-size: 11px !important;
-  font-family: "Matrice" !important;
-`;
-
 export const SmallTextTitle = styled.div`
   font-family: Roboto;
   font-weight: 700;
@@ -88,20 +83,20 @@ export const BigTitleWithBottomLine = styled.h3`
 `;
 
 export const MBigTitle = styled.h3`
-  font-family: "Matrice";
+  font-family: "Roboto";
   font-weight: 700;
   font-size: 42px;
   line-height: 42px;
 `;
 
 export const LargeTextTitle = styled.h1`
-  font-family: "Matrice";
+  font-family: "Roboto";
   font-weight: 500;
   font-size: 62px;
 `;
 
 export const SuperLargeTextTitle = styled.h1`
-  font-family: "Matrice";
+  font-family: "Roboto";
   font-weight: 500;
   font-size: 74px;
 `;

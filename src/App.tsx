@@ -29,9 +29,6 @@ const App: React.FC<AppProps> = () => {
           <Route path="/">
             <Home />
           </Route>
-          <Route path="/explore">
-            <Home />
-          </Route>
         </Switch>
       </Router>
     </div>

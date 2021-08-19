@@ -1,7 +1,7 @@
 import { EthereumNetworkID } from "./model/EthereumNetwork";
 
 const configs = {
-    DEPLOY_URL: "https://nft.puml.ga",
+    DEPLOY_URL: "https://nft.puml.com",
     /* Wallet Info */
     ONBOARD_API_KEY: process.env.REACT_APP_ONBOARD_API_KEY,
     ONBOARD_NETWORK_ID: EthereumNetworkID.RinkebyNetwork,

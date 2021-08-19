@@ -40,12 +40,6 @@ export const userSlice = createSlice({
     setMyTokens(state: Draft<UserReducerState>, action: PayloadAction<any>) {
       state.myTokens = action.payload;
     },
-    setSearchKey(
-      state: Draft<UserReducerState>,
-      action: PayloadAction<string>
-    ) {
-      state.searchKey = action.payload;
-    },
   },
 });
 
@@ -60,7 +54,6 @@ export const {
   setToken,
   setMyInfo,
   setMyCollection,
-  setSearchKey,
   setMyTokens,
 } = actions;
 
@@ -98,11 +91,5 @@ export const connectUserWallet = () => async (dispatch: any) => {
         }
       }
     }
-  } catch (e) {}
-};
-
-export const setSearchKeyValue = (payload: string) => async (dispatch: any) => {
-  try {
-    dispatch(setSearchKey(payload));
   } catch (e) {}
 };

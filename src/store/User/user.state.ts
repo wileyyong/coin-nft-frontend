@@ -7,7 +7,6 @@ export type UserWallet = {
 
 export type UserReducerState = {
   loading: boolean;
-  searchKey: string;
   info: any;
   token: any;
   wallet: UserWallet;
@@ -26,7 +25,6 @@ export const initCollectionItems = [
 
 export const USER_INITIAL_STATE: UserReducerState = {
   loading: false,
-  searchKey: '',
   info: {},
   token: Storage.getAuthToken(),
   wallet: { address: '', balance: 0 } as UserWallet,
