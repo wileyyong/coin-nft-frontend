@@ -6,7 +6,7 @@
 // Color system
 
 $white:    #FFFFFF !default;
-$gray-100: #F5F7FA !default;
+$gray-100: #F9FAFB !default;
 $gray-200: #E1E5EB !default;
 $gray-300: #dee2e6 !default;
 $gray-400: #BDBCC6 !default;
@@ -34,14 +34,14 @@ $grays: map-merge(
   $grays
 );
 
-$blue:    #1E1B52 !default;
-$indigo:  #635FA3 !default;
-$purple:  #C45BED !default;
+$blue:    #406B7C !default;
+$indigo:  #6085AF !default;
+$purple:  #866BFD !default;
 $pink:    #e83e8c !default;
 $red:     #dc3545 !default;
-$orange:  #FA8857 !default;
+$orange:  #FC6A34 !default;
 $yellow:  #F29640 !default;
-$green:   #4FDDBA !default; 
+$green:   #65DEC1 !default; 
 $teal:    #20c997 !default;
 $cyan:    #17a2b8 !default;
 $gray:    #777681 !default;
@@ -69,8 +69,8 @@ $colors: map-merge(
   $colors
 );
 
-$primary:       $blue !default;
-$secondary:     $indigo !default;
+$primary:       $green !default;
+$secondary:     $orange !default;
 $success:       $green !default;
 $info:          $cyan !default;
 $warning:       $yellow !default;
