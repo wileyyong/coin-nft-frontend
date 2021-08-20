@@ -1,0 +1,85 @@
+.nftcard {
+    z-index: 100;
+    color: $white;
+    .nft-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .nft-back-orange {
+        background: $secondary;
+    }
+    .nft-back-blue {
+        background: $blue;
+    }
+    .nft-back-indigo {
+        background: $indigo;
+    }    
+
+    .card-info {
+        padding-right: 80px;
+        padding-left: 80px;
+        .nft-title {
+            font-size: 32px;
+            font-weight: $font-weight-bold;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .nft-price {
+            font-size: 20px;
+            font-weight: $font-weight-bold;
+        }
+        .nft-content {
+            font-size: 16px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .btn-primary {
+            background-color: transparent;
+            color: $white;
+            border-color: $white;
+            border-radius: 10px;
+            width: 100%;
+        }
+    }
+}
+
+.hotcard {
+    .back-image {
+        width: 100%;
+        height: auto;
+    }
+    .hot-image {
+        width: 70px;
+        height: 70px;
+        margin-top: -35px;
+    }
+
+    .hot-back {
+        background: $gray-100;
+    }  
+
+    .card-info {
+        padding-right: 40px;
+        padding-left: 40px;
+        .hot-title {
+            color: $black;
+            font-size: 24px;
+            font-weight: $font-weight-bold;
+            padding-top: 10px;
+        }
+        .hot-type {
+            color: $gray-600; 
+            font-size: 20px;
+            font-weight: $font-weight-bold;
+            padding-bottom: 10px;
+        }
+        .btn-primary {
+            background-color: $primary;
+            color: $white;
+            border-color: $primary;
+            border-radius: 10px;
+            width: 100%;
+        }
+    }
+}

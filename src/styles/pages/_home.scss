@@ -1,0 +1,185 @@
+.home-container {
+    background: $white;
+    @include media-breakpoint-down(xl) {
+        padding: 0px 64px;
+    }
+    @include media-breakpoint-down(lg) {
+        padding: 0px 40px;
+    }
+    @include media-breakpoint-down(md) {
+        padding: 0px 20px;
+    }
+    @include media-breakpoint-down(sm) {
+        padding: 0px 10px;
+    }
+
+    .section-intro {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        @include media-breakpoint-down(xl) {
+            height: 900px;
+        }
+        @include media-breakpoint-down(lg) {
+            height: 700px;
+        }
+        @include media-breakpoint-down(md) {
+            height:500px;
+        }
+        @include media-breakpoint-down(sm) {
+            height: 300px;
+        }
+        .intro-content {
+            width: 50%;
+            @include media-breakpoint-down(md) {
+                width: 100%;
+            }
+            .intro-title {
+                color: $primary;
+                font-size: $h1-font-size * 2;
+                @include media-breakpoint-down(md) {
+                    font-size: $h1-font-size;
+                }
+                font-weight: $font-weight-bold;
+            }
+            .intro-type {
+                color: $black;
+                font-size: $h1-font-size * 2;
+                @include media-breakpoint-down(md) {
+                    font-size: $h1-font-size;
+                }
+                font-weight: $font-weight-bold;
+            }
+            .intro-desc {
+                color: $gray-600;
+                font-size: $h5-font-size;
+                @include media-breakpoint-down(md) {
+                    font-size: $h6-font-size;
+                }
+                font-weight: $font-weight-light;
+            }
+
+            .intro-connect-btnGroup {
+                display: flex;
+                flex-direction: column;
+                
+                @include media-breakpoint-down(md) {
+                    flex-direction: row;
+                }
+                @include media-breakpoint-down(sm) {
+                    justify-content: center;
+                }
+                .btn {
+                    padding-left: 20px;
+                    @include media-breakpoint-down(sm) {
+                        padding-left: 10px;
+                    }
+                    border-radius: 10px;
+                    width: 70%;
+                    @include media-breakpoint-down(md) {
+                        width: 100%;
+                    }
+                    height: auto;
+                    text-align: left;
+                }
+                .connect-img {
+                    width: 40px;
+                    height: 40px;
+                }
+                .intro-btn-wallet {
+                    padding-right: 20px;
+                    > .btn-primary {
+                        color: $white;
+                    }
+                }
+                .intro-btn-metamask {
+                    > .btn-primary {
+                        background-color: $white;
+                    }
+
+                    .btn-primary:hover {
+                        color: $white;
+                        background: $secondary;
+                    }
+                }
+            }
+        }
+        .intro-image {
+            width: 80%;
+            height: auto;
+            @include media-breakpoint-down(xl) {
+                position: absolute;
+                top: 0;
+                right: -64px;
+            }
+            @include media-breakpoint-down(lg) {
+                position: absolute;
+                top: 0;
+                right: -40px;
+            }
+            @include media-breakpoint-down(md) {
+                display: none;
+                top: 0;
+                right: -20px;
+            }
+        }
+    }
+
+    .section {
+        padding-top: 200px;
+        color: $black;
+
+        .section-title {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .hot-bids {
+            position: relative;
+            .hot-light {
+                z-index: 10;
+                position: absolute;
+                bottom: -60%;
+                right: 8%;
+                width: 70%;
+                height: auto;
+            }
+        }
+
+        .btn-type {
+            border: 1px solid $primary;
+            background-color: transparent;
+            color: $primary;
+            padding-right: 40px;
+            padding-left: 40px;
+        }
+        .btn-type:hover {
+            background-color: $primary;
+            color: $white;
+        }
+
+        .seller-segment {
+            .seg-img {
+                width: 100%;
+                height: auto;
+                border-width: 4px;
+            }
+            .seg-name {
+                font-size: 18px;
+                font-weight: $font-weight-bold;
+                color: $black;
+            }
+            .seg-type {
+                font-size: $h6-font-size;
+                font-weight: $font-weight-bold;
+                color: $gray-600;
+            }
+            .seg-price {
+                font-size: 22px;
+                font-weight: $font-weight-bold;
+                color: $primary;
+            }
+        }
+    }
+}
