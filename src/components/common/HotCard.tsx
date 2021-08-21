@@ -9,7 +9,7 @@ type cardProps = {
 
 const HotCard = ({ backurl, imgurl, title, type }: cardProps) => {
     return (
-        <div className="flex-fill hotcard text-center pr-2">
+        <div className="col-12 col-sm-6 col-md-4  hotcard text-center pr-2 pb-4">
             <Image className="back-image" src={backurl}></Image>
             <div className="card-info pb-4 hot-back">
                 <Image className="hot-image" src={imgurl}></Image>

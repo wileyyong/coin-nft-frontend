@@ -12,7 +12,7 @@ const NftCard = ({ url, title, price, content, style }: cardProps) => {
     const stylename = 'card-info pb-4 ' + style;
 
     return (
-        <div className="flex-fill nftcard text-center pr-2">
+        <div className="col-12 col-sm-6 col-md-4 nftcard text-center pr-2 pb-4">
             <Image className="nft-image" src={url}></Image>
             <div className={stylename}>
                 <div className="nft-title">{title}</div>

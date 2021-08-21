@@ -19,6 +19,10 @@
     .card-info {
         padding-right: 80px;
         padding-left: 80px;
+        @include media-breakpoint-down(lg) {
+            padding-right: 40px;
+            padding-left: 40px;
+        }
         .nft-title {
             font-size: 32px;
             font-weight: $font-weight-bold;
@@ -60,8 +64,12 @@
     }  
 
     .card-info {
-        padding-right: 40px;
-        padding-left: 40px;
+        padding-right: 80px;
+        padding-left: 80px;
+        @include media-breakpoint-down(lg) {
+            padding-right: 40px;
+            padding-left: 40px;
+        }
         .hot-title {
             color: $black;
             font-size: 24px;
