@@ -1,7 +1,7 @@
 import React from "react";
-import { Navbar, Nav, Image, Button } from "react-bootstrap";
+import { Navbar, Nav, Image } from "react-bootstrap";
 
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import logoImg from "assets/imgs/logo.png";
 import avatarImg from "assets/imgs/avatar.png";
