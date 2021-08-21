@@ -1,3 +1,7 @@
+body {
+    line-height: 1;
+}
+
 .home-container {
     background: $white;
     @include media-breakpoint-down(xl) {
@@ -32,7 +36,7 @@
         }
         .intro-content {
             width: 50%;
-            @include media-breakpoint-down(md) {
+            @include media-breakpoint-down(lg) {
                 width: 100%;
             }
             .intro-title {
@@ -53,6 +57,7 @@
             }
             .intro-desc {
                 color: $gray-600;
+                width: 100%;
                 font-size: $h5-font-size;
                 @include media-breakpoint-down(md) {
                     font-size: $h6-font-size;
@@ -76,7 +81,7 @@
                         padding-left: 10px;
                     }
                     border-radius: 10px;
-                    width: 70%;
+                    width: 50%;
                     @include media-breakpoint-down(md) {
                         width: 100%;
                     }
@@ -88,7 +93,9 @@
                     height: 40px;
                 }
                 .intro-btn-wallet {
-                    padding-right: 20px;
+                    @include media-breakpoint-down(md) {
+                        padding-right: 20px;
+                    }
                     > .btn-primary {
                         color: $white;
                     }
@@ -108,31 +115,69 @@
         .intro-image {
             width: 80%;
             height: auto;
-            @include media-breakpoint-down(xl) {
-                position: absolute;
-                top: 0;
-                right: -64px;
-            }
+            position: absolute;
+            top: 0;
+            right: -64px;
+
             @include media-breakpoint-down(lg) {
-                position: absolute;
-                top: 0;
-                right: -40px;
-            }
-            @include media-breakpoint-down(md) {
                 display: none;
-                top: 0;
-                right: -20px;
+            }
+        }
+        .intro-ticket {
+            position: absolute;
+            width: 30%;
+            height: auto;
+            top: 10%;
+            right: 5%;
+
+            .ticket-img {
+                width: 100%;
+                height: auto;
+            }
+
+            @include media-breakpoint-down(lg) {
+                display: none;
+            }
+
+            .ticket-content {
+                background-color: $secondary;
+                color: $white;
+                .title {
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                    font-size: 32px;
+                    font-weight: bold;
+                }
+                .price {
+                    padding-bottom: 20px;
+                    font-size: 20px;
+                    font-weight: bold;
+                }
             }
         }
     }
 
     .section {
-        padding-top: 200px;
+        padding-top: 100px;
+        @include media-breakpoint-down(lg) {
+            padding-top: 40px;
+        }
         color: $black;
 
         .section-title {
             padding-top: 40px;
             padding-bottom: 40px;
+            text-align: left;
+            @include media-breakpoint-down(sm) {
+                text-align: center;
+            }
+        }
+
+        .justify-center {
+            justify-content: left;
+            @include media-breakpoint-down(sm) {
+                justify-content: center;
+            }
         }
 
         .hot-bids {
@@ -144,6 +189,9 @@
                 right: 8%;
                 width: 70%;
                 height: auto;
+                @include media-breakpoint-down(lg) {
+                    display: none;
+                }
             }
         }
 

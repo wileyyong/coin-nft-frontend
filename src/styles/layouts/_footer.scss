@@ -1,0 +1,56 @@
+.footer-container {
+    margin-right: 80px;
+    margin-left: 80px;
+    @include media-breakpoint-down(sm) {
+        margin-right: 20px;
+        margin-left: 20px;
+    }
+
+    .footer-top {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        font-size: 72px;
+        @include media-breakpoint-down(sm) {
+            font-size: 40px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        color: $black;
+
+        .logo-image {
+            max-width: 96px;
+            height: auto;
+        }
+    }
+    .item-content {
+        font-size: 16px;
+        color: $black;
+        padding-bottom: 10px;
+        padding-left: 60px;
+        @include media-breakpoint-down(sm) {
+            padding-left: 20px;
+        }
+    }
+    .divider {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        border: 1px;
+        border-top: 1px solid $gray-400;
+        
+    }
+
+    .footer-bottom {
+        padding-top: 20px;
+        padding-bottom: 40px;
+        flex-direction: row;
+        @include media-breakpoint-down(sm) {
+            flex-direction: column;
+            padding-top: 10px;
+            padding-bottom: 20px;
+        }
+    }
+
+    .text-black {
+        color: $black;
+    }
+}
