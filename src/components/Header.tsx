@@ -27,7 +27,7 @@ const Header: React.FC<HeaderProps> = () => {
 
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
-            <Nav.Item>
+            <Nav.Item className="d-none d-md-block">
               <Nav.Link
                 eventKey="1"
                 as={Link}
@@ -41,7 +41,7 @@ const Header: React.FC<HeaderProps> = () => {
               </Nav.Link>
             </Nav.Item>
 
-            <Nav.Item>
+            <Nav.Item className="d-none d-md-block">
               <Nav.Link
                 eventKey="2"
                 as={Link}
@@ -55,7 +55,7 @@ const Header: React.FC<HeaderProps> = () => {
               </Nav.Link>
             </Nav.Item>
 
-            <Nav.Item>
+            <Nav.Item className="d-none d-md-block">
               <Image className="user-avatar" src={avatarImg}></Image>
             </Nav.Item>
 
