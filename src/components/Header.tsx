@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = () => {
                 to="/how-it-works"
                 className="mr-lg-4"
                 active={
-                  location.pathname === "/how-it-works" || location.pathname === "/"
+                  location.pathname === "/how-it-works"
                 }
               >
                 How it works
