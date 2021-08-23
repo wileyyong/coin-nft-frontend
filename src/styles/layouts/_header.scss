@@ -26,6 +26,9 @@
         border-radius: 3px;
         padding-left: 20px;
         padding-right: 10px;
+        @include media-breakpoint-down(sm) {
+            border-color: transparent;
+        }
     }
 
     .user-info {
@@ -151,18 +154,18 @@
             width: 0;
             transition: ease-in all 0.5s;
             &.show {
-                height: calc(100vh - 89px);
+                height: 800px;
                 opacity: 1;
                 transition: ease-in all 0.5s;
                 background-color: $white;
                 background-size: cover;
                 background-position: center;
                 display: flex !important;
-                align-items: center;
+                align-items: start;
                 position: absolute;
-                top: 74px;
-                left: 0;
-                width: 100%;
+                top: 84px;
+                left: -8px;
+                width: 104%;
                 padding: 10px 40px;
                 z-index: 1000;
                 .navbar-nav {

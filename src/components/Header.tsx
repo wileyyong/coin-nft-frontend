@@ -55,11 +55,11 @@ const Header: React.FC<HeaderProps> = () => {
               </Nav.Link>
             </Nav.Item>
 
-            <Nav.Item className="d-none d-md-block">
+            <Nav.Item>
               <Image className="user-avatar" src={avatarImg}></Image>
             </Nav.Item>
 
-            <Nav.Item className="d-none d-md-block">
+            <Nav.Item>
               <div className="user-info">
                 <span>Damien King</span>
                 <span className="user-balance">30.000PUML</span>
