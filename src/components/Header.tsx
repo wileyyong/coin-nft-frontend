@@ -32,7 +32,7 @@ const Header: React.FC<HeaderProps> = () => {
 
   const getDropdownAvatar = () => {
     return (
-      <div className="header-avatar">
+      <div className="header-avatar d-flex flex-row align-items-center">
         <Image
           src={
             userInfo.avatar
@@ -40,6 +40,10 @@ const Header: React.FC<HeaderProps> = () => {
               : avatarImg
           }
         ></Image>
+        <div className="ml-2">
+          <NormalTextTitle className="text-primary">Balance</NormalTextTitle>
+          <SmallTextTitleGrey>30.000PUML</SmallTextTitleGrey>
+        </div>
       </div>
     );
   };
@@ -99,8 +103,8 @@ const Header: React.FC<HeaderProps> = () => {
                       {userInfo.name}
                     </B1NormalTextTitle>
                   )}
-                  <FlexAlignCenterDiv>
-                    <Image className="avatar" src={avatarImg}></Image>
+                  <FlexAlignCenterDiv className="user-detail">
+                    <Image src={avatarImg}></Image>
                     <div className="ml-2">
                       <NormalTextTitle>Balance</NormalTextTitle>
                       <SmallTextTitleGrey>30.000PUML</SmallTextTitleGrey>
