@@ -1,16 +1,16 @@
 import { EthereumNetworkID } from "./model/EthereumNetwork";
 
 const configs = {
-    DEPLOY_URL: "https://nft.puml.com",
+    DEPLOY_URL: "https://nftapi.puml.io",
     /* Wallet Info */
     ONBOARD_API_KEY: process.env.REACT_APP_ONBOARD_API_KEY,
     ONBOARD_NETWORK_ID: EthereumNetworkID.RinkebyNetwork,
-    FORTMATIC_KEY:  "pk_test_BF97DF7960DC3212", /* live(Mainnet) pk_live_0E8B54C4DD1C8667*/
+    FORTMATIC_KEY:  "pk_test_737DD7FC0782E5A0", /* live(Mainnet) pk_live_ECF4039B2C85FB79*/
     PORTIS_KEY: "",
-    INFURA_KEY: "19c4591eda9b4bc3a5c8bad480ee95d0",
+    INFURA_KEY: "aee3ad6a786442119decb7448f17c7ea",
     WALLET_APP_URL: "",
     CONTACT_EMAIL: "general@puml.com",
-    RPC_URL: "https://mainnet.infura.io/v3/19c4591eda9b4bc3a5c8bad480ee95d0",
+    RPC_URL: "https://rinkeby.infura.io/v3/aee3ad6a786442119decb7448f17c7ea",
     WALLET_APP_NAME: "PUML NFT",
     CURRENCY_API_URL: "https://api.binance.com/api/v1/ticker/price",
 

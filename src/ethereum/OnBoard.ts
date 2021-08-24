@@ -73,7 +73,6 @@ const wallets = [
 const initializationOptions = {
   dappId: configs.ONBOARD_API_KEY,
   networkId: configs.ONBOARD_NETWORK_ID,
-  darkMode: true,
   subscriptions: {
     wallet: (wallet:any) => {
       // instantiate web3 when the user has selected a wallet
