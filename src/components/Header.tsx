@@ -1,16 +1,17 @@
 import React from "react";
 import { Navbar, Nav, Image } from "react-bootstrap";
-
 import { Link, useLocation } from "react-router-dom";
 
 import logoImg from "assets/imgs/logo.png";
 import avatarImg from "assets/imgs/avatar.png";
+import { useState } from "react";
 
 interface HeaderProps { }
 
 const Header: React.FC<HeaderProps> = () => {
 
   const location = useLocation();
+  const [dropMenuState, setDropMenuState] = useState(false);
 
   return (
     <div className="header-container">
@@ -56,14 +57,24 @@ const Header: React.FC<HeaderProps> = () => {
             </Nav.Item>
 
             <Nav.Item>
-              <Image className="user-avatar" src={avatarImg}></Image>
+
             </Nav.Item>
 
-            <Nav.Item>
-              <div className="user-info">
-                <span>Damien King</span>
-                <span className="user-balance">30.000PUML</span>
+            <Nav.Item className="user-info" onClick={() => { setDropMenuState(!dropMenuState) }}>
+              <Image className="avatar" src={avatarImg}></Image>
+              <div className="detail">
+                <div>Damien King</div>
+                <div className="balance">30.000PUML</div>
               </div>
+              {
+                dropMenuState && (
+                  <div className="dropdown_menu">
+                    <div className="drop-item">My Items</div>
+                    <div className="drop-item">Edit Profile</div>
+                    <div className="drop-item">Disconncet</div>
+                  </div>
+                )
+              }
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>
