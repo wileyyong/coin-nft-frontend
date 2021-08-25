@@ -37,6 +37,24 @@
         }
     }
 
+    .navbar-nav {
+        align-items: center;
+        @include media-breakpoint-down(sm) {
+            align-items: flex-start;
+        }
+    }
+
+    .navbar-collapse.show .navbar-nav .dropdown {
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        @include media-breakpoint-down(sm) {
+            position: relative !important;
+            top: 0 !important;
+            right: 0 !important;
+        }
+    }
+
     .navbar-toggler {
         margin-right: 20px;
         width: 20px;

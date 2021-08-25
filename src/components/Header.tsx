@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = () => {
         </Navbar.Brand>
 
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="ml-auto align-items-center">
+          <Nav className="ml-auto">
             <Nav.Item >
               <Nav.Link
                 eventKey="1"
