@@ -1,0 +1,46 @@
+.editprofile-container {
+    padding: 40px;
+    .header {
+        font-size: 40px;
+        font-weight: bold;
+        color: $black;
+    }
+    .description {
+        color: $gray-600;
+        width: 50%;
+    }
+
+    .text-black {
+        color: $black;
+    }
+
+    .edit-form {
+        width: 50%;
+        padding-right: 20px;
+    }
+
+    .edit-detail {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        border: 3px dashed $gray-600;
+        border-radius: 10px;
+        width: 50%;
+        .mail {
+            font-size: 18px;
+            font-weight: bold;
+            color: $black;  
+        }
+        .desc {
+            color: $black
+        }
+        .filetype {
+            color: $gray-600;
+        }
+    }
+
+    .btn-primary {
+        border-radius: 10px;
+        color: $white;
+        width: 30%;
+    }
+}

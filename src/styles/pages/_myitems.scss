@@ -1,0 +1,28 @@
+.myitems-container {
+    .background-item {
+        width: 100%;
+        height: auto;
+    }
+
+    .user-name {
+        color: $black;
+        font-weight: bold;
+        padding-top: 20px;
+    }
+
+    .avatar {
+        width: 16%;
+        height: auto;
+        margin-top: -8%;
+    }
+
+    .btn-primary {
+        padding-top: 10px;
+        color: $white !important;
+        width: 30%;
+    }
+
+    .btn {
+        border-radius: 10px;
+    }
+}
