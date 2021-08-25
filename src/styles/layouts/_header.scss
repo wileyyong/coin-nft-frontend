@@ -30,7 +30,7 @@
         &.active::after {
             display: block;
             content: " ";
-            margin-top: 10px;
+            margin-top: 4px;
             border-top: 2px solid $primary;
             border-bottom: 2px solid $primary;
             border-radius: 3px;
@@ -193,6 +193,10 @@
         }
     }
 
+    .dropdown-toggle {
+        white-space: nowrap;
+        padding-top: 10px;
+    }
     .dropdown-toggle::after {
         border: 0;
     }

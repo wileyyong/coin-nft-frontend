@@ -91,7 +91,6 @@ const Header: React.FC<HeaderProps> = () => {
               </Nav.Link>
             </Nav.Item>
 
-            <Nav.Item>
               <NavDropdown
                 title={getDropdownAvatar()}
                 id="header-nav-dropdown"
@@ -123,7 +122,6 @@ const Header: React.FC<HeaderProps> = () => {
                   Disconnect
                 </NavDropdown.Item>
               </NavDropdown>
-            </Nav.Item>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
