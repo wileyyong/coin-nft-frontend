@@ -5,6 +5,7 @@ import { connectUserWallet } from "store/User/user.slice";
 import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
 
 import Home from "./pages/Home/Home";
+import MyItems from "./pages/MyItems";
 
 import "./styles/index.scss";
 import { getETHUSDTCurrency } from "store/Nft/nft.slice";
@@ -28,6 +29,9 @@ const App: React.FC<AppProps> = () => {
         <Switch>
           <Route path="/">
             <Home />
+          </Route>
+          <Route path="/items">
+            <MyItems />
           </Route>
         </Switch>
       </Router>
