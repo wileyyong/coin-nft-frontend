@@ -27,7 +27,6 @@ interface HeaderProps { }
 const Header: React.FC<HeaderProps> = () => {
 
   const location = useLocation();
-  const [dropMenuState, setDropMenuState] = useState(false);
   const userInfo = useAppSelector(getMyInfo);
 
   const getDropdownAvatar = () => {
@@ -70,7 +69,7 @@ const Header: React.FC<HeaderProps> = () => {
                 to="/"
                 className="mr-lg-4"
                 active={
-                  location.pathname === "/" || location.pathname === "/"
+                  location.pathname === "/"
                 }
               >
                 Home

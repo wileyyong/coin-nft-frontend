@@ -74,7 +74,7 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
-        <div className="row">
+        <div className="row pr-2 pl-2">
           {
             nftlist.map((nft, index) => (
               <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
@@ -84,7 +84,7 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Collections</h1>
-        <div className="row">
+        <div className="row pr-2 pl-2">
           {
             hotlist.map((hot, index) => (
               <HotCard key={index} backurl={hot.backurl} imgurl={hot.imgurl} title={hot.title} type={hot.type}></HotCard>
@@ -104,14 +104,14 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row">
+        <div className="row pr-2 pl-2">
           {
             nftlist.map((nft, index) => (
               <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
             ))
           }
         </div>
-        <div className="row">
+        <div className="row pr-2 pl-2">
           {
             nftlist.map((nft, index) => (
               <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>

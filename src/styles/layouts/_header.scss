@@ -26,19 +26,24 @@
     }
 
     .nav-link {
+        padding-top: 20px;
         color: $black;
         &.active::after {
             display: block;
             content: " ";
-            margin-top: 4px;
+            margin-top: 10px;
             border-top: 2px solid $primary;
             border-bottom: 2px solid $primary;
             border-radius: 3px;
         }
     }
 
+    .nav-item {
+        padding-top: 20px;
+    }
+
     .navbar-nav {
-        align-items: center;
+        align-items: flex-start;
         @include media-breakpoint-down(sm) {
             align-items: flex-start;
         }
@@ -195,7 +200,7 @@
 
     .dropdown-toggle {
         white-space: nowrap;
-        padding-top: 20px;
+        margin-top: -10px;
     }
     .dropdown-toggle::after {
         border: 0;

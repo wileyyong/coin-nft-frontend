@@ -6,6 +6,7 @@ import Layout from "components/Layout";
 import Tabs from "components/common/Tabs";
 import nftlist from "assets/nftlist";
 import NftItemCard from "components/common/NftItemCard";
+import { Link } from "react-router-dom";
 
 interface MyItemProps { }
 
@@ -14,11 +15,11 @@ const MyItems: React.FC<MyItemProps> = () => {
 
     const OnSail = () => (
         <div className="row pt-4">
-          {
-            nftlist.map((nft, index) => (
-                <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
-            ))
-          }
+            {
+                nftlist.map((nft, index) => (
+                    <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
+                ))
+            }
         </div>
     );
     const Collectibles = () => <div> Collectibles component. </div>;
@@ -47,7 +48,11 @@ const MyItems: React.FC<MyItemProps> = () => {
                 <Image src={back} className="background-item"></Image>
                 <Image src={account_data.img} className="avatar"></Image>
                 <h1 className="user-name">{account_data.name}</h1>
-                <Button className="mr-2 mr-lg-4 btn-primary">Edit Profile</Button>
+                <Link to="/profile" className="link-profile mt-2" >
+                    <Button className="mr-2 mr-lg-4 btn-primary">
+                        Edit Profile
+                    </Button>
+                </Link>
             </div>
             <div className="myitems-tab">
                 <Tabs

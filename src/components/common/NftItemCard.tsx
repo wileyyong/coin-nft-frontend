@@ -1,4 +1,5 @@
 import { Button, Image } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 type cardProps = {
     url: string,
@@ -10,8 +11,10 @@ type cardProps = {
 
 const NftItemCard = ({ url, title, price, price_eth, content }: cardProps) => {
     return (
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center pr-2 pb-4">
-            <Image className="card-image" src={url}></Image>
+        <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center pb-4">
+            <Link to="/buy">
+                <Image className="card-image" src={url}></Image>
+            </Link>
             <div className="card-info pt-3 pb-4">
                 <div className="card-title">{title}</div>
                 <div>

@@ -1,0 +1,152 @@
+.buyitem-container {
+    padding: 60px;
+    flex-direction: row;
+    @include media-breakpoint-down(sm) {
+        padding-right: 20px;
+        padding-left: 20px;
+        flex-direction: column;
+    }
+
+    .item-image {
+        width: 50%;
+        height: auto;
+        padding-right: 40px;
+        padding-bottom: 40px;
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+            padding-right: 0;
+        }
+    }
+
+    .member-image {
+        width: 50px;
+        height: auto;
+        border-radius: 50px;
+    }
+
+    .item-info {
+        width: 50%;
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+        }
+        .item-title {
+            color: $black;
+            font-size: 40px;
+            font-weight: bold;
+        }
+
+        .item-price {
+            font-size: 16px;
+            .for-sale {
+                color: $gray-600;
+            }
+            .price-puml {
+                color: $primary;
+                font-weight: bold;
+            }
+        }
+
+        .item-price1 {
+            font-size: 14px;
+            .for-sale {
+                color: $gray-600;
+            }
+            .price-puml {
+                color: $primary;
+                font-weight: bold;
+            }
+        }
+
+        .item-bid {
+            font-size: 14px;
+            .bid-attr {
+                color: $gray-600;
+            }
+            .bid-member {
+                color: $black;
+                font-weight: bold;
+            }
+        }
+
+        .item-members {
+            font-weight: bold;
+            
+            .member-type {
+                color: $gray-600;
+                font-size: 14px;
+            }
+            .member-name {
+                color: $black;
+                font-size: 16px;
+            }
+        }
+
+        .item-address {
+            .address {
+                color: $black;
+                font-size: 16px;
+                font-weight: bold;
+            }
+        }
+
+        .item-description {
+            .title {
+                color: $black;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .content {
+                color: $black;
+                font-size: 14px;
+            }
+        }
+
+        .buyitem-tab {
+            padding-bottom: 40px;
+            .nav-tabs {
+                border-bottom: 1px solid $black;
+                .nav-link {
+                    color: $gray-600;
+                    font-weight: bold;
+                    background-color: transparent;
+                    border-top: 0;
+                    border-right: 0;
+                    border-left: 0;
+                    padding-right: 20px;
+                    padding-left: 20px;
+                }
+                .nav-link:hover {
+                    border-bottom: 1px solid $black;
+                    color: black;
+                }
+
+                & .nav-link.active {
+                    color: $black;
+                    border-bottom: 4px solid $primary;
+                }
+            }
+        }
+
+        .history-item {
+            .history-price {
+                font-size: 16px;
+                font-weight: bold;
+                color: $black;
+                .priceby {
+                    color: $primary;
+                }
+            }
+            .history-time {
+                font-size: 14px;
+                font-weight: bold;
+                color: $gray-600;
+            }
+        }
+
+        .btn-primary {
+            color: $white;
+            border-radius: 10px;
+            width: 100%;
+        }
+    }
+}
