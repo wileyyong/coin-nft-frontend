@@ -25,4 +25,25 @@
     .btn {
         border-radius: 10px;
     }
+
+    .myitems-tab {
+        padding-right: 58px;
+        padding-left: 58px;
+        .nav-tabs {
+            border-bottom: 1px solid $black;
+            .nav-link {
+                color: $gray-600;
+                font-weight: bold;
+                background-color: transparent;
+                border-top: 0;
+                border-right: 0;
+                border-left: 0;
+            }
+
+            & .active {
+                color: $black;
+                border-bottom: 4px solid $primary;
+            }
+        }
+    }
 }

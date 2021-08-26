@@ -10,37 +10,43 @@ const sellerdata = [
         img: sellerImg1,
         name: "Christian Trist",
         type: "General Manager",
-        price: "$30.000"
+        price: "$30.000",
+        price_eth: "26.09ETH"
     },
     {
         img: sellerImg2,
         name: "Christian Trist",
         type: "Athlete",
-        price: "$30.000"
+        price: "$30.000",
+        price_eth: "26.09ETH"
     },
     {
         img: sellerImg3,
         name: "Christian Trist",
         type: "Athlete",
-        price: "$30.000"
+        price: "$30.000",
+        price_eth: "26.09ETH"
     },
     {
         img: sellerImg4,
         name: "Christian Trist",
         type: "Athlete",
-        price: "$30.000"
+        price: "$30.000",
+        price_eth: "26.09ETH"
     },
     {
         img: sellerImg5,
         name: "Christian Trist",
         type: "Athlete",
-        price: "$30.000"
+        price: "$30.000",
+        price_eth: "26.09ETH"
     },
     {
         img: sellerImg6,
         name: "Christian Trist",
         type: "Athlete",
-        price: "$30.000"
+        price: "$30.000",
+        price_eth: "26.09ETH"
     }
 ];
 

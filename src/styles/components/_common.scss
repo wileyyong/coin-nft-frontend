@@ -48,6 +48,43 @@
     }
 }
 
+.myitem-card {
+    color: $black;
+
+    .card-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .card-info {
+        background-color: $gray-100;
+        padding-right: 80px;
+        padding-left: 80px;
+        @include media-breakpoint-down(lg) {
+            padding-right: 40px;
+            padding-left: 40px;
+        }
+        .puml-price {
+            color: $primary;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .eth-price {
+            color: $black;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .card-title {
+            color: $black;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .card-content {
+            color: $gray-500;
+        }
+    }
+}
+
 .hotcard {
     .back-image {
         width: 100%;

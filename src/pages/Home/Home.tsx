@@ -9,7 +9,7 @@ import metamaskImage from "assets/imgs/meta-logo.png";
 import lightImage from "assets/imgs/light.png";
 import ticketImage from "assets/imgs/ticket.png";
 
-import NftCard from "components/common/NftCard";
+import NftItemCard from "components/common/NftItemCard";
 import HotCard from "components/common/HotCard";
 
 import sellerdata from "assets/sellerdata";
@@ -66,6 +66,7 @@ const Home: React.FC<HomeProps> = () => {
                 <div className="seg-name pt-2">{seller.name}</div>
                 <div className="seg-type pt-2">{seller.type}</div>
                 <div className="seg-price pt-2">{seller.price} PUML</div>
+                <div className="seg-price-eth pt-2">{seller.price_eth}</div>
               </div>
             ))
           }
@@ -73,13 +74,12 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
-        <div className="row hot-bids">
+        <div className="row">
           {
             nftlist.map((nft, index) => (
-              <NftCard key={index} url={nft.url} title={nft.title} price={nft.price} content={nft.content} style={nft.style}></NftCard>
+              <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
             ))
           }
-          <Image className="hot-light" src={lightImage} alt="light"></Image>
         </div>
       </div>
       <div className="section">
@@ -104,10 +104,17 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row hot-bids">
+        <div className="row">
           {
             nftlist.map((nft, index) => (
-              <NftCard key={index} url={nft.url} title={nft.title} price={nft.price} content={nft.content} style={nft.style}></NftCard>
+              <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
+            ))
+          }
+        </div>
+        <div className="row">
+          {
+            nftlist.map((nft, index) => (
+              <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
             ))
           }
         </div>
