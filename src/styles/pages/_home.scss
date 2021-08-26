@@ -180,21 +180,6 @@ body {
             }
         }
 
-        .hot-bids {
-            position: relative;
-            .hot-light {
-                z-index: 10;
-                position: absolute;
-                bottom: -60%;
-                right: 8%;
-                width: 70%;
-                height: auto;
-                @include media-breakpoint-down(lg) {
-                    display: none;
-                }
-            }
-        }
-
         .btn-type {
             border: 1px solid $primary;
             background-color: transparent;
@@ -219,14 +204,19 @@ body {
                 color: $black;
             }
             .seg-type {
-                font-size: $h6-font-size;
+                font-size: 16px;
                 font-weight: $font-weight-bold;
                 color: $gray-600;
             }
             .seg-price {
-                font-size: 22px;
+                font-size: 18px;
                 font-weight: $font-weight-bold;
                 color: $primary;
+            }
+            .seg-price-eth {
+                font-size: 14px;
+                font-weight: $font-weight-bold;
+                color: $black;
             }
         }
     }

@@ -5,18 +5,20 @@ import { connectUserWallet } from "store/User/user.slice";
 import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
 
 import Home from "./pages/Home/Home";
+import MyItems from "./pages/MyItems";
+import EditProfile from "./pages/EditProfile";
 
 import "./styles/index.scss";
 import { getETHUSDTCurrency } from "store/Nft/nft.slice";
 
-interface AppProps {}
+interface AppProps { }
 
 const App: React.FC<AppProps> = () => {
   const dispatch = useAppDispatch();
   const walletAddress = useAppSelector(getWalletAddress);
   const isAuth = useAppSelector(isAuthenticated);
   useEffect(() => {
-    if(!isAuth || !walletAddress) {
+    if (!isAuth || !walletAddress) {
       dispatch(connectUserWallet());
     }
     dispatch(getETHUSDTCurrency());
@@ -26,8 +28,14 @@ const App: React.FC<AppProps> = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route path="/">
+          <Route path="/home">
             <Home />
+          </Route>
+          <Route path="/items">
+            <MyItems />
+          </Route>
+          <Route path="/profile">
+            <EditProfile />
           </Route>
         </Switch>
       </Router>

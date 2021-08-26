@@ -81,49 +81,47 @@ const Header: React.FC<HeaderProps> = () => {
               <Nav.Link
                 eventKey="2"
                 as={Link}
-                to="/how-it-works"
+                to="/items"
                 className="mr-lg-4"
                 active={
-                  location.pathname === "/how-it-works"
+                  location.pathname === "/items"
                 }
               >
-                How it works
+                My Items
               </Nav.Link>
             </Nav.Item>
 
-            <Nav.Item>
-              <NavDropdown
-                title={getDropdownAvatar()}
-                id="header-nav-dropdown"
-                alignRight={true}
-              >
-                <div className="px-4">
-                  {userInfo && userInfo.name && (
-                    <B1NormalTextTitle className="mb-2 mt-1">
-                      {userInfo.name}
-                    </B1NormalTextTitle>
-                  )}
-                  <FlexAlignCenterDiv className="user-detail">
-                    <Image src={avatarImg}></Image>
-                    <div className="ml-2">
-                      <NormalTextTitle>Balance</NormalTextTitle>
-                      <SmallTextTitleGrey>30.000PUML</SmallTextTitleGrey>
-                    </div>
-                  </FlexAlignCenterDiv>
-                </div>
+            <NavDropdown
+              title={getDropdownAvatar()}
+              id="header-nav-dropdown"
+              alignRight={true}
+            >
+              <div className="px-4">
+                {userInfo && userInfo.name && (
+                  <B1NormalTextTitle className="mb-2 mt-1">
+                    {userInfo.name}
+                  </B1NormalTextTitle>
+                )}
+                <FlexAlignCenterDiv className="user-detail">
+                  <Image src={avatarImg}></Image>
+                  <div className="ml-2">
+                    <NormalTextTitle>Balance</NormalTextTitle>
+                    <SmallTextTitleGrey>30.000PUML</SmallTextTitleGrey>
+                  </div>
+                </FlexAlignCenterDiv>
+              </div>
 
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/items">
-                  My Items
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/profile">
-                  Edit Profile
-                </NavDropdown.Item>
-                <NavDropdown.Item>
-                  Disconnect
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item as={Link} to="/items">
+                My Items
+              </NavDropdown.Item>
+              <NavDropdown.Item as={Link} to="/profile">
+                Edit Profile
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                Disconnect
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
