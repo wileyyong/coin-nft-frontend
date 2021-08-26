@@ -8,39 +8,60 @@
     .description {
         color: $gray-600;
         width: 50%;
+        @include media-breakpoint-down(sm) {
+            width: 100%;
+        }
     }
 
     .text-black {
         color: $black;
     }
 
-    .edit-form {
-        width: 50%;
-        padding-right: 20px;
-    }
+    .edit-profile {
+        flex-direction: row;
+        align-items: center;
+        @include media-breakpoint-down(sm) {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .edit-form {
+            width: 50%;
+            padding-right: 40px;
+            padding-bottom: 20px;
+            @include media-breakpoint-down(sm) {
+                width: 100%;
+                padding-right: 0;
+            }
+        }
 
-    .edit-detail {
-        padding-top: 20px;
-        padding-bottom: 20px;
-        border: 3px dashed $gray-600;
-        border-radius: 10px;
-        width: 50%;
-        .mail {
-            font-size: 18px;
-            font-weight: bold;
-            color: $black;  
+        .edit-detail {
+            padding: 20px;
+            border: 3px dashed $gray-600;
+            border-radius: 10px;
+            width: 50%;
+            @include media-breakpoint-down(sm) {
+                width: 100%;
+            }
+            .mail {
+                font-size: 18px;
+                font-weight: bold;
+                color: $black;
+            }
+            .desc {
+                color: $black;
+            }
+            .filetype {
+                color: $gray-600;
+            }
         }
-        .desc {
-            color: $black;
-        }
-        .filetype {
-            color: $gray-600;
-        }
-    }
 
-    .btn-primary {
-        border-radius: 10px;
-        color: $white;
-        width: 30%;
+        .btn-primary {
+            border-radius: 10px;
+            color: $white;
+            width: 30%;
+            @include media-breakpoint-down(sm) {
+                width: 100%;
+            }
+        }
     }
 }

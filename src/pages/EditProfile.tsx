@@ -18,7 +18,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
                 </div>
             </div>
             <div className="description pt-4">Custom-made characters that will transition to the assets expanded ecosystem (media, content, and games)</div>
-            <div className="d-flex flex-row align-items-center">
+            <div className="d-flex edit-profile">
                 <div className="d-flex flex-column edit-form">
                     <Form>
                         <Form.Group className="mb-3 mt-3 pb-3 pt-3" controlId="formBasicUserName">

@@ -28,7 +28,7 @@ const App: React.FC<AppProps> = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route path="/home">
+          <Route path="/">
             <Home />
           </Route>
           <Route path="/items">
