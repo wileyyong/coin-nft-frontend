@@ -5,7 +5,6 @@
 @if $enable-grid-classes {
   .container {
     @include make-container($grid-gutter-width * 2);
-    @include make-container-max-widths();
   }
 }
 
