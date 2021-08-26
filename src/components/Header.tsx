@@ -67,10 +67,10 @@ const Header: React.FC<HeaderProps> = () => {
               <Nav.Link
                 eventKey="1"
                 as={Link}
-                to="/home"
+                to="/"
                 className="mr-lg-4"
                 active={
-                  location.pathname === "/home" || location.pathname === "/"
+                  location.pathname === "/" || location.pathname === "/"
                 }
               >
                 Home
