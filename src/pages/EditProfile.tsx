@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import metamask from "assets/imgs/meta-logo.png";
-import { Container, Image, Button, Form } from "react-bootstrap";
+import { Image, Button, Form } from "react-bootstrap";
 import account_data from "assets/account_data";
 import Layout from "components/Layout";
 
@@ -18,7 +18,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
                 </div>
             </div>
             <div className="description pt-4">Custom-made characters that will transition to the assets expanded ecosystem (media, content, and games)</div>
-            <Container className="d-flex edit-profile">
+            <div className="d-flex edit-profile">
                 <div className="d-flex flex-column edit-form">
                     <Form>
                         <Form.Group className="mb-3 mt-3 pb-3 pt-3" controlId="formBasicUserName">
@@ -46,7 +46,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
                     <Button className="btn-primary pt-3">Upload Photo</Button>
                     <div className="filetype pt-3">PNG, GIF, MP4 or MP3, Max 30mb</div>
                 </div>
-            </Container>
+            </div>
         </Layout>
     );
 }
