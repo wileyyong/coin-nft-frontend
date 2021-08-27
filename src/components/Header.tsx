@@ -3,7 +3,7 @@ import { Navbar, Nav, Image, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 
-import logoImg from "assets/imgs/logo.png";
+import logoImg from "assets/imgs/logo.svg";
 import avatarImg from "assets/imgs/avatar.png";
 import { useState } from "react";
 import configs from "configs";
