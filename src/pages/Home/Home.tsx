@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Layout from "components/Layout";
-import { Button, Image } from "react-bootstrap";
+import { Button, Image, Container, Row, Col } from "react-bootstrap";
 
 import pumlImage from "assets/imgs/PUML-Logo.png";
 import homeintroImage from "assets/imgs/home-intro.svg";
@@ -15,11 +15,17 @@ import HotCard from "components/common/HotCard";
 import sellerdata from "assets/sellerdata";
 import nftlist from "assets/nftlist";
 import hotlist from "assets/hotlist";
+import Modal from 'react-bootstrap/Modal'
 
 interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
   const layoutView = useRef(null);
+
+  const [showDialog, setShowDialog] = useState(false);
+
+  const handleClose = () => setShowDialog(false);
+  const handleShow = () => setShowDialog(true);
 
   return (
     <Layout className="home-container" ref={layoutView}>
@@ -30,7 +36,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="intro-desc pt-4">Custom-made characters that will transition to the assets expanded ecosystem <br></br>(media, content, and games)</div>
           <div className="intro-connect-btnGroup pt-4">
             <div className="intro-btn-wallet pb-3">
-              <Button className="mr-2 mr-lg-4 btn-primary">
+              <Button className="mr-2 mr-lg-4 btn-primary" onClick={handleShow}>
                 <div className="d-flex flex-row align-items-center">
                   <Image className="connect-img" src={pumlImage}></Image>
                   <span>Connect PUML Wallet</span>
@@ -119,7 +125,42 @@ const Home: React.FC<HomeProps> = () => {
           }
         </div>
       </div>
-    </Layout>
+
+      {/* <Modal
+        show={showDialog}
+        onHide={handleClose}
+        size="sm"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Using Grid in Modal
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="show-grid">
+          <Container>
+            <Row>
+              <Col xs={12}>
+                <div className="modal-title">Your Wallet</div>
+              </Col>
+            </Row>
+
+            <Row>
+              <Col xs={6} md={4}>
+                .col-xs-6 .col-md-4
+              </Col>
+              <Col xs={6} md={4}>
+                .col-xs-6 .col-md-4
+              </Col>
+              <Col xs={6} md={4}>
+                .col-xs-6 .col-md-4
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+      </Modal > */}
+    </Layout >
   );
 };
 
