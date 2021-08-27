@@ -25,7 +25,7 @@ const Home: React.FC<HomeProps> = () => {
     <Layout className="home-container" ref={layoutView}>
       <div className="section-intro">
         <div className="intro-content text-center text-md-left">
-          <p className="intro-title pt-4 pb-0">PUML NFT </p>
+          <p className="intro-title pb-0">PUML NFT </p>
           <p className="intro-type">Market Place</p>
           <div className="intro-desc pt-4">Custom-made characters that will transition to the assets expanded ecosystem <br></br>(media, content, and games)</div>
           <div className="intro-connect-btnGroup pt-4">

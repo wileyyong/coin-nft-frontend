@@ -1,33 +1,32 @@
 .buyitem-container {
-    padding: 60px;
-    flex-direction: row;
-    @include media-breakpoint-down(sm) {
-        padding-right: 20px;
-        padding-left: 20px;
-        flex-direction: column;
-    }
+    padding-top: 60px;
 
     .item-image {
-        width: 50%;
+        // padding-bottom: 50%;
+        // background-position: center center;
+        // background-size: cover;
+        // width: 100%;
+        // height: 100%;
+        // height: auto;
+        width: 100%;
         height: auto;
-        padding-right: 40px;
-        padding-bottom: 40px;
-        @include media-breakpoint-down(sm) {
-            width: 100%;
-            padding-right: 0;
-        }
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
     }
 
     .member-image {
-        width: 50px;
+        max-width: 50px;
         height: auto;
         border-radius: 50px;
     }
 
     .item-info {
         width: 50%;
-        @include media-breakpoint-down(sm) {
+        padding-left: 40px;
+        @include media-breakpoint-down(lg) {
             width: 100%;
+            padding-left: 0px;
         }
         .item-title {
             color: $black;
@@ -69,6 +68,7 @@
         }
 
         .item-members {
+            cursor: pointer;
             font-weight: bold;
             
             .member-type {

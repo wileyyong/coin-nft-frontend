@@ -12,7 +12,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         <Layout className="editprofile-container" ref={layoutView}>
             <div className="d-flex flex-row align-items-center justify-content-between">
                 <div className="header">Edit Profile</div>
-                <div className="d-flex flex-row align-items-center">
+                <div className="d-flex flex-row align-items-center connect-wallet">
                     <div className="text-secondary pr-2">Connected to Meta Mask</div>
                     <Image src={metamask} alt="Meta Mask"></Image>
                 </div>

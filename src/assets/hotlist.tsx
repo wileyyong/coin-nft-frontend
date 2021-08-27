@@ -20,6 +20,12 @@ const hotlist = [
         title: "Christian Trist",
         type: "Athlete"
     },
+    {
+        backurl: back,
+        imgurl: img,
+        title: "Christian Trist",
+        type: "Athlete"
+    }
 ];
 
 export default hotlist;

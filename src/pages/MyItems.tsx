@@ -45,9 +45,9 @@ const MyItems: React.FC<MyItemProps> = () => {
     return (
         <Layout className="myitems-container" ref={layoutView}>
             <div className="d-flex flex-column align-items-center">
-                <Image src={back} className="background-item"></Image>
+                <div style={{ backgroundImage: `url(${back})` }} className="background-item"></div>
                 <Image src={account_data.img} className="avatar"></Image>
-                <h1 className="user-name">{account_data.name}</h1>
+                <div className="display user-name">{account_data.name}</div>
                 <Link to="/profile" className="link-profile mt-2" >
                     <Button className="mr-2 mr-lg-4 btn-primary">
                         Edit Profile

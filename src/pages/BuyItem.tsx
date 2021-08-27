@@ -3,7 +3,7 @@ import itemImage2 from "assets/imgs/nft-image2.png";
 import itemMember from "assets/imgs/seller6.png";
 import itemLogo from "assets/imgs/puml-logo-footer.png";
 
-import { Button, Image } from "react-bootstrap";
+import { Button, Container, Image } from "react-bootstrap";
 import Tabs from "components/common/Tabs";
 import Layout from "components/Layout";
 import React, { useRef, useState } from "react";
@@ -21,11 +21,11 @@ const BuyItem: React.FC<BuyItemProps> = () => {
             </div>
             <div className="item-description pb-4">
                 <div className="title">Description</div>
-                <div className="content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
+                <div className="content pt-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis</div>
             </div>
             <div className="item-description pb-4">
                 <div className="title">10% Royalties</div>
-                <div className="content">For every future sale. You will recieve 10% of the sold price</div>
+                <div className="content pt-1">For every future sale. You will recieve 10% of the sold price</div>
             </div>
         </div>
     );
@@ -96,59 +96,65 @@ const BuyItem: React.FC<BuyItemProps> = () => {
     const [selectedTab, setSelectedTab] = useState(0);
 
     return (
-        <Layout className="d-flex buyitem-container" ref={layoutView}>
-            <Image src={itemImage} className="item-image"></Image>
-            <div className="d-flex flex-column item-info">
-                <div className="item-title pb-4">Plado Man</div>
-                <div className="item-price pb-4">
-                    <span className="for-sale">For Sale • Highest Bid </span>
-                    <span className="price-puml">30.000.00PUML</span>
-                </div>
-                <div className="d-flex flex-row">
-                    <div className="d-flex flex-row align-items-center item-members pr-4">
-                        <Image src={itemMember} className="member-image mr-2"></Image>
-                        <div className="d-flex flex-column pt-2">
-                            <div className="member-type pb-1">Creator</div>
-                            <div className="member-name">Christian Trist</div>
+        <Layout ref={layoutView}>
+            <Container className="buyitem-container">
+                <div className="d-flex flex-column flex-lg-row">
+                    <div className="d-flex flex-row align-items-center pr-4 pb-4">
+                        <Image src={itemImage} className="item-image"></Image>
+                    </div>
+                    <div className="d-flex flex-column item-info">
+                        <div className="item-title pb-4">Plado Man</div>
+                        <div className="item-price pb-4">
+                            <span className="for-sale">For Sale • Highest Bid </span>
+                            <span className="price-puml">30.000.00PUML</span>
+                        </div>
+                        <div className="d-flex flex-row">
+                            <div className="d-flex flex-row align-items-center item-members pr-4">
+                                <Image src={itemMember} className="member-image mr-2"></Image>
+                                <div className="d-flex flex-column pt-2">
+                                    <div className="member-type pb-1">Creator</div>
+                                    <div className="member-name">Christian Trist</div>
+                                </div>
+                            </div>
+                            <div className="d-flex flex-row align-items-center item-members pr-2">
+                                <Image src={itemImage} className="member-image mr-2"></Image>
+                                <div className="d-flex flex-column pt-2">
+                                    <div className="member-type pb-1">Collection</div>
+                                    <div className="member-name">Christian Trist</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="buyitem-tab pt-2">
+                            <Tabs
+                                className="mt-4"
+                                selectedTab={selectedTab}
+                                onClick={setSelectedTab}
+                                tabs={tabs}
+                            />
+                        </div>
+
+                        <div className="d-flex flex-row align-items-center">
+                            <Image src={itemImage} className="member-image mb-2 mr-2" alt="image"></Image>
+                            <div>
+                                <div className="item-bid">
+                                    <span className="bid-attr">Highest bid by </span>
+                                    <span className="bid-member">Daniel Edwards</span>
+                                </div>
+                                <div className="item-price1 pt-2">
+                                    <span className="price-puml">30.0000PUML</span>
+                                    <span className="for-sale"> • 0.55ETH • $567.89 for 1 edition</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="row pt-2">
+                            <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2">Place a Bid</Button></div>
+                            <div className="col-12 col-sm-6"><Button className="btn-gray mr-2">Share</Button></div>
                         </div>
                     </div>
-                    <div className="d-flex flex-row align-items-center item-members pr-2">
-                        <Image src={itemImage} className="member-image mr-2"></Image>
-                        <div className="d-flex flex-column pt-2">
-                            <div className="member-type pb-1">Collection</div>
-                            <div className="member-name">Christian Trist</div>
-                        </div>
-                    </div>
                 </div>
-
-                <div className="buyitem-tab pt-2">
-                    <Tabs
-                        className="mt-4"
-                        selectedTab={selectedTab}
-                        onClick={setSelectedTab}
-                        tabs={tabs}
-                    />
-                </div>
-
-                <div className="d-flex flex-row align-items-center">
-                    <Image src={itemImage} className="member-image mb-2 mr-2" alt="image"></Image>
-                    <div>
-                        <div className="item-bid">
-                            <span className="bid-attr">Highest bid by </span>
-                            <span className="bid-member">Daniel Edwards</span>
-                        </div>
-                        <div className="item-price1">
-                            <span className="price-puml">30.0000PUML</span>
-                            <span className="for-sale"> • 0.55ETH • $567.89 for 1 edition</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="row pt-2">
-                    <div className="col-12 col-sm-6"><Button className="btn-primary mr-2">Place a Bid</Button></div>
-                    <div className="col-12 col-sm-6"><Button className="btn-gray mr-2">Share</Button></div>
-                </div>
-            </div>
+            </Container>
         </Layout>
     );
 }

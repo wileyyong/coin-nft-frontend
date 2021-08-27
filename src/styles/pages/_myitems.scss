@@ -1,23 +1,33 @@
 .myitems-container {
     .background-item {
+        padding-bottom: 30%;
+        background-position: center center;
+        background-size: cover;
         width: 100%;
-        height: auto;
+        height: 100%;
     }
 
     .user-name {
         color: $black;
         font-weight: bold;
         padding-top: 20px;
+        font-size: 40px;
+        @include media-breakpoint-down(sm) {
+            font-size: 28px;
+        }
     }
 
     .avatar {
-        width: 16%;
+        width: 10%;
         height: auto;
-        margin-top: -8%;
+        margin-top: -5%;
     }
 
     .link-profile {
         width: 30%;
+        @include media-breakpoint-down(sm) {
+            width: 70%;
+        }
         .btn-primary {
             width: 100%;
             padding-top: 10px;

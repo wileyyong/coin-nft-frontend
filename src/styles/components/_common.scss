@@ -59,11 +59,11 @@
 
     .card-info {
         background-color: $gray-100;
-        padding-right: 80px;
-        padding-left: 80px;
+        padding-right: 40px;
+        padding-left: 40px;
         @include media-breakpoint-down(lg) {
-            padding-right: 40px;
-            padding-left: 40px;
+            padding-right: 20px;
+            padding-left: 20px;
         }
         .puml-price {
             color: $primary;
@@ -89,10 +89,12 @@
 
 .hotcard {
     .back-image {
+        cursor: pointer;
         width: 100%;
         height: auto;
     }
     .hot-image {
+        cursor: pointer;
         width: 70px;
         height: 70px;
         margin-top: -35px;
@@ -103,11 +105,11 @@
     }  
 
     .card-info {
-        padding-right: 80px;
-        padding-left: 80px;
+        padding-right: 40px;
+        padding-left: 40px;
         @include media-breakpoint-down(lg) {
-            padding-right: 40px;
-            padding-left: 40px;
+            padding-right: 20px;
+            padding-left: 20px;
         }
         .hot-title {
             color: $black;

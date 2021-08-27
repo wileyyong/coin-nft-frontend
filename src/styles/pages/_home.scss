@@ -44,6 +44,7 @@ body {
                 font-size: $h1-font-size * 2;
                 @include media-breakpoint-down(md) {
                     font-size: $h1-font-size;
+                    padding-top: 60px;
                 }
                 font-weight: $font-weight-bold;
             }
@@ -90,6 +91,11 @@ body {
                     height: auto;
                     text-align: left;
                 }
+
+                .btn-outline-secondary {
+                    color: $secondary;
+                }
+
                 .connect-img {
                     width: 40px;
                     height: 40px;
@@ -100,6 +106,7 @@ body {
                     }
                     @include media-breakpoint-down(sm) {
                         padding-right: 0px;
+                        width: 60%;
                     }
                     > .btn-primary {
                         color: $white;
@@ -113,6 +120,10 @@ body {
                     .btn-primary:hover {
                         color: $white;
                         background: $secondary;
+                    }
+
+                    @include media-breakpoint-down(sm) {
+                        width: 60%;
                     }
                 }
             }
@@ -198,6 +209,7 @@ body {
         }
 
         .seller-segment {
+            cursor: pointer;
             .seg-img {
                 width: 100%;
                 height: auto;
