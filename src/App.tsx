@@ -7,6 +7,7 @@ import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
 import Home from "./pages/Home/Home";
 import MyItems from "./pages/MyItems";
 import EditProfile from "./pages/EditProfile";
+import BuyItem from "./pages/BuyItem";
 
 import "./styles/index.scss";
 import { getETHUSDTCurrency } from "store/Nft/nft.slice";
@@ -36,6 +37,9 @@ const App: React.FC<AppProps> = () => {
           </Route>
           <Route exact path="/profile">
             <EditProfile />
+          </Route>
+          <Route exact path="/buy">
+            <BuyItem />
           </Route>
         </Switch>
       </Router>
