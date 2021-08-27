@@ -30,6 +30,7 @@
         @include media-breakpoint-down(sm) {
             padding-left: 20px;
         }
+        cursor: pointer;
     }
     .divider {
         margin-top: 1rem;
