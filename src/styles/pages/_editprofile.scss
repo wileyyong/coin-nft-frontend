@@ -1,8 +1,4 @@
 .editprofile-container {
-    padding: 60px;
-    @include media-breakpoint-down(sm) {
-        padding: 20px;
-    }
     .header {
         font-size: 40px;
         font-weight: bold;

@@ -99,10 +99,10 @@ const BuyItem: React.FC<BuyItemProps> = () => {
         <Layout ref={layoutView}>
             <Container className="buyitem-container">
                 <div className="d-flex flex-column flex-lg-row">
-                    <div className="d-flex flex-row align-items-center pr-4 pb-4">
+                    <div className="d-flex flex-row align-items-center pb-4">
                         <Image src={itemImage} className="item-image"></Image>
                     </div>
-                    <div className="d-flex flex-column item-info">
+                    <div className="d-flex flex-column flex-fill item-info">
                         <div className="item-title pb-4">Plado Man</div>
                         <div className="item-price pb-4">
                             <span className="for-sale">For Sale • Highest Bid </span>
