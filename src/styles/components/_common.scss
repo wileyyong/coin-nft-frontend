@@ -133,3 +133,103 @@
         }
     }
 }
+
+.connectwalletmodal {
+    .your-wallet {
+        .modal-title {
+            color: $black;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    
+        .modal-balance {
+            color: $white;
+            background: $primary;
+            border-radius: 10px;
+            padding: 24px 20px;
+            .balance-title {
+                font-size: 16px;
+            }
+            .balance-amount-usd {
+                font-size: 40px;
+                font-weight: bold;
+            }
+            .balance-unit {
+                font-size: 24px;
+                font-weight: bold;
+            }
+            .balance-amount-puml {
+                font-size: 16px;
+            }
+        }
+        .modal-content {
+            border: 1px solid $gray-300;
+            border-radius: 10px;
+            .currency-content {
+                color: $black;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            .coin-content {
+                color: $gray-600;
+                font-size: 14px;
+            }
+    
+            hr {
+                width: 100%;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+        }
+    
+        .btn-primary {
+            margin-top: 20px;
+            border-radius: 10px;
+            color: $white;
+            width: 100%;
+        }
+    }
+    .deposit-currency {
+        .modal-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            padding-bottom: 16px;
+            .modal-title {
+                color: $black;
+                font-size: 24px;
+                font-weight: bold;
+            }
+        }
+        .modal-content {
+            border: 1px solid $gray-300;
+            border-radius: 10px;
+            .auth-data {
+                padding: 20px 30px;
+            }
+            .address {
+                color: $black;
+                font-size: 18px;
+                font-weight: bold;
+                border-top: 1px dashed $gray-300;
+                border-radius: 10px;
+            }
+
+        }
+    }
+    
+}
+
+.modal-header {
+    border-bottom: none;
+    padding: 0;
+    padding-top: 16px;
+    padding-left: 16px;
+
+    .close {
+        margin: 0;
+        padding: 0;
+    }
+}
