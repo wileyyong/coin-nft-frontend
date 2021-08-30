@@ -1,21 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState } from "react";
 import Layout from "components/Layout";
-import { Button, Image, Container, Row, Col } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 
 import pumlImage from "assets/imgs/PUML-Logo.png";
 import homeintroImage from "assets/imgs/home-intro.svg";
 import metamaskImage from "assets/imgs/meta-logo.png";
-import lightImage from "assets/imgs/light.png";
 import ticketImage from "assets/imgs/ticket.png";
 
 import NftItemCard from "components/common/NftItemCard";
 import HotCard from "components/common/HotCard";
-
+import ConnectWallet from "components/common/modal/ConnectWalletModal";
 import sellerdata from "assets/sellerdata";
 import nftlist from "assets/nftlist";
 import hotlist from "assets/hotlist";
-import Modal from 'react-bootstrap/Modal'
 
 interface HomeProps { }
 
@@ -126,40 +124,11 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </div>
 
-      {/* <Modal
+      <ConnectWallet
         show={showDialog}
-        onHide={handleClose}
-        size="sm"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+        handleClose={handleClose}
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Using Grid in Modal
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="show-grid">
-          <Container>
-            <Row>
-              <Col xs={12}>
-                <div className="modal-title">Your Wallet</div>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col xs={6} md={4}>
-                .col-xs-6 .col-md-4
-              </Col>
-              <Col xs={6} md={4}>
-                .col-xs-6 .col-md-4
-              </Col>
-              <Col xs={6} md={4}>
-                .col-xs-6 .col-md-4
-              </Col>
-            </Row>
-          </Container>
-        </Modal.Body>
-      </Modal > */}
+      </ConnectWallet>
     </Layout >
   );
 };

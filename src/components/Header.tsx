@@ -5,7 +5,6 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 
 import logoImg from "assets/imgs/logo.svg";
 import avatarImg from "assets/imgs/avatar.png";
-import { useState } from "react";
 import configs from "configs";
 
 import {
