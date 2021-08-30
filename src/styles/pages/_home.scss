@@ -108,6 +108,9 @@ body {
                         padding-right: 0px;
                         width: 60%;
                     }
+                    @include media-breakpoint-down(xs) {
+                        width: 100%;
+                    }
                     > .btn-primary {
                         color: $white;
                     }
@@ -124,6 +127,9 @@ body {
 
                     @include media-breakpoint-down(sm) {
                         width: 60%;
+                    }
+                    @include media-breakpoint-down(xs) {
+                        width: 100%;
                     }
                 }
             }
@@ -185,9 +191,6 @@ body {
             padding-top: 40px;
             padding-bottom: 40px;
             text-align: left;
-            @include media-breakpoint-down(sm) {
-                text-align: center;
-            }
         }
 
         .justify-center {

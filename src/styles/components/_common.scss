@@ -141,6 +141,36 @@
     }
 }
 
+.depositwalletmodal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    .modal-title {
+        color: $black;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .modal-content {
+        padding: 20px;
+        border: 1px solid $gray-300;
+        border-radius: 10px;
+        .auth-title {
+            color: $gray-600;
+            font-size: 16px;
+        }
+
+    }
+    .modal-footer {
+        margin-top: 20px;
+        border-radius: 10px;
+        background-color: #E9F9F6;
+        color: $black;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+}
+
 .connectwalletmodal {
     .your-wallet {
         .modal-title {
