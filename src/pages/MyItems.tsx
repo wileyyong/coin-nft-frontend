@@ -46,7 +46,10 @@ const MyItems: React.FC<MyItemProps> = () => {
         <Layout className="myitems-container" ref={layoutView}>
             <div className="d-flex flex-column align-items-center">
                 <div style={{ backgroundImage: `url(${back})` }} className="background-item"></div>
-                <Image src={account_data.img} className="avatar"></Image>
+                {/* <Image className="hot-image" src={account_data.img}></Image> */}
+                <div className="d-flex flex-row align-items-center justify-content-center">
+                    <div className="avatar" style={{ backgroundImage: `url(${account_data.img})` }}></div>
+                </div>
                 <div className="display user-name">{account_data.name}</div>
                 <Link to="/profile" className="link-profile mt-2" >
                     <Button className="mr-2 mr-lg-4 btn-primary">

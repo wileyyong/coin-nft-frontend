@@ -97,9 +97,9 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </div>
       <div className="section">
-        <div className="d-flex flex-row align-items-center flex-wrap justify-center">
+        <div className="d-flex flex-row align-items-center flex-wrap justify-center pt-4">
           <h1 className="font-weight-bold section-title mr-4">Explore</h1>
-          <div className="d-flex flex-row flex-wrap justify-center">
+          <div className="d-flex flex-row flex-wrap">
             <Button className="btn-type mr-3 mb-2">All</Button>
             <Button className="btn-type mr-3 mb-2">Art</Button>
             <Button className="btn-type mr-3 mb-2">Photography</Button>
