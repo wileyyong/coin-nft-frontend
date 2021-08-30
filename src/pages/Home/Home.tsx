@@ -11,6 +11,7 @@ import ticketImage from "assets/imgs/ticket.png";
 import NftItemCard from "components/common/NftItemCard";
 import HotCard from "components/common/HotCard";
 import ConnectWallet from "components/common/modal/ConnectWalletModal";
+import DepositWallet from "components/common/modal/DepositWalletModal";
 import sellerdata from "assets/sellerdata";
 import nftlist from "assets/nftlist";
 import hotlist from "assets/hotlist";
@@ -20,10 +21,13 @@ interface HomeProps { }
 const Home: React.FC<HomeProps> = () => {
   const layoutView = useRef(null);
 
-  const [showDialog, setShowDialog] = useState(false);
+  const [showConnectWallet, setShowConnectWallet] = useState(false);
+  const connectWalletClose = () => setShowConnectWallet(false);
+  const connectWalletShow = () => setShowConnectWallet(true);
 
-  const handleClose = () => setShowDialog(false);
-  const handleShow = () => setShowDialog(true);
+  const [showDepositWallet, setShowDepositWallet] = useState(false);
+  const depositWalletClose = () => setShowDepositWallet(false);
+  const depositWalletShow = () => setShowDepositWallet(true);
 
   return (
     <Layout className="home-container" ref={layoutView}>
@@ -34,7 +38,7 @@ const Home: React.FC<HomeProps> = () => {
           <div className="intro-desc pt-4">Custom-made characters that will transition to the assets expanded ecosystem <br></br>(media, content, and games)</div>
           <div className="intro-connect-btnGroup pt-4">
             <div className="intro-btn-wallet pb-3">
-              <Button className="mr-2 mr-lg-4 btn-primary" onClick={handleShow}>
+              <Button className="mr-2 mr-lg-4 btn-primary" onClick={connectWalletShow}>
                 <div className="d-flex flex-row align-items-center">
                   <Image className="connect-img" src={pumlImage}></Image>
                   <span>Connect PUML Wallet</span>
@@ -42,7 +46,7 @@ const Home: React.FC<HomeProps> = () => {
               </Button>
             </div>
             <div className="intro-btn-metamask">
-              <Button className="mr-2 mr-lg-4 btn-outline-secondary">
+              <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={depositWalletShow}>
                 <div className="d-flex flex-row align-items-center">
                   <Image className="connect-img p-1" src={metamaskImage}></Image>
                   <span>Connect with Meta Mask</span>
@@ -125,10 +129,15 @@ const Home: React.FC<HomeProps> = () => {
       </div>
 
       <ConnectWallet
-        show={showDialog}
-        handleClose={handleClose}
+        show={showConnectWallet}
+        handleClose={connectWalletClose}
       >
       </ConnectWallet>
+      <DepositWallet
+        show={showDepositWallet}
+        handleClose={depositWalletClose}
+      >
+      </DepositWallet>
     </Layout >
   );
 };
