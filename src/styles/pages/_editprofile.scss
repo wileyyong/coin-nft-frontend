@@ -27,12 +27,22 @@
             flex-direction: column-reverse;
             align-items: flex-start;
         }
+
+        .input-group-text {
+            color: $black;
+        }
+
+        .form {
+            margin-right: 16px;
+            @include media-breakpoint-down(sm) {
+                margin-right: 0px;
+            }
+        }
+
         .edit-form {
-            width: 50%;
             padding-right: 40px;
             padding-bottom: 20px;
             @include media-breakpoint-down(sm) {
-                width: 100%;
                 padding-right: 0;
             }
         }
@@ -41,10 +51,7 @@
             padding: 20px;
             border: 3px dashed $gray-600;
             border-radius: 10px;
-            width: 50%;
-            @include media-breakpoint-down(sm) {
-                width: 100%;
-            }
+            width: 100%;
             .mail {
                 font-size: 18px;
                 font-weight: bold;

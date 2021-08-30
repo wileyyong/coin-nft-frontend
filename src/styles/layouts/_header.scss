@@ -1,33 +1,47 @@
 .header-container {
+    height: 89px;
     min-width: 100%;
     box-sizing: border-box;
     background: $gray-100;
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     backdrop-filter: saturate(180%) blur(20px);
     color: $black;
+    box-shadow: 0 7px 29px 0 rgba(0, 0, 0, 0.07);
     position: sticky;
     top: 0;
-    padding-right: 20px;
-    padding-left: 20px;
-    z-index: 1999;
-
-    @include media-breakpoint-down(sm) {
-        padding-right: 8px;
-        padding-left: 8px;
+    z-index: 1049;
+    .navbar {
+        margin: 0 60px;
+        @media screen and (max-width: 1400px) {
+            margin: 0 25px;
+        }
+        @media screen and (max-width: 992px) {
+            margin: 0 0;
+        }
     }
-
     .logo {
-        width: auto;
-        height: 50px;
+        height: 36px;
+        @media screen and (max-width: 856px) {
+            height: 30px;
+        }
     }
-
-    .user-detail {
-        cursor: pointer;
+    @media screen and (max-width: 856px) {
+        padding-top: 15px;
     }
-
+    .navbar-nav {
+        padding: 15px 30px;
+        @media screen and (max-width: 1200px) {
+            padding: 15px 20px;
+        }
+        @media screen and (max-width: 768px) {
+            padding: 15px 10px;
+        }
+    }
     .nav-link {
-        padding-top: 20px;
-        color: $black;
+        color: $black !important;
+        font-size: 18px;
+        white-space: nowrap;
+
         &.active::after {
             display: block;
             content: " ";
@@ -35,28 +49,6 @@
             border-top: 2px solid $primary;
             border-bottom: 2px solid $primary;
             border-radius: 3px;
-        }
-    }
-
-    .nav-item {
-        padding-top: 20px;
-    }
-
-    .navbar-nav {
-        align-items: flex-start;
-        @include media-breakpoint-down(sm) {
-            align-items: flex-start;
-        }
-    }
-
-    .navbar-collapse.show .navbar-nav .dropdown {
-        position: absolute;
-        top: 30px;
-        right: 20px;
-        @include media-breakpoint-down(sm) {
-            position: relative !important;
-            top: 0 !important;
-            right: 0 !important;
         }
     }
 
@@ -154,26 +146,52 @@
             display: block;
         }
     }
-
+    .dropdown-menu {
+        min-width: 240px;
+    }
+    #header-nav-dropdown {
+        padding: 0px !important;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        div.header-avatar {
+            display: inline-block;
+            background-color: rgb(255, 255, 255);
+            width: 36px;
+            height: 36px;
+            max-width: 36px;
+            max-height: 36px;
+            position: relative;
+            border-radius: 100%;
+            margin-right: 5px;
+            z-index: 1;
+            img {
+                width: 36px;
+                height: 36px;
+                object-fit: cover;
+                border-radius: 36px;
+            }
+        }
+    }
     .navbar-collapse {
-        @include media-breakpoint-down(sm) {
+        @media screen and (max-width: 856px) {
             display: none !important;
             opacity: 0;
             width: 0;
             transition: ease-in all 0.5s;
             &.show {
-                height: 1000px;
+                height: calc(100vh - 89px);
                 opacity: 1;
                 transition: ease-in all 0.5s;
                 background-color: $white;
                 background-size: cover;
                 background-position: center;
                 display: flex !important;
-                align-items: start;
+                align-items: flex-start;
                 position: absolute;
-                top: 84px;
-                left: -8px;
-                width: 104%;
+                top: 74px;
+                left: 0;
+                width: 100%;
                 padding: 10px 40px;
                 z-index: 1000;
                 .navbar-nav {
@@ -183,10 +201,11 @@
                     .dropdown {
                         position: absolute;
                         top: 30px;
-                        right: 20px;
+                        right: 100px;
                     }
                 }
                 .buttons {
+                    padding-right: 40px;
                     margin-top: 40px;
                     margin-left: 10px;
                     flex-wrap: wrap;
@@ -197,12 +216,13 @@
             }
         }
     }
+    .dropdown-menu-right {
+        @media screen and (max-width: 856px) {
+            left: -200px;
+        }
+    }
+}
 
-    .dropdown-toggle {
-        white-space: nowrap;
-        margin-top: -10px;
-    }
-    .dropdown-toggle::after {
-        border: 0;
-    }
+.dropdown-toggle::after {
+    display: none;
 }

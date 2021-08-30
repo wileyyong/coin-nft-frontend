@@ -20,9 +20,20 @@
     .avatar {
         background-position: center center;
         background-size: cover;
-        width: 80px;
-        height: 80px;
-        margin-top: -40px;
+        width: 200px;
+        height: 200px;
+        margin-top: -100px;
+
+        @include media-breakpoint-down(lg) {
+            width: 160px;
+            height: 160px;
+            margin-top: -80px;
+        }
+        @include media-breakpoint-down(sm) {
+            width: 100px;
+            height: 100px;
+            margin-top: -50px;
+        }
     }
 
     .link-profile {
