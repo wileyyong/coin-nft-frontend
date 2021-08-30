@@ -22,8 +22,8 @@ const MyItems: React.FC<MyItemProps> = () => {
             }
         </div>
     );
-    const Collectibles = () => <div> Collectibles component. </div>;
-    const ExpiringAuctions = () => <div>Expiring Auctions component.</div>;
+    // const Collectibles = () => <div> Collectibles component. </div>;
+    // const ExpiringAuctions = () => <div>Expiring Auctions component.</div>;
 
     const tabs = [
         {

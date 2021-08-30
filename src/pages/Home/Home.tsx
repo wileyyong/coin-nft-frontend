@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState } from "react";
 import Layout from "components/Layout";
-import { Button, Image, Container, Row, Col } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 
 import pumlImage from "assets/imgs/PUML-Logo.png";
 import homeintroImage from "assets/imgs/home-intro.svg";
 import metamaskImage from "assets/imgs/meta-logo.png";
-import lightImage from "assets/imgs/light.png";
 import ticketImage from "assets/imgs/ticket.png";
 
 import NftItemCard from "components/common/NftItemCard";
