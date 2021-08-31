@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = () => {
                 My Items
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item className="d-flex pr-4 buttons">
+            <Nav.Item className="d-flex pr-4 mr-4 buttons">
                 <NavDropdown
                   title={getDropdownAvatar()}
                   id="header-nav-dropdown"
