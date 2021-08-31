@@ -16,6 +16,8 @@ import sellerdata from "assets/sellerdata";
 import nftlist from "assets/nftlist";
 import hotlist from "assets/hotlist";
 
+import { useHistory } from 'react-router-dom';
+
 interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
@@ -28,6 +30,8 @@ const Home: React.FC<HomeProps> = () => {
   const [showDepositWallet, setShowDepositWallet] = useState(false);
   const depositWalletClose = () => setShowDepositWallet(false);
   const depositWalletShow = () => setShowDepositWallet(true);
+
+  const history = useHistory();
 
   return (
     <Layout className="home-container" ref={layoutView}>
@@ -69,7 +73,7 @@ const Home: React.FC<HomeProps> = () => {
         <div className="row text-center">
           {
             sellerdata.map((seller, index) => (
-              <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4">
+              <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${index}`)}>
                 <Image src={seller.img} alt="seller"></Image>
                 <div className="seg-name pt-2">{seller.name}</div>
                 <div className="seg-type pt-2">{seller.type}</div>
@@ -101,7 +105,7 @@ const Home: React.FC<HomeProps> = () => {
         </div>
       </div>
       <div className="section">
-        <div className="d-flex flex-row align-items-center flex-wrap justify-center pt-4">
+        <div className="d-flex flex-row align-items-center flex-wrap pt-4">
           <h1 className="font-weight-bold section-title mr-4">Explore</h1>
           <div className="d-flex flex-row flex-wrap">
             <Button className="btn-type mr-3 mb-2">All</Button>

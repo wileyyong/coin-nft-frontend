@@ -97,9 +97,8 @@ const Header: React.FC<HeaderProps> = () => {
                       </B1NormalTextTitle>
                     )}
                     <FlexAlignCenterDiv>
-                      <div className="ml-2">
-                        <NormalTextTitle>Balance</NormalTextTitle>
-                        <SmallTextTitleGrey>10000 ETH</SmallTextTitleGrey>
+                      <div>
+                        {getDropdownAvatar()}
                       </div>
                     </FlexAlignCenterDiv>
                   </div>

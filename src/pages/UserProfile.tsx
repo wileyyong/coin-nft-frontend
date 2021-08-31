@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import back from "assets/imgs/hot-back.svg";
 import { Button } from "react-bootstrap";
 import account_data from "assets/account_data";
@@ -6,12 +6,18 @@ import Layout from "components/Layout";
 import Tabs from "components/common/Tabs";
 import nftlist from "assets/nftlist";
 import NftItemCard from "components/common/NftItemCard";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
-interface MyItemProps { }
+interface UserProfileProps { }
 
-const MyItems: React.FC<MyItemProps> = () => {
+const UserProfile: React.FC<UserProfileProps> = () => {
     const layoutView = useRef(null);
+    const params: any = useParams();
+    const [walletAddress, setWalletAddress] = useState('');
+
+    useEffect(() => {
+        setWalletAddress(params.walletAddress);
+    }, [params, walletAddress]);
 
     const OnSail = () => (
         <div className="row pt-4">
@@ -22,8 +28,6 @@ const MyItems: React.FC<MyItemProps> = () => {
             }
         </div>
     );
-    // const Collectibles = () => <div> Collectibles component. </div>;
-    // const ExpiringAuctions = () => <div>Expiring Auctions component.</div>;
 
     const tabs = [
         {
@@ -69,4 +73,4 @@ const MyItems: React.FC<MyItemProps> = () => {
     );
 }
 
-export default MyItems;
+export default UserProfile;

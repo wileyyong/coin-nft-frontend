@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import metamask from "assets/imgs/meta-logo.png";
-import { Image, Button, Form, Container } from "react-bootstrap";
+import { Image, Button, Container } from "react-bootstrap";
 import account_data from "assets/account_data";
 import Layout from "components/Layout";
 
@@ -8,7 +8,6 @@ interface EditProfileProps { }
 
 const EditProfile: React.FC<EditProfileProps> = () => {
     const layoutView = useRef(null);
-    const prefix = "nft.puml.io"
     return (
         <Layout ref={layoutView}>
             <Container className="editprofile-container">

@@ -7,6 +7,7 @@ import { Button, Container, Image } from "react-bootstrap";
 import Tabs from "components/common/Tabs";
 import Layout from "components/Layout";
 import React, { useRef, useState } from "react";
+import { useHistory } from 'react-router-dom';
 
 interface BuyItemProps { }
 
@@ -93,8 +94,9 @@ const BuyItem: React.FC<BuyItemProps> = () => {
         }
     ];
 
+    const history = useHistory();
     const [selectedTab, setSelectedTab] = useState(0);
-
+    
     return (
         <Layout ref={layoutView}>
             <Container className="buyitem-container">
@@ -109,14 +111,14 @@ const BuyItem: React.FC<BuyItemProps> = () => {
                             <span className="price-puml">30.000.00PUML</span>
                         </div>
                         <div className="d-flex flex-row">
-                            <div className="d-flex flex-row align-items-center item-members pr-4">
+                            <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/2`)}>
                                 <Image src={itemMember} className="member-image mr-2"></Image>
                                 <div className="d-flex flex-column pt-2">
                                     <div className="member-type pb-1">Creator</div>
                                     <div className="member-name">Christian Trist</div>
                                 </div>
                             </div>
-                            <div className="d-flex flex-row align-items-center item-members pr-2">
+                            <div className="d-flex flex-row align-items-center item-members pr-2" onClick={() => history.push(`/users/3`)}>
                                 <Image src={itemImage} className="member-image mr-2"></Image>
                                 <div className="d-flex flex-column pt-2">
                                     <div className="member-type pb-1">Collection</div>
