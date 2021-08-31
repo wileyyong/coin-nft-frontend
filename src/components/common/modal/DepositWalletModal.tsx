@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React from "react";
 import { Modal, Image } from "react-bootstrap";
 import logo from "assets/imgs/puml-logo-footer.png";
 import deposit_img from "assets/imgs/deposit_auth.png";
@@ -19,6 +19,11 @@ const DepositWalletModal: React.FC<DepositWalletProps> = ({
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Body>
         <div className="depositwalletmodal">
+          <div className="d-flex pb-2">
+            <button type="button" className="close" aria-label="Close" onClick={handleClose}>
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div className="d-flex justify-content-center">
             <Image src={logo}></Image>
           </div>

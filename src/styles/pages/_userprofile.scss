@@ -1,33 +1,10 @@
-.myitems-container {
+.userprofile-container {
     .background-item {
-        position: relative;
         padding-bottom: 30%;
         background-position: center center;
         background-size: cover;
         width: 100%;
         height: 300px;
-        z-index: 10;
-        .upload-img {
-            position: absolute;
-            bottom: 10px;
-            right: 58px;
-            color: $black;
-            background: $white;
-            padding: 5px 20px;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: bold;
-            @include media-breakpoint-down(sm) {
-                right: 20px;   
-            }
-        }
-        .form-control-file {
-            display: none;
-        }
-
-        label {
-            margin-bottom: 0px;
-        }
     }
 
     .user-name {
@@ -47,7 +24,7 @@
         height: 200px;
         margin-top: -100px;
         position: relative;
-        z-index: 15;
+
         @include media-breakpoint-down(lg) {
             width: 160px;
             height: 160px;
@@ -58,6 +35,7 @@
             height: 100px;
             margin-top: -50px;
         }
+
         .verify {
             position: absolute;
             bottom: 0px;
@@ -67,7 +45,12 @@
         }
     }
 
-    .link-profile {
+    .token-address {
+        color: $primary;
+        font-size: 16px;
+    }
+
+    .link-follow {
         width: 30%;
         @include media-breakpoint-down(sm) {
             width: 70%;
@@ -82,7 +65,12 @@
         }
     }
 
-    .myitems-tab {
+    .text-color {
+        color: $black;
+        font-size: 16px;
+    }
+
+    .userprofile-tab {
         padding-right: 58px;
         padding-left: 58px;
         @include media-breakpoint-down(sm) {

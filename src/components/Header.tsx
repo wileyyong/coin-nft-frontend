@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = () => {
                 My Items
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item className="d-flex pr-4 buttons">
+            <Nav.Item className="d-flex pr-4 mr-4 buttons">
                 <NavDropdown
                   title={getDropdownAvatar()}
                   id="header-nav-dropdown"
@@ -97,9 +97,8 @@ const Header: React.FC<HeaderProps> = () => {
                       </B1NormalTextTitle>
                     )}
                     <FlexAlignCenterDiv>
-                      <div className="ml-2">
-                        <NormalTextTitle>Balance</NormalTextTitle>
-                        <SmallTextTitleGrey>10000 ETH</SmallTextTitleGrey>
+                      <div>
+                        {getDropdownAvatar()}
                       </div>
                     </FlexAlignCenterDiv>
                   </div>
