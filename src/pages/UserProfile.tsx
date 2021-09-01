@@ -22,7 +22,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
         setWalletAddress(params.walletAddress);
     }, [params, walletAddress]);
 
-    const OnSail = () => (
+    const OnSale = () => (
         <div className="row pt-4">
             {
                 nftlist.map((nft, index) => (
@@ -34,24 +34,24 @@ const UserProfile: React.FC<UserProfileProps> = () => {
 
     const tabs = [
         {
-            label: "On Sail",
-            Component: OnSail
+            label: "On Sale",
+            Component: OnSale
         },
         {
             label: "Owned",
-            Component: OnSail
+            Component: OnSale
         },
         {
             label: "Created",
-            Component: OnSail
+            Component: OnSale
         },
         {
             label: "Linked",
-            Component: OnSail
+            Component: OnSale
         },
         {
             label: "Activity",
-            Component: OnSail
+            Component: OnSale
         }
     ];
 

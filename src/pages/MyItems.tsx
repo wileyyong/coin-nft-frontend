@@ -15,7 +15,7 @@ interface MyItemProps { }
 const MyItems: React.FC<MyItemProps> = () => {
     const layoutView = useRef(null);
 
-    const OnSail = () => (
+    const OnSale = () => (
         <div className="row pt-4">
             {
                 nftlist.map((nft, index) => (
@@ -29,16 +29,16 @@ const MyItems: React.FC<MyItemProps> = () => {
 
     const tabs = [
         {
-            label: "On Sail",
-            Component: OnSail
+            label: "On Sale",
+            Component: OnSale
         },
         {
             label: "Collectibles",
-            Component: OnSail
+            Component: OnSale
         },
         {
             label: "Expiring Auctions",
-            Component: OnSail
+            Component: OnSale
         }
     ];
 
