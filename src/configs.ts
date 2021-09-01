@@ -7,10 +7,10 @@ const configs = {
     ONBOARD_NETWORK_ID: EthereumNetworkID.RinkebyNetwork,
     FORTMATIC_KEY:  "pk_test_737DD7FC0782E5A0", /* live(Mainnet) pk_live_ECF4039B2C85FB79*/
     PORTIS_KEY: "",
-    INFURA_KEY: "aee3ad6a786442119decb7448f17c7ea",
+    INFURA_KEY: "5fbd69535adf4bd685f2cdd9901d199b",
     WALLET_APP_URL: "",
     CONTACT_EMAIL: "general@puml.com",
-    RPC_URL: "https://rinkeby.infura.io/v3/aee3ad6a786442119decb7448f17c7ea",
+    RPC_URL: "https://rinkeby.infura.io/v3/5fbd69535adf4bd685f2cdd9901d199b",
     WALLET_APP_NAME: "PUML NFT",
     CURRENCY_API_URL: "https://api.binance.com/api/v1/ticker/price",
 
