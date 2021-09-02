@@ -2,11 +2,6 @@
     $switchIndex: 2rem;
     $mainSwitchVal: 1.5rem;
 
-    padding-left: 54px;
-    @include media-breakpoint-down(sm) {
-        padding-left: 20px;
-    }
-
     .upload-file {
         color: $black;
         .title {
@@ -105,8 +100,8 @@
         box-sizing: border-box;
         box-shadow: 0px 2px 5px $gray-400;
         border-radius: 16px;
+        width: 100%;
         min-width: 300px;
-        max-width: 300px;
         margin-bottom: 1.5rem;
         // &:hover {
         //     border: 1px solid transparent;
@@ -151,6 +146,14 @@
         .auction-owner-avatar {
             width: 26px !important;
             height: 26px !important;
+        }
+    }
+
+    .preview-area {
+        padding-top: 0px;
+
+        @include media-breakpoint-down(sm) {
+            padding-top: 40px;
         }
     }
 

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import imgAvatar from "assets/imgs/avatar.svg";
 
@@ -390,243 +390,244 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     }, [expiryOption]);
 
     return (
-        <Layout className="create-collectible-container">
-            <Link to="/">
-                <div className="d-flex flex-row align-items-center">
-                    <FaLongArrowAltLeft />
-                    <B2NormalTextTitle className="ml-2">
-                        MANAGE COLLECTIBLE TYPE
-                    </B2NormalTextTitle>
-                </div>
-            </Link>
-            {isSucceed ? (
-                <Row>
-                    <Col>
-                        <MBigTitle className="mt-4 faint-color"> Congratulations! NFT is successfully created! </MBigTitle>
-                        <FlexAlignCenterDiv className="mt-5">
-                            <Link to="/items">
-                                <Button className="default-btn-size mr-4 fill-btn">
-                                    <span>My Items</span>
-                                </Button>
-                            </Link>
-                            <Link to="/explore">
-                                <Button className="default-btn-size outline-btn">
-                                    <span>Explore</span>
-                                </Button>
-                            </Link>
-                        </FlexAlignCenterDiv>
-                    </Col>
-                </Row>
-            ) : (
-                <Row>
-                    <Col>
-                        <MBigTitle className="mt-4 text-black">
-                            Create collectible
-                        </MBigTitle>
-                        <Form noValidate validated={validated} onSubmit={submitForm}>
-                            <Row className="mt-4 row-reserve">
-                                <Col xl="5" lg="6">
-                                    <div className="upload-file">
-                                        <div className="title mb-4">Upload file</div>
-                                        <FileUploader
-                                            title="PNG, JPEG, GIF, WEBP, MP4 or MP3. Max 30MB."
-                                            accept={configs.NFT_FILE_ACCEPT}
-                                            setFile={(e: any) => setNftFile(e)}
-                                            setPreview={(e: any) => setPreview(e)}
-                                        ></FileUploader>
-                                        {!isNftImage && (
-                                            <>
-                                                <BigTitle className="mt-4 mb-4">Upload cover</BigTitle>
-                                                <FileUploader
-                                                    title="PNG, GIF. Max 30MB."
-                                                    accept={configs.IMG_FILE_ACCEPT}
-                                                    setFile={(e: any) =>
-                                                        setCollectible({ ...collectible, thumbnail: e })
-                                                    }
-                                                    setPreview={(e: any) => setPreview(e)}
-                                                ></FileUploader>
-                                            </>
+        <Layout>
+            <Container className="create-collectible-container">
+                <Link to="/">
+                    <div className="d-flex flex-row align-items-center">
+                        <FaLongArrowAltLeft />
+                        <B2NormalTextTitle className="ml-2">
+                            MANAGE COLLECTIBLE TYPE
+                        </B2NormalTextTitle>
+                    </div>
+                </Link>
+                {isSucceed ? (
+                    <Row>
+                        <Col>
+                            <MBigTitle className="mt-4 faint-color"> Congratulations! NFT is successfully created! </MBigTitle>
+                            <FlexAlignCenterDiv className="mt-5">
+                                <Link to="/items">
+                                    <Button className="default-btn-size mr-4 fill-btn">
+                                        <span>My Items</span>
+                                    </Button>
+                                </Link>
+                                <Link to="/explore">
+                                    <Button className="default-btn-size outline-btn">
+                                        <span>Explore</span>
+                                    </Button>
+                                </Link>
+                            </FlexAlignCenterDiv>
+                        </Col>
+                    </Row>
+                ) : (
+                    <Row>
+                        <Col>
+                            <MBigTitle className="mt-4 text-black">
+                                Create collectible
+                            </MBigTitle>
+                            <Form noValidate validated={validated} onSubmit={submitForm}>
+                                <Row className="mt-4 row-reserve">
+                                    <Col>
+                                        <div className="upload-file">
+                                            <div className="title mb-4">Upload file</div>
+                                            <FileUploader
+                                                title="PNG, JPEG, GIF, WEBP, MP4 or MP3. Max 30MB."
+                                                accept={configs.NFT_FILE_ACCEPT}
+                                                setFile={(e: any) => setNftFile(e)}
+                                                setPreview={(e: any) => setPreview(e)}
+                                            ></FileUploader>
+                                            {!isNftImage && (
+                                                <>
+                                                    <BigTitle className="mt-4 mb-4">Upload cover</BigTitle>
+                                                    <FileUploader
+                                                        title="PNG, GIF. Max 30MB."
+                                                        accept={configs.IMG_FILE_ACCEPT}
+                                                        setFile={(e: any) =>
+                                                            setCollectible({ ...collectible, thumbnail: e })
+                                                        }
+                                                        setPreview={(e: any) => setPreview(e)}
+                                                    ></FileUploader>
+                                                </>
+                                            )}
+                                        </div>
+                                        <FlexJustifyBetweenDiv className="mt-4">
+                                            <BigTitle className="text-black">Put up for sale</BigTitle>
+                                            <Form.Check
+                                                type="switch"
+                                                id="put-up-sale-switch"
+                                                checked={collectible.is_auction}
+                                                name="is_auction"
+                                                onChange={(e) => handleChange(e)}
+                                            />
+                                        </FlexJustifyBetweenDiv>
+                                        <B2NormalTextTitle className="text-gray mt-2">
+                                            You will receive bids for this item.
+                                        </B2NormalTextTitle>
+                                        {collectible.is_auction && (
+                                            <div>
+                                                <B1NormalTextTitle className="text-black mt-3">
+                                                    Minimum bid price
+                                                </B1NormalTextTitle>
+                                                <Form.Row className="mt-1">
+                                                    <Form.Group as={Col} md="12">
+                                                        <Form.Control
+                                                            required
+                                                            type="text"
+                                                            placeholder="Enter Minimum Bid in ETH"
+                                                            name="min_bid_price"
+                                                            onChange={(e) => handleChange(e)}
+                                                            pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
+                                                            maxLength={10}
+                                                        />
+                                                        <Form.Control.Feedback type="invalid">
+                                                            Please input valid minimum bid price.
+                                                        </Form.Control.Feedback>
+                                                    </Form.Group>
+                                                </Form.Row>
+                                                <B1NormalTextTitle className="text-black">Expiry Date</B1NormalTextTitle>
+                                                <Form.Row className="mt-1">
+                                                    <Form.Group as={Col} md="6">
+                                                        <Form.Control
+                                                            as="select"
+                                                            value={expiryOption}
+                                                            onChange={(e) => {
+                                                                setExpiryOption(e.target.value);
+                                                            }}
+                                                        >
+                                                            {expiryDateOptions.map((eOpt, index) => {
+                                                                return (
+                                                                    <option value={eOpt.value} key={index}>
+                                                                        {eOpt.label}
+                                                                    </option>
+                                                                );
+                                                            })}
+                                                        </Form.Control>
+                                                    </Form.Group>
+                                                </Form.Row>
+                                            </div>
                                         )}
-                                    </div>
-                                    <FlexJustifyBetweenDiv className="mt-4">
-                                        <BigTitle className="text-black">Put up for sale</BigTitle>
-                                        <Form.Check
-                                            type="switch"
-                                            id="put-up-sale-switch"
-                                            checked={collectible.is_auction}
-                                            name="is_auction"
-                                            onChange={(e) => handleChange(e)}
-                                        />
-                                    </FlexJustifyBetweenDiv>
-                                    <B2NormalTextTitle className="text-gray mt-2">
-                                        You will receive bids for this item.
-                                    </B2NormalTextTitle>
-                                    {collectible.is_auction && (
-                                        <div>
-                                            <B1NormalTextTitle className="text-black mt-3">
-                                                Minimum bid price
-                                            </B1NormalTextTitle>
-                                            <Form.Row className="mt-1">
+                                        <FlexJustifyBetweenDiv className="mt-4">
+                                            <BigTitle className="text-black">Instant Sell Price</BigTitle>
+                                            <Form.Check
+                                                type="switch"
+                                                id="instant-sell-price-switch"
+                                                checked={isInstantPrice}
+                                                onChange={(e) => setIsInstantPrice(e.target.checked)}
+                                            />
+                                        </FlexJustifyBetweenDiv>
+                                        <B2NormalTextTitle className="text-gray mt-2">
+                                            Enter price to allow users instantly purchase your NFT
+                                        </B2NormalTextTitle>
+                                        {isInstantPrice && (
+                                            <Form.Row className="mt-4">
                                                 <Form.Group as={Col} md="12">
                                                     <Form.Control
                                                         required
                                                         type="text"
-                                                        placeholder="Enter Minimum Bid in ETH"
-                                                        name="min_bid_price"
-                                                        onChange={(e) => handleChange(e)}
+                                                        placeholder="Enter price for one piece"
+                                                        name="offer_price"
                                                         pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
                                                         maxLength={10}
+                                                        onChange={(e) => handleChange(e)}
+                                                    />
+                                                    <B2NormalTextTitle className="mt-3 text-black">
+                                                        <span className="text-gray">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
+                                                    </B2NormalTextTitle>
+                                                    <B2NormalTextTitle className="mt-2 text-black">
+                                                        <span className="text-gray">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount()} ETH
+                                                    </B2NormalTextTitle>
+                                                </Form.Group>
+                                            </Form.Row>
+                                        )}
+                                        <FlexJustifyBetweenDiv className="mt-4">
+                                            <BigTitle className="text-black">Unlock once purchased</BigTitle>
+                                            <Form.Check
+                                                type="switch"
+                                                id="unlock-once-purchased-switch"
+                                                checked={isLocked}
+                                                onChange={(e) => setIsLocked(e.target.checked)}
+                                            />
+                                        </FlexJustifyBetweenDiv>
+                                        <B2NormalTextTitle className="text-gray mt-2">
+                                            Content will be unlocked after successful transaction
+                                        </B2NormalTextTitle>
+                                        {isLocked && (
+                                            <Form.Row className="mt-4">
+                                                <Form.Group as={Col} md="12">
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="Digital key, code to redeem or link to a file..."
+                                                        name="locked"
+                                                        onChange={(e) => handleChange(e)}
                                                     />
                                                     <Form.Control.Feedback type="invalid">
-                                                        Please input valid minimum bid price.
+                                                        Please input valid price.
                                                     </Form.Control.Feedback>
+                                                    <B2NormalTextTitle className="text-gray mt-3">
+                                                        Tip: Markdown syntax is supported
+                                                    </B2NormalTextTitle>
                                                 </Form.Group>
                                             </Form.Row>
-                                            <B1NormalTextTitle className="text-black">Expiry Date</B1NormalTextTitle>
-                                            <Form.Row className="mt-1">
-                                                <Form.Group as={Col} md="6">
-                                                    <Form.Control
-                                                        as="select"
-                                                        value={expiryOption}
-                                                        onChange={(e) => {
-                                                            setExpiryOption(e.target.value);
-                                                        }}
-                                                    >
-                                                        {expiryDateOptions.map((eOpt, index) => {
-                                                            return (
-                                                                <option value={eOpt.value} key={index}>
-                                                                    {eOpt.label}
-                                                                </option>
-                                                            );
-                                                        })}
-                                                    </Form.Control>
-                                                </Form.Group>
-                                            </Form.Row>
-                                        </div>
-                                    )}
-                                    <FlexJustifyBetweenDiv className="mt-4">
-                                        <BigTitle className="text-black">Instant Sell Price</BigTitle>
-                                        <Form.Check
-                                            type="switch"
-                                            id="instant-sell-price-switch"
-                                            checked={isInstantPrice}
-                                            onChange={(e) => setIsInstantPrice(e.target.checked)}
-                                        />
-                                    </FlexJustifyBetweenDiv>
-                                    <B2NormalTextTitle className="text-gray mt-2">
-                                        Enter price to allow users instantly purchase your NFT
-                                    </B2NormalTextTitle>
-                                    {isInstantPrice && (
-                                        <Form.Row className="mt-4">
-                                            <Form.Group as={Col} md="12">
-                                                <Form.Control
-                                                    required
-                                                    type="text"
-                                                    placeholder="Enter price for one piece"
-                                                    name="offer_price"
-                                                    pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
-                                                    maxLength={10}
-                                                    onChange={(e) => handleChange(e)}
-                                                />
-                                                <B2NormalTextTitle className="mt-3 text-black">
-                                                    <span className="text-gray">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
-                                                </B2NormalTextTitle>
-                                                <B2NormalTextTitle className="mt-2 text-black">
-                                                    <span className="text-gray">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount()} ETH
-                                                </B2NormalTextTitle>
-                                            </Form.Group>
-                                        </Form.Row>
-                                    )}
-                                    <FlexJustifyBetweenDiv className="mt-4">
-                                        <BigTitle className="text-black">Unlock once purchased</BigTitle>
-                                        <Form.Check
-                                            type="switch"
-                                            id="unlock-once-purchased-switch"
-                                            checked={isLocked}
-                                            onChange={(e) => setIsLocked(e.target.checked)}
-                                        />
-                                    </FlexJustifyBetweenDiv>
-                                    <B2NormalTextTitle className="text-gray mt-2">
-                                        Content will be unlocked after successful transaction
-                                    </B2NormalTextTitle>
-                                    {isLocked && (
-                                        <Form.Row className="mt-4">
-                                            <Form.Group as={Col} md="12">
-                                                <Form.Control
-                                                    required
-                                                    type="text"
-                                                    placeholder="Digital key, code to redeem or link to a file..."
-                                                    name="locked"
-                                                    onChange={(e) => handleChange(e)}
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    Please input valid price.
-                                                </Form.Control.Feedback>
-                                                <B2NormalTextTitle className="text-gray mt-3">
-                                                    Tip: Markdown syntax is supported
-                                                </B2NormalTextTitle>
-                                            </Form.Group>
-                                        </Form.Row>
-                                    )}
-                                </Col>
-                                <Col xl="7" lg="6" className="preview-area pt-4">
-                                    <BigTitle className="text-black">PREVIEW</BigTitle>
-                                    <div className="auction-item p-4">
-                                        {/* {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>} */}
-                                        <div className="token-img-area">
-                                            <div className="pre-token-img">
-                                                {previewThumbnail ? (
-                                                    <img src={previewThumbnail} alt="tokenImage" />
-                                                ) : (
-                                                    <div className="no-thumbnail"></div>
-                                                )}
+                                        )}
+                                    </Col>
+                                    <Col className="preview-area">
+                                        <BigTitle className="text-black">PREVIEW</BigTitle>
+                                        <div className="auction-item p-4">
+                                            {/* {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>} */}
+                                            <div className="token-img-area">
+                                                <div className="pre-token-img">
+                                                    {previewThumbnail ? (
+                                                        <img src={previewThumbnail} alt="tokenImage" />
+                                                    ) : (
+                                                        <div className="no-thumbnail"></div>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <B1NormalTextTitle className="mt-3">
-                                            {collectible.name}
-                                        </B1NormalTextTitle>
-                                        <NormalTextTitle className="text-black">
-                                            {isInstantPrice ? (
-                                                <>From {collectible.offer_price} ETH</>
-                                            ) : (
-                                                collectible.is_auction ? "Put up for sale" : "Not for Sale"
-                                            )}
-                                        </NormalTextTitle>
-                                        <SubDescription className="mt-2"></SubDescription>
-                                        <FlexAlignCenterDiv className="mt-2 text-black">
-                                            {collectible.is_auction ? (
-                                                <NormalTextTitle>
-                                                    Bid ~ {collectible.min_bid_price} ETH
-                                                </NormalTextTitle>
-                                            ) : (
-                                                <NormalTextTitle>Buy Now</NormalTextTitle>
-                                            )}
-                                        </FlexAlignCenterDiv>
-                                    </div>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <BigTitle className="mt-4 text-black">Choose collection</BigTitle>
-                                    <div className="collection-types d-flex mt-4 text-black">
-                                        <div
-                                            className="choose-collection-item p-4 mr-4 text-center"
-                                            onClick={() => {
-                                                setShowCollectionDialog(true);
-                                            }}
-                                        >
-                                            <div className="c-nft-avatar add-collection-btn">
-                                                <FaPlus></FaPlus>
-                                            </div>
-                                            <B3NormalTextTitle className="faint-color mt-3">
-                                                Create
-                                            </B3NormalTextTitle>
-                                            <B2NormalTextTitle className="mt-3">
-                                                ERC - 721
-                                            </B2NormalTextTitle>
+                                            <B1NormalTextTitle className="mt-3">
+                                                {collectible.name}
+                                            </B1NormalTextTitle>
+                                            <NormalTextTitle className="text-black">
+                                                {isInstantPrice ? (
+                                                    <>From {collectible.offer_price} ETH</>
+                                                ) : (
+                                                    collectible.is_auction ? "Put up for sale" : "Not for Sale"
+                                                )}
+                                            </NormalTextTitle>
+                                            <SubDescription className="mt-2"></SubDescription>
+                                            <FlexAlignCenterDiv className="mt-2 text-black">
+                                                {collectible.is_auction ? (
+                                                    <NormalTextTitle>
+                                                        Bid ~ {collectible.min_bid_price} ETH
+                                                    </NormalTextTitle>
+                                                ) : (
+                                                    <NormalTextTitle>Buy Now</NormalTextTitle>
+                                                )}
+                                            </FlexAlignCenterDiv>
                                         </div>
-                                        {/* {collectionItems.map((cItem: any, index: number) => {
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        <BigTitle className="mt-4 text-black">Choose collection</BigTitle>
+                                        <div className="collection-types d-flex mt-4 text-black">
+                                            <div
+                                                className="choose-collection-item p-4 mr-4 text-center"
+                                                onClick={() => {
+                                                    setShowCollectionDialog(true);
+                                                }}
+                                            >
+                                                <div className="c-nft-avatar add-collection-btn">
+                                                    <FaPlus></FaPlus>
+                                                </div>
+                                                <B3NormalTextTitle className="faint-color mt-3">
+                                                    Create
+                                                </B3NormalTextTitle>
+                                                <B2NormalTextTitle className="mt-3">
+                                                    ERC - 721
+                                                </B2NormalTextTitle>
+                                            </div>
+                                            {/* {collectionItems.map((cItem: any, index: number) => {
                                             return (
                                                 <ChooseCollectionItem
                                                 item={cItem}
@@ -641,10 +642,10 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 />
                                             );
                                             })} */}
-                                    </div>
-                                    <BigTitle className="mt-4 text-black">Choose categories</BigTitle>
-                                    <FlexAlignCenterDiv className="category-list mt-4">
-                                        {/* {nftCategories.map((eType, index) => {
+                                        </div>
+                                        <BigTitle className="mt-4 text-black">Choose categories</BigTitle>
+                                        <FlexAlignCenterDiv className="category-list mt-4">
+                                            {/* {nftCategories.map((eType, index) => {
                                             return (
                                                 eType.value !== "all" && (
                                                 <div
@@ -659,112 +660,113 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 )
                                             );
                                             })} */}
-                                    </FlexAlignCenterDiv>
-                                    <Row>
-                                        <Col xl="5" lg="6">
-                                            <Form.Row className="mt-4">
-                                                <Form.Group as={Col} md="6">
-                                                    <Form.Label>
-                                                        <BigTitle className="text-black">Name</BigTitle>
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        required
-                                                        type="text"
-                                                        placeholder="name"
-                                                        name="name"
-                                                        onChange={(e) => handleChange(e)}
-                                                    />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        Please input valid name
-                                                    </Form.Control.Feedback>
-                                                    <B1NormalTextTitle className="mt-2 text-gray">
-                                                        Example: Magik 23
-                                                    </B1NormalTextTitle>
-                                                </Form.Group>
-                                                <Form.Group as={Col} md="6">
-                                                    <Form.Label>
-                                                        <BigTitle className="text-black">Royalties</BigTitle>
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        required
-                                                        type="number"
-                                                        placeholder="Royalties"
-                                                        name="royalties"
-                                                        min="0"
-                                                        max="50"
-                                                        pattern="^\d+$"
-                                                        onChange={(e) => handleChange(e)}
-                                                    />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        Royalties should be in range from 0% - 50%.
-                                                    </Form.Control.Feedback>
-                                                    <B1NormalTextTitle className="mt-2 text-gray">
-                                                        Suggested: 10%, 20%, 30%
-                                                    </B1NormalTextTitle>
-                                                </Form.Group>
-                                            </Form.Row>
-                                            <Form.Row className="mt-4">
-                                                <Form.Group as={Col} md="12">
-                                                    <Form.Label>
-                                                        <BigTitle className="text-black">Description</BigTitle>
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        as="textarea"
-                                                        placeholder="Description"
-                                                        name="description"
-                                                        rows={1}
-                                                        onChange={(e) => handleChange(e)}
-                                                    />
-                                                    <B1NormalTextTitle className="mt-2 text-gray">
-                                                        With preserved line-breaks
-                                                    </B1NormalTextTitle>
-                                                </Form.Group>
-                                            </Form.Row>
-                                            <FlexAlignCenterDiv className="mt-4">
-                                                {!isAuth && (
-                                                    <div className="mr-4">
-                                                        <ConnectWalletBtn />
-                                                    </div>
-                                                )}
-                                                <Button
-                                                    className="default-btn-size "
-                                                    type="submit"
-                                                >
-                                                    <span>Create NFT</span>
-                                                </Button>
-                                            </FlexAlignCenterDiv>
-                                        </Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                        </Form>
+                                        </FlexAlignCenterDiv>
+                                        <Row>
+                                            <Col xl="5" lg="6">
+                                                <Form.Row className="mt-4">
+                                                    <Form.Group as={Col} md="6">
+                                                        <Form.Label>
+                                                            <BigTitle className="text-black">Name</BigTitle>
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                            required
+                                                            type="text"
+                                                            placeholder="name"
+                                                            name="name"
+                                                            onChange={(e) => handleChange(e)}
+                                                        />
+                                                        <Form.Control.Feedback type="invalid">
+                                                            Please input valid name
+                                                        </Form.Control.Feedback>
+                                                        <B1NormalTextTitle className="mt-2 text-gray">
+                                                            Example: Magik 23
+                                                        </B1NormalTextTitle>
+                                                    </Form.Group>
+                                                    <Form.Group as={Col} md="6">
+                                                        <Form.Label>
+                                                            <BigTitle className="text-black">Royalties</BigTitle>
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                            required
+                                                            type="number"
+                                                            placeholder="Royalties"
+                                                            name="royalties"
+                                                            min="0"
+                                                            max="50"
+                                                            pattern="^\d+$"
+                                                            onChange={(e) => handleChange(e)}
+                                                        />
+                                                        <Form.Control.Feedback type="invalid">
+                                                            Royalties should be in range from 0% - 50%.
+                                                        </Form.Control.Feedback>
+                                                        <B1NormalTextTitle className="mt-2 text-gray">
+                                                            Suggested: 10%, 20%, 30%
+                                                        </B1NormalTextTitle>
+                                                    </Form.Group>
+                                                </Form.Row>
+                                                <Form.Row className="mt-4">
+                                                    <Form.Group as={Col} md="12">
+                                                        <Form.Label>
+                                                            <BigTitle className="text-black">Description</BigTitle>
+                                                        </Form.Label>
+                                                        <Form.Control
+                                                            as="textarea"
+                                                            placeholder="Description"
+                                                            name="description"
+                                                            rows={1}
+                                                            onChange={(e) => handleChange(e)}
+                                                        />
+                                                        <B1NormalTextTitle className="mt-2 text-gray">
+                                                            With preserved line-breaks
+                                                        </B1NormalTextTitle>
+                                                    </Form.Group>
+                                                </Form.Row>
+                                                <FlexAlignCenterDiv className="mt-4">
+                                                    {!isAuth && (
+                                                        <div className="mr-4">
+                                                            <ConnectWalletBtn />
+                                                        </div>
+                                                    )}
+                                                    <Button
+                                                        className="default-btn-size "
+                                                        type="submit"
+                                                    >
+                                                        <span>Create NFT</span>
+                                                    </Button>
+                                                </FlexAlignCenterDiv>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Form>
 
-                        <CreateCollectionModal
-                            show={showCollectionDialog}
-                            handleClose={() => {
-                                setShowCollectionDialog(false);
-                            }}
-                            createCollection={(e: any) => {
-                                createCollection(e);
-                            }}
-                        ></CreateCollectionModal>
-                        {isLoading && <LoadingSpinner></LoadingSpinner>}
-                        {createNftDialog && (
-                            <CreateNftStatusModal
-                                show={createNftDialog}
-                                status={createNftStatus}
-                                collectible={collectible}
-                                onClose={() => {
-                                    setCreateNftDialog(false);
+                            <CreateCollectionModal
+                                show={showCollectionDialog}
+                                handleClose={() => {
+                                    setShowCollectionDialog(false);
                                 }}
-                                createNft={createNft}
-                                approveNft={approveNft}
-                                createOffer={createOffer}
-                            ></CreateNftStatusModal>
-                        )}
-                    </Col>
-                </Row>
-            )}
+                                createCollection={(e: any) => {
+                                    createCollection(e);
+                                }}
+                            ></CreateCollectionModal>
+                            {isLoading && <LoadingSpinner></LoadingSpinner>}
+                            {createNftDialog && (
+                                <CreateNftStatusModal
+                                    show={createNftDialog}
+                                    status={createNftStatus}
+                                    collectible={collectible}
+                                    onClose={() => {
+                                        setCreateNftDialog(false);
+                                    }}
+                                    createNft={createNft}
+                                    approveNft={approveNft}
+                                    createOffer={createOffer}
+                                ></CreateNftStatusModal>
+                            )}
+                        </Col>
+                    </Row>
+                )}
+            </Container>
         </Layout>
     );
 };
