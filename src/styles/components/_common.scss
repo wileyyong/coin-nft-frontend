@@ -14,7 +14,7 @@
     }
     .nft-back-indigo {
         background: $indigo;
-    }    
+    }
 
     .card-info {
         padding-right: 80px;
@@ -109,7 +109,7 @@
 
     .hot-back {
         background: $gray-100;
-    }  
+    }
 
     .card-info {
         padding-right: 40px;
@@ -125,7 +125,7 @@
             padding-top: 10px;
         }
         .hot-type {
-            color: $gray-600; 
+            color: $gray-600;
             font-size: 20px;
             font-weight: $font-weight-bold;
             padding-top: 10px;
@@ -158,17 +158,15 @@
             color: $gray-600;
             font-size: 16px;
         }
-
     }
     .modal-footer {
         margin-top: 20px;
         border-radius: 10px;
-        background-color: #E9F9F6;
+        background-color: #e9f9f6;
         color: $black;
         font-size: 16px;
         font-weight: bold;
     }
-    
 }
 
 .connectwalletmodal {
@@ -178,7 +176,7 @@
             font-size: 24px;
             font-weight: bold;
         }
-    
+
         .modal-balance {
             color: $white;
             background: $primary;
@@ -211,14 +209,14 @@
                 color: $gray-600;
                 font-size: 14px;
             }
-    
+
             hr {
                 width: 100%;
                 margin-top: 0;
                 margin-bottom: 0;
             }
         }
-    
+
         .btn-primary {
             margin-top: 20px;
             border-radius: 10px;
@@ -253,7 +251,6 @@
                 border-top: 1px dashed $gray-300;
                 border-radius: 10px;
             }
-
         }
     }
 }
@@ -275,3 +272,34 @@
         padding: 0;
     }
 }
+
+.file-uploader {
+    text-align: center;
+    border: 2px dashed $gray-300;
+    box-sizing: border-box;
+    border-radius: 5px;
+    .preview {
+        position: relative;
+        .close-btn {
+            position: absolute;
+            right: 0px;
+            top: -10px;
+            svg {
+                cursor: pointer;
+                font-size: 26px;
+            }
+        }
+        img {
+            max-width: 100%;
+            width: 320px;
+            margin: 10px auto;
+        }
+    }
+
+    .btn-primary {
+        border-radius: 5px;
+        color: $white !important;
+    }
+}
+
+

@@ -1,0 +1,18 @@
+.create-collection-modal {
+    .modal-header {
+        color: $black;
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+    .modal-body {
+        color: $black;
+        .text-gray {
+            color: $gray-600;
+        }
+
+        .btn-primary {
+            border-radius: 5px;
+            color: $white;
+        }
+    }
+}
