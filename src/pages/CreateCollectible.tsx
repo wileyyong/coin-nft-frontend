@@ -571,7 +571,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         )}
                                     </Col>
                                     <Col className="preview-area">
-                                        <BigTitle className="text-black">PREVIEW</BigTitle>
+                                        <BigTitle className="text-black pb-3">PREVIEW</BigTitle>
                                         <div className="auction-item p-4">
                                             {/* {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>} */}
                                             <div className="token-img-area">
