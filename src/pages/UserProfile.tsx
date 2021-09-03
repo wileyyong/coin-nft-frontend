@@ -70,7 +70,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                 <div className="display user-name pb-3">{account_data.name}</div>
                 <div className="d-flex flex-row align-items-center pb-3">
                     <div className="token-address pr-2">0x36d564dsafd645fads6456fads</div>
-                    <Image src={copyImg}></Image>
+                    <Image src={copyImg} className="token-copy"></Image>
                 </div>
                 <div className="d-flex flex-row align-items-center pb-2">
                     <p className="font-weight-bold text-color pr-1">20</p>
