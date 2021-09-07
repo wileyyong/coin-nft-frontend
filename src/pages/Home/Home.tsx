@@ -103,7 +103,7 @@ const Home: React.FC<HomeProps> = () => {
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
         <div className="row text-center">
           {
-            sellers.map((seller, index) => (
+            sellers.length > 0 && sellers.map((seller, index) => (
               <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
                 <Image src={seller.avatar ?  `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
                 <div className="seg-name pt-2">{seller.name}</div>
@@ -119,7 +119,7 @@ const Home: React.FC<HomeProps> = () => {
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
         <div className="row pr-2 pl-2">
           {
-            exploreAuctions.map((auction, index) => (
+            exploreAuctions.length > 0 && exploreAuctions.map((auction, index) => (
               <NftItemCard key={index} item={auction}></NftItemCard>
             ))
           }
