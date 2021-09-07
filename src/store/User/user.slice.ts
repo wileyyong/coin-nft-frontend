@@ -5,6 +5,8 @@ import {
   initCollectionItems,
 } from "./user.state";
 import Storage from "service/storage";
+import UserController from "controller/UserController";
+import CollectionController from "controller/CollectionController";
 import EthUtil from "ethereum/EthUtil";
 import configs from "configs";
 import { onboard } from "ethereum/OnBoard";
@@ -39,7 +41,7 @@ export const userSlice = createSlice({
     },
     setMyTokens(state: Draft<UserReducerState>, action: PayloadAction<any>) {
       state.myTokens = action.payload;
-    },
+    }
   },
 });
 
@@ -57,11 +59,31 @@ export const {
   setMyTokens,
 } = actions;
 
+export const signInWithWallet = (payload: any) => async (dispatch: any) => {
+  try {
+    await UserController.signInWithWallet(payload).then((res) => {
+      if (res.token) {
+        Storage.setAuthToken(res.token);
+        dispatch(setToken(res.token));
+      }
+    });
+  } catch (e) {}
+};
+
 export const getWalletBalance = () => async (dispatch: any) => {
   try {
     let balance = await EthUtil.getBalance();
     if (balance) {
       dispatch(setUserWalletBalance(balance));
+    }
+  } catch (e) {}
+};
+
+export const loadMyCollections = () => async (dispatch: any) => {
+  try {
+    const collections = await CollectionController.getMyCollections();
+    if (collections) {
+      dispatch(setMyCollection(collections));
     }
   } catch (e) {}
 };
@@ -85,11 +107,20 @@ export const connectUserWallet = () => async (dispatch: any) => {
       const walletCheck = await onboard.walletCheck();
       if (walletCheck) {
         const currentState = onboard.getState();
+        const wallet = currentState.wallet
         if (currentState.address) {
+          Storage.set(configs.STORAGE.SELECTED_WALLET, wallet.name);
           dispatch(setUserWalletAddress(currentState.address));
           dispatch(getWalletBalance());
         }
       }
     }
+  } catch (e) {}
+};
+
+export const getMyInfo = (payload: string) => async (dispatch: any) => {
+  try {
+    const { user } = await UserController.userStats(payload);
+    dispatch(setMyInfo(user));
   } catch (e) {}
 };

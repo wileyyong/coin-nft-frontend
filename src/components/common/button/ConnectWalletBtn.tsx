@@ -20,7 +20,7 @@ const ConnectWalletBtn: React.FC<ConnectWalletBtnProps> = () => {
         connectWallet();
       }}
     >
-      <span>Connect Wallet</span>
+      Connect Wallet
     </Button>
   );
 };

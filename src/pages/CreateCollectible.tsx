@@ -390,8 +390,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     }, [expiryOption]);
 
     return (
-        <Layout>
-            <Container className="create-collectible-container">
+        <Layout className="create-collectible-container">
+            <Container className="container">
                 <Link to="/">
                     <div className="d-flex flex-row align-items-center">
                         <FaLongArrowAltLeft />

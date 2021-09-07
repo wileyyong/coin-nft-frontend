@@ -55,12 +55,17 @@ const Home: React.FC<HomeProps> = () => {
   }, [searchParam]);
 
   useEffect(() => {
-    const loadData = async() => {
-      let items = await UserController.getTopUsers('sellers', "7");
-      setSellers(items);
+    const loadData = async () => {
+      try {
+        let items = await UserController.getTopUsers('sellers', "7");
+        setSellers(items);
+      } catch (err) {
+        console.log(err);
+      }
     }
+    
     loadData();
-  })
+  }, [])
 
   const history = useHistory();
 
@@ -105,7 +110,7 @@ const Home: React.FC<HomeProps> = () => {
           {
             sellers.length > 0 && sellers.map((seller, index) => (
               <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
-                <Image src={seller.avatar ?  `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
+                <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
                 <div className="seg-name pt-2">{seller.name}</div>
                 <div className="seg-type pt-2">{seller.type}</div>
                 <div className="seg-price pt-2">{seller.amount} PUML</div>
