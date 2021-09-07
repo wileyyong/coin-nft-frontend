@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Layout from "components/Layout";
 import { Button, Image } from "react-bootstrap";
 
@@ -9,14 +9,15 @@ import metamaskImage from "assets/imgs/meta-logo.png";
 import ticketImage from "assets/imgs/ticket.png";
 
 import NftItemCard from "components/common/NftItemCard";
-import HotCard from "components/common/HotCard";
 import ConnectWallet from "components/common/modal/ConnectWalletModal";
 import DepositWallet from "components/common/modal/DepositWalletModal";
-import sellerdata from "assets/sellerdata";
-import nftlist from "assets/nftlist";
-import hotlist from "assets/hotlist";
+import Collections from "components/collection/Collections";
+import imageAvatar from "assets/imgs/seller1.png";
+import configs from "configs";
 
 import { useHistory } from 'react-router-dom';
+import OfferController from "controller/OfferController";
+import UserController from "controller/UserController";
 
 interface HomeProps { }
 
@@ -30,6 +31,36 @@ const Home: React.FC<HomeProps> = () => {
   const [showDepositWallet, setShowDepositWallet] = useState(false);
   const depositWalletClose = () => setShowDepositWallet(false);
   const depositWalletShow = () => setShowDepositWallet(true);
+
+  const [exploreAuctions, setExploreAuctions] = useState<any[]>([]);
+  const [sellers, setSellers] = useState<any[]>([]);
+  const [searchParam, setSearchParam] = useState<any>({
+    category: "all",
+    sort: "recent",
+    verified: false
+  })
+
+  useEffect(() => {
+    const loadExploreData = async () => {
+      let params = {};
+      if (searchParam.category === "all") {
+        params = { sort: searchParam.sort, verified: false };
+      }
+
+      let offers = await OfferController.getList("explore", params);
+      setExploreAuctions(offers);
+    };
+
+    loadExploreData();
+  }, [searchParam]);
+
+  useEffect(() => {
+    const loadData = async() => {
+      let items = await UserController.getTopUsers('sellers', "7");
+      setSellers(items);
+    }
+    loadData();
+  })
 
   const history = useHistory();
 
@@ -72,13 +103,13 @@ const Home: React.FC<HomeProps> = () => {
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
         <div className="row text-center">
           {
-            sellerdata.map((seller, index) => (
-              <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${index}`)}>
-                <Image src={seller.img} alt="seller"></Image>
+            sellers.map((seller, index) => (
+              <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
+                <Image src={seller.avatar ?  `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
                 <div className="seg-name pt-2">{seller.name}</div>
                 <div className="seg-type pt-2">{seller.type}</div>
-                <div className="seg-price pt-2">{seller.price} PUML</div>
-                <div className="seg-price-eth pt-2">{seller.price_eth}</div>
+                <div className="seg-price pt-2">{seller.amount} PUML</div>
+                <div className="seg-price-eth pt-2">{seller.amount}</div>
               </div>
             ))
           }
@@ -88,21 +119,22 @@ const Home: React.FC<HomeProps> = () => {
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
         <div className="row pr-2 pl-2">
           {
-            nftlist.map((nft, index) => (
-              <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
+            exploreAuctions.map((auction, index) => (
+              <NftItemCard key={index} item={auction}></NftItemCard>
             ))
           }
         </div>
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Collections</h1>
-        <div className="row pr-2 pl-2">
+        <Collections type="hot" />
+        {/* <div className="row pr-2 pl-2">
           {
             hotlist.map((hot, index) => (
               <HotCard key={index} backurl={hot.backurl} imgurl={hot.imgurl} title={hot.title} type={hot.type}></HotCard>
             ))
           }
-        </div>
+        </div> */}
       </div>
       <div className="section">
         <div className="d-flex flex-row align-items-center flex-wrap pt-4">
@@ -118,16 +150,13 @@ const Home: React.FC<HomeProps> = () => {
         </div>
         <div className="row pr-2 pl-2">
           {
-            nftlist.map((nft, index) => (
-              <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
-            ))
-          }
-        </div>
-        <div className="row pr-2 pl-2">
-          {
-            nftlist.map((nft, index) => (
-              <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
-            ))
+            exploreAuctions.length > 0 && (
+              exploreAuctions.map((auction, index) => {
+                return (
+                  <NftItemCard key={index} item={auction}></NftItemCard>
+                )
+              })
+            )
           }
         </div>
       </div>
