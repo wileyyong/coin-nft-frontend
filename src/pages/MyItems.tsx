@@ -17,11 +17,11 @@ const MyItems: React.FC<MyItemProps> = () => {
 
     const OnSale = () => (
         <div className="row pt-4">
-            {
+            {/* {
                 nftlist.map((nft, index) => (
                     <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
                 ))
-            }
+            } */}
         </div>
     );
     // const Collectibles = () => <div> Collectibles component. </div>;

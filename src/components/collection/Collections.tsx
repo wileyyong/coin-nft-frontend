@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-//import CollectionController from "controller/CollectionController";
+import CollectionController from "controller/CollectionController";
 import React, { useEffect, useState } from "react";
 import {
     FlexSlideContainer,
@@ -42,36 +42,36 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
       pageNumber = pageNum.sponsored;
     }
 
-    // const loadCollections = async() => {
-    //   let data = await CollectionController.getList(type, pageNumber);
-    //   if (data.collections.length >= showItems ) {
-    //     setShowArrows(true);
-    //   } else {
-    //     setShowArrows(false);
-    //   }
-    //   if (type === 'hot' && data.pages) {
-    //     if (pageNum.hot === 1) {
-    //       pages.hot = data.pages;
-    //     }
-    //     setCollections(pageNum.hot === 1 ? data.collections : collectionList.concat(data.collections));
-    //   }
-    //   if (type === 'featured' && data.pages) {
-    //     if (pageNum.featured === 1) {
-    //       pages.featured = data.pages;
-    //     }
-    //     setCollections(pageNum.featured === 1 ? data.collections : collectionList.concat(data.collections));
-    //   }
-    //   if (type === 'sponsored' && data.pages) {
-    //     if (pageNum.sponsored === 1) {
-    //       pages.sponsored = data.pages;
-    //     }
-    //     setCollections(pageNum.sponsored === 1 ? data.collections : collectionList.concat(data.collections));
-    //   }
-    //   setPages(pages);
-    //   setIncreaseVal(3);
-    // }
+    const loadCollections = async() => {
+      let data = await CollectionController.getList(type, pageNumber);
+      if (data.collections.length >= showItems ) {
+        setShowArrows(true);
+      } else {
+        setShowArrows(false);
+      }
+      if (type === 'hot' && data.pages) {
+        if (pageNum.hot === 1) {
+          pages.hot = data.pages;
+        }
+        setCollections(pageNum.hot === 1 ? data.collections : collectionList.concat(data.collections));
+      }
+      if (type === 'featured' && data.pages) {
+        if (pageNum.featured === 1) {
+          pages.featured = data.pages;
+        }
+        setCollections(pageNum.featured === 1 ? data.collections : collectionList.concat(data.collections));
+      }
+      if (type === 'sponsored' && data.pages) {
+        if (pageNum.sponsored === 1) {
+          pages.sponsored = data.pages;
+        }
+        setCollections(pageNum.sponsored === 1 ? data.collections : collectionList.concat(data.collections));
+      }
+      setPages(pages);
+      setIncreaseVal(3);
+    }
 
-    // loadCollections();
+    loadCollections();
   }, [type, pageNum]);
 
   const onNextCollections = () => {
