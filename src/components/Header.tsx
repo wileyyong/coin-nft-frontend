@@ -1,12 +1,14 @@
 import React from "react";
-import { Navbar, Nav, Image, NavDropdown, Button } from "react-bootstrap";
+import { Navbar, Nav, Image, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-
+import { onboard } from "ethereum/OnBoard";
 import logoImg from "assets/imgs/logo.svg";
-import avatarImg from "assets/imgs/avatar.png";
 import configs from "configs";
-
+import { FaEthereum } from "react-icons/fa";
+import {
+  disconnectUserWallet
+} from "store/User/user.slice";
 import {
   B1NormalTextTitle,
   FlexAlignCenterDiv,
@@ -21,13 +23,19 @@ import {
   getMyInfo,
 } from "store/User/user.selector";
 
+import imgAvatar from "assets/imgs/avatar.svg";
+
 interface HeaderProps { }
 
 const Header: React.FC<HeaderProps> = () => {
 
   const location = useLocation();
+  const walletAddress = useAppSelector(getWalletAddress);
+  const balance = useAppSelector(getWalletBalance);
+  const isAuth = useAppSelector(isAuthenticated);
+  const dispatch = useAppDispatch();
   const userInfo = useAppSelector(getMyInfo);
-
+  
   const getDropdownAvatar = () => {
     return (
       <div className="header-avatar d-flex flex-row align-items-center">
@@ -35,7 +43,7 @@ const Header: React.FC<HeaderProps> = () => {
           src={
             userInfo.avatar
               ? `${configs.DEPLOY_URL}${userInfo.avatar}`
-              : avatarImg
+              : imgAvatar
           }
         ></Image>
         <div className="ml-2">
@@ -44,6 +52,13 @@ const Header: React.FC<HeaderProps> = () => {
         </div>
       </div>
     );
+  };
+
+  const disConnect = () => {
+    onboard.walletReset();
+    dispatch(disconnectUserWallet());
+    document.querySelector(".navbar-collapse")?.classList.remove("show");
+    document.querySelector(".navbar-toggler")?.classList.add("collapsed");
   };
 
   return (
@@ -73,30 +88,35 @@ const Header: React.FC<HeaderProps> = () => {
                 Home
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                eventKey="2"
-                as={Link}
-                to="/items"
-                className="mr-lg-3"
-                active={location.pathname === "/items"}
-              >
-                My Items
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                eventKey="3"
-                as={Link}
-                to="/create-collectible"
-                className="mr-lg-3"
-                active={location.pathname === "/create-collectible"}
-              >
-                Create NFT
-              </Nav.Link>
-            </Nav.Item>
+            {walletAddress && isAuth && (
+              <Nav.Item>
+                <Nav.Link
+                  eventKey="2"
+                  as={Link}
+                  to="/items"
+                  className="mr-lg-3"
+                  active={location.pathname === "/items"}
+                >
+                  My Items
+                </Nav.Link>
+              </Nav.Item>
+            )}
+            {walletAddress && isAuth && (
+              <Nav.Item>
+                <Nav.Link
+                  eventKey="3"
+                  as={Link}
+                  to="/create-collectible"
+                  className="mr-lg-3"
+                  active={location.pathname === "/create-collectible"}
+                >
+                  Create NFT
+                </Nav.Link>
+              </Nav.Item>
+            )}
 
             <Nav.Item className="d-flex pr-4 mr-4 buttons">
+              {walletAddress && isAuth ? (
                 <NavDropdown
                   title={getDropdownAvatar()}
                   id="header-nav-dropdown"
@@ -109,8 +129,10 @@ const Header: React.FC<HeaderProps> = () => {
                       </B1NormalTextTitle>
                     )}
                     <FlexAlignCenterDiv>
-                      <div>
-                        {getDropdownAvatar()}
+                      <FaEthereum size={22}></FaEthereum>
+                      <div className="ml-2">
+                        <NormalTextTitle>Balance</NormalTextTitle>
+                        <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
                       </div>
                     </FlexAlignCenterDiv>
                   </div>
@@ -122,10 +144,11 @@ const Header: React.FC<HeaderProps> = () => {
                   <NavDropdown.Item as={Link} to="/profile">
                     Edit Profile
                   </NavDropdown.Item>
-                  <NavDropdown.Item>
+                  <NavDropdown.Item onClick={disConnect}>
                     Disconnect
                   </NavDropdown.Item>
                 </NavDropdown>
+              ) : ''}
             </Nav.Item>
           </Nav>
         </Navbar.Collapse>

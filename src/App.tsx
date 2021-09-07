@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { connectUserWallet } from "store/User/user.slice";
+import { connectUserWallet, signInWithWallet } from "store/User/user.slice";
 import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
 
 import Home from "./pages/Home/Home";
@@ -13,6 +13,7 @@ import CreateCollectible from "./pages/CreateCollectible";
 
 import "./styles/index.scss";
 import { getETHUSDTCurrency } from "store/Nft/nft.slice";
+import { getMyInfo } from 'store/User/user.slice';
 
 interface AppProps { }
 
@@ -26,6 +27,13 @@ const App: React.FC<AppProps> = () => {
     }
     dispatch(getETHUSDTCurrency());
   }, [dispatch, isAuth, walletAddress]);
+
+  useEffect(() => {
+    if (walletAddress) {
+      dispatch(signInWithWallet({ wallet: walletAddress }));
+      dispatch(getMyInfo(walletAddress));
+    }
+  }, [dispatch, walletAddress]);
 
   return (
     <div className="App">
