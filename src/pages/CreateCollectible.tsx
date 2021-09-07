@@ -641,7 +641,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 isSelected={collectible.collection === cItem._id}
                                                 />
                                             );
-                                            })} */}
+                                            })} */} 
                                         </div>
                                         <BigTitle className="mt-4 text-black">Choose categories</BigTitle>
                                         <FlexAlignCenterDiv className="category-list mt-4">
