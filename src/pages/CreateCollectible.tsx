@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
-import imgAvatar from "assets/imgs/avatar.svg";
+import imgAvatar from "assets/imgs/avatar.png";
 
 import {
     B1NormalTextTitle,

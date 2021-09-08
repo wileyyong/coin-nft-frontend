@@ -13,6 +13,8 @@ import ConnectWallet from "components/common/modal/ConnectWalletModal";
 import DepositWallet from "components/common/modal/DepositWalletModal";
 import Collections from "components/collection/Collections";
 import imageAvatar from "assets/imgs/seller1.png";
+import NoItem from "components/common/noItem";
+
 import configs from "configs";
 
 import { useHistory } from 'react-router-dom';
@@ -63,7 +65,7 @@ const Home: React.FC<HomeProps> = () => {
         console.log(err);
       }
     }
-    
+
     loadData();
   }, [])
 
@@ -106,40 +108,52 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
-        <div className="row text-center">
+        <div className="row text-center justify-content-center">
           {
-            sellers.length > 0 && sellers.map((seller, index) => (
-              <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
-                <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
-                <div className="seg-name pt-2">{seller.name}</div>
-                <div className="seg-type pt-2">{seller.type}</div>
-                <div className="seg-price pt-2">{seller.amount} PUML</div>
-                <div className="seg-price-eth pt-2">{seller.amount}</div>
-              </div>
-            ))
+            sellers.length > 0 ?
+              sellers.map((seller, index) => (
+                <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
+                  <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
+                  <div className="seg-name pt-2">{seller.name}</div>
+                  <div className="seg-type pt-2">{seller.type}</div>
+                  <div className="seg-price pt-2">{seller.amount} PUML</div>
+                  <div className="seg-price-eth pt-2">{seller.amount}</div>
+                </div>
+              )
+              ) : (
+                <NoItem
+                  title="No items found"
+                  description="Come back soon! Or try to browse something for you on our marketplace"
+                  btnLink="/"
+                  btnLabel="Browse marketplace"
+                />
+              )
           }
         </div>
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
-        <div className="row pr-2 pl-2">
+        <div className="row pr-2 pl-2 justify-content-center">
           {
-            exploreAuctions.length > 0 && exploreAuctions.map((auction, index) => (
-              <NftItemCard key={index} item={auction}></NftItemCard>
-            ))
+            exploreAuctions.length > 0 ?
+              exploreAuctions.map((auction, index) => (
+                <NftItemCard key={index} item={auction}></NftItemCard>
+              )
+              ) : (
+                <NoItem
+                  title="No items found"
+                  description="Come back soon! Or try to browse something for you on our marketplace"
+                  btnLink="/"
+                  btnLabel="Browse marketplace"
+                />
+              )
+
           }
         </div>
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Collections</h1>
         <Collections type="hot" />
-        {/* <div className="row pr-2 pl-2">
-          {
-            hotlist.map((hot, index) => (
-              <HotCard key={index} backurl={hot.backurl} imgurl={hot.imgurl} title={hot.title} type={hot.type}></HotCard>
-            ))
-          }
-        </div> */}
       </div>
       <div className="section">
         <div className="d-flex flex-row align-items-center flex-wrap pt-4">
@@ -153,15 +167,23 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row pr-2 pl-2">
+        <div className="row pr-2 pl-2 justify-content-center">
           {
-            exploreAuctions.length > 0 && (
-              exploreAuctions.map((auction, index) => {
-                return (
-                  <NftItemCard key={index} item={auction}></NftItemCard>
-                )
-              })
-            )
+            exploreAuctions.length > 0 ?
+              (
+                exploreAuctions.map((auction, index) => {
+                  return (
+                    <NftItemCard key={index} item={auction}></NftItemCard>
+                  )
+                })
+              ) : (
+                <NoItem
+                  title="No items found"
+                  description="Come back soon! Or try to browse something for you on our marketplace"
+                  btnLink="/"
+                  btnLabel="Browse marketplace"
+                />
+              )
           }
         </div>
       </div>

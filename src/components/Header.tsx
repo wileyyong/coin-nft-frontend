@@ -23,7 +23,7 @@ import {
   getMyInfo,
 } from "store/User/user.selector";
 
-import imgAvatar from "assets/imgs/avatar.svg";
+import imgAvatar from "assets/imgs/avatar.png";
 
 interface HeaderProps { }
 

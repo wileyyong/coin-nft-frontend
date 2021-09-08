@@ -20,6 +20,10 @@
         cursor: pointer;
     }
 
+    .form-control {
+        color: $black;
+    }
+
     .edit-profile {
         align-items: center;
         padding-top: 20px;
@@ -62,6 +66,45 @@
             }
             .filetype {
                 color: $gray-600;
+            }
+        }
+
+        .avatar-uploader {
+            border: 2px dashed $gray-300;
+            .avatar-preview {
+                margin: 20px auto;
+                width: 106px;
+                height: 106px;
+                border-radius: 106px;
+                border: 3px solid $purple;
+                img {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 100px;
+                    object-fit: cover;
+                }
+            }
+            .file-uploader {
+                color: $black;
+
+                .email {
+                    font-weight: bold;
+                    font-size: 18px;
+                }
+
+                .title {
+                    font-size: 16px;
+                }
+
+                .file-type {
+                    font-size: 16px;
+                    color: $gray-600;
+                }
+
+                .btn-primary {
+                    border-radius: 5px;
+                    color: $white !important;
+                }
             }
         }
 

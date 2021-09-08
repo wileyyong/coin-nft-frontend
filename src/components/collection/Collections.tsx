@@ -2,10 +2,11 @@
 import CollectionController from "controller/CollectionController";
 import React, { useEffect, useState } from "react";
 import {
-    FlexSlideContainer,
+  FlexSlideContainer,
 } from "../common/common.styles";
 import CollectionItem from "./CollectionItem";
 import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from 'react-icons/hi';
+import NoItem from "components/common/noItem";
 
 interface CollectionsProps {
   type: string;
@@ -42,9 +43,9 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
       pageNumber = pageNum.sponsored;
     }
 
-    const loadCollections = async() => {
+    const loadCollections = async () => {
       let data = await CollectionController.getList(type, pageNumber);
-      if (data.collections.length >= showItems ) {
+      if (data.collections.length >= showItems) {
         setShowArrows(true);
       } else {
         setShowArrows(false);
@@ -103,7 +104,17 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
   }
 
   return (
-    <FlexSlideContainer className="slide-container" id={`slider_${type}`}>
+    <FlexSlideContainer className="slide-container justify-content-center" id={`slider_${type}`}>
+      {
+        collectionList.length === 0 && (
+          <NoItem
+            title="No items found"
+            description="Come back soon! Or try to browse something for you on our marketplace"
+            btnLink="/"
+            btnLabel="Browse marketplace"
+          />
+        )
+      }
       {
         showArrows && (
           <div className="arrow-btn left pointer-cursor" onClick={() => onPrevCollections()}><HiOutlineChevronDoubleLeft /></div>
