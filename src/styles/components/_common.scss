@@ -275,7 +275,7 @@
 
 .file-uploader {
     text-align: center;
-    border: 2px dashed $gray-300;
+    // border: 2px dashed $gray-300;
     box-sizing: border-box;
     border-radius: 5px;
     .preview {
@@ -302,4 +302,11 @@
     }
 }
 
+.no-data {
+    .btn-primary {
+        color: $white;
+        background-color: $primary;
+        border-radius: 4px;
+    }
+}
 
