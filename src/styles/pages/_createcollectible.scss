@@ -2,6 +2,19 @@
     $switchIndex: 2rem;
     $mainSwitchVal: 1.5rem;
 
+    .container {
+        padding-right: 240px;
+        padding-left: 240px;
+        @include media-breakpoint-down(md) {
+            padding-right: 100px;
+            padding-left: 100px;
+        }
+        @include media-breakpoint-down(sm) {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+    }
+
     .upload-file {
         color: $black;
         .title {
@@ -161,9 +174,9 @@
 
     .row-reserve {
         @include media-breakpoint-down(sm) {
-          flex-wrap: wrap-reverse;
+            flex-wrap: wrap-reverse;
         }
-      }
+    }
 
     .btn-outline-primary {
         border-radius: 5px;
