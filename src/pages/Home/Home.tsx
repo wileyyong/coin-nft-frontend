@@ -122,7 +122,7 @@ const Home: React.FC<HomeProps> = () => {
               )
               ) : (
                 <NoItem
-                  title="No items found"
+                  title="No Users found"
                   description="Come back soon! Or try to browse something for you on our marketplace"
                   btnLink="/"
                   btnLabel="Browse marketplace"
@@ -141,13 +141,12 @@ const Home: React.FC<HomeProps> = () => {
               )
               ) : (
                 <NoItem
-                  title="No items found"
+                  title="No Hot bids found"
                   description="Come back soon! Or try to browse something for you on our marketplace"
-                  btnLink="/"
+                  btnLink="/" 
                   btnLabel="Browse marketplace"
                 />
               )
-
           }
         </div>
       </div>

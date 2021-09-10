@@ -19,7 +19,7 @@ const DepositWalletModal: React.FC<DepositWalletProps> = ({
     <Modal show={show} onHide={handleClose} centered>
       <Modal.Body>
         <div className="depositwalletmodal">
-          <div className="d-flex pb-2">
+          <div className="d-flex">
             <button type="button" className="close" aria-label="Close" onClick={handleClose}>
               <span aria-hidden="true">&times;</span>
             </button>

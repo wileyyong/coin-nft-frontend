@@ -35,7 +35,6 @@ import {
     getWalletBalance,
 } from "store/User/user.slice";
 import {
-    //  getMyCollections,
     getWalletAddress,
     isAuthenticated,
 } from "store/User/user.selector";
@@ -55,8 +54,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const dispatch = useAppDispatch();
     const location: any = useLocation();
     const loggedInUserInfo = useAppSelector(getMyInfo);
-    //   const collectionItems = useAppSelector(getMyCollections);
-    //   const nftCategories = useAppSelector(getNftCategories);
     const serviceFee = useAppSelector(getNftServiceFee);
     const walletAddress = useAppSelector(getWalletAddress);
     const isAuth = useAppSelector(isAuthenticated);
@@ -584,7 +581,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 </div>
                                             </div>
 
-                                            <B1NormalTextTitle className="mt-3">
+                                            <B1NormalTextTitle className="mt-3 text-black">
                                                 {collectible.name}
                                             </B1NormalTextTitle>
                                             <NormalTextTitle className="text-black">

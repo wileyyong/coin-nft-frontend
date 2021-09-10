@@ -5,6 +5,10 @@
     .container {
         padding-right: 240px;
         padding-left: 240px;
+        @include media-breakpoint-down(lg) {
+            padding-right: 160px;
+            padding-left: 160px;
+        }
         @include media-breakpoint-down(md) {
             padding-right: 100px;
             padding-left: 100px;
@@ -29,14 +33,6 @@
         border: 1px solid $gray-300;
         border-radius: 5px;
         color: $black;
-    }
-
-    .text-black {
-        color: $black;
-    }
-
-    .text-gray {
-        color: $gray-600;
     }
 
     .custom-switch {
@@ -74,19 +70,6 @@
         box-sizing: border-box;
         border-radius: 16px;
         cursor: pointer;
-        // &.selected {
-        //     border-color: #136bfb !important;
-        // }
-        // &.dark-collection-item {
-        //     background: linear-gradient(
-        //             135.63deg,
-        //             rgba(254, 176, 254, 0.084) -0.59%,
-        //             rgba(34, 39, 39, 0.096) 59.4%,
-        //             rgba(93, 247, 164, 0.14) 108.48%
-        //         ),
-        //         rgba(20, 20, 20, 0.85) !important;
-        //     border: 2px solid $gray-300;
-        // }
         .c-nft-avatar {
             width: 62px;
             height: 62px;

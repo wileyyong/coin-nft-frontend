@@ -22,6 +22,8 @@ const configs = {
         COLLECTION_URL: "collections",
         MY_COLLECTION_URL: "collections/user/my",
         USERS_URL: "users",
+        TOKEN_URL: "tokens",
+        MY_TOKEN_URL: "tokens/my",
     },
     
     /* STORAGE Values */

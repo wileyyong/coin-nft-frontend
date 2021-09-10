@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import metamask from "assets/imgs/meta-logo.png";
-import { Image, Button, Container, Form } from "react-bootstrap";
-import account_data from "assets/account_data";
+import { Image, Button, Container } from "react-bootstrap";
 import Layout from "components/Layout";
 import UserController from "controller/UserController";
 import imageAvatar from "assets/imgs/avatar.png";
@@ -31,6 +30,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
     useEffect(() => {
         const loadActivities = async () => {
             let data = await UserController.getSettings();
+            console.log('data', data);
             if (data.name) {
                 setDisplayName(data.name);
             }
@@ -94,11 +94,12 @@ const EditProfile: React.FC<EditProfileProps> = () => {
                 NotificationManager.success(
                     'Profile Successfully updated!',
                     "Success"
-                )
-                dispatch(getMyInfo(walletAddress))
+                );
+                dispatch(getMyInfo(walletAddress));
             }
         }).catch((err) => {
             if (err.response && err.response.data && err.response.data.error) {
+                console.log(err.response);
                 NotificationManager.error(
                     err.response.data.error,
                     'Error'
@@ -119,8 +120,8 @@ const EditProfile: React.FC<EditProfileProps> = () => {
     }
 
     return (
-        <Layout ref={layoutView}>
-            <Container className="editprofile-container">
+        <Layout ref={layoutView} className="editprofile-container">
+            <Container className="container">
                 <div className="d-flex flex-row align-items-center justify-content-between">
                     <div className="header">Edit Profile</div>
                     <div className="d-flex flex-row align-items-center connect-wallet">
@@ -168,14 +169,6 @@ const EditProfile: React.FC<EditProfileProps> = () => {
                                     setPreview={(e: any) => setPreviewFile(e)}
                                 />
                             </div>
-
-                            {/* <div className="d-flex flex-column align-items-center edit-detail">
-                                <Image src={account_data.img} alt="logo"></Image>
-                                <div className="mail pt-3">Daniel@gmail.com</div>
-                                <div className="desc pt-3 pb-3">This is your PUML profile, other users will see this. </div>
-                                <Button className="btn-primary pt-3">Upload Photo</Button>
-                                <div className="filetype pt-3">PNG, GIF, MP4 or MP3, Max 30mb</div>
-                            </div> */}
                         </div>
                     </div>
                 </div>

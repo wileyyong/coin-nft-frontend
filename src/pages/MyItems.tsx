@@ -5,8 +5,6 @@ import { Button, Image, Form } from "react-bootstrap";
 import account_data from "assets/account_data";
 import Layout from "components/Layout";
 import Tabs from "components/common/Tabs";
-import nftlist from "assets/nftlist";
-import NftItemCard from "components/common/NftItemCard";
 import { Link } from "react-router-dom";
 import verifyImg from "assets/imgs/verify.svg";
 
@@ -48,13 +46,13 @@ const MyItems: React.FC<MyItemProps> = () => {
         <Layout className="myitems-container" ref={layoutView}>
             <div className="d-flex flex-column align-items-center">
                 <div style={{ backgroundImage: `url(${back})` }} className="background-item">
-                    <div className="upload-img d-flex align-items-center">
-                        <Image src={camera} className="pr-2"></Image>
+                    {/* <div className="cover-btn d-flex align-items-center">
+                        <Image src={camera} className="pr-2 btn-image"></Image>
                         <div>Add Cover Photo</div>
-                    </div>
+                    </div> */}
                     <Form.Group controlId="formFile" className="mb-3">
-                        <Form.Label className="upload-img d-flex align-items-center">
-                            <Image src={camera} className="pr-2"></Image>
+                        <Form.Label className="cover-btn d-flex align-items-center">
+                            <Image src={camera} className="pr-2 btn-image"></Image>
                             <div>Add Cover Photo</div>
                         </Form.Label>
                         <Form.Control type="file" />

@@ -108,7 +108,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
       {
         collectionList.length === 0 && (
           <NoItem
-            title="No items found"
+            title="No Collections found"
             description="Come back soon! Or try to browse something for you on our marketplace"
             btnLink="/"
             btnLabel="Browse marketplace"

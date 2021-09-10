@@ -81,7 +81,7 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
                         openFileDialog();
                     }}
                 >
-                    <span>Choose File</span>
+                    <span>Upload Photo</span>
                 </Button>
                 <div className="file-type pt-3">PNG, GIF, MP4 or MP3, Max 30mb</div>
             </>

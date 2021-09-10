@@ -155,13 +155,14 @@
         border: 1px solid $gray-300;
         border-radius: 10px;
         .auth-title {
-            color: $gray-600;
+            color: $gray-700;
             font-size: 16px;
         }
     }
     .modal-footer {
         margin-top: 20px;
         border-radius: 10px;
+        border: none;
         background-color: #e9f9f6;
         color: $black;
         font-size: 16px;
@@ -310,3 +311,14 @@
     }
 }
 
+.text-black {
+    color: $black;
+}
+
+.text-gray {
+    color: $gray-600;
+}
+
+.form-control {
+    color: $black !important;
+}
