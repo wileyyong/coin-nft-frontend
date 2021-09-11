@@ -31,13 +31,13 @@
 
     .form-control {
         border: 1px solid $gray-300;
-        border-radius: 5px;
+        border-radius: 4px;
         color: $black;
     }
 
     .custom-switch {
         cursor: pointer !important;
-        margin-right: 15px;
+        margin-right: 16px;
         .custom-control-label::before {
             height: $mainSwitchVal !important;
             width: calc(#{$switchIndex} + 0.75rem) !important;
@@ -66,7 +66,7 @@
     .choose-collection-item {
         width: 160px;
         min-width: 160px;
-        border: 2px solid #c4c4c4;
+        border: 2px solid $gray-300;
         box-sizing: border-box;
         border-radius: 16px;
         cursor: pointer;
@@ -100,14 +100,6 @@
         min-width: 300px;
         height: auto;
         margin-bottom: 1.5rem;
-        // &:hover {
-        //     border: 1px solid transparent;
-        //     background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
-        //         linear-gradient(101deg, #1ac3f0, #ed489c, #ffca3d);
-        //     background-origin: border-box;
-        //     background-clip: content-box, border-box;
-        //     box-shadow: 1px 1000px 1px #000000 inset;
-        // }
         .wallet-address {
             min-height: 19px;
             opacity: 0.5;
@@ -162,7 +154,7 @@
     }
 
     .btn-outline-primary {
-        border-radius: 5px;
+        border-radius: 4px;
     }
 
     .btn-outline-primary:hover {
@@ -170,7 +162,7 @@
     }
 
     .btn-primary {
-        border-radius: 5px;
+        border-radius: 4px;
         color: $white;
     }
 }

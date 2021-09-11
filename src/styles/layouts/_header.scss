@@ -11,28 +11,28 @@
     z-index: 500;
     .navbar {
         margin: 0 60px;
-        @media screen and (max-width: 1400px) {
+        @include media-breakpoint-down(lg) {
             margin: 0 25px;
         }
-        @media screen and (max-width: 992px) {
+        @include media-breakpoint-down(md) {
             margin: 0 0;
         }
     }
     .logo {
         height: 36px;
-        @media screen and (max-width: 856px) {
+        @include media-breakpoint-down(sm) {
             height: 30px;
         }
     }
-    @media screen and (max-width: 856px) {
+    @include media-breakpoint-down(sm) {
         padding-top: 15px;
     }
     .navbar-nav {
         padding: 15px 30px;
-        @media screen and (max-width: 1200px) {
+        @include media-breakpoint-down(lg) {
             padding: 15px 20px;
         }
-        @media screen and (max-width: 768px) {
+        @include media-breakpoint-down(sm) {
             padding: 15px 10px;
         }
     }
@@ -75,7 +75,7 @@
             position: absolute;
             height: 2px;
             width: 100%;
-            border-radius: 9px;
+            border-radius: 8px;
             opacity: 1;
             left: 0;
             -webkit-transform: rotate(0deg);
@@ -155,7 +155,7 @@
         align-items: center;
         div.header-avatar {
             display: inline-block;
-            background-color: rgb(255, 255, 255);
+            background-color: $white;
             width: 36px;
             height: 36px;
             max-width: 36px;
@@ -173,7 +173,7 @@
         }
     }
     .navbar-collapse {
-        @media screen and (max-width: 856px) {
+        @include media-breakpoint-down(sm)  {
             display: none !important;
             opacity: 0;
             width: 0;
@@ -215,7 +215,7 @@
         }
     }
     .dropdown-menu-right {
-        @media screen and (max-width: 856px) {
+        @include media-breakpoint-down(sm) {
             left: -200px;
         }
     }

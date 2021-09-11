@@ -113,7 +113,7 @@ const Home: React.FC<HomeProps> = () => {
             sellers.length > 0 ?
               sellers.map((seller, index) => (
                 <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
-                  <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller"></Image>
+                  <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller" roundedCircle></Image>
                   <div className="seg-name pt-2">{seller.name}</div>
                   <div className="seg-type pt-2">{seller.type}</div>
                   <div className="seg-price pt-2">{seller.amount} PUML</div>
@@ -133,7 +133,7 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
-        <div className="row pr-2 pl-2 justify-content-center">
+        <div className="row px-2 justify-content-center">
           {
             exploreAuctions.length > 0 ?
               exploreAuctions.map((auction, index) => (
@@ -155,7 +155,7 @@ const Home: React.FC<HomeProps> = () => {
         <Collections type="hot" />
       </div>
       <div className="section">
-        <div className="d-flex flex-row align-items-center flex-wrap pt-4">
+        <div className="d-flex flex-row align-items-center flex-wrap">
           <h1 className="font-weight-bold section-title mr-4">Explore</h1>
           <div className="d-flex flex-row flex-wrap">
             <Button className="btn-type mr-3 mb-2">All</Button>
@@ -166,7 +166,7 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row pr-2 pl-2 justify-content-center">
+        <div className="row px-2 justify-content-center">
           {
             exploreAuctions.length > 0 ?
               (

@@ -10,7 +10,7 @@
         .cover-btn {
             transform: translateY(100px);
             opacity: 0;
-            z-index: 2000;
+            z-index: 10;
             transition: all 0.5s ease-in-out 0s;
             position: absolute;
             bottom: 16px;
@@ -47,7 +47,7 @@
 
     .user-name {
         color: $black;
-        font-weight: bold;
+        font-weight: $font-weight-bold;
         padding-top: 20px;
         font-size: 40px;
         @include media-breakpoint-down(sm) {
@@ -111,7 +111,7 @@
             border-bottom: 1px solid $black;
             .nav-link {
                 color: $gray-600;
-                font-weight: bold;
+                font-weight: $font-weight-bold;
                 background-color: transparent;
                 border-top: 0;
                 border-right: 0;
@@ -119,9 +119,8 @@
             }
             .nav-link:hover {
                 border-bottom: 1px solid $black;
-                color: black;
+                color: $black;
             }
-
             & .nav-link.active {
                 color: $black;
                 border-bottom: 4px solid $primary;
