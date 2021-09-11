@@ -149,7 +149,6 @@ const BuyItem: React.FC<BuyItemProps> = () => {
                                 </div>
                             </div>
                         </div>
-
                         <div className="row pt-2">
                             <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2">Place a Bid</Button></div>
                             <div className="col-12 col-sm-6"><Button className="btn-gray mr-2">Share</Button></div>

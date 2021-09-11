@@ -113,7 +113,7 @@ const Home: React.FC<HomeProps> = () => {
             sellers.length > 0 ?
               sellers.map((seller, index) => (
                 <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
-                  <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} alt="seller" roundedCircle></Image>
+                  <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} className="seg-img" alt="seller"></Image>
                   <div className="seg-name pt-2">{seller.name}</div>
                   <div className="seg-type pt-2">{seller.type}</div>
                   <div className="seg-price pt-2">{seller.amount} PUML</div>
