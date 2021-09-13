@@ -30,7 +30,6 @@ const EditProfile: React.FC<EditProfileProps> = () => {
     useEffect(() => {
         const loadActivities = async () => {
             let data = await UserController.getSettings();
-            console.log('data', data);
             if (data.name) {
                 setDisplayName(data.name);
             }

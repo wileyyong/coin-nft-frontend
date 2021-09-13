@@ -26,15 +26,16 @@ import ChooseCollectionItem from "components/collection/ChooseCollectionItem";
 import CreateCollectionModal from "components/collection/CreateCollectionModal";
 import { getMyInfo } from "store/User/user.selector";
 import Utility from "service/utility";
-//import CollectionController from "controller/CollectionController";
+import CollectionController from "controller/CollectionController";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import configs from "configs";
 import {
-    //  loadMyCollections,
+    loadMyCollections,
     connectUserWallet,
     getWalletBalance,
 } from "store/User/user.slice";
 import {
+    getMyCollections,
     getWalletAddress,
     isAuthenticated,
 } from "store/User/user.selector";
@@ -42,11 +43,10 @@ import ConnectWalletBtn from "components/common/button/ConnectWalletBtn";
 //import NftController from "controller/NftController";
 import SmartContract from "ethereum/Contract";
 import DateTimeService from "service/dateTime";
-//getNftCategories
-import { getNftServiceFee } from "store/Nft/nft.selector";
+import { getNftCategories, getNftServiceFee } from "store/Nft/nft.selector";
 import CreateNftStatusModal from "components/token/CreateNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
-//import OfferController from "controller/OfferController";
+import OfferController from "controller/OfferController";
 
 interface CreateCollectibleProps { }
 
@@ -65,6 +65,10 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const [isSucceed, setIsSucceed] = useState(false);
     const [expiryOption, setExpiryOption] = useState("3");
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
+    const nftCategories = useAppSelector(getNftCategories);
+    const collectionItems = useAppSelector(getMyCollections);
+
+    console.log('cate', nftCategories);
 
     const [collectible, setCollectible] = useState<any>({
         name: "",
@@ -624,39 +628,39 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                     ERC - 721
                                                 </B2NormalTextTitle>
                                             </div>
-                                            {/* {collectionItems.map((cItem: any, index: number) => {
-                                            return (
-                                                <ChooseCollectionItem
-                                                item={cItem}
-                                                key={index}
-                                                onSelected={() => {
-                                                    setCollectible({
-                                                    ...collectible,
-                                                    collection: cItem._id,
-                                                    });
-                                                }}
-                                                isSelected={collectible.collection === cItem._id}
-                                                />
-                                            );
-                                            })} */} 
+                                            {collectionItems.map((cItem: any, index: number) => {
+                                                return (
+                                                    <ChooseCollectionItem
+                                                        item={cItem}
+                                                        key={index}
+                                                        onSelected={() => {
+                                                            setCollectible({
+                                                                ...collectible,
+                                                                collection: cItem._id,
+                                                            });
+                                                        }}
+                                                        isSelected={collectible.collection === cItem._id}
+                                                    />
+                                                );
+                                            })}
                                         </div>
                                         <BigTitle className="mt-4 text-black">Choose categories</BigTitle>
                                         <FlexAlignCenterDiv className="category-list mt-4">
-                                            {/* {nftCategories.map((eType, index) => {
-                                            return (
-                                                eType.value !== "all" && (
-                                                <div
-                                                    className={getCategoryClass(eType.value)}
-                                                    key={index}
-                                                    onClick={() => {
-                                                    categorySelected(eType.value);
-                                                    }}
-                                                >
-                                                    {eType.label}
-                                                </div>
-                                                )
-                                            );
-                                            })} */}
+                                            {nftCategories.map((eType, index) => {
+                                                return (
+                                                    eType.value !== "all" && (
+                                                        <div
+                                                            className={getCategoryClass(eType.value)}
+                                                            key={index}
+                                                            onClick={() => {
+                                                                categorySelected(eType.value);
+                                                            }}
+                                                        >
+                                                            {eType.label}
+                                                        </div>
+                                                    )
+                                                );
+                                            })}
                                         </FlexAlignCenterDiv>
                                         <Row>
                                             <Col xl="5" lg="6">
