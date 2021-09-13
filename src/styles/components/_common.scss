@@ -325,3 +325,30 @@
 .form-control {
     color: $black !important;
 }
+
+.nft-type-btn {
+    cursor: pointer;
+    border: 1px solid $black;
+    box-sizing: border-box;
+    border-radius: 100px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 500;
+    font-size: 16px;
+    padding: 6px 16px;
+    min-width: 80px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    @media screen and (max-width: 1260px) {
+      padding: 4px 12px;
+    }
+    @media screen and (max-width: 992px) {
+      padding: 4px 8px;
+    }
+}
+
+.nft-type-selected {
+    background: $primary;
+    color: $black !important;
+    border-color: $black !important;
+}

@@ -18,9 +18,9 @@ import {
     NftAvatar,
 } from "components/common/common.styles";
 import Layout from "components/Layout";
-import { FaLongArrowAltLeft, FaPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import FileUploader from "components/common/uploader/FileUploader";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import ChooseCollectionItem from "components/collection/ChooseCollectionItem";
 import CreateCollectionModal from "components/collection/CreateCollectionModal";
@@ -40,10 +40,10 @@ import {
     isAuthenticated,
 } from "store/User/user.selector";
 import ConnectWalletBtn from "components/common/button/ConnectWalletBtn";
-//import NftController from "controller/NftController";
+import NftController from "controller/NftController";
 import SmartContract from "ethereum/Contract";
 import DateTimeService from "service/dateTime";
-import { getNftCategories, getNftServiceFee } from "store/Nft/nft.selector";
+import { getNftCategories } from "store/Nft/nft.selector";
 import CreateNftStatusModal from "components/token/CreateNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
 import OfferController from "controller/OfferController";
@@ -52,23 +52,17 @@ interface CreateCollectibleProps { }
 
 const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const dispatch = useAppDispatch();
-    const location: any = useLocation();
     const loggedInUserInfo = useAppSelector(getMyInfo);
-    const serviceFee = useAppSelector(getNftServiceFee);
     const walletAddress = useAppSelector(getWalletAddress);
     const isAuth = useAppSelector(isAuthenticated);
     const [validated, setValidated] = useState(false);
     const [previewThumbnail, setPreviewThumbnail] = useState<any>(null);
     const [isNftImage, setIsNftImage] = useState(true);
-    const [isInstantPrice, setIsInstantPrice] = useState(false);
-    const [isLocked, setIsLocked] = useState(false);
     const [isSucceed, setIsSucceed] = useState(false);
     const [expiryOption, setExpiryOption] = useState("3");
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const nftCategories = useAppSelector(getNftCategories);
     const collectionItems = useAppSelector(getMyCollections);
-
-    console.log('cate', nftCategories);
 
     const [collectible, setCollectible] = useState<any>({
         name: "",
@@ -166,16 +160,11 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         setPreviewThumbnail(e);
     };
 
-    const instantReceiveAmount = () => {
-        let remainPer = 100 - serviceFee;
-        return (collectible.offer_price * remainPer) / 100;
-    };
-
     const createCollection = async (collection: any) => {
         setIsLoading(true);
         let formData = Utility.getFormDataFromObject(collection);
         try {
-            //await CollectionController.create(formData);
+            await CollectionController.create(formData);
             loadCollections();
             setIsLoading(false);
             setShowCollectionDialog(false);
@@ -239,7 +228,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         if (!result) {
             try {
                 let formData = Utility.getFormDataFromObject(getPureNftObj());
-                //result = await NftController.create(formData);
+                result = await NftController.create(formData);
                 setNftFromDB(result);
             } catch (err) {
                 setCreateNftStatus(NftCreateStatus.MINT_FAILED);
@@ -259,9 +248,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                     dispatch(getWalletBalance());
                     setCreateNftStatus(NftCreateStatus.MINT_SUCCEED);
                     setChainId(contractResult.tokenId);
-                    //   await NftController.setChainId(result.token._id, {
-                    //     chain_id: contractResult.tokenId,
-                    //   });
+                    await NftController.setChainId(result.token._id, {
+                        chain_id: contractResult.tokenId,
+                    });
                     if (isPureNftCreation()) {
                         setCreateNftDialog(false);
                         setIsSucceed(true);
@@ -333,7 +322,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                     if (collectible.is_auction)
                         offerObj["min_bid"] = collectible.min_bid_price;
 
-                    //await OfferController.create(offerObj);
+                    await OfferController.create(offerObj);
 
                     setCreateNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
                     setCreateNftDialog(false);
@@ -356,11 +345,21 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const handleChange = (e: any) => {
         let fieldName = e.target.name;
+        if(fieldName === 'offer_price' || fieldName === 'min_bid_price') {
+            const regex = /^[0-9]\d*(?:[.]\d*)?$/;
+            if (e.target.value !== '' && !regex.test(e.target.value)) {
+                e.preventDefault();
+                return;
+            }
+        }
         if (e.target.type === "checkbox") {
             let fieldVal = e.target.checked;
             setCollectible({ ...collectible, [fieldName]: fieldVal });
         } else {
             let fieldVal = e.target.value;
+            if(fieldVal.length>1 && fieldVal[0] === '0' && fieldVal[1] !== '.') {
+                fieldVal = fieldVal.substring(1)
+            }
             setCollectible({ ...collectible, [fieldName]: fieldVal });
         }
     };
@@ -371,7 +370,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     };
 
     const loadCollections = () => {
-        //dispatch(loadMyCollections());
+        dispatch(loadMyCollections());
     };
 
     useEffect(() => {
@@ -393,27 +392,19 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     return (
         <Layout className="create-collectible-container">
             <Container className="container">
-                <Link to="/">
-                    <div className="d-flex flex-row align-items-center">
-                        <FaLongArrowAltLeft />
-                        <B2NormalTextTitle className="ml-2">
-                            MANAGE COLLECTIBLE TYPE
-                        </B2NormalTextTitle>
-                    </div>
-                </Link>
                 {isSucceed ? (
                     <Row>
                         <Col>
                             <MBigTitle className="mt-4 faint-color"> Congratulations! NFT is successfully created! </MBigTitle>
                             <FlexAlignCenterDiv className="mt-5">
+                                <Link to="/">
+                                    <Button className="default-btn-size outline-btn">
+                                        <span>Home</span>
+                                    </Button>
+                                </Link>
                                 <Link to="/items">
                                     <Button className="default-btn-size mr-4 fill-btn">
                                         <span>My Items</span>
-                                    </Button>
-                                </Link>
-                                <Link to="/explore">
-                                    <Button className="default-btn-size outline-btn">
-                                        <span>Explore</span>
                                     </Button>
                                 </Link>
                             </FlexAlignCenterDiv>
@@ -427,7 +418,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                             </MBigTitle>
                             <Form noValidate validated={validated} onSubmit={submitForm}>
                                 <Row className="mt-4 row-reserve">
-                                    <Col>
+                                    <Col md="6">
                                         <div className="upload-file">
                                             <div className="title mb-4">Upload file</div>
                                             <FileUploader
@@ -452,13 +443,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         </div>
                                         <FlexJustifyBetweenDiv className="mt-4">
                                             <BigTitle className="text-black">Put up for sale</BigTitle>
-                                            <Form.Check
-                                                type="switch"
-                                                id="put-up-sale-switch"
-                                                checked={collectible.is_auction}
-                                                name="is_auction"
-                                                onChange={(e) => handleChange(e)}
-                                            />
                                         </FlexJustifyBetweenDiv>
                                         <B2NormalTextTitle className="text-gray mt-2">
                                             You will receive bids for this item.
@@ -470,18 +454,19 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 </B1NormalTextTitle>
                                                 <Form.Row className="mt-1">
                                                     <Form.Group as={Col} md="12">
-                                                        <Form.Control
-                                                            required
-                                                            type="text"
-                                                            placeholder="Enter Minimum Bid in ETH"
-                                                            name="min_bid_price"
-                                                            onChange={(e) => handleChange(e)}
-                                                            pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
-                                                            maxLength={10}
-                                                        />
-                                                        <Form.Control.Feedback type="invalid">
-                                                            Please input valid minimum bid price.
-                                                        </Form.Control.Feedback>
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="Enter Minimum Bid in ETH"
+                                                        name="min_bid_price"
+                                                        value={collectible.min_bid_price}
+                                                        onChange={(e) => handleChange(e)}
+                                                        pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
+                                                        maxLength={10}
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        Please input valid minimum bid price.
+                                                    </Form.Control.Feedback>
                                                     </Form.Group>
                                                 </Form.Row>
                                                 <B1NormalTextTitle className="text-black">Expiry Date</B1NormalTextTitle>
@@ -506,72 +491,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 </Form.Row>
                                             </div>
                                         )}
-                                        {/* <FlexJustifyBetweenDiv className="mt-4">
-                                            <BigTitle className="text-black">Instant Sell Price</BigTitle>
-                                            <Form.Check
-                                                type="switch"
-                                                id="instant-sell-price-switch"
-                                                checked={isInstantPrice}
-                                                onChange={(e) => setIsInstantPrice(e.target.checked)}
-                                            />
-                                        </FlexJustifyBetweenDiv>
-                                        <B2NormalTextTitle className="text-gray mt-2">
-                                            Enter price to allow users instantly purchase your NFT
-                                        </B2NormalTextTitle>
-                                        {isInstantPrice && (
-                                            <Form.Row className="mt-4">
-                                                <Form.Group as={Col} md="12">
-                                                    <Form.Control
-                                                        required
-                                                        type="text"
-                                                        placeholder="Enter price for one piece"
-                                                        name="offer_price"
-                                                        pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
-                                                        maxLength={10}
-                                                        onChange={(e) => handleChange(e)}
-                                                    />
-                                                    <B2NormalTextTitle className="mt-3 text-black">
-                                                        <span className="text-gray">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
-                                                    </B2NormalTextTitle>
-                                                    <B2NormalTextTitle className="mt-2 text-black">
-                                                        <span className="text-gray">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount()} ETH
-                                                    </B2NormalTextTitle>
-                                                </Form.Group>
-                                            </Form.Row>
-                                        )} */}
-                                        <FlexJustifyBetweenDiv className="mt-4">
-                                            <BigTitle className="text-black">Unlock once purchased</BigTitle>
-                                            <Form.Check
-                                                type="switch"
-                                                id="unlock-once-purchased-switch"
-                                                checked={isLocked}
-                                                onChange={(e) => setIsLocked(e.target.checked)}
-                                            />
-                                        </FlexJustifyBetweenDiv>
-                                        <B2NormalTextTitle className="text-gray mt-2">
-                                            Content will be unlocked after successful transaction
-                                        </B2NormalTextTitle>
-                                        {isLocked && (
-                                            <Form.Row className="mt-4">
-                                                <Form.Group as={Col} md="12">
-                                                    <Form.Control
-                                                        required
-                                                        type="text"
-                                                        placeholder="Digital key, code to redeem or link to a file..."
-                                                        name="locked"
-                                                        onChange={(e) => handleChange(e)}
-                                                    />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        Please input valid price.
-                                                    </Form.Control.Feedback>
-                                                    <B2NormalTextTitle className="text-gray mt-3">
-                                                        Tip: Markdown syntax is supported
-                                                    </B2NormalTextTitle>
-                                                </Form.Group>
-                                            </Form.Row>
-                                        )}
                                     </Col>
-                                    <Col className="preview-area">
+                                    <Col md="6" className="preview-area">
                                         <BigTitle className="text-black pb-3">PREVIEW</BigTitle>
                                         <div className="auction-item p-4">
                                             {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>}
@@ -589,11 +510,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 {collectible.name}
                                             </B1NormalTextTitle>
                                             <NormalTextTitle className="text-black">
-                                                {isInstantPrice ? (
-                                                    <>From {collectible.offer_price} ETH</>
-                                                ) : (
-                                                    collectible.is_auction ? "Put up for sale" : "Not for Sale"
-                                                )}
+                                                Put up for sale
                                             </NormalTextTitle>
                                             <SubDescription className="mt-2"></SubDescription>
                                             <FlexAlignCenterDiv className="mt-2 text-black">
@@ -663,7 +580,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             })}
                                         </FlexAlignCenterDiv>
                                         <Row>
-                                            <Col xl="5" lg="6">
+                                            <Col xl="6" lg="8">
                                                 <Form.Row className="mt-4">
                                                     <Form.Group as={Col} md="6">
                                                         <Form.Label>
@@ -672,7 +589,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         <Form.Control
                                                             required
                                                             type="text"
-                                                            placeholder="name"
+                                                            placeholder="Name"
                                                             name="name"
                                                             onChange={(e) => handleChange(e)}
                                                         />
