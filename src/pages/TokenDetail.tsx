@@ -382,21 +382,21 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         <div className="item-title pb-4">{token.name}</div>
                         <div className="item-price pb-4">
                             <span className="for-sale">For Sale • Highest Bid </span>
-                            <span className="price-puml">{ getBidMinPrice() }PUML</span>
+                            <span className="price-puml">{ offer ? getDollarPrice(offer.offer_price) : '' }PUML</span>
                         </div>
                         <div className="d-flex flex-row">
                             <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/2`)}>
                                 <Image src={itemMember} className="member-image mr-2"></Image>
                                 <div className="d-flex flex-column pt-2">
                                     <div className="member-type pb-1">Creator</div>
-                                    <div className="member-name">Christian Trist</div>
+                                    <div className="member-name">{owner ? owner.user : ''}</div>
                                 </div>
                             </div>
                             <div className="d-flex flex-row align-items-center item-members pr-2" onClick={() => history.push(`/users/3`)}>
                                 <Image src={itemImage} className="member-image mr-2"></Image>
                                 <div className="d-flex flex-column pt-2">
                                     <div className="member-type pb-1">Collection</div>
-                                    <div className="member-name">Christian Trist</div>
+                                    <div className="member-name">{owner ? owner.user : ''}</div>
                                 </div>
                             </div>
                         </div>
@@ -415,7 +415,8 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                             <div>
                                 <div className="item-bid">
                                     <span className="bid-attr">Highest bid by </span>
-                                    <span className="bid-member">{owner.user ? owner.user.name : ""}</span>
+                                    <span className="bid-member">{owner
+                                     ? owner.user.name : ""}</span>
                                 </div>
                                 <div className="item-price1 pt-2">
                                     <span className="price-puml">30.0000PUML</span>

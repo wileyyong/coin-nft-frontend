@@ -100,6 +100,7 @@ const MyItems: React.FC<MyItemProps> = () => {
     const loadTokensAndCollections = async () => {
         if (walletAddress) {
             let data = await UserController.userStats(walletAddress);
+            console.log(data);
             if (data.user) {
                 setUserInfo(data.user);
                 if (data.user.cover) {
@@ -130,7 +131,9 @@ const MyItems: React.FC<MyItemProps> = () => {
     const loadItems = async () => {
         if (walletAddress) {
             //setLoading(true);
+            console.log(_categories[selectedTab].path);
             let { items, pages } = await TokenController.getItems(walletAddress, _categories[selectedTab].path, pageNum);
+            console.log('items',items);
             if (pageNum === 1) {
                 setPages(pages);
             }

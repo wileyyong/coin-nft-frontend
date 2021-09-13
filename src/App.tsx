@@ -48,7 +48,7 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/profile">
             <EditProfile />
           </Route>
-          <Route exact path="/buy">
+          <Route exact path="/collections/:walletAddress">
             <TokenDetail />
           </Route>
           <Route exact path="/users/:walletAddress">

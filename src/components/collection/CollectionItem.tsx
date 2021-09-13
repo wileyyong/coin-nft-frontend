@@ -21,6 +21,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
 
   const collectionCreatorImgUrl = () => {
     if(item.creator && item.creator.avatar) return `${configs.DEPLOY_URL}${item.creator.avatar}`;
+    console.log(item.creator);
     return '';
   }
 
@@ -38,9 +39,9 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
           {collectionImgUrl() ? <img src={collectionImgUrl()} alt="collectionImage" /> : <div className="no-thumbnail"></div> }
           <NftAvatar imagePath={collectionCreatorImgUrl()} className="nft-avatar"></NftAvatar>
       </div>
-      <div className="item-content m-3 pt-1 pb-2">
-        <B1NormalTextTitle className="mt-4 text-center title">{item.name}</B1NormalTextTitle>
-        <SubDescription className="mt-1 text-center wallet-address">{walletHiddenAddress()}</SubDescription>
+      <div className="background-gray d-flex flex-column align-items-center pt-1 pb-2">
+        <B1NormalTextTitle className="mt-4 text-center title pt-2">{item.name}</B1NormalTextTitle>
+        <SubDescription className="mt-1 text-center sub-title pt-2 pb-2">Athlete</SubDescription>
       </div>
     </div>
   );
