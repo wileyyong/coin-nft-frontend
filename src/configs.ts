@@ -19,6 +19,7 @@ const configs = {
         BASE_URL: process.env.REACT_APP_API_POINT,
         AUTH_WITH_WALLET_URL: "auth/wallet",
         OFFER_URL: "offers",
+        CATEGORIES_URL: "categories",
         COLLECTION_URL: "collections",
         MY_COLLECTION_URL: "collections/user/my",
         USERS_URL: "users",

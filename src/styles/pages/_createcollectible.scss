@@ -70,6 +70,9 @@
         box-sizing: border-box;
         border-radius: 16px;
         cursor: pointer;
+        &.selected {
+            border-color: $primary !important;
+        }
         .c-nft-avatar {
             width: 62px;
             height: 62px;

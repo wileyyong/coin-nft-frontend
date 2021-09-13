@@ -12,7 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import CreateCollectible from "./pages/CreateCollectible";
 
 import "./styles/index.scss";
-import { getETHUSDTCurrency } from "store/Nft/nft.slice";
+import { getNftCategories, getETHUSDTCurrency } from "store/Nft/nft.slice";
 import { getMyInfo } from 'store/User/user.slice';
 
 interface AppProps { }
@@ -26,6 +26,7 @@ const App: React.FC<AppProps> = () => {
       dispatch(connectUserWallet());
     }
     dispatch(getETHUSDTCurrency());
+    dispatch(getNftCategories());
   }, [dispatch, isAuth, walletAddress]);
 
   useEffect(() => {
