@@ -4,4 +4,27 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1;
+  padding: 0 !important;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #9e9fa0;
+    border-radius: 3px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #9e9fa0;
+  }
+  .bn-onboard-custom {
+    z-index: 1000;
+  }
 }

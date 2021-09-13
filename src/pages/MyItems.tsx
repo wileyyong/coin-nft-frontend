@@ -1,12 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { NotificationManager } from "react-notifications";
-import { Button, Image, Form } from "react-bootstrap";
+import { Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 
-import back from "assets/imgs/default_rect.svg";
 import camera from "assets/imgs/camera_alt.png";
-import account_data from "assets/account_data";
 import verifyImg from "assets/imgs/verify.svg";
 import imgAvatar from "assets/imgs/avatar.png";
 import defaultImage from "assets/imgs/default_rect.svg";

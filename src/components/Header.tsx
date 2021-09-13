@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Navbar, Nav, Image, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -24,7 +24,6 @@ import {
 } from "store/User/user.selector";
 
 import imgAvatar from "assets/imgs/avatar.png";
-import { useEffect } from "hoist-non-react-statics/node_modules/@types/react";
 
 interface HeaderProps { }
 
@@ -89,62 +88,65 @@ const Header: React.FC<HeaderProps> = () => {
                 Home
               </Nav.Link>
             </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                eventKey="2"
-                as={Link}
-                to="/items"
-                className="mr-lg-3"
-                active={location.pathname === "/items"}
-              >
-                My Items
-              </Nav.Link>
-            </Nav.Item>
-            <Nav.Item>
-              <Nav.Link
-                eventKey="3"
-                as={Link}
-                to="/create-collectible"
-                className="mr-lg-3"
-                active={location.pathname === "/create-collectible"}
-              >
-                Create NFT
-              </Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item className="d-flex pr-4 mr-4 buttons">
-              <NavDropdown
-                title={getDropdownAvatar()}
-                id="header-nav-dropdown"
-                alignRight={true}
-              >
-                <div className="px-4">
-                  {userInfo && userInfo.name && (
-                    <B1NormalTextTitle className="mb-2 mt-1">
-                      {userInfo.name}
-                    </B1NormalTextTitle>
-                  )}
-                  <FlexAlignCenterDiv>
-                    <FaEthereum size={22}></FaEthereum>
-                    <div className="ml-2">
-                      <NormalTextTitle>Balance</NormalTextTitle>
-                      <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
+            {isAuth && walletAddress && (
+              <Fragment>
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="2"
+                    as={Link}
+                    to="/items"
+                    className="mr-lg-3"
+                    active={location.pathname === "/items"}
+                  >
+                    My Items
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="3"
+                    as={Link}
+                    to="/create-collectible"
+                    className="mr-lg-3"
+                    active={location.pathname === "/create-collectible"}
+                  >
+                    Create NFT
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item className="d-flex pr-4 mr-4 buttons">
+                  <NavDropdown
+                    title={getDropdownAvatar()}
+                    id="header-nav-dropdown"
+                    alignRight={true}
+                  >
+                    <div className="px-4">
+                      {userInfo && userInfo.name && (
+                        <B1NormalTextTitle className="mb-2 mt-1">
+                          {userInfo.name}
+                        </B1NormalTextTitle>
+                      )}
+                      <FlexAlignCenterDiv>
+                        <FaEthereum size={22}></FaEthereum>
+                        <div className="ml-2">
+                          <NormalTextTitle>Balance</NormalTextTitle>
+                          <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
+                        </div>
+                      </FlexAlignCenterDiv>
                     </div>
-                  </FlexAlignCenterDiv>
-                </div>
 
-                <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/items">
-                  My Items
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/profile">
-                  Edit Profile
-                </NavDropdown.Item>
-                <NavDropdown.Item onClick={disConnect}>
-                  Disconnect
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item as={Link} to="/items">
+                      My Items
+                    </NavDropdown.Item>
+                    <NavDropdown.Item as={Link} to="/profile">
+                      Edit Profile
+                    </NavDropdown.Item>
+                    <NavDropdown.Item onClick={disConnect}>
+                      Disconnect
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </Nav.Item>
+              </Fragment>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>

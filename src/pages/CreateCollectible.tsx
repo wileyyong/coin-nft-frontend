@@ -502,7 +502,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 </Form.Row>
                                             </div>
                                         )}
-                                        <FlexJustifyBetweenDiv className="mt-4">
+                                        {/* <FlexJustifyBetweenDiv className="mt-4">
                                             <BigTitle className="text-black">Instant Sell Price</BigTitle>
                                             <Form.Check
                                                 type="switch"
@@ -534,7 +534,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                     </B2NormalTextTitle>
                                                 </Form.Group>
                                             </Form.Row>
-                                        )}
+                                        )} */}
                                         <FlexJustifyBetweenDiv className="mt-4">
                                             <BigTitle className="text-black">Unlock once purchased</BigTitle>
                                             <Form.Check
@@ -570,7 +570,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                     <Col className="preview-area">
                                         <BigTitle className="text-black pb-3">PREVIEW</BigTitle>
                                         <div className="auction-item p-4">
-                                            {/* {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>} */}
+                                            {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>}
                                             <div className="token-img-area">
                                                 <div className="pre-token-img">
                                                     {previewThumbnail ? (

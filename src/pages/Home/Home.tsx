@@ -2,6 +2,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import Layout from "components/Layout";
 import { Button, Image } from "react-bootstrap";
+import { useAppSelector, useAppDispatch } from "store/hooks";
+import { connectUserWallet } from "store/User/user.slice";
+import {
+  isAuthenticated,
+} from "store/User/user.selector";
 
 import pumlImage from "assets/imgs/PUML-Logo.png";
 import homeintroImage from "assets/imgs/home-intro.svg";
@@ -25,7 +30,8 @@ interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
   const layoutView = useRef(null);
-
+  const dispatch = useAppDispatch();
+  const isAuth = useAppSelector(isAuthenticated);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
   const connectWalletClose = () => setShowConnectWallet(false);
   const connectWalletShow = () => setShowConnectWallet(true);
@@ -69,6 +75,10 @@ const Home: React.FC<HomeProps> = () => {
     loadData();
   }, [])
 
+  const connectMetaMask = () => {
+    dispatch(connectUserWallet());
+  }
+
   const history = useHistory();
 
   return (
@@ -88,10 +98,10 @@ const Home: React.FC<HomeProps> = () => {
               </Button>
             </div>
             <div className="intro-btn-metamask">
-              <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={depositWalletShow}>
+              <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={() => connectMetaMask()}>
                 <div className="d-flex flex-row align-items-center">
                   <Image className="connect-img p-1" src={metamaskImage}></Image>
-                  <span>Connect with Meta Mask</span>
+                  <span>{isAuth ? 'Connected with Meta Mask' : 'connect with Meta Mask'}</span>
                 </div>
               </Button>
             </div>
