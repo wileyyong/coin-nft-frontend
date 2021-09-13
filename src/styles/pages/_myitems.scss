@@ -60,6 +60,8 @@
         background-size: cover;
         width: 200px;
         height: 200px;
+        border-radius: 100%;
+        border: 4px solid $purple;
         margin-top: -100px;
         position: relative;
         z-index: 15;

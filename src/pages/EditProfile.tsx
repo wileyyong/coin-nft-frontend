@@ -108,6 +108,29 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         });
     }
 
+    const onSaveImage = async () => {
+        let data = {
+            image: uploadImage
+        };
+        let formdata = Utility.getFormDataFromObject(data);
+        await UserController.uploadCover(formdata).then((res) => {
+            if (res && res.status === 200) {
+                NotificationManager.success(
+                    uploadImage ? 'Successfully uploaded!' : 'Successfully removed!',
+                    "Success"
+                );
+                setUploadImage(null);
+            }
+        }).catch((err) => {
+            if (err.response && err.response.data && err.response.data.error) {
+                NotificationManager.error(
+                    err.response.data.error,
+                    'Error'
+                );
+            }
+        });
+    }
+
     const onVerify = async () => {
         let res = await UserController.getVerify();
         if (res && res.status === 200) {
