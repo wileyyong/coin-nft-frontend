@@ -20,6 +20,8 @@ import configs from "configs";
 import UserController from "controller/UserController";
 import CollectionController from "controller/CollectionController";
 import TokenController from "controller/TokenController";
+import NftItemCard from "components/common/NftItemCard";
+import NoItem from "components/common/noItem";
 
 interface MyItemProps { }
 
@@ -63,7 +65,6 @@ const _royalty = {
 const MyItems: React.FC<MyItemProps> = () => {
     const layoutView = useRef(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [loading, setLoading] = useState(false);
     const [pages, setPages] = useState(1);
     const [pageNum, setPageNumber] = useState(1);
     const [userInfo, setUserInfo] = useState(_userInfo);
@@ -72,18 +73,12 @@ const MyItems: React.FC<MyItemProps> = () => {
     const [collections, setCollections] = useState([]);
     const [selectedTab, setSelectedTab] = useState(0);
     const walletAddress = useAppSelector(getWalletAddress);
-    const [walletHiddenText, setHiddenText] = useState(walletAddress);
     const [uploadCoverImage, setUploadCoverImage] = useState(null);
     const [backgroundCoverImage, setCoverImage] = useState<any>(null);
     const [filters] = useState(_filters);
     const [selectedFilter, setSelectedFilter] = useState('');
     const [filteredActivities, setFilteredActivities] = useState([]);
     const [royalty, setRoyalty] = useState(_royalty);
-
-    useEffect(() => {
-        loadTokensAndCollections();
-        setHiddenText(Utility.getHiddenWalletAddress(walletAddress));
-    }, [categories, walletAddress]);
 
     useEffect(() => {
         loadItems();
@@ -228,12 +223,22 @@ const MyItems: React.FC<MyItemProps> = () => {
     }
 
     const OnSale = () => (
-        <div className="row pt-4">
-            {/* {
-                nftlist.map((nft, index) => (
-                    <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
-                ))
-            } */}
+        <div className="row justify-content-center pt-4">
+            {
+                itemList.length > 0 ?
+                    itemList.map((item, index) => (
+                        <NftItemCard key={index} item={item}></NftItemCard>
+                    ))
+                    :
+                    <div >
+                        <NoItem
+                            title="No items found"
+                            description="Come back soon! Or try to browse something for you on our marketplace"
+                            btnLink="/"
+                            btnLabel="Browse marketplace"
+                        />
+                    </div>
+            }
         </div>
     );
     // const Collectibles = () => <div> Collectibles component. </div>;
