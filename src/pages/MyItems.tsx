@@ -102,7 +102,6 @@ const MyItems: React.FC<MyItemProps> = () => {
     const loadTokensAndCollections = async () => {
         if (walletAddress) {
             let data = await UserController.userStats(walletAddress);
-            console.log(data);
             if (data.user) {
                 setUserInfo(data.user);
                 if (data.user.cover) {
@@ -230,7 +229,7 @@ const MyItems: React.FC<MyItemProps> = () => {
                         <NftItemCard key={index} item={item}></NftItemCard>
                     ))
                     :
-                    <div >
+                    <div>
                         <NoItem
                             title="No items found"
                             description="Come back soon! Or try to browse something for you on our marketplace"

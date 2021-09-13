@@ -7,7 +7,7 @@ import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
 import Home from "./pages/Home/Home";
 import MyItems from "./pages/MyItems";
 import EditProfile from "./pages/EditProfile";
-import BuyItem from "./pages/BuyItem";
+import TokenDetail from "./pages/TokenDetail";
 import UserProfile from "./pages/UserProfile";
 import CreateCollectible from "./pages/CreateCollectible";
 
@@ -49,7 +49,7 @@ const App: React.FC<AppProps> = () => {
             <EditProfile />
           </Route>
           <Route exact path="/buy">
-            <BuyItem />
+            <TokenDetail />
           </Route>
           <Route exact path="/users/:walletAddress">
             <UserProfile />
