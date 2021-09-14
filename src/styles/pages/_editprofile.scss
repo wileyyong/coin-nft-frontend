@@ -12,8 +12,21 @@
         }
     }
 
-    .text-black {
-        color: $black;
+    .container {
+        padding-right: 240px;
+        padding-left: 240px;
+        @include media-breakpoint-down(lg) {
+            padding-right: 160px;
+            padding-left: 160px;
+        }
+        @include media-breakpoint-down(md) {
+            padding-right: 80px;
+            padding-left: 80px;
+        }
+        @include media-breakpoint-down(sm) {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
     }
 
     .connect-wallet {
@@ -111,10 +124,10 @@
         .btn-primary {
             border-radius: 10px;
             color: $white;
-            width: 30%;
-            @include media-breakpoint-down(sm) {
-                width: 100%;
-            }
+            width: 160px;
+            // @include media-breakpoint-down(sm) {
+            //     width: 100%;
+            // }
         }
     }
 }

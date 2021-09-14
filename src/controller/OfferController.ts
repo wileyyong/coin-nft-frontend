@@ -19,7 +19,15 @@ class OfferController {
         return API.get(url).then(res => {
             return res.data;
         })
-    }    
+    }
+
+    public static placeBid(id: any, payload: any) {
+        return API.post(`${configs.API.OFFER_URL}/${id}/bid`,payload).then(res => res.data )
+    }
+
+    public static directBuy(id: any, payload: any) {
+        return API.post(`${configs.API.OFFER_URL}/${id}/buy`,payload).then(res => res.data )
+    }
 }
 
 export default OfferController;

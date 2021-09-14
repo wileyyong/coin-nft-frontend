@@ -5,6 +5,10 @@
     .container {
         padding-right: 240px;
         padding-left: 240px;
+        @include media-breakpoint-down(lg) {
+            padding-right: 160px;
+            padding-left: 160px;
+        }
         @include media-breakpoint-down(md) {
             padding-right: 100px;
             padding-left: 100px;
@@ -27,21 +31,13 @@
 
     .form-control {
         border: 1px solid $gray-300;
-        border-radius: 5px;
+        border-radius: 4px;
         color: $black;
-    }
-
-    .text-black {
-        color: $black;
-    }
-
-    .text-gray {
-        color: $gray-600;
     }
 
     .custom-switch {
         cursor: pointer !important;
-        margin-right: 15px;
+        margin-right: 16px;
         .custom-control-label::before {
             height: $mainSwitchVal !important;
             width: calc(#{$switchIndex} + 0.75rem) !important;
@@ -70,23 +66,13 @@
     .choose-collection-item {
         width: 160px;
         min-width: 160px;
-        border: 2px solid #c4c4c4;
+        border: 2px solid $gray-300;
         box-sizing: border-box;
         border-radius: 16px;
         cursor: pointer;
-        // &.selected {
-        //     border-color: #136bfb !important;
-        // }
-        // &.dark-collection-item {
-        //     background: linear-gradient(
-        //             135.63deg,
-        //             rgba(254, 176, 254, 0.084) -0.59%,
-        //             rgba(34, 39, 39, 0.096) 59.4%,
-        //             rgba(93, 247, 164, 0.14) 108.48%
-        //         ),
-        //         rgba(20, 20, 20, 0.85) !important;
-        //     border: 2px solid $gray-300;
-        // }
+        &.selected {
+            border-color: $primary !important;
+        }
         .c-nft-avatar {
             width: 62px;
             height: 62px;
@@ -117,14 +103,6 @@
         min-width: 300px;
         height: auto;
         margin-bottom: 1.5rem;
-        // &:hover {
-        //     border: 1px solid transparent;
-        //     background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)),
-        //         linear-gradient(101deg, #1ac3f0, #ed489c, #ffca3d);
-        //     background-origin: border-box;
-        //     background-clip: content-box, border-box;
-        //     box-shadow: 1px 1000px 1px #000000 inset;
-        // }
         .wallet-address {
             min-height: 19px;
             opacity: 0.5;
@@ -179,7 +157,7 @@
     }
 
     .btn-outline-primary {
-        border-radius: 5px;
+        border-radius: 4px;
     }
 
     .btn-outline-primary:hover {
@@ -187,7 +165,7 @@
     }
 
     .btn-primary {
-        border-radius: 5px;
+        border-radius: 4px;
         color: $white;
     }
 }

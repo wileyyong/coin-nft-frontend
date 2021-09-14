@@ -164,13 +164,13 @@
                     padding-top: 20px;
                     padding-bottom: 20px;
                     font-size: 32px;
-                    font-weight: bold;
+                    font-weight: $font-weight-bold;
                 }
                 .price {
                     color: $primary;
                     padding-bottom: 20px;
                     font-size: 20px;
-                    font-weight: bold;
+                    font-weight: $font-weight-bold;
                 }
             }
         }
@@ -214,6 +214,7 @@
                 width: 100%;
                 height: auto;
                 border-width: 4px;
+                border-radius: 100%;
             }
             .seg-name {
                 font-size: 18px;
@@ -241,6 +242,6 @@
     .modal-title {
         color: $black;
         font-size: 24px;
-        font-weight: bold;
+        font-weight: $font-weight-bold;
     }
 }

@@ -23,3 +23,7 @@ export function isAuthenticated(state: RootState): boolean {
 export function getMyInfo(state: RootState): any {
   return state?.user?.info;
 }
+
+export function getMyCollections(state: RootState): any {
+  return state?.user?.myCollections || [];
+}

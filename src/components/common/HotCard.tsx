@@ -13,9 +13,6 @@ const HotCard = ({ backurl, imgurl, title, type }: cardProps) => {
             <div className="back-image" style={{ backgroundImage: `url(${backurl})` }}></div>
             <div className="card-info pb-4 hot-back">
                 <Image src={imgurl} className="hot-image"></Image>
-                {/* <div className="d-flex flex-row align-items-center justify-content-center">
-                    <div className="hot-image" style={{ backgroundImage: `url(${imgurl})` }}></div>
-                </div> */}
                 <div className="hot-title">{title}</div>
                 <div className="hot-type">{type}</div>
                 <Button>Buy</Button>

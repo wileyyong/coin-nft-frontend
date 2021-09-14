@@ -25,16 +25,6 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
         // return imgAvatar;
     };
 
-    // const getCurrentBidPrice = () => {
-    //     if (item.bids && item.bids.length) {
-    //         let bids = item.bids.sort(function (a: any, b: any) {
-    //             return b.price - a.price;
-    //         });
-    //         return bids[0].price;
-    //     }
-    //     return 0;
-    // };
-
     return (
         <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center pb-4" onClick={() => { history.push("/tokens/" + token._id) }}>
             <Link to="/buy">
