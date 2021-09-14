@@ -398,13 +398,13 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                             <MBigTitle className="mt-4 faint-color"> Congratulations! NFT is successfully created! </MBigTitle>
                             <FlexAlignCenterDiv className="mt-5">
                                 <Link to="/">
-                                    <Button className="default-btn-size outline-btn">
-                                        <span>Home</span>
+                                    <Button className="default-btn-size outline-btn mr-3">
+                                        Home
                                     </Button>
                                 </Link>
                                 <Link to="/items">
                                     <Button className="default-btn-size mr-4 fill-btn">
-                                        <span>My Items</span>
+                                        My Items
                                     </Button>
                                 </Link>
                             </FlexAlignCenterDiv>

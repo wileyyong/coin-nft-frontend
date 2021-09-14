@@ -1,0 +1,14 @@
+.item-columns {
+  width: 100%;
+  padding: 30px 60px !important;
+  max-width: 1660px;
+  margin: 0 auto;
+  @include media-breakpoint-down('lg') {
+    max-width: 768px;
+    padding: 30px 40px !important;
+  }
+  @include media-breakpoint-down('md') {
+    max-width: 100%;
+    padding: 30px 20px !important;
+  }
+}

@@ -28,3 +28,15 @@ body {
     z-index: 1000;
   }
 }
+
+.pointer-cursor {
+  cursor: pointer;
+}
+
+.faint-color {
+  background: linear-gradient(90deg, $primary, $purple, $warning);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  background-color: $black;
+}
