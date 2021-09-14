@@ -120,14 +120,14 @@ const Header: React.FC<HeaderProps> = () => {
                   >
                     <div className="px-4">
                       {userInfo && userInfo.name && (
-                        <B1NormalTextTitle className="mb-2 mt-1">
+                        <B1NormalTextTitle className="text-black mb-2 mt-1">
                           {userInfo.name}
                         </B1NormalTextTitle>
                       )}
                       <FlexAlignCenterDiv>
                         <FaEthereum size={22}></FaEthereum>
                         <div className="ml-2">
-                          <NormalTextTitle>Balance</NormalTextTitle>
+                          <NormalTextTitle className="text-black">Balance</NormalTextTitle>
                           <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
                         </div>
                       </FlexAlignCenterDiv>

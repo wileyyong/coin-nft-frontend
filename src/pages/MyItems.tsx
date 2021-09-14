@@ -12,7 +12,7 @@ import defaultImage from "assets/imgs/default_rect.svg";
 import Layout from "components/Layout";
 import Tabs from "components/common/Tabs";
 import { useAppSelector } from "store/hooks";
-import { getWalletAddress } from "store/User/user.selector";
+import { getMyInfo, getWalletAddress } from "store/User/user.selector";
 import Utility from "service/utility";
 import configs from "configs";
 import UserController from "controller/UserController";
@@ -25,13 +25,8 @@ interface MyItemProps { }
 
 const _categories = [
     { title: "On sale", count: 0, active: false, path: "on_sale" },
-    { title: "Owned", count: 0, active: false, path: "collectibles" },
-    { title: "Created", count: 0, active: false, path: "created" },
-    { title: "Liked", count: 0, active: false, path: "liked" },
-    // { title: "Activity", count: 0, active: false, path: "activity" },
-    // { title: "Following", count: 0, active: false, path: "following" },
-    // { title: "Followers", count: 0, active: false, path: "followers" },
-    // { title: "Royalties", count: 0, active: false, path: "royalties" },
+    { title: "Collectibles", count: 0, active: false, path: "collectibles" },
+    { title: "Expiring auctions", count: 0, active: false, path: "expiring" },
 ];
 
 const _filters = [
@@ -66,6 +61,7 @@ const MyItems: React.FC<MyItemProps> = () => {
     const [pages, setPages] = useState(1);
     const [pageNum, setPageNumber] = useState(1);
     const [userInfo, setUserInfo] = useState(_userInfo);
+    const myInfo = useAppSelector(getMyInfo);
     const [categories, setCategories] = useState(_categories);
     const [itemList, setItemList] = useState([]);
     const [collections, setCollections] = useState([]);
@@ -83,9 +79,14 @@ const MyItems: React.FC<MyItemProps> = () => {
     }, [selectedTab, pageNum, walletAddress]);
 
     useEffect(() => {
+        if(myInfo) {
+            if(myInfo.cover) setCoverImage(`${configs.DEPLOY_URL}${myInfo.cover}`);
+        }
+    }, [myInfo])
+
+    useEffect(() => {
         if (selectedFilter) {
             setFilteredActivities(itemList.filter((token: { type: String; }) => token.type === selectedFilter));
-
         } else {
             setFilteredActivities(itemList);
         }
@@ -100,7 +101,6 @@ const MyItems: React.FC<MyItemProps> = () => {
     const loadTokensAndCollections = async () => {
         if (walletAddress) {
             let data = await UserController.userStats(walletAddress);
-            console.log(data);
             if (data.user) {
                 setUserInfo(data.user);
                 if (data.user.cover) {
@@ -123,27 +123,15 @@ const MyItems: React.FC<MyItemProps> = () => {
         setCollections(collections);
     };
 
-    const resaleSucced = () => {
-        loadTokensAndCollections();
-        loadItems();
-    }
-
     const loadItems = async () => {
         if (walletAddress) {
-            //setLoading(true);
-            console.log(_categories[selectedTab].path);
+            console.log(pageNum);
             let { items, pages } = await TokenController.getItems(walletAddress, _categories[selectedTab].path, pageNum);
-            console.log('items',items);
             if (pageNum === 1) {
                 setPages(pages);
             }
             setItemList(pageNum === 1 ? items : itemList.concat(items));
-            //setLoading(false);
         }
-        // else if (selectedTab === 'royalties') {
-        //     let data = await TokenController.getItems(walletAddress, selectedTab, 1);
-        //     setRoyalty(data);
-        // }
     }
 
     const onSelectType = (type: any) => {
@@ -153,7 +141,7 @@ const MyItems: React.FC<MyItemProps> = () => {
     };
 
     const getUserImgAvatar = () => {
-        if (userInfo.avatar) return `${configs.DEPLOY_URL}${userInfo.avatar}`;
+        if (myInfo.avatar) return `${configs.DEPLOY_URL}${myInfo.avatar}`;
         return imgAvatar;
     };
 
@@ -250,15 +238,11 @@ const MyItems: React.FC<MyItemProps> = () => {
             Component: OnSale
         },
         {
-            label: "Owned",
+            label: "Collectibles",
             Component: OnSale
         },
         {
-            label: "Created",
-            Component: OnSale
-        },
-        {
-            label: "Liked",
+            label: "Expiring auctions",
             Component: OnSale
         }
     ];
@@ -302,7 +286,7 @@ const MyItems: React.FC<MyItemProps> = () => {
                         }
                     </div>
                 </div>
-                <div className="display user-name">{userInfo.name}</div>
+                <div className="display user-name">{myInfo.name}</div>
                 <Link to="/profile" className="link-profile mt-2" >
                     <Button className="mr-2 mr-lg-4 btn-primary">
                         Edit Profile

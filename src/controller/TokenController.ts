@@ -28,7 +28,7 @@ class TokenController {
         return API.get(`${url}/${walletAdress}/items/${type}${page > 1 ? '?page='+page : ''}`).then(res => {
             return res.data
         });
-    }
+    }  
     public static setLike(id: String) {
         let url = configs.API.TOKEN_URL;
         return API.get(`${url}/${id}/like`).then(res => res);

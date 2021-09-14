@@ -66,6 +66,7 @@ const Home: React.FC<HomeProps> = () => {
     const loadData = async () => {
       try {
         let items = await UserController.getTopUsers('sellers', "7");
+        console.log(items);
         setSellers(items);
       } catch (err) {
         console.log(err);
