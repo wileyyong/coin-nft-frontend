@@ -31,7 +31,6 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   const [showResellDialog, setShowResellDialog] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE);
-  const [ercType] = useState(item.type || 721);
   const loggedInUserInfo = useAppSelector(getMyInfo);
 
   const resellFormData = useRef({
@@ -47,7 +46,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
       media.includes("mp3") ||
       media.includes("mp4")
     ) {
-      return `${configs.DEPLOY_URL}/content/collection/puml.jpg`;
+      return `${configs.DEPLOY_URL}/content/collection/puml.png`;
     }
     return `${configs.DEPLOY_URL}${item.thumbnail || item.media}`;
   };
