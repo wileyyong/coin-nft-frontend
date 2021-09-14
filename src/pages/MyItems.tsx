@@ -1,25 +1,30 @@
-import React, { useRef, useState, useEffect } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useRef, useState, useEffect, Fragment } from "react";
 import { NotificationManager } from "react-notifications";
-import { Button, Image } from "react-bootstrap";
+import { Button, Image, Nav, Tab } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 
-import camera from "assets/imgs/camera_alt.png";
-import verifyImg from "assets/imgs/verify.svg";
+// import camera from "assets/imgs/camera_alt.png";
+// import verifyImg from "assets/imgs/verify.svg";
 import imgAvatar from "assets/imgs/avatar.png";
-import defaultImage from "assets/imgs/default_rect.svg";
 
 import Layout from "components/Layout";
-import Tabs from "components/common/Tabs";
+import TokenView from "components/token/TokenView";
 import { useAppSelector } from "store/hooks";
-import { getMyInfo, getWalletAddress } from "store/User/user.selector";
+import { getWalletAddress } from "store/User/user.selector";
 import Utility from "service/utility";
 import configs from "configs";
 import UserController from "controller/UserController";
-import CollectionController from "controller/CollectionController";
 import TokenController from "controller/TokenController";
-import NftItemCard from "components/common/NftItemCard";
+import LoadingBar from "components/common/LoadingBar";
 import NoItem from "components/common/noItem";
+import OnSaleItem from "components/myitems/OnSaleItem";
+import ExpiringAuction from "components/myitems/ExpiringAuction";
+import {
+    BigTitle,
+    B2NormalTextTitleGrey,
+  } from "components/common/common.styles";
 
 interface MyItemProps { }
 
@@ -27,16 +32,6 @@ const _categories = [
     { title: "On sale", count: 0, active: false, path: "on_sale" },
     { title: "Collectibles", count: 0, active: false, path: "collectibles" },
     { title: "Expiring auctions", count: 0, active: false, path: "expiring" },
-];
-
-const _filters = [
-    { name: 'Listings', selected: false, filter: 'listed' },
-    { name: 'Purchases', selected: false, filter: 'purchased' },
-    { name: 'Sales', selected: false, filter: 'minted' },
-    { name: 'Transfers', selected: false, filter: 'transfered' },
-    { name: 'Bids', selected: false, filter: 'offered' },
-    { name: 'Likes', selected: false, filter: 'liked' },
-    { name: 'Followings', selected: false, filter: 'following' },
 ];
 
 const _userInfo = {
@@ -49,54 +44,27 @@ const _userInfo = {
     verified: false,
 };
 
-const _royalty = {
-    royalties: 0,
-    tokens: 0,
-    collections: 0
-}
-
 const MyItems: React.FC<MyItemProps> = () => {
-    const layoutView = useRef(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [loading, setLoading] = useState(false);
     const [pages, setPages] = useState(1);
     const [pageNum, setPageNumber] = useState(1);
     const [userInfo, setUserInfo] = useState(_userInfo);
-    const myInfo = useAppSelector(getMyInfo);
     const [categories, setCategories] = useState(_categories);
     const [itemList, setItemList] = useState([]);
-    const [collections, setCollections] = useState([]);
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectedTab, setSelectedTab] = useState("collectibles");
     const walletAddress = useAppSelector(getWalletAddress);
     const [uploadCoverImage, setUploadCoverImage] = useState(null);
     const [backgroundCoverImage, setCoverImage] = useState<any>(null);
-    const [filters] = useState(_filters);
-    const [selectedFilter, setSelectedFilter] = useState('');
-    const [filteredActivities, setFilteredActivities] = useState([]);
-    const [royalty, setRoyalty] = useState(_royalty);
 
     useEffect(() => {
         loadItems();
+        loadTokensAndCollections();
     }, [selectedTab, pageNum, walletAddress]);
 
     useEffect(() => {
-        if(myInfo) {
-            if(myInfo.cover) setCoverImage(`${configs.DEPLOY_URL}${myInfo.cover}`);
-        }
-    }, [myInfo])
-
-    useEffect(() => {
-        if (selectedFilter) {
-            setFilteredActivities(itemList.filter((token: { type: String; }) => token.type === selectedFilter));
-        } else {
-            setFilteredActivities(itemList);
-        }
-    }, [itemList]);
-
-    const getFilterClass = (val: string) => {
-        if (selectedFilter === val)
-            return "filter-btn active";
-        return "filter-btn";
-    };
+        loadTokensAndCollections();
+    }, [categories, walletAddress])
 
     const loadTokensAndCollections = async () => {
         if (walletAddress) {
@@ -119,18 +87,17 @@ const MyItems: React.FC<MyItemProps> = () => {
                 setCategories(categories);
             }
         }
-        let collections = await CollectionController.getMyCollections();
-        setCollections(collections);
     };
 
     const loadItems = async () => {
-        if (walletAddress) {
-            console.log(pageNum);
-            let { items, pages } = await TokenController.getItems(walletAddress, _categories[selectedTab].path, pageNum);
+        if(walletAddress) {
+            setLoading(true);
+            let { items, pages } = await TokenController.getItems(walletAddress, selectedTab, pageNum);
             if (pageNum === 1) {
-                setPages(pages);
+              setPages(pages);
             }
             setItemList(pageNum === 1 ? items : itemList.concat(items));
+            setLoading(false);
         }
     }
 
@@ -141,7 +108,7 @@ const MyItems: React.FC<MyItemProps> = () => {
     };
 
     const getUserImgAvatar = () => {
-        if (myInfo.avatar) return `${configs.DEPLOY_URL}${myInfo.avatar}`;
+        if (userInfo.avatar) return `${configs.DEPLOY_URL}${userInfo.avatar}`;
         return imgAvatar;
     };
 
@@ -200,106 +167,233 @@ const MyItems: React.FC<MyItemProps> = () => {
         }
     }
 
-    const onSelectFilter = (filter: String) => {
-        if (selectedFilter === filter || filter === '') {
-            setSelectedFilter('');
-            setFilteredActivities(itemList);
-        } else {
-            setSelectedFilter(`${filter}`);
-            setFilteredActivities(itemList.filter((token: { type: String; }) => token.type === filter));
-        }
+    const resaleSucced = () => {
+        loadTokensAndCollections();
+        loadItems();
     }
 
-    const OnSale = () => (
-        <div className="row justify-content-center pt-4">
-            {
-                itemList.length > 0 ?
-                    itemList.map((item, index) => (
-                        <NftItemCard key={index} item={item}></NftItemCard>
-                    ))
-                    :
-                    <div>
-                        <NoItem
-                            title="No items found"
-                            description="Come back soon! Or try to browse something for you on our marketplace"
-                            btnLink="/"
-                            btnLabel="Browse marketplace"
-                        />
-                    </div>
-            }
-        </div>
-    );
-    // const Collectibles = () => <div> Collectibles component. </div>;
-    // const ExpiringAuctions = () => <div>Expiring Auctions component.</div>;
-
-    const tabs = [
-        {
-            label: "On Sale",
-            Component: OnSale
-        },
-        {
-            label: "Collectibles",
-            Component: OnSale
-        },
-        {
-            label: "Expiring auctions",
-            Component: OnSale
-        }
-    ];
-
     return (
-        <Layout className="myitems-container" ref={layoutView}>
-            <div className="d-flex flex-column align-items-center">
-                <div style={{ backgroundImage: `url(${backgroundCoverImage ? backgroundCoverImage : defaultImage})` }} className="background-item">
-                    {
-                        uploadCoverImage ? (
-                            <Button variant="outline-white" className="cover-btn d-flex flex-row align-items-center" onClick={() => onSaveImage()}>
-                                <Image src={camera} className="pr-2 btn-image"></Image>
-                                <div>Save Cover Photo</div>
-                            </Button>
-                        ) : (
-                            <Button variant="outline-white" className="cover-btn d-flex flex-row align-items-center" onClick={() => onUploadImage()}>
-                                <Image src={camera} className="pr-2 btn-image"></Image>
-                                <div>Add Cover Photo</div>
-                            </Button>
-                        )
-                    }
-                    {
-                        backgroundCoverImage && (
-                            <div className="trach-btn text-danger text-right pr-4 pt-4">
-                                <FaTrash className="pointer-cursor" onClick={() => onRemoveImage()} />
-                            </div>
-                        )
-                    }
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        hidden
-                        accept={configs.IMG_FILE_ACCEPT}
-                        onChange={fileChanged}
-                    />
+        <Layout className="myitems-container">
+            <div className="section-1">
+                <div className="intro" style={{ backgroundImage: `url("${backgroundCoverImage}")` }}>
+                <Image src={getUserImgAvatar()} className="avatar" roundedCircle />
+                {
+                    uploadCoverImage ? (
+                    <Button variant="outline-white" className="btn-round cover-btn save-btn outline-btn" onClick={() => onSaveImage()}>
+                        Save Cover
+                    </Button>
+                    ) : (
+                    <Button variant="outline-white" className="btn-round cover-btn outline-btn" onClick={() => onUploadImage()}>
+                        Add Cover
+                    </Button>
+                    )
+                }
+                {
+                    backgroundCoverImage && (
+                        <div className="trach-btn text-danger text-right mr-3">
+                            <FaTrash className="pointer-cursor" onClick={() => onRemoveImage()} />
+                        </div>
+                    )
+                }
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    hidden
+                    accept={configs.IMG_FILE_ACCEPT}
+                    onChange={fileChanged}
+                />
                 </div>
-                <div className="d-flex flex-row align-items-center justify-content-center">
-                    <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}>
-                        {
-                            userInfo.verified && <Image src={verifyImg} className="verify"></Image>
-                        }
-                    </div>
+            </div>
+            <div className="section-2">
+                <div className="d-flex justify-content-center px-3 px-md-0">
+                    <span className="title faint-color font-matrice">{`${userInfo.name || "User - "}`}</span>
                 </div>
-                <div className="display user-name">{myInfo.name}</div>
-                <Link to="/profile" className="link-profile mt-2" >
-                    <Button className="mr-2 mr-lg-4 btn-primary">
-                        Edit Profile
+            </div>
+            <div className="section-3">
+                <div className="d-flex justify-content-center align-items-center">
+                <Link to="/profile">
+                    <Button variant="outline-primary" className="btn-default-size">
+                        <span>Edit Profile</span>
                     </Button>
                 </Link>
+                </div>
             </div>
-            <div className="myitems-tab">
-                <Tabs
-                    className="mt-4"
-                    selectedTab={selectedTab}
-                    onClick={setSelectedTab}
-                    tabs={tabs}
-                />
+            <div className="section-4">
+                <Tab.Container defaultActiveKey="collectibles" id="items_tabs">
+                    <div className="link-section px-md-5">
+                        <Nav defaultActiveKey="collectibles">
+                        {categories.map((category, index) => (
+                            <Nav.Item
+                                key={index}
+                                onClick={() => onSelectType(category.path)}
+                            >
+                                <Nav.Link eventKey={category.path}>
+                                    {category.title}
+                                    <span className={category.count ? 'fill-count' : ''}>{category.count}</span>
+                                </Nav.Link>
+                            </Nav.Item>
+                        ))}
+                        </Nav>
+                    </div>
+                    <div className="item-columns">
+                        <Tab.Content>
+                            <Tab.Pane eventKey="on_sale">
+                                <div className="auction-section">
+                                    <BigTitle>On Sale Items</BigTitle>
+                                    {loading && pageNum === 1 ? (
+                                        <div className="text-center mt-5 loading-bar">
+                                            <LoadingBar />
+                                        </div>
+                                    ) : (
+                                        <div className="item-list mt-3 mt-md-5">
+                                            {itemList.length > 0 ? (
+                                                itemList.map((saleItem: any, i: number) => (
+                                                    <OnSaleItem key={i} item={saleItem}></OnSaleItem>
+                                                ))
+                                            ) : (
+                                                <NoItem
+                                                    title="No items found"
+                                                    description="Come back soon! Or try to browse something for you on our marketplace"
+                                                    btnLink="/"
+                                                    btnLabel="Browse marketplace"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                    {
+                                        loading && pageNum > 1 ? (
+                                        <div className="my-3 d-flex justify-content-center loading-bar">
+                                            <LoadingBar />
+                                        </div>
+                                        ) : (
+                                        itemList.length > 0 && pages > pageNum && (
+                                            <div className="my-3 d-flex justify-content-center">
+                                                <Button
+                                                    variant="primary"
+                                                    className="btn-round w-50 outline-btn"
+                                                    onClick={() => setPageNumber(pageNum + 1)}
+                                                >
+                                                    <span>Load More</span>
+                                                </Button>
+                                            </div>
+                                        )
+                                        )
+                                    }
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="collectibles">
+                                {loading && pageNum === 1 ? (
+                                <div className="mt-5 text-center loading-bar">
+                                    <LoadingBar />
+                                </div>
+                                ) : (
+                                <Fragment>
+                                    <div className="tokens-section">
+                                        <BigTitle>My Tokens</BigTitle>
+                                        <div className="item-list mt-3 mt-md-5">
+                                            {itemList.length > 0 ? (
+                                            itemList.map((token: any, i: number) => (
+                                                <TokenView key={i} item={token} user={userInfo} resaleSucced={() => resaleSucced()}></TokenView>
+                                            ))
+                                            ) : (
+                                            <NoItem
+                                                title="No tokens found"
+                                                description="Come back soon! Or try to browse something for you on our marketplace"
+                                                btnLink="/"
+                                                btnLabel="Browse marketplace"
+                                            />
+                                            )}
+                                        </div>
+                                        {
+                                            loading && pageNum > 1 ? (
+                                            <div className="my-3 d-flex justify-content-center loading-bar">
+                                                <LoadingBar />
+                                            </div>
+                                            ) : (
+                                            itemList.length > 0 && pages > pageNum && (
+                                                <div className="my-3 d-flex justify-content-center">
+                                                <Button
+                                                    variant="primary"
+                                                    className="btn-round w-50 outline-btn"
+                                                    onClick={() => setPageNumber(pageNum + 1)}
+                                                >
+                                                    <span>Load More</span>
+                                                </Button>
+                                                </div>
+                                            )
+                                            )
+                                        }
+                                    </div>
+                                </Fragment>
+                                )}
+                                <div className="notice-view">
+                                    <div className="notice">
+                                        <B2NormalTextTitleGrey className="text-dark">
+                                            Create collections (your own storefonts), upload digital
+                                            creations, configure your commision, and sell NFTs to your
+                                            fans - all for free! You can also manage smart contracts
+                                            than you created outside of NFT’s.
+                                        </B2NormalTextTitleGrey>
+                                    </div>
+                                    <div className="btn-section">
+                                        <Link to="/create-collectible">
+                                        <Button
+                                            variant="primary"
+                                            className="default-btn-size btn-create fill-btn"
+                                        >
+                                            <span>Create NFT</span>
+                                        </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="expiring">
+                                <div className="auction-section">
+                                    <BigTitle>Expiring Auctions</BigTitle>
+                                    {loading && pageNum === 1 ? (
+                                        <div className="text-center mt-5 loading-bar">
+                                            <LoadingBar />
+                                        </div>
+                                    ) : (
+                                        <div className="item-list mt-3 mt-md-5">
+                                            {itemList.length > 0 ? (
+                                                itemList.map((auction: any, i: number) => (
+                                                    <ExpiringAuction key={i} item={auction}></ExpiringAuction>
+                                                ))
+                                            ) : (
+                                                <NoItem
+                                                    title="No items found"
+                                                    description="Come back soon! Or try to browse something for you on our marketplace"
+                                                    btnLink="/"
+                                                    btnLabel="Browse marketplace"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                    {
+                                        loading && pageNum > 1 ? (
+                                            <div className="my-3 d-flex justify-content-center loading-bar">
+                                                <LoadingBar />
+                                            </div>
+                                        ) : (
+                                            itemList.length > 0 && pages > pageNum && (
+                                                <div className="my-3 d-flex justify-content-center">
+                                                    <Button
+                                                        variant="primary"
+                                                        className="btn-round w-50 outline-btn"
+                                                        onClick={() => setPageNumber(pageNum + 1)}
+                                                    >
+                                                        <span>Load More</span>
+                                                    </Button>
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </Tab.Pane>
+                        </Tab.Content>
+                    </div>
+                </Tab.Container>
             </div>
         </Layout>
     );

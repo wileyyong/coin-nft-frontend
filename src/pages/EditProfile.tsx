@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import React, { useRef, useState, useEffect } from "react";
 import metamask from "assets/imgs/meta-logo.png";
 import { Image, Button, Container } from "react-bootstrap";

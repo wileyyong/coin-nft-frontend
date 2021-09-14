@@ -98,14 +98,18 @@ const Home: React.FC<HomeProps> = () => {
                 </div>
               </Button>
             </div>
-            <div className="intro-btn-metamask">
-              <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={() => connectMetaMask()}>
-                <div className="d-flex flex-row align-items-center">
-                  <Image className="connect-img p-1" src={metamaskImage}></Image>
-                  <span>{isAuth ? 'Connected with Meta Mask' : 'connect with Meta Mask'}</span>
-                </div>
-              </Button>
-            </div>
+            {
+              !isAuth ? (
+                <div className="intro-btn-metamask">
+                <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={() => connectMetaMask()}>
+                  <div className="d-flex flex-row align-items-center">
+                    <Image className="connect-img p-1" src={metamaskImage}></Image>
+                    <span>Connect with Meta Mask</span>
+                  </div>
+                </Button>
+              </div>
+              ) : ''
+            }
           </div>
         </div>
         <Image className="intro-image" src={homeintroImage}></Image>
