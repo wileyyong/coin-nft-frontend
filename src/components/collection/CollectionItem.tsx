@@ -34,7 +34,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
   }
 
   return (
-    <div className="collection-item mr-4" onClick={() => pushLink()}>
+    <div className="flex-fill collection-item mr-4" onClick={() => pushLink()}>
       <div className="collection-item-bg pos-relative">
           {collectionImgUrl() ? <img src={collectionImgUrl()} alt="collectionImage" /> : <div className="no-thumbnail"></div> }
           <NftAvatar imagePath={collectionCreatorImgUrl()} className="nft-avatar"></NftAvatar>

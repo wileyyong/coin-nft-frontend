@@ -4,6 +4,7 @@ import Layout from "components/Layout";
 import { Button, Image } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
+import { getNftCategories } from "store/Nft/nft.selector";
 import {
   isAuthenticated,
 } from "store/User/user.selector";
@@ -22,9 +23,25 @@ import NoItem from "components/common/noItem";
 
 import configs from "configs";
 
+import TopUsers from "components/home/TopUsers";
+import HotBids from "components/home/HotBids";
 import { useHistory } from 'react-router-dom';
 import OfferController from "controller/OfferController";
 import UserController from "controller/UserController";
+import LoadingBar from "components/common/LoadingBar";
+
+import {
+  B1NormalTextTitle,
+  B2NormalTextTitle,
+  B3NormalTextTitle,
+  NormalTextTitle,
+  BigTitle,
+  FlexAlignCenterDiv,
+  FlexJustifyBetweenDiv,
+  MBigTitle,
+  SubDescription,
+  NftAvatar,
+} from "components/common/common.styles";
 
 interface HomeProps { }
 
@@ -46,17 +63,42 @@ const Home: React.FC<HomeProps> = () => {
     category: "all",
     sort: "recent",
     verified: false
-  })
+  });
+  const history = useHistory();
+  const [loading, setLoading] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
+  const nftCategories = useAppSelector(getNftCategories);
+
+  const categorySelected = (val: string) => {
+    let updatedCategories: any[] =
+      JSON.parse(JSON.stringify(selectedCategories)) || [];
+    if (updatedCategories.includes(val)) {
+      let index = updatedCategories.findIndex((elm: any) => elm === val);
+      updatedCategories.splice(index, 1);
+      setSelectedCategories(updatedCategories);
+    } else {
+      updatedCategories.push(val);
+      setSelectedCategories(updatedCategories);
+    }
+  };
+
+  const getCategoryClass = (val: string) => {
+    if (selectedCategories.includes(val))
+      return "nft-type-btn mr-4 nft-type-selected";
+    return `nft-type-btn mr-4`;
+  };
 
   useEffect(() => {
     const loadExploreData = async () => {
+      setLoading(true);
       let params = {};
       if (searchParam.category === "all") {
         params = { sort: searchParam.sort, verified: false };
       }
 
       let offers = await OfferController.getList("explore", params);
-      setExploreAuctions(offers);
+      setExploreAuctions(offers.offers);
+      setLoading(false);
     };
 
     loadExploreData();
@@ -64,23 +106,23 @@ const Home: React.FC<HomeProps> = () => {
 
   useEffect(() => {
     const loadData = async () => {
+      setLoading(true);
       try {
         let items = await UserController.getTopUsers('sellers', "7");
         console.log(items);
         setSellers(items);
+        setLoading(false);
       } catch (err) {
         console.log(err);
+        setLoading(false);
       }
     }
-
     loadData();
   }, [])
 
   const connectMetaMask = () => {
     dispatch(connectUserWallet());
   }
-
-  const history = useHistory();
 
   return (
     <Layout className="home-container" ref={layoutView}>
@@ -101,13 +143,13 @@ const Home: React.FC<HomeProps> = () => {
             {
               !isAuth ? (
                 <div className="intro-btn-metamask">
-                <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={() => connectMetaMask()}>
-                  <div className="d-flex flex-row align-items-center">
-                    <Image className="connect-img p-1" src={metamaskImage}></Image>
-                    <span>Connect with Meta Mask</span>
-                  </div>
-                </Button>
-              </div>
+                  <Button className="mr-2 mr-lg-4 btn-outline-secondary" onClick={() => connectMetaMask()}>
+                    <div className="d-flex flex-row align-items-center">
+                      <Image className="connect-img p-1" src={metamaskImage}></Image>
+                      <span>Connect with Meta Mask</span>
+                    </div>
+                  </Button>
+                </div>
               ) : ''
             }
           </div>
@@ -125,43 +167,53 @@ const Home: React.FC<HomeProps> = () => {
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
         <div className="row text-center justify-content-center">
           {
-            sellers.length > 0 ?
-              sellers.map((seller, index) => (
-                <div key={index} className="col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment pb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
-                  <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} className="seg-img" alt="seller"></Image>
-                  <div className="seg-name pt-2">{seller.name}</div>
-                  <div className="seg-type pt-2">{seller.type}</div>
-                  <div className="seg-price pt-2">{seller.amount} PUML</div>
-                  <div className="seg-price-eth pt-2">{seller.amount}</div>
-                </div>
-              )
-              ) : (
+            loading ? (
+              <div className="my-5 d-flex justify-content-center">
+                <LoadingBar />
+              </div>
+            ) : (
+              sellers.length > 0 ?
+                <TopUsers users={sellers}></TopUsers>
+                :
                 <NoItem
                   title="No Users found"
                   description="Come back soon! Or try to browse something for you on our marketplace"
                   btnLink="/"
                   btnLabel="Browse marketplace"
                 />
-              )
+            )
           }
         </div>
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
-        <div className="row px-2 justify-content-center">
+        <div>
           {
-            exploreAuctions.length > 0 ?
-              exploreAuctions.map((auction, index) => (
-                <NftItemCard key={index} item={auction}></NftItemCard>
-              )
-              ) : (
+            loading ? (
+              <div className="row px-2 my-5 justify-content-center">
+                <LoadingBar />
+              </div>
+            ) : (
+              exploreAuctions.length > 0 ?
+                (
+                  <div className="row px-2 justify-content-start">
+                    {
+                      exploreAuctions.map((auction, index) => {
+                        return (
+                          <NftItemCard key={index} item={auction}></NftItemCard>
+                        )
+                      })
+                    }
+                  </div>
+                )
+                :
                 <NoItem
                   title="No Hot bids found"
                   description="Come back soon! Or try to browse something for you on our marketplace"
-                  btnLink="/" 
+                  btnLink="/"
                   btnLabel="Browse marketplace"
                 />
-              )
+            )
           }
         </div>
       </div>
@@ -172,6 +224,23 @@ const Home: React.FC<HomeProps> = () => {
       <div className="section">
         <div className="d-flex flex-row align-items-center flex-wrap">
           <h1 className="font-weight-bold section-title mr-4">Explore</h1>
+          {/* <FlexAlignCenterDiv className="category-list mt-4">
+            {nftCategories.map((eType, index) => {
+              return (
+                eType.value !== "all" && (
+                  <div
+                    className={getCategoryClass(eType.value)}
+                    key={index}
+                    onClick={() => {
+                      categorySelected(eType.value);
+                    }}
+                  >
+                    {eType.label}
+                  </div>
+                )
+              );
+            })}
+          </FlexAlignCenterDiv> */}
           <div className="d-flex flex-row flex-wrap">
             <Button className="btn-type mr-3 mb-2">All</Button>
             <Button className="btn-type mr-3 mb-2">Art</Button>
@@ -181,7 +250,7 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row px-2 justify-content-center">
+        <div className="row px-2">
           {
             exploreAuctions.length > 0 ?
               (

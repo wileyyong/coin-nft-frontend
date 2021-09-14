@@ -52,14 +52,11 @@
     color: $black;
 
     .card-image {
-        // background-position: center center;
-        // background-size: cover;
         width: 100%;
         height: auto;
         cursor: pointer;
-        border-radius: 100%;
-        border-width: 2px;
-        border: 2px solid $purple;
+        //border-radius: 100%;
+        //border: 2px solid $purple;
     }
 
     .card-info {
