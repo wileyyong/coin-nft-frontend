@@ -24,7 +24,7 @@ class UserController {
     public static userSettings(payload: any) {
         return API.post(`${configs.API.USERS_URL}/settings`, payload);
     }
-    public static getTopUsers(type: string, days: string) {
+    public static getTopUsers(type: string, days: number) {
         return API.get(`${configs.API.USERS_URL}/tops/${type}?days=${days}`).then(res => res.data.users);
     }
     public static userFollow(id: string) {

@@ -21,8 +21,6 @@ import Collections from "components/collection/Collections";
 import imageAvatar from "assets/imgs/seller1.png";
 import NoItem from "components/common/noItem";
 
-import configs from "configs";
-
 import TopUsers from "components/home/TopUsers";
 import HotBids from "components/home/HotBids";
 import { useHistory } from 'react-router-dom';
@@ -30,19 +28,6 @@ import OfferController from "controller/OfferController";
 import UserController from "controller/UserController";
 import TokenController from "controller/TokenController";
 import LoadingBar from "components/common/LoadingBar";
-
-import {
-  B1NormalTextTitle,
-  B2NormalTextTitle,
-  B3NormalTextTitle,
-  NormalTextTitle,
-  BigTitle,
-  FlexAlignCenterDiv,
-  FlexJustifyBetweenDiv,
-  MBigTitle,
-  SubDescription,
-  NftAvatar,
-} from "components/common/common.styles";
 
 interface HomeProps { }
 
@@ -113,7 +98,6 @@ const Home: React.FC<HomeProps> = () => {
       setNftTokens(items);
       setLoading(false);
     }
-
     loadNftTokens();
   }, [])
 
@@ -121,7 +105,7 @@ const Home: React.FC<HomeProps> = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        let items = await UserController.getTopUsers('sellers', "7");
+        let items = await UserController.getTopUsers('sellers', 7);
         setSellers(items);
         setLoading(false);
       } catch (err) {

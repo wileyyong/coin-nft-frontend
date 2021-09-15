@@ -20,16 +20,14 @@ const _pageNumber = {
 };
 
 const _pages = {
-  hot: 1,
-  featured: 1,
-  sponsored: 1
+  hot: 1
 };
 
 const Collections: React.FC<CollectionsProps> = ({ type }) => {
   const [collectionList, setCollections] = useState<any[]>([]);
   const [pageNum, setPageNumber] = useState(_pageNumber);
   const [pages, setPages] = useState(_pages);
-  const [showItems, setShowItems] = useState(5);
+  const [showItems, setShowItems] = useState(4);
   const [increaseVal, setIncreaseVal] = useState(3);
   const [showArrows, setShowArrows] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -53,23 +51,11 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
       } else {
         setShowArrows(false);
       }
-      if (type === 'hot' && data.pages) {
+      if (data.pages) {
         if (pageNum.hot === 1) {
           pages.hot = data.pages;
         }
         setCollections(pageNum.hot === 1 ? data.collections : collectionList.concat(data.collections));
-      }
-      if (type === 'featured' && data.pages) {
-        if (pageNum.featured === 1) {
-          pages.featured = data.pages;
-        }
-        setCollections(pageNum.featured === 1 ? data.collections : collectionList.concat(data.collections));
-      }
-      if (type === 'sponsored' && data.pages) {
-        if (pageNum.sponsored === 1) {
-          pages.sponsored = data.pages;
-        }
-        setCollections(pageNum.sponsored === 1 ? data.collections : collectionList.concat(data.collections));
       }
       setPages(pages);
       setIncreaseVal(3);
@@ -86,14 +72,8 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
       if (showItems < collectionList.length) {
         setShowItems(showItems + increaseVal);
       } else {
-        if (type === 'hot' && pages.hot > pageNum.hot) {
+        if (pages.hot > pageNum.hot) {
           pageNum.hot += 1;
-        }
-        if (type === 'featured' && pages.featured > pageNum.featured) {
-          pageNum.featured += 1;
-        }
-        if (type === 'sponsored' && pages.sponsored > pageNum.sponsored) {
-          pageNum.sponsored += 1;
         }
         setPageNumber(pageNum);
       }
@@ -109,29 +89,38 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
 
   return (
     <FlexSlideContainer className="slide-container justify-content-center" id={`slider_${type}`}>
-      {
-        collectionList.length === 0 && (
-          <NoItem
-            title="No Collections found"
-            description="Come back soon! Or try to browse something for you on our marketplace"
-            btnLink="/"
-            btnLabel="Browse marketplace"
-          />
-        )
-      }
-      {
-        showArrows && (
-          <div className="arrow-btn left pointer-cursor" onClick={() => onPrevCollections()}><HiOutlineChevronDoubleLeft /></div>
-        )
-      }
-      {collectionList.map((collection, index) => (
-        index < showItems && (
-          <CollectionItem item={collection} key={index} />
-        )
-      ))}
-      {
-        showArrows && (
-          <div className="arrow-btn right pointer-cursor" onClick={() => onNextCollections()}><HiOutlineChevronDoubleRight /></div>
+      {loading ? (
+        <div className="d-flex my-4 justify-content-center w-100">
+          <LoadingBar />
+        </div>
+        ) : (
+          <>
+            {
+              collectionList.length === 0 && (
+                <NoItem
+                  title="No Collections found"
+                  description="Come back soon! Or try to browse something for you on our marketplace"
+                  btnLink="/"
+                  btnLabel="Browse marketplace"
+                />
+              )
+            }
+            {
+              showArrows && (
+                <div className="arrow-btn left pointer-cursor" onClick={() => onPrevCollections()}><HiOutlineChevronDoubleLeft /></div>
+              )
+            }
+            {collectionList.map((collection, index) => (
+              index < showItems && (
+                <CollectionItem item={collection} key={index} />
+              )
+            ))}
+            {
+              showArrows && (
+                <div className="arrow-btn right pointer-cursor" onClick={() => onNextCollections()}><HiOutlineChevronDoubleRight /></div>
+              )
+            }
+          </>
         )
       }
     </FlexSlideContainer>

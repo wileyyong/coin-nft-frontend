@@ -345,7 +345,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const handleChange = (e: any) => {
         let fieldName = e.target.name;
-        if(fieldName === 'offer_price' || fieldName === 'min_bid_price') {
+        if(fieldName === 'offer_price' || fieldName === 'min_bid_price' || fieldName === 'royalties') {
             const regex = /^[0-9]\d*(?:[.]\d*)?$/;
             if (e.target.value !== '' && !regex.test(e.target.value)) {
                 e.preventDefault();
@@ -462,7 +462,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         value={collectible.min_bid_price}
                                                         onChange={(e) => handleChange(e)}
                                                         pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
-                                                        maxLength={10}
+                                                        maxLength={7}
                                                     />
                                                     <Form.Control.Feedback type="invalid">
                                                         Please input valid minimum bid price.
@@ -591,6 +591,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                             type="text"
                                                             placeholder="Name"
                                                             name="name"
+                                                            value={collectible.name}
                                                             onChange={(e) => handleChange(e)}
                                                         />
                                                         <Form.Control.Feedback type="invalid">
@@ -606,11 +607,13 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         </Form.Label>
                                                         <Form.Control
                                                             required
-                                                            type="number"
+                                                            type="text"
                                                             placeholder="Royalties"
                                                             name="royalties"
+                                                            value={collectible.royalties}
                                                             min="0"
                                                             max="50"
+                                                            maxLength={2}
                                                             pattern="^\d+$"
                                                             onChange={(e) => handleChange(e)}
                                                         />

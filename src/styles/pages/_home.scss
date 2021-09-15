@@ -31,7 +31,7 @@
             height: 300px;
         }
         .intro-content {
-            width: 50%;
+            width: 45%;
             @include media-breakpoint-down(lg) {
                 width: 100%;
             }

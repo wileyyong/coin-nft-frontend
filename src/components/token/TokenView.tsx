@@ -76,7 +76,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   };
 
   const hasResellPermission = () => {
-    return !item.offer && isOwner();
+    return isOwner();
   };
 
   const isCreator = () => {
@@ -200,10 +200,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         {item.collections ? item.collections.name : "PUML"}
       </SmallTextTitleGrey>
 
-      {hasResellPermission() && !item.offer ? (
+      {hasResellPermission() && item.offer && item.offer.status !== 'pending' ? (
         <Button
           variant="primary"
-          className="full-width mt-3 outline-btn"
+          className="full-width mt-3 w-100"
           onClick={() => {
             setShowResellDialog(true);
           }}
