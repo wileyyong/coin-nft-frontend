@@ -19,7 +19,7 @@ const ChooseCollectionItem: React.FC<ChooseCollectionItemProps> = ({ item, onSel
     <div className={getClassName()} onClick={onSelected}>
         <div className="c-nft-avatar">
           {
-            item.name==='PUML' ? (<img src={configs.DEPLOY_URL + '/content/collection/puml.jpg'} />): (item.image && <img src={configs.DEPLOY_URL + item.image} alt="avatar" />)
+            item.name==='PUML' ? (<img src={configs.DEPLOY_URL + '/content/collection/puml.png'} />): (item.image && <img src={configs.DEPLOY_URL + item.image} alt="avatar" />)
           }
         </div>
         <B3NormalTextTitle className="mt-3 faint-color">{item.name}</B3NormalTextTitle>

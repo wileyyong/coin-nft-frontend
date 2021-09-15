@@ -164,7 +164,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const getCollectionImgPath = () => {
         if (token && token.collections && token.collections.image)
             return `${configs.DEPLOY_URL}${token.collections.image}`;
-        return `${configs.DEPLOY_URL}/content/collection/puml.jpg`;
+        return `${configs.DEPLOY_URL}/content/collection/puml.png`;
     };
 
     const isPicture = () => {
