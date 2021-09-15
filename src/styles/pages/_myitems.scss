@@ -103,7 +103,7 @@
   
       .token-view, .auction-item, .collection-item {
         margin-bottom: 1.5rem;
-        @include media-breakpoint-down('md') {
+        @include media-breakpoint-down('sm') {
             max-width: 100%;
             min-width: 100%;
             margin-right: 0 !important;
@@ -129,6 +129,9 @@
       }
     }
     .item-list {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
       .row {
         @include media-breakpoint-down('md') {
             flex-wrap: wrap-reverse;
