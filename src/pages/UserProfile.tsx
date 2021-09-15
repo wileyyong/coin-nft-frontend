@@ -44,8 +44,10 @@ interface UserProfileProps { }
 
 const _categories = [
     { title: "On sale", count: 0, active: false, path: "on_sale" },
-    { title: "Collectibles", count: 0, active: false, path: "collectibles" },
-    { title: "Expiring auctions", count: 0, active: false, path: "expiring" },
+    { title: "Owned", count: 0, active: false, path: "collectibles" },
+    { title: "Created", count: 0, active: false, path: "created" },
+    { title: "Liked", count: 0, active: false, path: "liked" },
+    { title: "Activity", count: 0, active: false, path: "activity" },
 ];
 
 const _userInfo = {
@@ -225,11 +227,19 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             Component: OnSale
         },
         {
-            label: "Collectibles",
+            label: "Owned",
             Component: OnSale
         },
         {
-            label: "Expiring auctions",
+            label: "Created",
+            Component: OnSale
+        },
+        {
+            label: "Liked",
+            Component: OnSale
+        },
+        {
+            label: "Activity",
             Component: OnSale
         }
     ];
@@ -247,7 +257,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                             )
                         }
                     </div>
-                </div>
+                </div> 
                 <div className="display user-name pb-3">{userInfo ? userInfo.name : ''}</div>
                 <div className="d-flex flex-row align-items-center pb-3">
                     <div className="token-address pr-2">{userInfo.wallet}</div>

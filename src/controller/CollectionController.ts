@@ -2,7 +2,6 @@ import API from 'service/api';
 import configs from "configs";
 
 class CollectionController {
-    
     public static create(payload: any) {
         return API.post(configs.API.COLLECTION_URL, payload).then(res => res.data)
     }
@@ -43,7 +42,6 @@ class CollectionController {
     public static delete(id: any) {
         return API.delete(`${configs.API.COLLECTION_URL}/${id}`).then(res => res.data)
     }
-    
 }
 
 export default CollectionController;
