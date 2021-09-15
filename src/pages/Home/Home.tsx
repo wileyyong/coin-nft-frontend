@@ -28,6 +28,7 @@ import HotBids from "components/home/HotBids";
 import { useHistory } from 'react-router-dom';
 import OfferController from "controller/OfferController";
 import UserController from "controller/UserController";
+import TokenController from "controller/TokenController";
 import LoadingBar from "components/common/LoadingBar";
 
 import {
@@ -58,6 +59,7 @@ const Home: React.FC<HomeProps> = () => {
   const depositWalletShow = () => setShowDepositWallet(true);
 
   const [exploreAuctions, setExploreAuctions] = useState<any[]>([]);
+  const [nftTokens, setNftTokens] = useState<any[]>([]);
   const [sellers, setSellers] = useState<any[]>([]);
   const [searchParam, setSearchParam] = useState<any>({
     category: "all",
@@ -97,7 +99,7 @@ const Home: React.FC<HomeProps> = () => {
       }
 
       let offers = await OfferController.getList("explore", params);
-      setExploreAuctions(offers.offers);
+      //setExploreAuctions(offers.offers);
       setLoading(false);
     };
 
@@ -105,11 +107,21 @@ const Home: React.FC<HomeProps> = () => {
   }, [searchParam]);
 
   useEffect(() => {
+    const loadNftTokens = async () => {
+      setLoading(true);
+      let items = await TokenController.getTokens();
+      setNftTokens(items);
+      setLoading(false);
+    }
+
+    loadNftTokens();
+  }, [])
+
+  useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
         let items = await UserController.getTopUsers('sellers', "7");
-        console.log(items);
         setSellers(items);
         setLoading(false);
       } catch (err) {
@@ -194,13 +206,13 @@ const Home: React.FC<HomeProps> = () => {
                 <LoadingBar />
               </div>
             ) : (
-              exploreAuctions.length > 0 ?
+              nftTokens.length > 0 ?
                 (
                   <div className="row px-2 justify-content-start">
                     {
-                      exploreAuctions.map((auction, index) => {
+                      nftTokens.map((token, index) => {
                         return (
-                          <NftItemCard key={index} item={auction}></NftItemCard>
+                          <NftItemCard key={index} item={token}></NftItemCard>
                         )
                       })
                     }
@@ -250,22 +262,28 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row px-2">
+        <div>
           {
-            exploreAuctions.length > 0 ?
+            nftTokens.length > 0 ?
               (
-                exploreAuctions.map((auction, index) => {
-                  return (
-                    <NftItemCard key={index} item={auction}></NftItemCard>
-                  )
-                })
+                <div className="row px-2">
+                  {
+                    nftTokens.map((auction, index) => {
+                      return (
+                        <NftItemCard key={index} item={auction}></NftItemCard>
+                      )
+                    })
+                  }
+                </div>
               ) : (
-                <NoItem
-                  title="No items found"
-                  description="Come back soon! Or try to browse something for you on our marketplace"
-                  btnLink="/"
-                  btnLabel="Browse marketplace"
-                />
+                <div className="row justify-content-center px-2">
+                  <NoItem
+                    title="No items found"
+                    description="Come back soon! Or try to browse something for you on our marketplace"
+                    btnLink="/"
+                    btnLabel="Browse marketplace"
+                  />
+                </div>
               )
           }
         </div>
