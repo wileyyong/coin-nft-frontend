@@ -381,11 +381,11 @@
     min-width: 80px;
     margin-top: 5px;
     margin-bottom: 5px;
-    @media screen and (max-width: 1260px) {
-      padding: 4px 12px;
+    @include media-breakpoint-down(xl) {
+        padding: 4px 12px;
     }
-    @media screen and (max-width: 992px) {
-      padding: 4px 8px;
+    @include media-breakpoint-down(lg) {
+        padding: 4px 8px;
     }
 }
 

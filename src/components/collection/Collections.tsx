@@ -7,6 +7,7 @@ import {
 import CollectionItem from "./CollectionItem";
 import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from 'react-icons/hi';
 import NoItem from "components/common/noItem";
+import LoadingBar from "components/common/LoadingBar";
 
 interface CollectionsProps {
   type: string;
@@ -31,6 +32,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
   const [showItems, setShowItems] = useState(5);
   const [increaseVal, setIncreaseVal] = useState(3);
   const [showArrows, setShowArrows] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     let pageNumber = 1;
     if (type === 'hot') {
@@ -44,6 +46,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
     }
 
     const loadCollections = async () => {
+      setLoading(true);
       let data = await CollectionController.getList(type, pageNumber);
       if (data.collections.length >= showItems) {
         setShowArrows(true);
@@ -70,6 +73,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
       }
       setPages(pages);
       setIncreaseVal(3);
+      setLoading(false);
     }
 
     loadCollections();
