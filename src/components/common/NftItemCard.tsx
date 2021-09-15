@@ -26,15 +26,15 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
     };
 
     return (
-        <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center pb-4" onClick={() => { history.push("/tokens/" + token._id) }}>
+        <div className="myitem-card text-center py-4 px-2" onClick={() => { history.push("/tokens/" + token._id) }}>
             <Link to="/buy">
                 <Image className="card-image" src={getOwnerAvatar()}></Image>
             </Link>
             <div className="card-info pt-3 pb-4">
                 <div className="card-title">{token.name}</div>
                 <div>
-                    <span className="puml-price">{item.offer_price}</span>
-                    <span className="eth-price"> • {item.offer_price}</span>
+                    <span className="puml-price">{item.min_bid}</span>
+                    <span className="eth-price"> • {item.min_bid}</span>
                 </div>
                 <div className="card-content pt-2">Unfolding reality to see whats underneath the favricated surface</div>
             </div>

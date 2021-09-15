@@ -53,6 +53,7 @@ const HotBids: React.FC<HotBidsProps> = ({ bids }) => {
                 }
             </Slider>
         </div>
+
     );
 };
 

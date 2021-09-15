@@ -97,7 +97,7 @@ const Home: React.FC<HomeProps> = () => {
       }
 
       let offers = await OfferController.getList("explore", params);
-      setExploreAuctions(offers);
+      setExploreAuctions(offers.offers);
       setLoading(false);
     };
 
@@ -187,15 +187,25 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
-        <div className="row px-2 justify-content-center">
+        <div>
           {
             loading ? (
-              <div className="my-5 d-flex justify-content-center">
+              <div className="row px-2 my-5 justify-content-center">
                 <LoadingBar />
               </div>
             ) : (
               exploreAuctions.length > 0 ?
-                <HotBids bids={exploreAuctions}></HotBids>
+                (
+                  <div className="row px-2 justify-content-start">
+                    {
+                      exploreAuctions.map((auction, index) => {
+                        return (
+                          <NftItemCard key={index} item={auction}></NftItemCard>
+                        )
+                      })
+                    }
+                  </div>
+                )
                 :
                 <NoItem
                   title="No Hot bids found"
@@ -240,7 +250,7 @@ const Home: React.FC<HomeProps> = () => {
             <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
-        <div className="row px-2 justify-content-center">
+        <div className="row px-2">
           {
             exploreAuctions.length > 0 ?
               (
