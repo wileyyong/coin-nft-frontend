@@ -88,7 +88,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
   }
 
   return (
-    <FlexSlideContainer className="slide-container justify-content-center" id={`slider_${type}`}>
+    <FlexSlideContainer className="slide-container flex-wrap" id={`slider_${type}`}>
       {loading ? (
         <div className="d-flex my-4 justify-content-center w-100">
           <LoadingBar />

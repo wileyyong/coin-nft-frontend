@@ -1,10 +1,11 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { Fragment, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
 import { Row, Col, Dropdown, Button, Image, Nav, Tab } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import Layout from "components/Layout";
-
+import TokenView from "components/token/TokenView";
 import {
     BigTitle,
     MidTextTitle,
@@ -19,7 +20,7 @@ import TokenController from "controller/TokenController";
 import CollectionController from "controller/CollectionController";
 import LoadingBar from "components/common/LoadingBar";
 import imgAvatar from "assets/imgs/avatar.png";
-import imgCopyIcon from "assets/imgs/copyicon.svg";
+import imgCopyIcon from "assets/imgs/copy.png";
 import NoItem from "components/common/noItem";
 import { useAppSelector } from "store/hooks";
 import { getWalletAddress } from "store/User/user.selector";
@@ -28,17 +29,17 @@ import UserController from "controller/UserController";
 import Utility from "service/utility";
 import configs from "configs";
 import CollectionItem from "components/collection/CollectionItem";
+import ActivityItem from "components/token/ActivityItem";
+import OnSaleItem from "components/myitems/OnSaleItem";
+import UserItem from "components/user/userItem";
+import TokenItem from "components/token/TokenItem";
 import { FaTag, FaHeart, FaCheck } from "react-icons/fa";
 import { BsLightningFill } from 'react-icons/bs';
 import { BiTransfer } from 'react-icons/bi';
 import { RiAuctionFill } from 'react-icons/ri';
 import { ImDiamonds } from 'react-icons/im';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
-
-import Tabs from "components/common/Tabs";
-import verifyImg from "assets/imgs/verify.svg";
-import copyImg from "assets/imgs/copy.png";
-import back from "assets/imgs/hot-back.svg";
+import NftItemCard from "components/common/NftItemCard";
 
 interface UserProfileProps { }
 
@@ -48,6 +49,8 @@ const _categories = [
     { title: "Created", count: 0, active: false, path: "created" },
     { title: "Liked", count: 0, active: false, path: "liked" },
     { title: "Activity", count: 0, active: false, path: "activity" },
+    { title: "Following", count: 0, active: false, path: "following" },
+    { title: "Followers", count: 0, active: false, path: "followers" },
 ];
 
 const _userInfo = {
@@ -57,7 +60,7 @@ const _userInfo = {
     date_create: "",
     avatar: "",
     cover: "",
-    verified: false,
+    verified: false
 };
 
 const _filters = [
@@ -77,23 +80,26 @@ const _royalty = {
 }
 
 const UserProfile: React.FC<UserProfileProps> = () => {
-    const layoutView = useRef(null);
     const params: any = useParams();
     const history = useHistory();
+    const [loading, setLoading] = useState(false);
     const [pages, setPages] = useState(1);
     const [pageNum, setPageNumber] = useState(1);
     const [userInfo, setUserInfo] = useState(_userInfo);
     const [categories, setCategories] = useState(_categories);
     const [itemList, setItemList] = useState([]);
     const [collections, setCollections] = useState([]);
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [selectedTab, setSelectedTab] = useState("collectibles");
     const [walletAddress, setWalletAddress] = useState('');
+    const [walletHiddenText, setHiddenText] = useState('');
     const [followedAllow, setFollowedAllow] = useState(true);
     const [filters] = useState(_filters);
     const [selectedFilter, setSelectedFilter] = useState('');
     const [filteredActivities, setFilteredActivities] = useState([]);
     const myWallet = useAppSelector(getWalletAddress);
     const [royalty, setRoyalty] = useState(_royalty);
+    const [following, setFollowing] = useState(0);
+    const [followers, setFollowers] = useState(0);
 
     useEffect(() => {
         const loadTokensAndCollections = async () => {
@@ -103,6 +109,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             }
             if (walletAddress) {
                 let data = await UserController.userStats(walletAddress);
+
                 if (data.user) {
                     setUserInfo(data.user);
                     setFollowedAllow(!data.user.followed);
@@ -115,7 +122,11 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                         } else {
                             category.count = 0;
                         }
+
+                        if (category.path == "following") setFollowing(category.count);
+                        if (category.path == "followers") setFollowers(category.count);
                     }
+
                     setCategories(categories);
                 }
                 let { collections } = await CollectionController.getByUserId(data.user._id);
@@ -124,6 +135,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             loadItems();
         };
         loadTokensAndCollections();
+        setHiddenText(walletAddress);
     }, [params, categories, walletAddress]);
 
     useEffect(() => {
@@ -155,12 +167,18 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     }
 
     const loadItems = async () => {
-        if (walletAddress) {
-            let { items, pages } = await TokenController.getItems(walletAddress, _categories[selectedTab].path, pageNum);
+        if (walletAddress && selectedTab !== 'royalties') {
+            setLoading(true);
+            let { items, pages } = await TokenController.getItems(walletAddress, selectedTab, pageNum);
+
             if (pageNum === 1) {
                 setPages(pages);
             }
             setItemList(pageNum === 1 ? items : itemList.concat(items));
+            setLoading(false);
+        } else if (selectedTab === 'royalties') {
+            let data = await TokenController.getItems(walletAddress, selectedTab, 1);
+            setRoyalty(data);
         }
     }
 
@@ -168,6 +186,14 @@ const UserProfile: React.FC<UserProfileProps> = () => {
         setSelectedTab(type);
         setPages(1);
         setPageNumber(1);
+    };
+
+    const copyWalletAddress = async () => {
+        setHiddenText("Copied!");
+        setTimeout(() => {
+            setHiddenText(walletAddress);
+        }, 2000);
+        await navigator.clipboard.writeText(walletAddress);
     };
 
     const copyName = async () => {
@@ -201,7 +227,31 @@ const UserProfile: React.FC<UserProfileProps> = () => {
         return "filter-btn";
     };
 
+    const getFilterColor = (type: String) => {
+        if (selectedFilter === type) {
+            switch (type) {
+                case 'following':
+                    return 'rgb(109, 188, 0)';
+                case 'liked':
+                    return 'rgb(255, 158, 18)';
+                case 'listed':
+                    return 'rgb(0, 147, 255)';
+                case 'purchased':
+                    return 'rgb(255, 199, 90)';
+                case 'minted':
+                    return 'rgb(235, 88, 73)';
+                case 'transfered':
+                    return 'rgb(177, 89, 220)';
+                case 'offered':
+                    return 'rgb(247, 109, 192)';
+                default:
+                    break;
+            }
+        }
+    };
+
     const onSelectFilter = (filter: String) => {
+        setLoading(true);
         if (selectedFilter === filter || filter === '') {
             setSelectedFilter('');
             setFilteredActivities(itemList);
@@ -209,43 +259,11 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             setSelectedFilter(`${filter}`);
             setFilteredActivities(itemList.filter((token: { type: String; }) => token.type === filter));
         }
+        setLoading(false);
     }
 
-    const OnSale = () => (
-        <div className="row pt-4">
-            {/* {
-                nftlist.map((nft, index) => (
-                    <NftItemCard key={index} url={nft.url} title={nft.title} price={nft.price} price_eth={nft.price_eth} content={nft.content}></NftItemCard>
-                ))
-            } */}
-        </div>
-    );
-
-    const tabs = [
-        {
-            label: "On Sale",
-            Component: OnSale
-        },
-        {
-            label: "Owned",
-            Component: OnSale
-        },
-        {
-            label: "Created",
-            Component: OnSale
-        },
-        {
-            label: "Liked",
-            Component: OnSale
-        },
-        {
-            label: "Activity",
-            Component: OnSale
-        }
-    ];
-
     return (
-        <Layout className="userprofile-container" ref={layoutView}>
+        <Layout className="userprofile-container">
             <div className="d-flex flex-column align-items-center">
                 <div style={{ backgroundImage: `url(${configs.DEPLOY_URL}${userInfo.cover})` }} className="background-item"></div>
                 {/* <Image className="hot-image" src={account_data.img}></Image> */}
@@ -253,38 +271,435 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}>
                         {
                             userInfo && userInfo.verified && (
-                                <Image className="verify" src={verifyImg}></Image>
+                                <Image className="verify" src={imgCopyIcon}></Image>
                             )
                         }
                     </div>
-                </div> 
+                </div>
                 <div className="display user-name pb-3">{userInfo ? userInfo.name : ''}</div>
                 <div className="d-flex flex-row align-items-center pb-3">
-                    <div className="token-address pr-2">{userInfo.wallet}</div>
-                    <Image src={copyImg} className="token-copy"></Image>
+                    <div className="token-address pr-2" >{walletHiddenText}</div>
+                    <Image src={imgCopyIcon} className="token-copy" onClick={() => { copyWalletAddress(); }}></Image>
                 </div>
-                <div className="d-flex flex-row align-items-center pb-2">
-                    <p className="font-weight-bold text-color pr-1">20</p>
+                <div className="d-flex flex-row align-items-center pb-4">
+                    <p className="font-weight-bold text-color pr-1">{followers}</p>
                     <p className="text-gray font-weight-bold pr-3">Followers</p>
-                    <p className="font-weight-bold text-color pr-1">3k</p>
+                    <p className="font-weight-bold text-color pr-1">{following}</p>
                     <p className="text-gray font-weight-bold">Following</p>
                 </div>
-                <Link to="/" className="link-follow mt-2" >
-                    <Button className="mr-2 mr-lg-4 btn-primary">
-                        Follow
+                <div className="link-follow mt-2">
+                    <Button
+                        variant="outline-primary"
+                        className="mr-2 mr-lg-4 btn-primary"
+                        onClick={() => onFollow()}
+                    >
+                        <span>{followedAllow ? 'Follow' : 'Unfollow'}</span>
                     </Button>
-                </Link>
+                </div>
             </div>
-            <div className="userprofile-tab">
-                <Tabs
-                    className="mt-4"
-                    selectedTab={selectedTab}
-                    onClick={setSelectedTab}
-                    tabs={tabs}
-                />
+            <div className="pt-4">
+                <Tab.Container defaultActiveKey="collectibles" id="items_tabs">
+                    <div className="link-section px-md-5">
+                        <Nav defaultActiveKey="collectibles">
+                            {categories.map((category, index) => (
+                                category.path !== 'followers' && category.path !== 'following' &&
+                                <Nav.Item
+                                    key={index}
+                                    onClick={() => onSelectType(category.path)}
+                                >
+                                    <Nav.Link eventKey={category.path}>
+                                        {category.title}
+                                        <span className={category.count ? 'fill-count' : ''}>{category.count}</span>
+                                    </Nav.Link>
+                                </Nav.Item>
+                            ))}
+                        </Nav>
+                    </div>
+                    <div className="item-columns">
+                        <Tab.Content>
+                            <Tab.Pane eventKey="on_sale">
+                                <div className="auction-section">
+                                    <BigTitle>On Sale Items</BigTitle>
+                                    {loading && pageNum === 1 ? (
+                                        <div className="text-center mt-5">
+                                            <LoadingBar />
+                                        </div>
+                                    ) : (
+                                        <div className="row mt-3 mt-md-5">
+                                            {itemList.length > 0 ? (
+                                                itemList.map((saleItem: any, i: number) => (
+                                                    <OnSaleItem key={i} item={saleItem}></OnSaleItem>
+                                                ))
+                                            ) : (
+                                                <NoItem
+                                                    title="No items found"
+                                                    description="Come back soon! Or try to browse something for you on our marketplace"
+                                                    btnLink="/"
+                                                    btnLabel="Browse marketplace"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                    {
+                                        loading && pageNum > 1 ? (
+                                            <div className="text-center my-3">
+                                                <LoadingBar />
+                                            </div>
+                                        ) : (
+                                            itemList.length > 0 && pages > pageNum && (
+                                                <div className="my-3 d-flex justify-content-center">
+                                                    <Button
+                                                        variant="primary"
+                                                        className="btn-round w-50 outline-btn"
+                                                        onClick={() => setPageNumber(pageNum + 1)}
+                                                    >
+                                                        <span>Load More</span>
+                                                    </Button>
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="liked">
+                                <div className="tokens-section">
+                                    <BigTitle>Liked Tokens</BigTitle>
+                                    {loading && pageNum === 1 ? (
+                                        <div className="text-center mt-5">
+                                            <LoadingBar />
+                                        </div>
+                                    ) : (
+                                        <div className="item-list mt-3 mt-md-5">
+                                            {itemList.length > 0 ? (
+                                                itemList.map((item: any, i: number) => (
+                                                    <TokenItem item={item} key={i} />
+                                                ))
+                                            ) : (
+                                                <NoItem
+                                                    title="No tokens found"
+                                                    description="Come back soon! Or try to browse something for you on our marketplace"
+                                                    btnLink="/"
+                                                    btnLabel="Browse marketplace"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                    {
+                                        loading && pageNum > 1 ? (
+                                            <div className="text-center my-3">
+                                                <LoadingBar />
+                                            </div>
+                                        ) : (
+                                            itemList.length > 0 && pages > pageNum && (
+                                                <div className="my-3 d-flex justify-content-center">
+                                                    <Button
+                                                        variant="primary"
+                                                        className="btn-round w-50 outline-btn"
+                                                        onClick={() => setPageNumber(pageNum + 1)}
+                                                    >
+                                                        <span>Load More</span>
+                                                    </Button>
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+                            </Tab.Pane>
+
+                            <Tab.Pane eventKey="created">
+                                <div className="tokens-section">
+                                    <BigTitle>Created Tokens</BigTitle>
+                                    {loading && pageNum === 1 ? (
+                                        <div className="text-center mt-5">
+                                            <LoadingBar />
+                                        </div>
+                                    ) : (
+                                        <div className="row mt-3 mt-md-5">
+                                            {itemList.length > 0 ? (
+                                                itemList.map((item: any, i: number) => (
+                                                    <TokenView key={i} item={item} user={userInfo}></TokenView>
+                                                ))
+                                            ) : (
+                                                <NoItem
+                                                    title="No tokens found"
+                                                    description="Come back soon! Or try to browse something for you on our marketplace"
+                                                    btnLink="/"
+                                                    btnLabel="Browse marketplace"
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+                                    {
+                                        loading && pageNum > 1 ? (
+                                            <div className="text-center my-3">
+                                                <LoadingBar />
+                                            </div>
+                                        ) : (
+                                            itemList.length > 0 && pages > pageNum && (
+                                                <div className="my-3 d-flex justify-content-center">
+                                                    <Button
+                                                        variant="primary"
+                                                        className="btn-round w-50 outline-btn"
+                                                        onClick={() => setPageNumber(pageNum + 1)}
+                                                    >
+                                                        <span>Load More</span>
+                                                    </Button>
+                                                </div>
+                                            )
+                                        )
+                                    }
+                                </div>
+                                <div className="collections-section">
+                                    <BigTitle>Created Collections</BigTitle>
+                                    <div className="row mt-3 mt-md-5">
+                                        {collections.length > 0 ? (
+                                            collections.map(
+                                                (collection: any, i: number) =>
+                                                    collection._id && (
+                                                        <CollectionItem
+                                                            key={i}
+                                                            item={collection}
+                                                        ></CollectionItem>
+                                                    )
+                                            )
+                                        ) : (
+                                            <NoItem
+                                                title="No collections found"
+                                                description="Come back soon! Or try to browse something for you on our marketplace"
+                                                btnLink="/"
+                                                btnLabel="Browse marketplace"
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="notice-view">
+                                        <div className="notice py-4">
+                                            <B2NormalTextTitleGrey>
+                                                Create collections (your own storefonts), upload digital
+                                                creations, configure your commision, and sell NFTs to
+                                                your fans - all for free! You can also manage smart
+                                                contracts than you created outside ofNFT’s.
+                                            </B2NormalTextTitleGrey>
+                                        </div>
+                                        <div className="btn-section">
+                                            <Link to="/collectible">
+                                                <Button
+                                                    variant="primary"
+                                                    className="default-btn-size btn-create fill-btn"
+                                                >
+                                                    <span>Create NFT</span>
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="collectibles">
+                                {loading && pageNum === 1 ? (
+                                    <div className="mt-5 text-center">
+                                        <LoadingBar />
+                                    </div>
+                                ) : (
+                                    <Fragment>
+                                        <div className="tokens-section">
+                                            <BigTitle>Tokens</BigTitle>
+                                            <div className="row mt-3 mt-md-5">
+                                                {itemList.length > 0 ? (
+                                                    itemList.map((token: any, i: number) => (
+                                                        <TokenView key={i} item={token} user={userInfo}></TokenView>
+                                                    ))
+                                                ) : (
+                                                    <NoItem
+                                                        title="No tokens found"
+                                                        description="Come back soon! Or try to browse something for you on our marketplace"
+                                                        btnLink="/"
+                                                        btnLabel="Browse marketplace"
+                                                    />
+                                                )}
+                                            </div>
+                                            {
+                                                loading && pageNum > 1 ? (
+                                                    <div className="text-center my-3">
+                                                        <LoadingBar />
+                                                    </div>
+                                                ) : (
+                                                    itemList.length > 0 && pages > pageNum && (
+                                                        <div className="my-3 d-flex justify-content-center">
+                                                            <Button
+                                                                variant="primary"
+                                                                className="btn-round w-50 outline-btn"
+                                                                onClick={() => setPageNumber(pageNum + 1)}
+                                                            >
+                                                                <span>Load More</span>
+                                                            </Button>
+                                                        </div>
+                                                    )
+                                                )
+                                            }
+                                        </div>
+                                        <div className="collections-section">
+                                            <BigTitle>Collections</BigTitle>
+                                            <div className="row justify-content-start mt-3 mt-md-5">
+                                                {collections.length > 0 ? (
+                                                    collections.map(
+                                                        (collection: any, i: number) =>
+                                                            collection._id && (
+                                                                <CollectionItem
+                                                                    key={i}
+                                                                    item={collection}
+                                                                ></CollectionItem>
+                                                            )
+                                                    )
+                                                ) : (
+                                                    <NoItem
+                                                        title="No collections found"
+                                                        description="Come back soon! Or try to browse something for you on our marketplace"
+                                                        btnLink="/"
+                                                        btnLabel="Browse marketplace"
+                                                    />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </Fragment>
+                                )}
+                                <div className="notice-view">
+                                    <div className="notice py-4">
+                                        <B2NormalTextTitleGrey>
+                                            Create collections (your own storefonts), upload digital
+                                            creations, configure your commision, and sell NFTs to your
+                                            fans - all for free! You can also manage smart contracts
+                                            than you created outside ofNFT’s.
+                                        </B2NormalTextTitleGrey>
+                                    </div>
+                                    <div className="btn-section">
+                                        <Link to="/collectible">
+                                            <Button
+                                                variant="primary"
+                                                className="default-btn-size btn-create fill-btn"
+                                            >
+                                                <span>Create NFT</span>
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="activity">
+                                <div className="tokens-section">
+                                    <BigTitle>Activities</BigTitle>
+                                    {loading && pageNum === 1 ? (
+                                        <div className="text-center mt-5">
+                                            <LoadingBar />
+                                        </div>
+                                    ) : (
+                                        <div className="item-list mt-3 mt-md-5">
+                                            <Row>
+                                                <Col md="8">
+                                                        {filteredActivities.length > 0 ? (
+                                                            <Row>
+                                                                {
+                                                                    filteredActivities.map((item: any, i: number) => (
+                                                                        <Col key={i} xl="6">
+                                                                            <ActivityItem item={item}></ActivityItem>
+                                                                        </Col>
+                                                                    ))
+                                                                }
+                                                            </Row>
+                                                        ) : (
+                                                            <Row className="w-100 justify-content-center">
+                                                                <NoItem
+                                                                    title="No activities found"
+                                                                    description="Come back soon! Or try to browse something for you on our marketplace"
+                                                                    btnLink="/"
+                                                                    btnLabel="Browse marketplace"
+                                                                />
+                                                            </Row>
+                                                        )}
+                                                    {
+                                                        loading && pageNum > 1 ? (
+                                                            <div className="my-3 d-flex justify-content-center">
+                                                                <LoadingBar />
+                                                            </div>
+                                                        ) : (
+                                                            filteredActivities.length > 0 && pages > pageNum && (
+                                                                <div className="my-3 d-flex justify-content-center">
+                                                                    <Button
+                                                                        variant="primary"
+                                                                        className="btn-round w-50 outline-btn"
+                                                                        onClick={() => setPageNumber(pageNum + 1)}
+                                                                    >
+                                                                        <span>Load More</span>
+                                                                    </Button>
+                                                                </div>
+                                                            )
+                                                        )
+                                                    }
+                                                </Col>
+                                                <Col md="4">
+                                                    <div className="sticky-filters">
+                                                        <div className="filter-header mb-4">
+                                                            <NormalTextTitle className="mr-3">
+                                                                Filters
+                                                            </NormalTextTitle>
+                                                            {
+                                                                selectedFilter && (
+                                                                    <NormalTextTitle className="filter-reset" onClick={() => { onSelectFilter('') }}>
+                                                                        Reset filter
+                                                                    </NormalTextTitle>
+                                                                )
+                                                            }
+                                                        </div>
+                                                        <div className="filter-buttons">
+                                                            {
+                                                                filters.map((filter, index) => {
+                                                                    return (
+                                                                        <div
+                                                                            className={getFilterClass(filter.filter)}
+                                                                            key={index}
+                                                                            onClick={() => { onSelectFilter(`${filter.filter}`) }}
+                                                                            style={{ backgroundColor: getFilterColor(filter.filter) }}
+                                                                        >
+                                                                            <FilterIcon className="mr-3">
+                                                                                {filter.icon}
+                                                                            </FilterIcon>
+                                                                            <span>{filter.name}</span>
+                                                                        </div>
+                                                                    );
+                                                                })
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </Col>
+                                            </Row>
+
+                                        </div>
+                                    )}
+                                    <div className="notice-view">
+                                        <div className="notice py-4">
+                                            <B2NormalTextTitleGrey>
+                                                Create collections (your own storefonts), upload digital
+                                                creations, configure your commision, and sell NFTs to
+                                                your fans - all for free! You can also manage smart
+                                                contracts than you created outside ofNFT’s.
+                                            </B2NormalTextTitleGrey>
+                                        </div>
+                                        <div className="btn-section">
+                                            <Link to="/collectible">
+                                                <Button
+                                                    variant="primary"
+                                                    className="default-btn-size btn-create fill-btn"
+                                                >
+                                                    <span>Create NFT</span>
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Tab.Pane>
+                        </Tab.Content>
+                    </div>
+                </Tab.Container>
             </div>
         </Layout>
     );
-}
+};
 
 export default UserProfile;
