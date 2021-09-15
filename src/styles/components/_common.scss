@@ -57,7 +57,7 @@
         background-position: center center;
         background-size: cover;
         width: 100%;
-        height: 100%;
+        height: 250px;
         cursor: pointer;
     }
 
@@ -316,16 +316,11 @@
 .collection-item {
     cursor: pointer;
     .collection-item-bg {
-        // width: 100%;
-        // height: 250px;
-        // object-fit: cover;
-        // background-position: center center;
-        // background-repeat: no-repeat;
         padding-bottom: 50%;
         background-position: center center;
         background-size: cover;
         width: 100%;
-        height: 100%;
+        height: 200px;
         cursor: pointer;
 
         .no-thumbnail {

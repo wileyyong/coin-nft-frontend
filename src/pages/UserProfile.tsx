@@ -2,18 +2,14 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Link, useParams, useHistory } from "react-router-dom";
 
-import { Row, Col, Dropdown, Button, Image, Nav, Tab } from "react-bootstrap";
+import { Row, Col, Button, Image, Nav, Tab } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import Layout from "components/Layout";
 import TokenView from "components/token/TokenView";
 import {
     BigTitle,
-    MidTextTitle,
     B2NormalTextTitleGrey,
-    SmallTextTitleGrey,
-    SmallTextTitle,
     NormalTextTitle,
-    SubDescription,
     FilterIcon
 } from "components/common/common.styles";
 import TokenController from "controller/TokenController";
@@ -24,22 +20,17 @@ import imgCopyIcon from "assets/imgs/copy.png";
 import NoItem from "components/common/noItem";
 import { useAppSelector } from "store/hooks";
 import { getWalletAddress } from "store/User/user.selector";
-import { FaFacebook, FaMailBulk, FaTelegram, FaTwitter } from "react-icons/fa";
 import UserController from "controller/UserController";
-import Utility from "service/utility";
 import configs from "configs";
 import CollectionItem from "components/collection/CollectionItem";
 import ActivityItem from "components/token/ActivityItem";
 import OnSaleItem from "components/myitems/OnSaleItem";
-import UserItem from "components/user/userItem";
 import TokenItem from "components/token/TokenItem";
 import { FaTag, FaHeart, FaCheck } from "react-icons/fa";
 import { BsLightningFill } from 'react-icons/bs';
 import { BiTransfer } from 'react-icons/bi';
 import { RiAuctionFill } from 'react-icons/ri';
 import { ImDiamonds } from 'react-icons/im';
-import { AiOutlineCloudUpload } from 'react-icons/ai';
-import NftItemCard from "components/common/NftItemCard";
 
 interface UserProfileProps { }
 
@@ -97,7 +88,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     const [selectedFilter, setSelectedFilter] = useState('');
     const [filteredActivities, setFilteredActivities] = useState([]);
     const myWallet = useAppSelector(getWalletAddress);
-    const [royalty, setRoyalty] = useState(_royalty);
     const [following, setFollowing] = useState(0);
     const [followers, setFollowers] = useState(0);
 
@@ -123,8 +113,8 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                             category.count = 0;
                         }
 
-                        if (category.path == "following") setFollowing(category.count);
-                        if (category.path == "followers") setFollowers(category.count);
+                        if (category.path === "following") setFollowing(category.count);
+                        if (category.path === "followers") setFollowers(category.count);
                     }
 
                     setCategories(categories);
@@ -167,7 +157,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     }
 
     const loadItems = async () => {
-        if (walletAddress && selectedTab !== 'royalties') {
+        if (walletAddress) {
             setLoading(true);
             let { items, pages } = await TokenController.getItems(walletAddress, selectedTab, pageNum);
 
@@ -176,9 +166,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             }
             setItemList(pageNum === 1 ? items : itemList.concat(items));
             setLoading(false);
-        } else if (selectedTab === 'royalties') {
-            let data = await TokenController.getItems(walletAddress, selectedTab, 1);
-            setRoyalty(data);
         }
     }
 
@@ -194,17 +181,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             setHiddenText(walletAddress);
         }, 2000);
         await navigator.clipboard.writeText(walletAddress);
-    };
-
-    const copyName = async () => {
-        if (userInfo) {
-            let element = document.querySelector(".copy-icon");
-            element?.classList.add("clicked");
-            setTimeout(() => {
-                element?.classList.remove("clicked");
-            }, 1000);
-            await navigator.clipboard.writeText(`${userInfo.name}`);
-        }
     };
 
     const getUserImgAvatar = () => {
@@ -266,7 +242,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
         <Layout className="userprofile-container">
             <div className="d-flex flex-column align-items-center">
                 <div style={{ backgroundImage: `url(${configs.DEPLOY_URL}${userInfo.cover})` }} className="background-item"></div>
-                {/* <Image className="hot-image" src={account_data.img}></Image> */}
                 <div className="d-flex flex-row align-items-center justify-content-center">
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}>
                         {
