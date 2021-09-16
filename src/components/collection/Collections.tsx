@@ -108,7 +108,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
   }
 
   return (
-    <FlexSlideContainer className="slide-container justify-content-center" id={`slider_${type}`}>
+    <FlexSlideContainer className="slide-container" id={`slider_${type}`}>
       {
         collectionList.length === 0 && (
           <NoItem

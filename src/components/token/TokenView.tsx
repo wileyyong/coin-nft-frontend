@@ -37,7 +37,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
     min_bid_price: 0,
     expiry_date: "",
     offer_price: 0,
-    quantity:1
+    quantity: 1
   });
 
   const getTokenThumbnail = () => {
@@ -94,7 +94,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   const approveNft = async () => {
     setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
     try {
-      if(item.chain_id) {
+      if (item.chain_id) {
         let result: any = await SmartContract721.approve(item.chain_id);
         if (result) {
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
@@ -124,9 +124,9 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           isDirectSale && !isAuction
             ? 0
             : DateTimeService.getDurationSecondsWithTwoDates(
-                "now",
-                resellFormData.current.expiry_date
-              );
+              "now",
+              resellFormData.current.expiry_date
+            );
         let result: any = await SmartContract721.createOffer(
           item.chain_id,
           isDirectSale,
@@ -138,10 +138,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         );
         if (result) {
           dispatch(getWalletBalance());
-          if(!result.success) {
+          if (!result.success) {
             setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
             return;
-          } 
+          }
           let offerObj: any = {
             token_id: item._id,
           };
@@ -177,66 +177,62 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   };
 
   return (
-    <div className="token-view auction-item mr-4 p-4">
-      {item && item.copies && (
-        <div className="multiple" />
-      )}
-      <div className="token-img-area mt-2">
-        <div className="pre-token-img" onClick={tokenViewClicked}>
-          {item.media ? (
+    <div className="col-12 col-sm-6 col-md-4 col-lg-3 flex-fill justify-content-start myitem-card mt-2">
+      <div className={`${item.media ? "card-image" : 'no-thumbnail'}`} onClick={tokenViewClicked} style={{ backgroundImage: `url("${item.media ? getTokenThumbnail() : ''}")` }}>
+        {/* {item.media ? (
             <img src={getTokenThumbnail()} alt="tokenImage" />
           ) : (
             <div className="no-thumbnail"></div>
-          )}
-        </div>
+          )} */}
       </div>
-      <B1NormalTextTitle className="mt-3" onClick={tokenViewClicked}>
-        {item.name}
-      </B1NormalTextTitle>
-      <SmallTextTitleGrey
-        className="token-collection-name"
-        onClick={tokenViewClicked}
-      >
-        {item.collections ? item.collections.name : "PUML"}
-      </SmallTextTitleGrey>
-
-      {hasResellPermission() && !item.offer ? (
-        <Button
-          variant="primary"
-          className="full-width mt-3 outline-btn"
-          onClick={() => {
-            setShowResellDialog(true);
-          }}
+      <div className="card-info">
+        <B1NormalTextTitle className="mt-3" onClick={tokenViewClicked}>
+          {item.name}
+        </B1NormalTextTitle>
+        <SmallTextTitleGrey
+          className="token-collection-name"
+          onClick={tokenViewClicked}
         >
-          <span>{isCreator() ? "Put on Sale" : "Resell"}</span>
-        </Button>
-      ) : (
-        item.offer && (
-          <div onClick={tokenViewClicked}>
-            <NormalTextTitle>
-              {item.offer.type === "auction" ? (
-                "Not for Sale"
-              ) : (
-                <>From {item.offer.offer_price} ETH</>
-              )}
-            </NormalTextTitle>
-            <FlexAlignCenterDiv className="mt-1">
-              {(item.offer.type === "auction" ||
-                item.offer.type === "both") && (
-                <NormalTextTitle className="faint-color">
-                  {getCurrentBidPrice() ? (
-                    <>Current Bid {getCurrentBidPrice()} ETH</>
-                  ) : (
-                    item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
+          {item.collections ? item.collections.name : "PUML"}
+        </SmallTextTitleGrey>
+        {hasResellPermission() && !item.offer ? (
+          <Button
+            variant="primary"
+            className="full-width mt-3 outline-btn"
+            onClick={() => {
+              setShowResellDialog(true);
+            }}
+          >
+            <span>{isCreator() ? "Put on Sale" : "Resell"}</span>
+          </Button>
+        ) : (
+          item.offer && (
+            <div onClick={tokenViewClicked}>
+              <NormalTextTitle>
+                {item.offer.type === "auction" ? (
+                  "Not for Sale"
+                ) : (
+                  <>From {item.offer.offer_price} ETH</>
+                )}
+              </NormalTextTitle>
+              <FlexAlignCenterDiv className="mt-1">
+                {(item.offer.type === "auction" ||
+                  item.offer.type === "both") && (
+                    <NormalTextTitle className="faint-color">
+                      {getCurrentBidPrice() ? (
+                        <>Current Bid {getCurrentBidPrice()} ETH</>
+                      ) : (
+                        item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
+                      )}
+                    </NormalTextTitle>
                   )}
-                </NormalTextTitle>
-              )}
-              &nbsp;
-              <NormalTextTitle className="grey-color">{item.offer.available_copies ? item.offer.available_copies + '/' + item.offer.total_copies : ''}</NormalTextTitle>
-            </FlexAlignCenterDiv>
-          </div>
-        )
-      )}
+                &nbsp;
+                <NormalTextTitle className="grey-color">{item.offer.available_copies ? item.offer.available_copies + '/' + item.offer.total_copies : ''}</NormalTextTitle>
+              </FlexAlignCenterDiv>
+            </div>
+          )
+        )}
+      </div>
 
       <ResellNftModal
         show={showResellDialog}

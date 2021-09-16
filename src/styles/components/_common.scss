@@ -315,7 +315,7 @@
 .collection-item {
     .collection-item-bg {
         width: 100%;
-        height: 300px;
+        height: 250px;
         object-fit: cover;
         background-position: center center;
         background-repeat: no-repeat;
@@ -393,4 +393,55 @@
     background: $primary;
     color: $black !important;
     border-color: $black !important;
+}
+
+.item-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    .row {
+        @include media-breakpoint-down("md") {
+            flex-wrap: wrap-reverse;
+        }
+    }
+
+    .sticky-filters {
+        position: sticky;
+        top: 110px;
+        .filter-header {
+            display: flex;
+            align-items: center;
+            color: $black;
+            .filter-reset {
+                cursor: pointer;
+                color: rgb(0, 102, 255);
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+
+            .filter-btn {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                border: 1px solid $black;
+                box-shadow: none;
+                background-color: transparent;
+                color: $black;
+                line-height: 40px;
+                height: 40px;
+                border-radius: 40px;
+                padding: 0 20px;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                &.active {
+                    border-color: transparent;
+                }
+            }
+        }
+    }
 }
