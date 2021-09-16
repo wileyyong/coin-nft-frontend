@@ -15,6 +15,7 @@ import configs from "configs";
 import CollectionItem from "components/collection/CollectionItem";
 import OnSaleItem from "components/myitems/OnSaleItem";
 import ReadMore from "components/common/ReadMore";
+import CoverImage from 'assets/imgs/default_rect.svg';
 
 interface CollectionDetailProps { }
 
@@ -112,7 +113,7 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
     return (
         <Layout className="collection-detail-container">
             <div className="d-flex flex-column align-items-center">
-                <div style={{ backgroundImage: `url("${configs.DEPLOY_URL}${collectionInfo.cover || collectionInfo.image || collectionInfo.thumbnail}")` }} className="background-item"></div>
+                <div style={{ backgroundImage: `url("${collectionInfo.image ? configs.DEPLOY_URL + collectionInfo.image : CoverImage}")` }} className="background-item"></div>
                 <div className="d-flex flex-row align-items-center justify-content-center">
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}></div>
                 </div>

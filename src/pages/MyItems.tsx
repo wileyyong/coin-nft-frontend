@@ -21,7 +21,8 @@ import ExpiringAuction from "components/myitems/ExpiringAuction";
 import {
     BigTitle,
     B2NormalTextTitleGrey,
-  } from "components/common/common.styles";
+} from "components/common/common.styles";
+import CoverImage from 'assets/imgs/default_rect.svg';
 
 interface MyItemProps { }
 
@@ -172,7 +173,7 @@ const MyItems: React.FC<MyItemProps> = () => {
     return (
         <Layout className="myitems-container">
             <div className="section-1">
-                <div className="intro" style={{ backgroundImage: `url("${backgroundCoverImage}")` }}>
+                <div className="intro" style={{ backgroundImage: `url("${backgroundCoverImage || CoverImage}")` }}>
                 <Image src={getUserImgAvatar()} className="avatar" roundedCircle />
                 {
                     uploadCoverImage ? (

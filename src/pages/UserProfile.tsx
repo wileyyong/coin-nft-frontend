@@ -33,6 +33,7 @@ import { BsLightningFill } from 'react-icons/bs';
 import { BiTransfer } from 'react-icons/bi';
 import { RiAuctionFill } from 'react-icons/ri';
 import { ImDiamonds } from 'react-icons/im';
+import CoverImage from 'assets/imgs/default_rect.svg';
 
 interface UserProfileProps { }
 
@@ -241,7 +242,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     return (
         <Layout className="userprofile-container">
             <div className="d-flex flex-column align-items-center">
-                <div style={{ backgroundImage: `url(${configs.DEPLOY_URL}${userInfo.cover})` }} className="background-item"></div>
+                <div style={{ backgroundImage: `url(${userInfo.cover ? configs.DEPLOY_URL + userInfo.cover : CoverImage})` }} className="background-item" />
                 <div className="d-flex flex-row align-items-center justify-content-center">
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}>
                         {

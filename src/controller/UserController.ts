@@ -36,6 +36,9 @@ class UserController {
     public static uploadCover(payload: any) {
         return API.post(`${configs.API.USERS_URL}/cover`, payload);
     }
+    public static userSearch(params: any, page: number) {
+        return API.post(`/users/search${page === 1 ? '' : '?page='+page}`, params).then(res => res.data);
+    }
 }
 
 export default UserController;

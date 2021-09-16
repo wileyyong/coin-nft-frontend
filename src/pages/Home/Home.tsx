@@ -21,15 +21,19 @@ import DepositWallet from "components/common/modal/DepositWalletModal";
 import Collections from "components/collection/Collections";
 import NoItem from "components/common/noItem";
 
-import TopUsers from "components/home/TopUsers";
+// import TopUsers from "components/home/TopUsers";
 import OfferController from "controller/OfferController";
 import UserController from "controller/UserController";
-import TokenController from "controller/TokenController";
+// import TokenController from "controller/TokenController";
 import LoadingBar from "components/common/LoadingBar";
+import { useHistory } from 'react-router-dom';
+import imageAvatar from "assets/imgs/seller1.png";
+import configs from "configs";
 
 interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
+  const history = useHistory();
   const layoutView = useRef(null);
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(isAuthenticated);
@@ -79,8 +83,8 @@ const Home: React.FC<HomeProps> = () => {
   useEffect(() => {
     const loadNftTokens = async () => {
       setLoading(true);
-      let items = await TokenController.getTokens();
-      setNftTokens(items);
+      let { offers } = await OfferController.getList("live");
+      setNftTokens(offers);
       setLoading(false);
     }
     loadNftTokens();
@@ -90,8 +94,13 @@ const Home: React.FC<HomeProps> = () => {
     const loadData = async () => {
       setLoading(true);
       try {
-        let items = await UserController.getTopUsers('sellers', 7);
-        setSellers(items);
+        const params = {
+          name: "",
+          bio: "",
+          verified: false
+        };
+        let { users } = await UserController.userSearch(params, 1);
+        setSellers(users);
         setLoading(false);
       } catch (err) {
         console.log(err);
@@ -152,22 +161,34 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
-        <div className="row text-center justify-content-center">
+        <div className="row text-center">
           {
             loading ? (
-              <div className="my-5 d-flex justify-content-center">
+              <div className="my-5 d-flex justify-content-center w-100">
                 <LoadingBar />
               </div>
             ) : (
               sellers.length > 0 ?
-                <TopUsers users={sellers}></TopUsers>
+                sellers.map((seller, index) => (
+                  index < 6 &&
+                  <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment mb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
+                    <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} className="seg-img" alt="seller" />
+                    <div className="seg-name pt-2 mt-3">{seller.name}</div>
+                    <div className="seg-type pt-2">{seller.type || 'Seller'}</div>
+                    <div className="seg-price pt-2">{seller.amount || '$30.00'} PUML</div>
+                    <div className="seg-price-eth pt-2">{seller.price || '0.15'} ETH</div>
+                  </div>
+                ))
+                // <TopUsers users={sellers}></TopUsers>
                 :
-                <NoItem
-                  title="No Users found"
-                  description="Come back soon! Or try to browse something for you on our marketplace"
-                  btnLink="/"
-                  btnLabel="Browse marketplace"
-                />
+                <div className="d-flex w-100 justify-content-center">
+                  <NoItem
+                    title="No Users found"
+                    description="Come back soon! Or try to browse something for you on our marketplace"
+                    btnLink="/"
+                    btnLabel="Browse marketplace"
+                  />
+                </div>
             )
           }
         </div>
