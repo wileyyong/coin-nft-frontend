@@ -6,7 +6,6 @@ import {
   B1NormalTextTitle,
   SmallTextTitle
 } from "../common/common.styles";
-import "./ActivityItem.scss";
 import configs from "configs";
 import { FaTag, FaHeart, FaCheck } from "react-icons/fa";
 import { BsLightningFill } from 'react-icons/bs';
