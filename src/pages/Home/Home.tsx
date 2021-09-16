@@ -5,6 +5,7 @@ import { Button, Image } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
 import { getNftCategories } from "store/Nft/nft.selector";
+import Storage from "service/storage";
 import {
   isAuthenticated,
 } from "store/User/user.selector";
@@ -18,12 +19,9 @@ import NftItemCard from "components/common/NftItemCard";
 import ConnectWallet from "components/common/modal/ConnectWalletModal";
 import DepositWallet from "components/common/modal/DepositWalletModal";
 import Collections from "components/collection/Collections";
-import imageAvatar from "assets/imgs/seller1.png";
 import NoItem from "components/common/noItem";
 
 import TopUsers from "components/home/TopUsers";
-import HotBids from "components/home/HotBids";
-import { useHistory } from 'react-router-dom';
 import OfferController from "controller/OfferController";
 import UserController from "controller/UserController";
 import TokenController from "controller/TokenController";
@@ -38,12 +36,13 @@ const Home: React.FC<HomeProps> = () => {
   const [showConnectWallet, setShowConnectWallet] = useState(false);
   const connectWalletClose = () => setShowConnectWallet(false);
   const connectWalletShow = () => setShowConnectWallet(true);
-
+  const [exploreAuctions, setExploreAuctions] = useState<any[]>([]);
+  const [explorePageNum, setExplorePageNumber] = useState(1);
+  const [exploreLoading, setExploreLoading] = useState(false);
+  const [explorePages, setExplorePages] = useState(1);
   const [showDepositWallet, setShowDepositWallet] = useState(false);
   const depositWalletClose = () => setShowDepositWallet(false);
-  const depositWalletShow = () => setShowDepositWallet(true);
-
-  const [exploreAuctions, setExploreAuctions] = useState<any[]>([]);
+  // const depositWalletShow = () => setShowDepositWallet(true);
   const [nftTokens, setNftTokens] = useState<any[]>([]);
   const [sellers, setSellers] = useState<any[]>([]);
   const [searchParam, setSearchParam] = useState<any>({
@@ -51,45 +50,31 @@ const Home: React.FC<HomeProps> = () => {
     sort: "recent",
     verified: false
   });
-  const history = useHistory();
   const [loading, setLoading] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
   const nftCategories = useAppSelector(getNftCategories);
-
-  const categorySelected = (val: string) => {
-    let updatedCategories: any[] =
-      JSON.parse(JSON.stringify(selectedCategories)) || [];
-    if (updatedCategories.includes(val)) {
-      let index = updatedCategories.findIndex((elm: any) => elm === val);
-      updatedCategories.splice(index, 1);
-      setSelectedCategories(updatedCategories);
-    } else {
-      updatedCategories.push(val);
-      setSelectedCategories(updatedCategories);
-    }
-  };
-
-  const getCategoryClass = (val: string) => {
-    if (selectedCategories.includes(val))
-      return "nft-type-btn mr-4 nft-type-selected";
-    return `nft-type-btn mr-4`;
-  };
 
   useEffect(() => {
     const loadExploreData = async () => {
-      setLoading(true);
       let params = {};
       if (searchParam.category === "all") {
-        params = { sort: searchParam.sort, verified: false };
+        params = { sort: searchParam.sort, verfied: searchParam.verified };
+      } else {
+        params = { ...searchParam };
       }
-
-      let offers = await OfferController.getList("explore", params);
-      //setExploreAuctions(offers.offers);
-      setLoading(false);
+      if (explorePageNum > 1) {
+        params = { page: explorePageNum, ...params };
+      }
+      setExploreLoading(true);
+      let { offers, pages } = await OfferController.getList("explore", params);
+      setExplorePages(pages);
+      setExploreAuctions(
+        explorePageNum === 1 ? offers : exploreAuctions.concat(offers)
+      );
+      setExploreLoading(false);
     };
 
     loadExploreData();
-  }, [searchParam]);
+  }, [searchParam, explorePageNum]);
 
   useEffect(() => {
     const loadNftTokens = async () => {
@@ -119,6 +104,12 @@ const Home: React.FC<HomeProps> = () => {
   const connectMetaMask = () => {
     dispatch(connectUserWallet());
   }
+
+  useEffect(() => {
+    if (Storage.get('home_filter')) {
+      setSearchParam(JSON.parse(Storage.get('home_filter')));
+    }
+  }, []);
 
   return (
     <Layout className="home-container" ref={layoutView}>
@@ -220,30 +211,30 @@ const Home: React.FC<HomeProps> = () => {
       <div className="section">
         <div className="d-flex flex-row align-items-center flex-wrap">
           <h1 className="font-weight-bold section-title mr-4">Explore</h1>
-          {/* <FlexAlignCenterDiv className="category-list mt-4">
+          <div className="category-list d-flex flex-wrap">
             {nftCategories.map((eType, index) => {
               return (
-                eType.value !== "all" && (
-                  <div
-                    className={getCategoryClass(eType.value)}
-                    key={index}
-                    onClick={() => {
-                      categorySelected(eType.value);
-                    }}
-                  >
-                    {eType.label}
-                  </div>
-                )
+                <div
+                  className={`nft-type-btn mr-2 my-2 ${
+                    searchParam.category === eType.value
+                      ? "nft-type-selected"
+                      : ""
+                  }`}
+                  key={index}
+                  onClick={() =>
+                    {setSearchParam({
+                        ...searchParam,
+                        category: eType.value,
+                      });
+                      setExplorePageNumber(1);
+                      Storage.set('home_filter', JSON.stringify({...searchParam, category: eType.value}));
+                    }
+                  }
+                >
+                  {eType.label}
+                </div>
               );
             })}
-          </FlexAlignCenterDiv> */}
-          <div className="d-flex flex-row flex-wrap">
-            <Button className="btn-type mr-3 mb-2">All</Button>
-            <Button className="btn-type mr-3 mb-2">Art</Button>
-            <Button className="btn-type mr-3 mb-2">Photography</Button>
-            <Button className="btn-type mr-3 mb-2">Games</Button>
-            <Button className="btn-type mr-3 mb-2">Music</Button>
-            <Button className="btn-type mr-3 mb-2">Domains</Button>
           </div>
         </div>
         <div>
@@ -271,6 +262,25 @@ const Home: React.FC<HomeProps> = () => {
               )
           }
         </div>
+        {
+          exploreLoading && explorePageNum > 1 ? (
+            <div className="d-flex my-3 justify-content-center loading-bar">
+              <LoadingBar />
+            </div>
+          ) : (
+            exploreAuctions.length > 0 && explorePages > explorePageNum && (
+              <div className="mt-3 mb-5 d-flex justify-content-center">
+                <Button
+                  variant="primary"
+                  className="btn-round w-50 outline-btn"
+                  onClick={() => setExplorePageNumber(explorePageNum + 1)}
+                >
+                  <span>Load More</span>
+                </Button>
+              </div>
+            )
+          )
+        }
       </div>
 
       <ConnectWallet

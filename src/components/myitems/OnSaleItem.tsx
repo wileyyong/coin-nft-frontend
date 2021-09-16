@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import configs from "configs";
 
@@ -9,10 +9,6 @@ interface OnSaleItemProps {
 const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
   const history = useHistory();
   const token = item.token || {};
-
-  useEffect(() => {
-    console.log(item);
-  }, []);
 
   const getTokenThumbnail = () => {
     return `${configs.DEPLOY_URL}${token.thumbnail || token.media}`;

@@ -1,25 +1,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import { Dropdown, Button, Image, Nav, Tab } from "react-bootstrap";
+import { Button, Nav, Tab } from "react-bootstrap";
 import Layout from "components/Layout";
 import {
-    SmallTextTitleGrey,
-    SubDescription,
+    SmallTextTitleGrey
 } from "components/common/common.styles";
 import CollectionController from "controller/CollectionController";
 import LoadingBar from "components/common/LoadingBar";
 import imgAvatar from "assets/imgs/avatar.png";
 import NoItem from "components/common/noItem";
-//import "./CollectionDetail.scss";
-import { FaFacebook, FaMailBulk, FaTelegram, FaTwitter } from "react-icons/fa";
-import Utility from "service/utility";
 import configs from "configs";
 import CollectionItem from "components/collection/CollectionItem";
 import OnSaleItem from "components/myitems/OnSaleItem";
 import ReadMore from "components/common/ReadMore";
-import { AiOutlineCloudUpload } from 'react-icons/ai';
 
 interface CollectionDetailProps { }
 
@@ -59,7 +54,6 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
     const [itemList, setItemList] = useState([]);
     const [selectedTab, setSelectedTab] = useState("owned");
     const [walletAddress, setWalletAddress] = useState('');
-    const [walletHiddenText, setHiddenText] = useState('');
     const [collectionId, setCollectionId] = useState('');
 
     useEffect(() => {
@@ -86,7 +80,6 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
             loadItems();
         };
         loadTokensAndCollections();
-        setHiddenText(Utility.getHiddenWalletAddress(walletAddress));
     }, [categories, collectionId, walletAddress]);
 
     useEffect(() => {
@@ -111,14 +104,6 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
         setPageNumber(1);
     };
 
-    const copyWalletAddress = async () => {
-        setHiddenText("Copied!");
-        setTimeout(() => {
-            setHiddenText(Utility.getHiddenWalletAddress(walletAddress));
-        }, 2000);
-        await navigator.clipboard.writeText(walletAddress);
-    };
-
     const getUserImgAvatar = () => {
         if (collectionInfo.creator && collectionInfo.creator.avatar) return `${configs.DEPLOY_URL}${collectionInfo.creator.avatar}`;
         return imgAvatar;
@@ -128,7 +113,6 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
         <Layout className="collection-detail-container">
             <div className="d-flex flex-column align-items-center">
                 <div style={{ backgroundImage: `url("${configs.DEPLOY_URL}${collectionInfo.cover || collectionInfo.image || collectionInfo.thumbnail}")` }} className="background-item"></div>
-                {/* <Image className="hot-image" src={account_data.img}></Image> */}
                 <div className="d-flex flex-row align-items-center justify-content-center">
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}></div>
                 </div>

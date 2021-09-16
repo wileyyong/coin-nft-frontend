@@ -231,8 +231,6 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
                   )}
                 </NormalTextTitle>
               )}
-              &nbsp;
-              <NormalTextTitle className="grey-color">{item.offer.available_copies ? item.offer.available_copies + '/' + item.offer.total_copies : ''}</NormalTextTitle>
             </FlexAlignCenterDiv>
           </div>
         )

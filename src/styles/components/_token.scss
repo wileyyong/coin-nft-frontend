@@ -1,4 +1,7 @@
 .token-view {
+  @include media-breakpoint-down('xs') {
+    margin-right: 0 !important;
+  }
   .token-desc {
     font-family: Roboto;
     font-weight: 400;
