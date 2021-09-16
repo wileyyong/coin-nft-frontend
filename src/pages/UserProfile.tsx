@@ -64,12 +64,6 @@ const _filters = [
     { name: 'Followings', selected: false, filter: 'following', icon: <FaCheck /> },
 ];
 
-const _royalty = {
-    royalties: 0,
-    tokens: 0,
-    collections: 0
-}
-
 const UserProfile: React.FC<UserProfileProps> = () => {
     const params: any = useParams();
     const history = useHistory();
@@ -141,6 +135,8 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                         "Success"
                     );
                     setFollowedAllow(false);
+                    categories[6].count += 1;
+                    setFollowers(followers + 1);
                 }
             });
         } else {
@@ -151,6 +147,8 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                         "Success"
                     );
                     setFollowedAllow(true);
+                    categories[6].count -= 1;
+                    setFollowers(followers - 1);
                 }
             });
         }
