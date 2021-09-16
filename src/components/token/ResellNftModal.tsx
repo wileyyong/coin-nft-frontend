@@ -152,7 +152,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
               <Button
                 type="submit"
                 variant="primary"
-                className="full-width mt-4 outline-btn"
+                className="full-width mt-4 w-100"
               >
                 <span>{isResell ? "Resell" : "Put on Sale"}</span>
               </Button>

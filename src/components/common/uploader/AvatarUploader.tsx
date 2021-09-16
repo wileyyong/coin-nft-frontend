@@ -2,8 +2,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button } from "react-bootstrap";
 import Utility from "service/utility";
-import { B2NormalTextTitle } from "../common.styles";
-import { FaWindowClose } from "react-icons/fa";
 
 interface AvatarUploaderProps {
     email: any;
@@ -20,12 +18,9 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
 }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
-
-    const [filePreview, setFilePreview] = useState<any>(null);
     const [fileAccept] = useState(
         accept || "audio/*,video/*,image/*"
     );
-    const [isImage, setIsImage] = useState(true);
 
     const fileChanged = (e: any) => {
         const file = e.target.files[0];
@@ -36,18 +31,15 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
             "load",
             () => {
                 if (setPreview) setPreview(reader.result || "");
-                setFilePreview(reader.result || "");
             },
             false
         );
 
         let isImg = Utility.isFileImage(file);
-        setIsImage(isImg);
 
         if (isImg) {
             reader.readAsDataURL(file);
         } else {
-            setFilePreview(URL.createObjectURL(file));
             videoRef?.current?.load();
         }
     };
@@ -58,8 +50,6 @@ const AvatarUploader: React.FC<AvatarUploaderProps> = ({
 
     const initFile = () => {
         setFile(null);
-        setFilePreview(null);
-        setIsImage(true);
         if (setPreview) setPreview("");
         let fInputElement = fileInputRef?.current;
         if (fInputElement) fInputElement.value = '';

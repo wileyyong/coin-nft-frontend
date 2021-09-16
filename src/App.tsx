@@ -10,6 +10,7 @@ import EditProfile from "./pages/EditProfile";
 import TokenDetail from "./pages/TokenDetail";
 import UserProfile from "./pages/UserProfile";
 import CreateCollectible from "./pages/CreateCollectible";
+import CollectionDetail from "pages/CollectionDetail";
 
 import "./styles/index.scss";
 
@@ -50,7 +51,7 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/profile">
             <EditProfile />
           </Route>
-          <Route exact path="/collections/:walletAddress">
+          <Route exact path="/tokens/:id">
             <TokenDetail />
           </Route>
           <Route exact path="/users/:walletAddress">
@@ -58,6 +59,9 @@ const App: React.FC<AppProps> = () => {
           </Route>
           <Route path="/create-collectible">
             <CreateCollectible />
+          </Route>
+          <Route path="/collections/:id">
+            <CollectionDetail />
           </Route>
         </Switch>
       </Router>

@@ -37,7 +37,7 @@ $grays: map-merge(
 $blue:    #406B7C !default;
 $indigo:  #6085AF !default;
 $purple:  #866BFD !default;
-$pink:    #e83e8c !default;
+$pink:    #ED489C !default;
 $red:     #dc3545 !default;
 $orange:  #FC6A34 !default;
 $yellow:  #F29640 !default;
@@ -442,9 +442,9 @@ $btn-link-disabled-color:     $gray-600 !default;
 $btn-block-spacing-y:         8px !default;
 
 // Allows for customizing button radius independently from global border radius
-$btn-border-radius:           40px !default;
-$btn-border-radius-lg:        40px !default;
-$btn-border-radius-sm:        40px !default;
+$btn-border-radius:           4px !default;
+$btn-border-radius-lg:        4px !default;
+$btn-border-radius-sm:        4px !default;
 
 $btn-transition:              color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
 

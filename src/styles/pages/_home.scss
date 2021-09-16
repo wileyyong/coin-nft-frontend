@@ -31,7 +31,7 @@
             height: 300px;
         }
         .intro-content {
-            width: 50%;
+            width: 45%;
             @include media-breakpoint-down(lg) {
                 width: 100%;
             }
@@ -211,8 +211,8 @@
         .seller-segment {
             cursor: pointer;
             .seg-img {
-                width: 100%;
-                height: auto;
+                width: 200px;
+                height: 200px;
                 border-width: 4px;
                 border-radius: 100%;
             }

@@ -8,7 +8,6 @@ import {
   FlexAlignCenterDiv,
   B1NormalTextTitle,
 } from "../common/common.styles";
-import "./CreateNftStatusModal.scss";
 import { FaCheck } from "react-icons/fa";
 
 interface ResellNftStatusModalProps {

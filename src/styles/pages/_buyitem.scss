@@ -3,18 +3,17 @@
     @include media-breakpoint-down(sm) {
         padding-top: 20px;
     }
-
-    .item-image {
+    .media {
+        padding: 10px;
+        border-radius: 10px;
         width: 100%;
-        height: auto;
-        background-repeat: no-repeat;
-        background-position: center;
-        background-size: cover;
+        background-origin: border-box;
+        background-clip: content-box, border-box;
+        box-shadow: 2px 1000px 1px $primary inset;
     }
-
     .member-image {
         max-width: 50px;
-        height: auto;
+        height: 50px;
         border-radius: 50px;
     }
 
@@ -123,21 +122,13 @@
                 }
             }
         }
-
+        .history-list {
+            overflow-y: auto;
+            max-height: 400px;
+        }
         .history-item {
-            .history-price {
-                font-size: 16px;
-                font-weight: bold;
-                color: $black;
-                .priceby {
-                    color: $primary;
-                }
-            }
-            .history-time {
-                font-size: 14px;
-                font-weight: bold;
-                color: $gray-600;
-            }
+            display: flex;
+            align-items: center;
         }
 
         .btn-primary {

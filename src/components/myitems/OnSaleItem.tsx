@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  B1NormalTextTitle,
-  FlexAlignCenterDiv,
-  NormalTextTitle,
-  SmallTextTitleGrey,
-} from "../common/common.styles";
 import { useHistory } from "react-router-dom";
 import configs from "configs";
-import { AiFillHeart } from 'react-icons/ai';
 
 interface OnSaleItemProps {
   item: any;
@@ -32,49 +25,20 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
   };
 
   return (
-    <div
-      className="auction-item mr-4 p-4"
-      onClick={() => {history.push("/tokens/" + token._id);}}
-    >
-      <div className="token-img-area mt-2">
-        <div className="pre-token-img">
-          {token.media ? (
-            <img src={getTokenThumbnail()} alt="auctionImage" />
-          ) : (
-            <div className="no-thumbnail"></div>
-          )}
-        </div>
+    <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center py-4 px-2" onClick={() => { history.push("/tokens/" + item._id) }}>
+      <div style={{ backgroundImage: `url("${getTokenThumbnail()}")` }} className="card-image">
       </div>
-      <div className="d-flex justify-content-between align-items-end">
-        <div className="item-content">
-          <B1NormalTextTitle className="mt-3">{token.name}</B1NormalTextTitle>
-          <SmallTextTitleGrey className="token-collection-name">{token.collections ? token.collections.name : "PUML"}</SmallTextTitleGrey>
-          <SmallTextTitleGrey>
-            {item.type === "auction" ? (
+      <div className="card-info pt-3 pb-4">
+        <div className="card-title">{token.name}</div>
+        <div>
+          <span className="puml-price">{item.min_bid}ETH</span>
+          <span className="eth-price"> • {item.type === "auction" ? (
               "Not for Sale"
             ) : (
-              <>From {item.offer_price} ETH</>
-            )}
-          </SmallTextTitleGrey>
-          <FlexAlignCenterDiv className="mt-1">
-            <NormalTextTitle className="faint-color">
-              {getCurrentBidPrice() ? (
-                <>Current Bid {getCurrentBidPrice()} ETH</>
-              ) : (
-                <>Minimum Bid {item.min_bid} ETH</>
-              )}{" "}
-            </NormalTextTitle>
-          </FlexAlignCenterDiv>
+              <>From {getCurrentBidPrice()} ETH</>
+            )}</span>
         </div>
-        {
-          token.likes ? (
-            <div className="likes d-flex align-items-center">
-              <AiFillHeart />
-              &nbsp;
-              {token.likes}
-            </div>
-          ) : ''
-        }
+        <div className="card-content pt-2">{token.description}</div>
       </div>
     </div>
   );

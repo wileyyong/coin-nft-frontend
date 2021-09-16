@@ -50,13 +50,15 @@
 
 .myitem-card {
     color: $black;
-
+    margin-bottom: 30px;
+    cursor: pointer;
     .card-image {
+        padding-bottom: 50%;
+        background-position: center center;
+        background-size: cover;
         width: 100%;
-        height: auto;
+        height: 250px;
         cursor: pointer;
-        //border-radius: 100%;
-        //border: 2px solid $purple;
     }
 
     .card-info {
@@ -267,10 +269,10 @@
     padding: 0;
     padding-top: 16px;
     padding-left: 16px;
-
     .close {
         margin: 0;
         padding: 0;
+        margin-right: 20px;
     }
 }
 
@@ -312,12 +314,15 @@
 }
 
 .collection-item {
+    cursor: pointer;
     .collection-item-bg {
-        img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
+        padding-bottom: 50%;
+        background-position: center center;
+        background-size: cover;
+        width: 100%;
+        height: 200px;
+        cursor: pointer;
+
         .no-thumbnail {
             max-width: 100%;
             min-height: 300px;
@@ -379,11 +384,11 @@
     min-width: 80px;
     margin-top: 5px;
     margin-bottom: 5px;
-    @media screen and (max-width: 1260px) {
-      padding: 4px 12px;
+    @include media-breakpoint-down(xl) {
+        padding: 4px 12px;
     }
-    @media screen and (max-width: 992px) {
-      padding: 4px 8px;
+    @include media-breakpoint-down(lg) {
+        padding: 4px 8px;
     }
 }
 
@@ -391,4 +396,55 @@
     background: $primary;
     color: $black !important;
     border-color: $black !important;
+}
+
+.item-list {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    .row {
+        @include media-breakpoint-down("md") {
+            flex-wrap: wrap-reverse;
+        }
+    }
+
+    .sticky-filters {
+        position: sticky;
+        top: 110px;
+        .filter-header {
+            display: flex;
+            align-items: center;
+            color: $black;
+            .filter-reset {
+                cursor: pointer;
+                color: rgb(0, 102, 255);
+                &:hover {
+                    color: white;
+                }
+            }
+        }
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+
+            .filter-btn {
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                border: 1px solid $black;
+                box-shadow: none;
+                background-color: transparent;
+                color: $black;
+                line-height: 40px;
+                height: 40px;
+                border-radius: 40px;
+                padding: 0 20px;
+                margin-right: 10px;
+                margin-bottom: 10px;
+                &.active {
+                    border-color: transparent;
+                }
+            }
+        }
+    }
 }
