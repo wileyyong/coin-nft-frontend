@@ -4,9 +4,6 @@ import { NotificationManager } from "react-notifications";
 import { Button, Image, Nav, Tab } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
-
-// import camera from "assets/imgs/camera_alt.png";
-// import verifyImg from "assets/imgs/verify.svg";
 import imgAvatar from "assets/imgs/avatar.png";
 
 import Layout from "components/Layout";
@@ -212,7 +209,7 @@ const MyItems: React.FC<MyItemProps> = () => {
             <div className="section-3">
                 <div className="d-flex justify-content-center align-items-center">
                 <Link to="/profile">
-                    <Button variant="outline-primary" className="btn-default-size">
+                    <Button variant="primary" className="text-white px-5">
                         <span>Edit Profile</span>
                     </Button>
                 </Link>

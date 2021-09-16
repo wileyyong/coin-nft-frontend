@@ -17,11 +17,13 @@ import CollectionController from "controller/CollectionController";
 import LoadingBar from "components/common/LoadingBar";
 import imgAvatar from "assets/imgs/avatar.png";
 import imgCopyIcon from "assets/imgs/copy.png";
+import verifyImg from "assets/imgs/verify.svg";
 import NoItem from "components/common/noItem";
 import { useAppSelector } from "store/hooks";
 import { getWalletAddress } from "store/User/user.selector";
 import UserController from "controller/UserController";
 import configs from "configs";
+import Utility from "service/utility";
 import CollectionItem from "components/collection/CollectionItem";
 import ActivityItem from "components/token/ActivityItem";
 import OnSaleItem from "components/myitems/OnSaleItem";
@@ -119,7 +121,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
             loadItems();
         };
         loadTokensAndCollections();
-        setHiddenText(walletAddress);
+        setHiddenText(Utility.getHiddenWalletAddress(walletAddress));
     }, [params, categories, walletAddress]);
 
     useEffect(() => {
@@ -176,10 +178,10 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     const copyWalletAddress = async () => {
         setHiddenText("Copied!");
         setTimeout(() => {
-            setHiddenText(walletAddress);
+          setHiddenText(Utility.getHiddenWalletAddress(walletAddress));
         }, 2000);
         await navigator.clipboard.writeText(walletAddress);
-    };
+      };
 
     const getUserImgAvatar = () => {
         if (userInfo.avatar) return `${configs.DEPLOY_URL}${userInfo.avatar}`;
@@ -244,7 +246,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}>
                         {
                             userInfo && userInfo.verified && (
-                                <Image className="verify" src={imgCopyIcon}></Image>
+                                <Image className="verify" src={verifyImg}></Image>
                             )
                         }
                     </div>
@@ -262,8 +264,8 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                 </div>
                 <div className="link-follow mt-2">
                     <Button
-                        variant="outline-primary"
-                        className="mr-2 mr-lg-4 btn-primary"
+                        variant="primary"
+                        className="mr-2 mr-lg-4"
                         onClick={() => onFollow()}
                     >
                         <span>{followedAllow ? 'Follow' : 'Unfollow'}</span>

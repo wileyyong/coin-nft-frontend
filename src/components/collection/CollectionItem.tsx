@@ -10,7 +10,7 @@ interface CollectionItemProps {
 const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
   const history = useHistory();
   const collectionImgUrl = () => {
-    if(item.image) return `${configs.DEPLOY_URL}${item.image}`;
+    if(item.image || item.media || item.thumbnail) return `${configs.DEPLOY_URL}${item.image || item.media || item.thumbnail}`;
     return '';
   }
 
@@ -20,7 +20,11 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
   }
 
   const pushLink = () => {
-    history.push(`/collections/${item._id}`);
+    if (item.collections && item.creator) {
+      history.push(`/users/${item.creator.wallet}`);
+    } else {
+      history.push(`/collections/${item._id}`);
+    }
   }
 
   return (

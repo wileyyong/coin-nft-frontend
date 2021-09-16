@@ -38,7 +38,7 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
               <>From {getCurrentBidPrice()} ETH</>
             )}</span>
         </div>
-        <div className="card-content pt-2">{item.description}</div>
+        <div className="card-content pt-2">{token.description}</div>
       </div>
     </div>
   );

@@ -238,28 +238,37 @@ const Home: React.FC<HomeProps> = () => {
           </div>
         </div>
         <div>
-          {
-            nftTokens.length > 0 ?
-              (
-                <div className="row px-2">
-                  {
-                    nftTokens.map((auction, index) => {
-                      return (
-                        <NftItemCard key={index} item={auction}></NftItemCard>
-                      )
-                    })
-                  }
-                </div>
-              ) : (
-                <div className="row justify-content-center px-2">
-                  <NoItem
-                    title="No items found"
-                    description="Come back soon! Or try to browse something for you on our marketplace"
-                    btnLink="/"
-                    btnLabel="Browse marketplace"
-                  />
-                </div>
-              )
+          {exploreLoading && explorePageNum === 1 ? (
+            <div className="d-flex my-3 justify-content-center loading-bar">
+              <LoadingBar />
+            </div>
+            ) : (
+              <>
+                {
+                  exploreAuctions.length > 0 ?
+                    (
+                      <div className="row px-2">
+                        {
+                          exploreAuctions.map((auction, index) => {
+                            return (
+                              <NftItemCard key={index} item={auction}></NftItemCard>
+                            )
+                          })
+                        }
+                      </div>
+                    ) : (
+                      <div className="row justify-content-center px-2">
+                        <NoItem
+                          title="No items found"
+                          description="Come back soon! Or try to browse something for you on our marketplace"
+                          btnLink="/"
+                          btnLabel="Browse marketplace"
+                        />
+                      </div>
+                    )
+                }
+              </>    
+            )
           }
         </div>
         {
