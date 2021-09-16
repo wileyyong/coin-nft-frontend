@@ -6,6 +6,10 @@ import Layout from "components/Layout";
 import UserController from "controller/UserController";
 import imageAvatar from "assets/imgs/avatar.png";
 
+import {
+    isAuthenticated,
+} from "store/User/user.selector";
+
 import configs from "configs";
 import { NotificationManager } from "react-notifications";
 import { useAppSelector, useAppDispatch } from "store/hooks";
@@ -20,6 +24,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
     const layoutView = useRef(null);
 
     const dispatch = useAppDispatch();
+    const isAuth = useAppSelector(isAuthenticated);
     const walletAddress = useAppSelector(getWalletAddress);
     const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
@@ -119,10 +124,14 @@ const EditProfile: React.FC<EditProfileProps> = () => {
             <Container className="container">
                 <div className="d-flex flex-row align-items-center justify-content-between">
                     <div className="header">Edit Profile</div>
-                    <div className="d-flex flex-row align-items-center connect-wallet" onClick={() => connectMetaMask()}>
-                        <div className="text-secondary pr-2">{walletAddress ? 'Connected to Meta mask' : 'Connect to Meta Mask'}</div>
-                        <Image src={metamask} alt="Meta Mask"></Image>
-                    </div>
+                    {
+                        !isAuth && (
+                            <div className="d-flex flex-row align-items-center connect-wallet" onClick={() => connectMetaMask()}>
+                                <div className="text-secondary pr-2">{walletAddress ? 'Connected to Meta mask' : 'Connect to Meta Mask'}</div>
+                                <Image src={metamask} alt="Meta Mask"></Image>
+                            </div>
+                        )
+                    }
                 </div>
                 <div className="description pt-4">Custom-made characters that will transition to the assets expanded ecosystem (media, content, and games)</div>
                 <div className="edit-profile">
