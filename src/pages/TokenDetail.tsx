@@ -22,7 +22,33 @@ import configs from "configs";
 import SmartContract from "ethereum/Contract";
 import OfferController from "controller/OfferController";
 
+import {
+    B1NormalTextTitle,
+    B2NormalTextTitle,
+    B3NormalTextTitle,
+    DivideLine,
+    FlexAlignCenterDiv,
+    BigTitle,
+    MidTextTitle,
+    NftAvatar,
+} from "components/common/common.styles";
+
 interface TokenDetailProps { }
+
+const _owner = {
+    date: "",
+    price: 0,
+    user: {
+        avatar: "", 
+        cover: "", 
+        date_create: "", 
+        link: "", 
+        name: "", 
+        verified: false, 
+        wallet: "", 
+        _id: ""
+    }
+}
 
 const TokenDetail: React.FC<TokenDetailProps> = () => {
     const layoutView = useRef(null);
@@ -114,9 +140,12 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             bids.sort(function (a: any, b: any) {
                 return b.price - a.price;
             });
+
             const owners = token ? token.owners : [];
+
             setOffer(offer);
             setToken(token);
+            console.log(token.collections.name);
             if (token.liked) {
                 setLikeDisable(true);
             } else {
@@ -125,7 +154,8 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             setLikes(token.likes || 0);
             setBidHistory(bids);
             if (bids.length) setHighestBidder(bids[0]);
-            if (owners.length) setOwner(owners[0]);
+            if (owners.length)
+                setOwner(owners[0]);
             if (token.creator) setCreator(token.creator);
         }
     };
@@ -382,7 +412,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         <div className="item-title pb-4">{token.name}</div>
                         <div className="item-price pb-4">
                             <span className="for-sale">For Sale • Highest Bid </span>
-                            <span className="price-puml">{ offer ? getDollarPrice(offer.offer_price) : '' }PUML</span>
+                            <span className="price-puml">{offer ? getDollarPrice(offer.offer_price) : ''}PUML</span>
                         </div>
                         <div className="d-flex flex-row">
                             <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/2`)}>
@@ -396,7 +426,15 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 <Image src={itemImage} className="member-image mr-2"></Image>
                                 <div className="d-flex flex-column pt-2">
                                     <div className="member-type pb-1">Collection</div>
-                                    <div className="member-name">{owner ? owner.user : ''}</div>
+                                    <FlexAlignCenterDiv className="pointer-cursor d-flex align-items-center" onClick={() => token.collections ? history.push(`/collections/${token.collections._id}`) : ''}>
+                                        <NftAvatar
+                                            className="mr-3"
+                                            imagePath={getCollectionImgPath()}
+                                        ></NftAvatar>
+                                        <B1NormalTextTitle style={{ width: 'calc(100% - 76px)' }}>
+                                            {token.collections ? token.collections.name : "xSigma"}
+                                        </B1NormalTextTitle>
+                                    </FlexAlignCenterDiv>
                                 </div>
                             </div>
                         </div>
@@ -416,7 +454,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 <div className="item-bid">
                                     <span className="bid-attr">Highest bid by </span>
                                     <span className="bid-member">{owner
-                                     ? owner.user.name : ""}</span>
+                                        ? owner.user.name : ""}</span>
                                 </div>
                                 <div className="item-price1 pt-2">
                                     <span className="price-puml">30.0000PUML</span>
