@@ -30,7 +30,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
             <div style={{ backgroundImage: `url("${getMedia()}")` }} className="card-image">
             </div>
             <div className="card-info pt-3 pb-4">
-                <div className="card-title">{item.name}</div>
+                <div className="card-title">{item.name || item.token.name}</div>
                 <div>
                     <span className="puml-price">$30.00 PUML</span>
                     <span className="eth-price"> • {getOwner()? getOwner().price : item.min_bid} ETH</span>
