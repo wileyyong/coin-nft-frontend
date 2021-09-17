@@ -50,7 +50,6 @@
 
 .myitem-card {
     color: $black;
-    margin-bottom: 30px;
     cursor: pointer;
     .card-image {
         padding-bottom: 50%;
@@ -447,4 +446,8 @@
             }
         }
     }
+}
+
+.btn-create {
+    color: $white;
 }

@@ -36,11 +36,11 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
 
   const getDollarPrice = (ethValue: any) => {
     if (ethValue) {
-        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(1);
+        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
         return dollarPrice;
     }
     return 0;
-};
+  }
 
   return (
     <div className="bid-history-item d-flex align-items-center mt-3 mb-2">
