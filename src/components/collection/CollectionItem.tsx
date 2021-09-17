@@ -10,7 +10,7 @@ interface CollectionItemProps {
 const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
   const history = useHistory();
   const collectionImgUrl = () => {
-    if(item.image || item.media || item.thumbnail) return `${configs.DEPLOY_URL}${item.image || item.media || item.thumbnail}`;
+    if(item.image || item.thumbnail || item.media) return `${configs.DEPLOY_URL}${item.image || item.thumbnail || item.media}`;
     return '';
   }
 
