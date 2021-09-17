@@ -25,7 +25,7 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
   };
 
   return (
-    <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center py-4 px-2" onClick={() => { history.push("/tokens/" + item._id) }}>
+    <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center py-2 px-2" onClick={() => { history.push("/tokens/" + item._id) }}>
       <div style={{ backgroundImage: `url("${getTokenThumbnail()}")` }} className="card-image">
       </div>
       <div className="card-info pt-3 pb-4">
