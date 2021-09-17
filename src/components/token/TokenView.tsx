@@ -44,7 +44,8 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
     let media = item.thumbnail ? item.thumbnail.toLowerCase() : item.media.toLowerCase();
     if (
       media.includes("mp3") ||
-      media.includes("mp4")
+      media.includes("mp4") ||
+      media.includes("webm")
     ) {
       return `${configs.DEPLOY_URL}/content/collection/puml.png`;
     }
