@@ -40,7 +40,7 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
         return dollarPrice;
     }
     return 0;
-};
+  }
 
   return (
     <div className="bid-history-item d-flex align-items-center mt-3 mb-2">

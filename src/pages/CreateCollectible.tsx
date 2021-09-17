@@ -459,7 +459,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         type="text"
                                                         placeholder="Enter Minimum Bid in ETH"
                                                         name="min_bid_price"
-                                                        value={collectible.min_bid_price}
+                                                        value={collectible.min_bid_price || ''}
                                                         onChange={(e) => handleChange(e)}
                                                         pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
                                                         maxLength={7}
@@ -610,7 +610,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                             type="text"
                                                             placeholder="Royalties"
                                                             name="royalties"
-                                                            value={collectible.royalties}
+                                                            value={collectible.royalties || ''}
                                                             min="0"
                                                             max="50"
                                                             maxLength={2}
