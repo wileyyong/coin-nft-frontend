@@ -21,7 +21,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item }) => {
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
   const getDollarPrice = (ethValue: any) => {
     if (ethValue) {
-        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(1);
+        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
         return dollarPrice;
     }
     return 0;

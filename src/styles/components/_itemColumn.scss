@@ -1,10 +1,10 @@
 .item-columns {
   width: 100%;
   padding: 30px 60px !important;
-  max-width: 1660px;
+  max-width: 1750px;
   margin: 0 auto;
   @include media-breakpoint-down('lg') {
-    max-width: 768px;
+    max-width: 840px;
     padding: 30px 40px !important;
   }
   @include media-breakpoint-down('md') {
