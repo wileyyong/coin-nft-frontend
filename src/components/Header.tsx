@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = () => {
         ></Image>
         <div className="ml-2">
           <NormalTextTitle className="text-primary">Balance</NormalTextTitle>
-          <SmallTextTitleGrey>30.000PUML</SmallTextTitleGrey>
+          <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
         </div>
       </div>
     );
