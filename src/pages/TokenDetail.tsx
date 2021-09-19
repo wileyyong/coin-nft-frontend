@@ -618,7 +618,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     !isExpired() && <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => onPlaceBidClicked()}>Place a Bid</Button></div>
                                     ) : (
                                         isOwner() && isOwner().user.wallet === walletAddress && (offer.status !== 'pending' || isExpired()) &&
-                                        <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2">Resell</Button></div>
+                                        <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => {setShowResellDialog(true);}}>Resell</Button></div>
                                     )
                                 }
                                 <div className="col-12 col-sm-6"><Button className="btn-gray mr-2">Share</Button></div>

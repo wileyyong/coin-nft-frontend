@@ -118,7 +118,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
                       type="text"
                       placeholder="Enter Minimum Bid in ETH"
                       name="min_bid_price"
-                      value={newOffer.min_bid_price}
+                      value={newOffer.min_bid_price || ''}
                       onChange={(e) => handleChange(e)}
                       pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
                       maxLength={10}
