@@ -81,7 +81,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   };
 
   const isCreator = () => {
-    if (user._id === item.creator) return true;
+    if (item.offer && user._id === item.offer.creator) return true;
     return false;
   };
 
