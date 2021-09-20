@@ -24,6 +24,7 @@ import ReadMore from "components/common/ReadMore";
 import ResellNftModal from "components/token/ResellNftModal";
 import ResellNftStatusModal from "components/token/ResellNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
+import ShareNFTModal from "components/token/ShareNFTModal";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
@@ -69,6 +70,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE);
     const [showPlaceBidModal, setShowPlaceBidModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
     const [isTransProgressing, setTransProgressing] = useState(false);
     const [likeDisable, setLikeDisable] = useState(false);
     const [likes, setLikes] = useState(0);
@@ -621,7 +623,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                         <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => {setShowResellDialog(true);}}>Resell</Button></div>
                                     )
                                 }
-                                <div className="col-12 col-sm-6"><Button className="btn-gray mr-2">Share</Button></div>
+                                <div className="col-12 col-sm-6"><Button className="btn-gray mr-2" onClick={() => {setShowShareModal(true);}}>Share</Button></div>
                             </div>
                         </div>
                     </div>
@@ -639,6 +641,16 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     }}
                 ></PlaceBidModal>
             )}
+            {
+                showShareModal && (
+                    <ShareNFTModal
+                        show={showShareModal}
+                        handleClose={() => {
+                            setShowShareModal(false);
+                        }}
+                    ></ShareNFTModal>
+                )
+            }
             {isTransProgressing && <LoadingSpinner></LoadingSpinner>}
             <ResellNftModal
                 show={showResellDialog}

@@ -28,9 +28,9 @@ const Footer = () => {
         <div className="d-flex footer-bottom justify-content-between align-items-center">
           <div className="text-black pb-2">© 2021 PUML All rights reserved</div>
           <div>
-            <Image className="link-img pr-4" src={image1} alt="alt"></Image>
-            <Image className="link-img pr-4" src={image2} alt="alt"></Image>
-            <Image className="link-img pr-4" src={image3} alt="alt"></Image>
+            <Image className="link-img mr-4" src={image1} alt="alt"></Image>
+            <Image className="link-img mr-4" src={image2} alt="alt"></Image>
+            <Image className="link-img mr-4" src={image3} alt="alt"></Image>
           </div>
         </div>
 

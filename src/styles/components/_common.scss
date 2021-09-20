@@ -448,6 +448,17 @@
         }
     }
 }
+.share-space {
+    border: 1px solid $gray-200;
+    border-radius: 100%;
+    padding: 20px;
+    margin-bottom: 20px;
+    .img-share-icon {
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+    }
+}
 
 .btn-create {
     color: $white;
