@@ -648,6 +648,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         handleClose={() => {
                             setShowShareModal(false);
                         }}
+                        item={token}
                     ></ShareNFTModal>
                 )
             }

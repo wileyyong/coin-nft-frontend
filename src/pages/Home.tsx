@@ -100,6 +100,7 @@ const Home: React.FC<HomeProps> = () => {
           verified: false
         };
         let { users } = await UserController.userSearch(params, 1);
+        users.reverse();
         setSellers(users);
         setLoading(false);
       } catch (err) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Modal, Row, Image } from "react-bootstrap";
+import { Modal, Image } from "react-bootstrap";
 import {
     BigTitle,
 } from "../common/common.styles";
@@ -11,11 +11,13 @@ import imgFacebook from "assets/imgs/facebook.png";
 interface ShareNFTModalProps {
     handleClose?: any;
     show: boolean;
+    item: any;
 }
 
 const ShareNFTModal: React.FC<ShareNFTModalProps> = ({
     show,
-    handleClose
+    handleClose,
+    item
 }) => {
     return (
         <Modal show={show} onHide={handleClose} className="buy-token-modal">
