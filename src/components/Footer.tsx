@@ -11,7 +11,10 @@ const Footer = () => {
       <div>
         <div className="d-flex align-items-center justify-content-center footer-top">
           <Image className="logo-image" src={logo_footer} alt="logo"></Image>
-          <div className="font-weight-bold">PUML</div>
+          <div className="d-flex flex-column">
+            <div className="font-weight-bold font-italic">PUML</div>
+            <div className="logo-title text-primary font-weight-bold font-italic">Better Health</div>
+          </div>
         </div>
         <div className="d-flex flex-wrap justify-content-center">
           <div className="item-content font-weight-bold">Top Sellers</div>
@@ -20,17 +23,17 @@ const Footer = () => {
           <div className="item-content font-weight-bold">Privacy Policy</div>
           <div className="item-content font-weight-bold">Terms and Condtions</div>
         </div>
-        <hr className="divider"/>
+        <hr className="divider" />
 
         <div className="d-flex footer-bottom justify-content-between align-items-center">
           <div className="text-black pb-2">© 2021 PUML All rights reserved</div>
           <div>
-            <Image className="link-img pr-4" src={image1} alt="alt"></Image>
-            <Image className="link-img pr-4" src={image2} alt="alt"></Image>
-            <Image className="link-img pr-4" src={image3} alt="alt"></Image>
+            <Image className="link-img mr-4" src={image1} alt="alt"></Image>
+            <Image className="link-img mr-4" src={image2} alt="alt"></Image>
+            <Image className="link-img mr-4" src={image3} alt="alt"></Image>
           </div>
         </div>
-        
+
       </div>
     </footer>
   );

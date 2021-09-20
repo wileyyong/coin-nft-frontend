@@ -1,6 +1,7 @@
 .footer-container {
     margin-right: 80px;
     margin-left: 80px;
+    background: $bg-default;
     @include media-breakpoint-down(sm) {
         margin-right: 20px;
         margin-left: 20px;
@@ -9,11 +10,13 @@
     .footer-top {
         padding-top: 40px;
         padding-bottom: 40px;
-        font-size: 72px;
+        font-size: 40px;
         @include media-breakpoint-down(sm) {
-            font-size: 40px;
             padding-top: 20px;
             padding-bottom: 20px;
+        }
+        .logo-title {
+            font-size: 24px;
         }
         color: $black;
 
@@ -52,5 +55,7 @@
 
     .link-img {
         cursor: pointer;
+        width: 16px;
+        height: 16px;
     }
 }

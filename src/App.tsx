@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { connectUserWallet, signInWithWallet } from "store/User/user.slice";
 import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
 
-import Home from "./pages/Home/Home";
+import Home from "./pages/Home";
 import MyItems from "./pages/MyItems";
 import EditProfile from "./pages/EditProfile";
 import TokenDetail from "./pages/TokenDetail";

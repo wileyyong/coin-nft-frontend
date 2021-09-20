@@ -37,7 +37,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
     min_bid_price: 0,
     expiry_date: "",
     offer_price: 0,
-    quantity:1
+    quantity: 1
   });
 
   const getTokenThumbnail = () => {
@@ -95,7 +95,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   const approveNft = async () => {
     setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
     try {
-      if(item.chain_id) {
+      if (item.chain_id) {
         let result: any = await SmartContract721.approve(item.chain_id);
         if (result) {
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
@@ -125,9 +125,9 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           isDirectSale && !isAuction
             ? 0
             : DateTimeService.getDurationSecondsWithTwoDates(
-                "now",
-                resellFormData.current.expiry_date
-              );
+              "now",
+              resellFormData.current.expiry_date
+            );
         let result: any = await SmartContract721.createOffer(
           item.chain_id,
           isDirectSale,
@@ -139,10 +139,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         );
         if (result) {
           dispatch(getWalletBalance());
-          if(!result.success) {
+          if (!result.success) {
             setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
             return;
-          } 
+          }
           let offerObj: any = {
             token_id: item._id,
           };
@@ -224,14 +224,14 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
             <FlexAlignCenterDiv className="mt-1">
               {(item.offer.type === "auction" ||
                 item.offer.type === "both") && (
-                <NormalTextTitle className="faint-color">
-                  {getCurrentBidPrice() ? (
-                    <>Current Bid {getCurrentBidPrice()} ETH</>
-                  ) : (
-                    item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
-                  )}
-                </NormalTextTitle>
-              )}
+                  <NormalTextTitle className="faint-color">
+                    {getCurrentBidPrice() ? (
+                      <>Current Bid {getCurrentBidPrice()} ETH</>
+                    ) : (
+                      item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
+                    )}
+                  </NormalTextTitle>
+                )}
             </FlexAlignCenterDiv>
           </div>
         )
