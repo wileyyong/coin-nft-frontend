@@ -1,6 +1,7 @@
 .footer-container {
     margin-right: 80px;
     margin-left: 80px;
+    background: $bg-default;
     @include media-breakpoint-down(sm) {
         margin-right: 20px;
         margin-left: 20px;

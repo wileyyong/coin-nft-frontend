@@ -1,5 +1,6 @@
 .buyitem-container {
     padding-top: 60px;
+    background-color: $bg-default;
     @include media-breakpoint-down(sm) {
         padding-top: 20px;
     }

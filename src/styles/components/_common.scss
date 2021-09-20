@@ -329,6 +329,7 @@
         .nft-avatar {
             position: absolute;
             bottom: -30px;
+            border: 2px solid $purple;
             left: calc(50% - 30px);
         }
     }

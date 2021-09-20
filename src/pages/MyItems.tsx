@@ -88,11 +88,11 @@ const MyItems: React.FC<MyItemProps> = () => {
     };
 
     const loadItems = async () => {
-        if(walletAddress) {
+        if (walletAddress) {
             setLoading(true);
             let { items, pages } = await TokenController.getItems(walletAddress, selectedTab, pageNum);
             if (pageNum === 1) {
-              setPages(pages);
+                setPages(pages);
             }
             setItemList(pageNum === 1 ? items : itemList.concat(items));
             setLoading(false);
@@ -174,32 +174,32 @@ const MyItems: React.FC<MyItemProps> = () => {
         <Layout className="myitems-container">
             <div className="section-1">
                 <div className="intro" style={{ backgroundImage: `url("${backgroundCoverImage || CoverImage}")` }}>
-                <Image src={getUserImgAvatar()} className="avatar" roundedCircle />
-                {
-                    uploadCoverImage ? (
-                    <Button variant="outline-white" className="btn-round cover-btn save-btn outline-btn" onClick={() => onSaveImage()}>
-                        Save Cover
-                    </Button>
-                    ) : (
-                    <Button variant="outline-white" className="btn-round cover-btn outline-btn" onClick={() => onUploadImage()}>
-                        Add Cover
-                    </Button>
-                    )
-                }
-                {
-                    backgroundCoverImage && (
-                        <div className="trach-btn text-danger text-right mr-3">
-                            <FaTrash className="pointer-cursor" onClick={() => onRemoveImage()} />
-                        </div>
-                    )
-                }
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    hidden
-                    accept={configs.IMG_FILE_ACCEPT}
-                    onChange={fileChanged}
-                />
+                    <Image src={getUserImgAvatar()} className="avatar" roundedCircle />
+                    {
+                        uploadCoverImage ? (
+                            <Button variant="outline-white" className="btn-round cover-btn save-btn outline-btn" onClick={() => onSaveImage()}>
+                                Save Cover
+                            </Button>
+                        ) : (
+                            <Button variant="outline-white" className="btn-round cover-btn outline-btn" onClick={() => onUploadImage()}>
+                                Add Cover
+                            </Button>
+                        )
+                    }
+                    {
+                        backgroundCoverImage && (
+                            <div className="trach-btn text-danger text-right mr-3">
+                                <FaTrash className="pointer-cursor" onClick={() => onRemoveImage()} />
+                            </div>
+                        )
+                    }
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        hidden
+                        accept={configs.IMG_FILE_ACCEPT}
+                        onChange={fileChanged}
+                    />
                 </div>
             </div>
             <div className="section-2">
@@ -209,28 +209,28 @@ const MyItems: React.FC<MyItemProps> = () => {
             </div>
             <div className="section-3">
                 <div className="d-flex justify-content-center align-items-center">
-                <Link to="/profile">
-                    <Button variant="primary" className="text-white px-5">
-                        <span>Edit Profile</span>
-                    </Button>
-                </Link>
+                    <Link to="/profile">
+                        <Button variant="primary" className="text-white px-5">
+                            <span>Edit Profile</span>
+                        </Button>
+                    </Link>
                 </div>
             </div>
             <div className="section-4">
                 <Tab.Container defaultActiveKey="collectibles" id="items_tabs">
                     <div className="link-section px-md-5">
                         <Nav defaultActiveKey="collectibles">
-                        {categories.map((category, index) => (
-                            <Nav.Item
-                                key={index}
-                                onClick={() => onSelectType(category.path)}
-                            >
-                                <Nav.Link eventKey={category.path}>
-                                    {category.title}
-                                    <span className={category.count ? 'fill-count' : ''}>{category.count}</span>
-                                </Nav.Link>
-                            </Nav.Item>
-                        ))}
+                            {categories.map((category, index) => (
+                                <Nav.Item
+                                    key={index}
+                                    onClick={() => onSelectType(category.path)}
+                                >
+                                    <Nav.Link eventKey={category.path}>
+                                        {category.title}
+                                        <span className={category.count ? 'fill-count' : ''}>{category.count}</span>
+                                    </Nav.Link>
+                                </Nav.Item>
+                            ))}
                         </Nav>
                     </div>
                     <div className="item-columns">
@@ -260,69 +260,69 @@ const MyItems: React.FC<MyItemProps> = () => {
                                     )}
                                     {
                                         loading && pageNum > 1 ? (
-                                        <div className="my-3 d-flex justify-content-center loading-bar">
-                                            <LoadingBar />
-                                        </div>
-                                        ) : (
-                                        itemList.length > 0 && pages > pageNum && (
-                                            <div className="my-3 d-flex justify-content-center">
-                                                <Button
-                                                    variant="primary"
-                                                    className="btn-round w-50 outline-btn"
-                                                    onClick={() => setPageNumber(pageNum + 1)}
-                                                >
-                                                    <span>Load More</span>
-                                                </Button>
+                                            <div className="my-3 d-flex justify-content-center loading-bar">
+                                                <LoadingBar />
                                             </div>
-                                        )
+                                        ) : (
+                                            itemList.length > 0 && pages > pageNum && (
+                                                <div className="my-3 d-flex justify-content-center">
+                                                    <Button
+                                                        variant="primary"
+                                                        className="btn-round w-50 outline-btn"
+                                                        onClick={() => setPageNumber(pageNum + 1)}
+                                                    >
+                                                        <span>Load More</span>
+                                                    </Button>
+                                                </div>
+                                            )
                                         )
                                     }
                                 </div>
                             </Tab.Pane>
                             <Tab.Pane eventKey="collectibles">
                                 {loading && pageNum === 1 ? (
-                                <div className="mt-5 text-center loading-bar">
-                                    <LoadingBar />
-                                </div>
-                                ) : (
-                                <Fragment>
-                                    <div className="tokens-section">
-                                        <BigTitle>My Tokens</BigTitle>
-                                        <div className="item-list mt-3 mt-md-5">
-                                            {itemList.length > 0 ? (
-                                            itemList.map((token: any, i: number) => (
-                                                <TokenView key={i} item={token} user={userInfo} resaleSucced={() => resaleSucced()}></TokenView>
-                                            ))
-                                            ) : (
-                                            <NoItem
-                                                title="No tokens found"
-                                                description="Come back soon! Or try to browse something for you on our marketplace"
-                                                btnLink="/"
-                                                btnLabel="Browse marketplace"
-                                            />
-                                            )}
-                                        </div>
-                                        {
-                                            loading && pageNum > 1 ? (
-                                            <div className="my-3 d-flex justify-content-center loading-bar">
-                                                <LoadingBar />
-                                            </div>
-                                            ) : (
-                                            itemList.length > 0 && pages > pageNum && (
-                                                <div className="my-3 d-flex justify-content-center">
-                                                <Button
-                                                    variant="primary"
-                                                    className="btn-round w-50 outline-btn"
-                                                    onClick={() => setPageNumber(pageNum + 1)}
-                                                >
-                                                    <span>Load More</span>
-                                                </Button>
-                                                </div>
-                                            )
-                                            )
-                                        }
+                                    <div className="mt-5 text-center loading-bar">
+                                        <LoadingBar />
                                     </div>
-                                </Fragment>
+                                ) : (
+                                    <Fragment>
+                                        <div className="tokens-section">
+                                            <BigTitle>My Tokens</BigTitle>
+                                            <div className="item-list mt-3 mt-md-5">
+                                                {itemList.length > 0 ? (
+                                                    itemList.map((token: any, i: number) => (
+                                                        <TokenView key={i} item={token} user={userInfo} resaleSucced={() => resaleSucced()}></TokenView>
+                                                    ))
+                                                ) : (
+                                                    <NoItem
+                                                        title="No tokens found"
+                                                        description="Come back soon! Or try to browse something for you on our marketplace"
+                                                        btnLink="/"
+                                                        btnLabel="Browse marketplace"
+                                                    />
+                                                )}
+                                            </div>
+                                            {
+                                                loading && pageNum > 1 ? (
+                                                    <div className="my-3 d-flex justify-content-center loading-bar">
+                                                        <LoadingBar />
+                                                    </div>
+                                                ) : (
+                                                    itemList.length > 0 && pages > pageNum && (
+                                                        <div className="my-3 d-flex justify-content-center">
+                                                            <Button
+                                                                variant="primary"
+                                                                className="btn-round w-50 outline-btn"
+                                                                onClick={() => setPageNumber(pageNum + 1)}
+                                                            >
+                                                                <span>Load More</span>
+                                                            </Button>
+                                                        </div>
+                                                    )
+                                                )
+                                            }
+                                        </div>
+                                    </Fragment>
                                 )}
                                 <div className="notice-view">
                                     <div className="notice">
@@ -335,12 +335,12 @@ const MyItems: React.FC<MyItemProps> = () => {
                                     </div>
                                     <div className="btn-section">
                                         <Link to="/create-collectible">
-                                        <Button
-                                            variant="primary"
-                                            className="default-btn-size btn-create fill-btn"
-                                        >
-                                            <span>Create NFT</span>
-                                        </Button>
+                                            <Button
+                                                variant="primary"
+                                                className="default-btn-size btn-create fill-btn"
+                                            >
+                                                <span>Create NFT</span>
+                                            </Button>
                                         </Link>
                                     </div>
                                 </div>
