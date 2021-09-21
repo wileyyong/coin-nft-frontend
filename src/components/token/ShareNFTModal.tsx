@@ -1,18 +1,12 @@
 import React from "react";
-import { Modal, Image } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import {
-    BigTitle,
     MidTextTitle,
-    B2NormalTextTitleGrey,
     SmallTextTitleGrey,
-    SmallTextTitle,
-    NormalTextTitle,
-    SubDescription,
-    FilterIcon
 } from "components/common/common.styles";
 
 import { Link } from "react-router-dom";
-import { FaFacebook, FaMailBulk, FaTelegram, FaTrash, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaMailBulk, FaTelegram, FaTwitter } from "react-icons/fa";
 
 interface ShareNFTModalProps {
     handleClose?: any;
