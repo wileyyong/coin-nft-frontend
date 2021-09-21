@@ -36,8 +36,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   const resellFormData = useRef({
     min_bid_price: 0,
     expiry_date: "",
-    offer_price: 0,
-    quantity: 1
+    offer_price: 0
   });
 
   const getTokenThumbnail = () => {
@@ -201,15 +200,15 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         {item.collections ? item.collections.name : "PUML"}
       </SmallTextTitleGrey>
 
-      {hasResellPermission() && item.offer && item.offer.status !== 'pending' ? (
+      {hasResellPermission() ? (
         <Button
           variant="primary"
-          className="full-width mt-3 w-100"
+          className="full-width mt-3 outline-btn"
           onClick={() => {
             setShowResellDialog(true);
           }}
         >
-          <span>{isCreator() ? "Put on Sale" : "Resell"}</span>
+          <span>{!isCreator() ? "Put on Sale" : "Resell"}</span>
         </Button>
       ) : (
         item.offer && (
@@ -224,25 +223,24 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
             <FlexAlignCenterDiv className="mt-1">
               {(item.offer.type === "auction" ||
                 item.offer.type === "both") && (
-                  <NormalTextTitle className="faint-color">
-                    {getCurrentBidPrice() ? (
-                      <>Current Bid {getCurrentBidPrice()} ETH</>
-                    ) : (
-                      item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
-                    )}
-                  </NormalTextTitle>
-                )}
+                <NormalTextTitle className="faint-color">
+                  {getCurrentBidPrice() ? (
+                    <>Current Bid {getCurrentBidPrice()} ETH</>
+                  ) : (
+                    item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
+                  )}
+                </NormalTextTitle>
+              )}
             </FlexAlignCenterDiv>
           </div>
         )
       )}
-
       <ResellNftModal
         show={showResellDialog}
         handleClose={() => {
           setShowResellDialog(false);
         }}
-        isResell={!isCreator()}
+        isResell={isCreator()}
         handleSubmit={submitted}
       ></ResellNftModal>
       <ResellNftStatusModal

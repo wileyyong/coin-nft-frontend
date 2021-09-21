@@ -50,7 +50,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
             return dollarPrice;
         }
         return 0;
-      }
+    }
 
     return (
         <div className="col-12 col-sm-6 col-md-4 col-lg-3 myitem-card text-center py-2 px-2" onClick={() => { history.push("/tokens/" + (item.token && item.token._id ? item.token._id : item._id)) }}>
@@ -58,10 +58,18 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
             </div>
             <div className="card-info pt-3 pb-4">
                 <div className="card-title">{item.name || item.token.name}</div>
-                <div>
-                    <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.min_bid)} PUML</span>
-                    <span className="eth-price"> • {getOwner()? getOwner().price : item.min_bid} ETH</span>
-                </div>
+                {item.type && (item.type === 'auction' || item.type === 'both') && (
+                    <div>
+                        <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.min_bid)} PUML</span>
+                        <span className="eth-price"> • {getOwner()? getOwner().price : item.min_bid} ETH</span>
+                    </div>
+                )}
+                {item.type && (item.type === 'direct' || item.type === 'both') && (
+                    <div>
+                        <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.offer_price)} PUML</span>
+                        <span className="eth-price"> • {getOwner()? getOwner().price : item.offer_price} ETH</span>
+                    </div>
+                )}
                 {
                     item.description ? (
                         <div className="card-content pt-2">{item.description}</div>
@@ -73,7 +81,9 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                         )
                     )
                 }
-                {item.status === 'pending' && <NormalTextTitle className="faint-color mt-2">Place a bid</NormalTextTitle>}
+                {item.status === 'pending' && <NormalTextTitle className="faint-color mt-2">{
+                    (item.type === 'direct' || item.type === 'both') ? 'Buy now' : 'Place a bid'
+                }</NormalTextTitle>}
             </div>
         </div>
     );
