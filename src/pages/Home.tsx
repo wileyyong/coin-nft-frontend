@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState, useEffect } from "react";
 import Layout from "components/Layout";
-import { Button, Image } from "react-bootstrap";
+import { Button, Image, Dropdown, Form } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
 import { getNftCategories } from "store/Nft/nft.selector";
@@ -9,6 +9,12 @@ import Storage from "service/storage";
 import {
   isAuthenticated,
 } from "store/User/user.selector";
+
+import {
+  SmallTextTitle,
+  B1NormalTextTitle,
+  FlexAlignCenterDiv,
+} from "components/common/common.styles";
 
 import pumlImage from "assets/imgs/PUML-Logo.png";
 import homeintroImage from "assets/imgs/home-intro.svg";
@@ -29,6 +35,7 @@ import LoadingBar from "components/common/LoadingBar";
 import { useHistory } from 'react-router-dom';
 import imageAvatar from "assets/imgs/seller1.png";
 import configs from "configs";
+import { FaCheck } from "react-icons/fa";
 
 interface HomeProps { }
 
@@ -56,6 +63,35 @@ const Home: React.FC<HomeProps> = () => {
   });
   const [loading, setLoading] = useState(false);
   const nftCategories = useAppSelector(getNftCategories);
+
+  const sortByOptions = [
+    {
+      value: "recent",
+      text: "Recently added",
+    },
+    {
+      value: "cheap",
+      text: "Cheapest",
+    },
+    {
+      value: "costly",
+      text: "Highest price",
+    },
+    {
+      value: "liked",
+      text: "Most liked",
+    },
+  ];
+
+  const onSortOptionClicked = (e: any, value: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSearchParam({ ...searchParam, sort: value });
+  };
+
+  const onCheckVerified = (val: boolean) => {
+    setSearchParam({ ...searchParam, verified: val });
+  }
 
   useEffect(() => {
     const loadExploreData = async () => {
@@ -236,26 +272,69 @@ const Home: React.FC<HomeProps> = () => {
             {nftCategories.map((eType, index) => {
               return (
                 <div
-                  className={`nft-type-btn mr-2 my-2 ${
-                    searchParam.category === eType.value
+                  className={`nft-type-btn mr-2 my-2 ${searchParam.category === eType.value
                       ? "nft-type-selected"
                       : ""
-                  }`}
+                    }`}
                   key={index}
-                  onClick={() =>
-                    {setSearchParam({
-                        ...searchParam,
-                        category: eType.value,
-                      });
-                      setExplorePageNumber(1);
-                      Storage.set('home_filter', JSON.stringify({...searchParam, category: eType.value}));
-                    }
+                  onClick={() => {
+                    setSearchParam({
+                      ...searchParam,
+                      category: eType.value,
+                    });
+                    setExplorePageNumber(1);
+                    Storage.set('home_filter', JSON.stringify({ ...searchParam, category: eType.value }));
+                  }
                   }
                 >
                   {eType.label}
                 </div>
               );
             })}
+            <Dropdown className="filter-sort my-2">
+              <Dropdown.Toggle className="filter-sort-btn">
+                Filter and sort
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <SmallTextTitle className="grey-color px-4">
+                  SORT BY
+                </SmallTextTitle>
+                {sortByOptions.map((sortOption, index) => {
+                  return (
+                    <Dropdown.Item
+                      key={index}
+                      onClick={(e) =>
+                        onSortOptionClicked(e, sortOption.value)
+                      }
+                    >
+                      <FlexAlignCenterDiv>
+                        <B1NormalTextTitle>
+                          {sortOption.text}
+                        </B1NormalTextTitle>
+                        {sortOption.value === searchParam.sort && (
+                          <FaCheck className="fa-check ml-5"></FaCheck>
+                        )}
+                      </FlexAlignCenterDiv>
+                    </Dropdown.Item>
+                  );
+                })}
+
+                <SmallTextTitle className="grey-color px-4">
+                  OPTIONS
+                </SmallTextTitle>
+                <FlexAlignCenterDiv className="px-4 text-nowrap">
+                  Verified only
+                  <Form.Check
+                    type="switch"
+                    id="is-verified"
+                    className="ml-3 pointer-cursor"
+                    onChange={(e) => onCheckVerified(e.target.checked)}
+                    checked={searchParam.verified}
+                  />
+                </FlexAlignCenterDiv>
+              </Dropdown.Menu>
+            </Dropdown>
           </div>
         </div>
         <div>
@@ -263,33 +342,33 @@ const Home: React.FC<HomeProps> = () => {
             <div className="d-flex my-3 justify-content-center loading-bar">
               <LoadingBar />
             </div>
-            ) : (
-              <>
-                {
-                  exploreAuctions.length > 0 ?
-                    (
-                      <div className="row px-2">
-                        {
-                          exploreAuctions.map((auction, index) => {
-                            return (
-                              <NftItemCard key={index} item={auction}></NftItemCard>
-                            )
-                          })
-                        }
-                      </div>
-                    ) : (
-                      <div className="row justify-content-center px-2">
-                        <NoItem
-                          title="No items found"
-                          description="Come back soon! Or try to browse something for you on our marketplace"
-                          btnLink="/"
-                          btnLabel="Browse marketplace"
-                        />
-                      </div>
-                    )
-                }
-              </>    
-            )
+          ) : (
+            <>
+              {
+                exploreAuctions.length > 0 ?
+                  (
+                    <div className="row px-2">
+                      {
+                        exploreAuctions.map((auction, index) => {
+                          return (
+                            <NftItemCard key={index} item={auction}></NftItemCard>
+                          )
+                        })
+                      }
+                    </div>
+                  ) : (
+                    <div className="row justify-content-center px-2">
+                      <NoItem
+                        title="No items found"
+                        description="Come back soon! Or try to browse something for you on our marketplace"
+                        btnLink="/"
+                        btnLabel="Browse marketplace"
+                      />
+                    </div>
+                  )
+              }
+            </>
+          )
           }
         </div>
         {

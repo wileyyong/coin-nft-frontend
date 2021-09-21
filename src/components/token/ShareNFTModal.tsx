@@ -1,12 +1,12 @@
 import React from "react";
-import { Col, Modal, Row, Image } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import {
-    BigTitle,
-} from "../common/common.styles";
-import imgTwitter from "assets/imgs/twitter.png";
-import imgTelegram from "assets/imgs/telegram.png";
-import imgEmail from "assets/imgs/email.png";
-import imgFacebook from "assets/imgs/facebook.png";
+    MidTextTitle,
+    SmallTextTitleGrey,
+} from "components/common/common.styles";
+
+import { Link } from "react-router-dom";
+import { FaFacebook, FaMailBulk, FaTelegram, FaTwitter } from "react-icons/fa";
 
 interface ShareNFTModalProps {
     handleClose?: any;
@@ -19,37 +19,37 @@ const ShareNFTModal: React.FC<ShareNFTModalProps> = ({
 }) => {
     return (
         <Modal show={show} onHide={handleClose} className="buy-token-modal">
-            <Modal.Header>
+            <Modal.Header closeButton>
                 <Modal.Title className="p-4">
-                    <BigTitle>Share this NFT.</BigTitle>
+                    <MidTextTitle>Share this NFT.</MidTextTitle>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <div className="d-flex justify-content-around text-center">
-                    <div>
-                        <div className="share-space">
-                            <Image src={imgTwitter} className="img-share-icon"></Image>
+                <div className="d-flex justify-content-around text-center pb-4">
+                    <Link to="/" className="social-link-item text-center">
+                        <div className="share-space mb-3">
+                            <FaTwitter />
                         </div>
-                        <p>Twitter</p>
-                    </div>
-                    <div>
-                        <div className="share-space">
-                            <Image src={imgFacebook} className="img-share-icon"></Image>
+                        <SmallTextTitleGrey>Twitter</SmallTextTitleGrey>
+                    </Link>
+                    <Link to="/" className="social-link-item text-center">
+                        <div className="share-space mb-3">
+                            <FaFacebook />
                         </div>
-                        <p>Facebook</p>
-                    </div>
-                    <div>
-                        <div className="share-space">
-                            <Image src={imgTelegram} className="img-share-icon"></Image>
+                        <SmallTextTitleGrey>Facebook</SmallTextTitleGrey>
+                    </Link>
+                    <Link to="/" className="social-link-item text-center">
+                        <div className="share-space mb-3">
+                            <FaTelegram />
                         </div>
-                        <p>Telegram</p>
-                    </div>
-                    <div>
-                        <div className="share-space">
-                            <Image src={imgEmail} className="img-share-icon"></Image>
+                        <SmallTextTitleGrey>Telegram</SmallTextTitleGrey>
+                    </Link>
+                    <Link to="/" className="social-link-item text-center">
+                        <div className="share-space mb-3">
+                            <FaMailBulk />
                         </div>
-                        <p>E-mail</p>
-                    </div>  
+                        <SmallTextTitleGrey>E-mail</SmallTextTitleGrey>
+                    </Link>
                 </div>
             </Modal.Body>
         </Modal>
