@@ -373,7 +373,8 @@
 
 .nft-type-btn {
     cursor: pointer;
-    border: 1px solid $black;
+    border: 1px solid $primary;
+    color: $primary;
     box-sizing: border-box;
     border-radius: 100px;
     text-align: center;
@@ -385,7 +386,7 @@
     margin-top: 5px;
     margin-bottom: 5px;
     @include media-breakpoint-down(xl) {
-        padding: 4px 12px;
+        padding: 6px 12px;
     }
     @include media-breakpoint-down(lg) {
         padding: 4px 8px;
@@ -394,8 +395,19 @@
 
 .nft-type-selected {
     background: $primary;
-    color: $black !important;
-    border-color: $black !important;
+    color: $white !important;
+    border-color: $primary !important;
+}
+
+.filter-sort {
+    .btn-primary {
+        color: $white;
+        border-radius: 50px;
+    }
+
+    .btn-primary.dropdown-toggle {
+        color: $white;
+    }
 }
 
 .item-list {
