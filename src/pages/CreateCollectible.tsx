@@ -43,7 +43,7 @@ import ConnectWalletBtn from "components/common/button/ConnectWalletBtn";
 import NftController from "controller/NftController";
 import SmartContract from "ethereum/Contract";
 import DateTimeService from "service/dateTime";
-import { getNftCategories } from "store/Nft/nft.selector";
+import { getNftCategories, getNftServiceFee } from "store/Nft/nft.selector";
 import CreateNftStatusModal from "components/token/CreateNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
 import OfferController from "controller/OfferController";
@@ -56,7 +56,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const walletAddress = useAppSelector(getWalletAddress);
     const isAuth = useAppSelector(isAuthenticated);
     const [validated, setValidated] = useState(false);
+    const serviceFee = useAppSelector(getNftServiceFee);
     const [previewThumbnail, setPreviewThumbnail] = useState<any>(null);
+    const [isInstantPrice, setIsInstantPrice] = useState(false);
     const [isNftImage, setIsNftImage] = useState(true);
     const [isSucceed, setIsSucceed] = useState(false);
     const [expiryOption, setExpiryOption] = useState("3");
@@ -158,6 +160,14 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const setPreview = (e: any) => {
         setPreviewThumbnail(e);
+    };
+
+    const instantReceiveAmount = () => {
+        if(serviceFee) {
+          let remainPer = 100 - serviceFee;
+          return (collectible.offer_price * remainPer) / 100;
+        } 
+        return collectible.offer_price
     };
 
     const createCollection = async (collection: any) => {
@@ -443,6 +453,13 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         </div>
                                         <FlexJustifyBetweenDiv className="mt-4">
                                             <BigTitle className="text-black">Put up for sale</BigTitle>
+                                            <Form.Check
+                                                type="switch"
+                                                id="put-up-sale-switch"
+                                                checked={collectible.is_auction}
+                                                name="is_auction"
+                                                onChange={(e) => handleChange(e)}
+                                            />
                                         </FlexJustifyBetweenDiv>
                                         <B2NormalTextTitle className="text-gray mt-2">
                                             You will receive bids for this item.
@@ -490,6 +507,40 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                     </Form.Group>
                                                 </Form.Row>
                                             </div>
+                                        )}
+                                        <FlexJustifyBetweenDiv className="mt-4">
+                                            <BigTitle>Instant Sell Price</BigTitle>
+                                            <Form.Check
+                                                type="switch"
+                                                id="instant-sell-price-switch"
+                                                checked={isInstantPrice}
+                                                onChange={(e) => setIsInstantPrice(e.target.checked)}
+                                            />
+                                        </FlexJustifyBetweenDiv>
+                                        <B2NormalTextTitle className="grey-color mt-2">
+                                            Enter price to allow users instantly purchase your NFT
+                                        </B2NormalTextTitle>
+                                        {isInstantPrice && (
+                                            <Form.Row className="mt-4">
+                                            <Form.Group as={Col} md="12">
+                                                <Form.Control
+                                                required
+                                                type="text"
+                                                placeholder="Enter price for one piece"
+                                                name="offer_price"
+                                                value={collectible.offer_price || ''}
+                                                pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
+                                                maxLength={10}
+                                                onChange={(e) => handleChange(e)}
+                                                />
+                                                <B2NormalTextTitle className="mt-3">
+                                                <span className="o-5">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
+                                                </B2NormalTextTitle>
+                                                <B2NormalTextTitle className="mt-2">
+                                                <span className="o-5">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount() ? `${instantReceiveAmount()} ETH`: ''}
+                                                </B2NormalTextTitle>
+                                            </Form.Group>
+                                            </Form.Row>
                                         )}
                                     </Col>
                                     <Col md="6" className="preview-area">

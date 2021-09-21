@@ -47,9 +47,9 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
       <NftAvatar imagePath={getUserAvatar()} className="mr-3">
       </NftAvatar>
       <div>
-          <B1NormalTextTitle>{token?.name} </B1NormalTextTitle>
+          <B1NormalTextTitle>{item.user ? item.user.name : ''} </B1NormalTextTitle>
           <p className="mb-1">Offered {item.price} ETH • <span className="text-primary">${getDollarPrice(item.price)} PUML</span></p>
-          <p className="time-ago mb-1">{getDifferentHours(item.date)} hours ago by {item.user? item.user.name: ''}</p>
+          <p className="time-ago mb-1">{getDifferentHours(item.date)} hours ago</p>
       </div>
     </div>
   );

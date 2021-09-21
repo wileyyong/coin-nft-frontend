@@ -73,3 +73,9 @@ body {
   align-items: center;
   z-index: 100000;
 }
+
+a {
+  &:hover {
+    text-decoration: none;
+  }
+}

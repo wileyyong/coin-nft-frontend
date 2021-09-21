@@ -5,7 +5,6 @@ import {
     SmallTextTitleGrey,
 } from "components/common/common.styles";
 
-import { Link } from "react-router-dom";
 import { FaFacebook, FaMailBulk, FaTelegram, FaTwitter } from "react-icons/fa";
 
 interface ShareNFTModalProps {
@@ -28,30 +27,30 @@ const ShareNFTModal: React.FC<ShareNFTModalProps> = ({
             </Modal.Header>
             <Modal.Body>
                 <div className="d-flex justify-content-around text-center pb-4">
-                    <Link to="/" className="social-link-item text-center">
+                    <a href={`https://twitter.com?puml_nft=${item._id}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
                         <div className="share-space mb-3">
                             <FaTwitter />
                         </div>
                         <SmallTextTitleGrey>Twitter</SmallTextTitleGrey>
-                    </Link>
-                    <Link to="/" className="social-link-item text-center">
+                    </a>
+                    <a href={`https://facebook.com?puml_nft=${item._id}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
                         <div className="share-space mb-3">
                             <FaFacebook />
                         </div>
                         <SmallTextTitleGrey>Facebook</SmallTextTitleGrey>
-                    </Link>
-                    <Link to="/" className="social-link-item text-center">
+                    </a>
+                    <a href={`https://t.me/pumlofficial?puml_nft=${item._id}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
                         <div className="share-space mb-3">
                             <FaTelegram />
                         </div>
                         <SmallTextTitleGrey>Telegram</SmallTextTitleGrey>
-                    </Link>
-                    <Link to="/" className="social-link-item text-center">
+                    </a>
+                    <a href={`https://mail.com/?puml_nft=${item._id}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
                         <div className="share-space mb-3">
                             <FaMailBulk />
                         </div>
                         <SmallTextTitleGrey>E-mail</SmallTextTitleGrey>
-                    </Link>
+                    </a>
                 </div>
             </Modal.Body>
         </Modal>
