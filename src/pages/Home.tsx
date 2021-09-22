@@ -133,7 +133,7 @@ const Home: React.FC<HomeProps> = () => {
     };
 
     loadExploreData();
-  }, [searchParam, explorePageNum]);
+  }, [searchParam, explorePageNum, myInfo]);
 
   useEffect(() => {
     const loadNftTokens = async () => {
@@ -190,9 +190,6 @@ const Home: React.FC<HomeProps> = () => {
       );
       reader.readAsDataURL(file);
     }
-    setTimeout(() => {
-      saveFeaturedImage();
-    }, 1000);
   };
 
   const onUploadImage = () => {
@@ -307,6 +304,13 @@ const Home: React.FC<HomeProps> = () => {
         </div>
         <Image className="intro-image" src={homeintroImage}></Image>
         <div className="intro-ticket">
+          {
+            uploadFeaturedImage ? (
+              <div className="upload-image pointer-cursor text-dark ml-5" onClick={() => saveFeaturedImage()}>
+                <FaSave />
+              </div>
+            ) : ''
+          }
           <div className="upload-image pointer-cursor" onClick={() => onUploadImage()}>
             <FaCamera />
           </div>
