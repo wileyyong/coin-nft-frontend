@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState, useEffect } from "react";
 import Layout from "components/Layout";
+import { NotificationManager } from "react-notifications";
 import { Button, Image, Dropdown, Form } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
@@ -26,7 +27,7 @@ import ConnectWallet from "components/common/modal/ConnectWalletModal";
 import DepositWallet from "components/common/modal/DepositWalletModal";
 import Collections from "components/collection/Collections";
 import NoItem from "components/common/noItem";
-
+import Utility from "service/utility";
 // import TopUsers from "components/home/TopUsers";
 import OfferController from "controller/OfferController";
 import UserController from "controller/UserController";
@@ -35,13 +36,19 @@ import LoadingBar from "components/common/LoadingBar";
 import { useHistory } from 'react-router-dom';
 import imageAvatar from "assets/imgs/seller1.png";
 import configs from "configs";
-import { FaCheck } from "react-icons/fa";
+import { FaCamera, FaCheck, FaPen, FaSave } from "react-icons/fa";
+import { getMyInfo } from "store/User/user.selector";
+import { BigNumberMul } from "service/number";
+import { getETHUSDTCurrency } from "store/Nft/nft.selector";
 
 interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
   const history = useHistory();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
   const layoutView = useRef(null);
+  const myInfo = useAppSelector(getMyInfo);
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(isAuthenticated);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
@@ -56,6 +63,11 @@ const Home: React.FC<HomeProps> = () => {
   // const depositWalletShow = () => setShowDepositWallet(true);
   const [nftTokens, setNftTokens] = useState<any[]>([]);
   const [sellers, setSellers] = useState<any[]>([]);
+  const [uploadFeaturedImage, setUploadFeaturedImage] = useState(null);
+  const [featuredImage, setFeaturedImage] = useState<any>(null);
+  const [editFeatured, setEditFeatured] = useState(false);
+  const [featured_name, setFeaturedName] = useState('');
+  const [featured_price, setFeaturedPrice] = useState(0);
   const [searchParam, setSearchParam] = useState<any>({
     category: "all",
     sort: "recent",
@@ -89,12 +101,19 @@ const Home: React.FC<HomeProps> = () => {
     setSearchParam({ ...searchParam, sort: value });
   };
 
-  const onCheckVerified = (val: boolean) => {
-    setSearchParam({ ...searchParam, verified: val });
-  }
+  // const onCheckVerified = (val: boolean) => {
+  //   setSearchParam({ ...searchParam, verified: val });
+  // }
 
   useEffect(() => {
     const loadExploreData = async () => {
+      if (myInfo && myInfo.featured) {
+        setFeaturedImage(`${configs.DEPLOY_URL}${myInfo.featured}`)
+      } else {
+        setFeaturedImage(null);
+      }
+      setFeaturedPrice(myInfo.featured_price || 0);
+      setFeaturedName(myInfo.featured_name || '');
       let params = {};
       if (searchParam.category === "all") {
         params = { sort: searchParam.sort, verfied: searchParam.verified };
@@ -157,6 +176,105 @@ const Home: React.FC<HomeProps> = () => {
     }
   }, []);
 
+  const fileChanged = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadFeaturedImage(file);
+      var reader = new FileReader();
+      reader.addEventListener(
+          "load",
+          () => {
+            setFeaturedImage(reader.result || "");
+          },
+          false
+      );
+      reader.readAsDataURL(file);
+    }
+    setTimeout(() => {
+      saveFeaturedImage();
+    }, 1000);
+  };
+
+  const onUploadImage = () => {
+      fileInputRef?.current?.click();
+  }
+
+  const saveFeaturedImage = async() => {
+    let data = {
+      featuredImage: uploadFeaturedImage
+    };
+    let formdata = Utility.getFormDataFromObject(data);
+    await UserController.uploadFeaturedImage(formdata).then((res) => {
+        if (res && res.status === 200) {
+            NotificationManager.success(
+                uploadFeaturedImage ? 'Successfully uploaded!' : 'Successfully removed!',
+                "Success"
+            );
+            setUploadFeaturedImage(null);
+        }
+    }).catch((err) => {
+        if (err.response && err.response.data && err.response.data.error) {
+            NotificationManager.error(
+                err.response.data.error,
+                'Error'
+            );
+        }
+    });
+  }
+
+  const getDollarPrice = (ethValue: any) => {
+    if (ethValue) {
+        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
+        return dollarPrice;
+    }
+    return 0;
+  }
+
+  const handleChange = (e: any) => {
+    let fieldName = e.target.name;
+    if(fieldName === 'featured_price') {
+      const regex = /^[0-9]\d*(?:[.]\d*)?$/;
+      if (e.target.value !== '' && !regex.test(e.target.value)) {
+          e.preventDefault();
+          return;
+      }
+      setFeaturedPrice(e.target.value);
+    } else {
+      setFeaturedName(e.target.value);
+    }
+  };
+
+  const handleSaveFeatured = async() => {
+    const data = {
+      featured_name,
+      featured_price
+    };
+    if (!featured_name || !featured_price) {
+      NotificationManager.error(
+        'Please input featured Name and Price.',
+        'Error'
+      );
+      return;
+    }
+    let formdata = Utility.getFormDataFromObject(data);
+    await UserController.updateFeatured(formdata).then((res) => {
+      if (res && res.status === 200) {
+        NotificationManager.success(
+            'Successfully updated!',
+            "Success"
+        );
+        setEditFeatured(false);
+      }
+    }).catch((err) => {
+      if (err.response && err.response.data && err.response.data.error) {
+        NotificationManager.error(
+            err.response.data.error,
+            'Error'
+        );
+      }
+    });
+  }
+
   return (
     <Layout className="home-container" ref={layoutView}>
       <div className="section-intro">
@@ -189,11 +307,53 @@ const Home: React.FC<HomeProps> = () => {
         </div>
         <Image className="intro-image" src={homeintroImage}></Image>
         <div className="intro-ticket">
-          <Image className="ticket-img" src={ticketImage} alt="ticket"></Image>
-          <div className="d-flex flex-column align-items-center ticket-content">
-            <div className="title">Christian Trist</div>
-            <div className="price">$30.000.00PUML</div>
+          <div className="upload-image pointer-cursor" onClick={() => onUploadImage()}>
+            <FaCamera />
           </div>
+          <Image className="ticket-img" src={featuredImage || ticketImage} alt="ticket"></Image>
+          <div className="d-flex flex-column align-items-center ticket-content">
+            {
+              editFeatured ? (
+                <>
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="NFT Name"
+                    name="featured_name"
+                    value={featured_name}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <Form.Control
+                    required
+                    type="text"
+                    placeholder="Featured Price"
+                    name="featured_price"
+                    value={featured_price}
+                    onChange={(e) => handleChange(e)}
+                  />
+                </>
+              ) : (
+                <>
+                  <div className="title">{featured_name || 'Christian Trist'}</div>
+                  <div className="price">${getDollarPrice(featured_price) || '30.00'} PUML <span className="text-dark"> • {featured_price || 0.01} ETH</span></div>
+                </>
+              )
+            }
+            {
+              editFeatured ? (
+                <div className="edit-content" onClick={() => handleSaveFeatured()}><FaSave /></div>
+              ) : (
+                <div className="edit-content" onClick={() => setEditFeatured(true)}><FaPen /></div>
+              )
+            }
+          </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            hidden
+            accept={configs.IMG_FILE_ACCEPT}
+            onChange={fileChanged}
+          />
         </div>
       </div>
       <div className="section">
@@ -321,7 +481,7 @@ const Home: React.FC<HomeProps> = () => {
                   );
                 })}
 
-                <SmallTextTitle className="grey-color px-4">
+                {/* <SmallTextTitle className="grey-color px-4">
                   OPTIONS
                 </SmallTextTitle>
                 <FlexAlignCenterDiv className="px-4 text-nowrap">
@@ -333,7 +493,7 @@ const Home: React.FC<HomeProps> = () => {
                     onChange={(e) => onCheckVerified(e.target.checked)}
                     checked={searchParam.verified}
                   />
-                </FlexAlignCenterDiv>
+                </FlexAlignCenterDiv> */}
               </Dropdown.Menu>
             </Dropdown>
           </div>
