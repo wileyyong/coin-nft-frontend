@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useRef, useState, useEffect } from "react";
 import Layout from "components/Layout";
-import { Button, Image, Dropdown, Form } from "react-bootstrap";
+import { Button, Image, Dropdown } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
 import { getNftCategories } from "store/Nft/nft.selector";
@@ -88,10 +88,6 @@ const Home: React.FC<HomeProps> = () => {
     e.stopPropagation();
     setSearchParam({ ...searchParam, sort: value });
   };
-
-  const onCheckVerified = (val: boolean) => {
-    setSearchParam({ ...searchParam, verified: val });
-  }
 
   useEffect(() => {
     const loadExploreData = async () => {
@@ -319,20 +315,6 @@ const Home: React.FC<HomeProps> = () => {
                     </Dropdown.Item>
                   );
                 })}
-
-                <SmallTextTitle className="grey-color px-4">
-                  OPTIONS
-                </SmallTextTitle>
-                <FlexAlignCenterDiv className="px-4 text-nowrap">
-                  Verified only
-                  <Form.Check
-                    type="switch"
-                    id="is-verified"
-                    className="ml-3 pointer-cursor"
-                    onChange={(e) => onCheckVerified(e.target.checked)}
-                    checked={searchParam.verified}
-                  />
-                </FlexAlignCenterDiv>
               </Dropdown.Menu>
             </Dropdown>
           </div>
