@@ -68,6 +68,7 @@ const Home: React.FC<HomeProps> = () => {
   const [editFeatured, setEditFeatured] = useState(false);
   const [featured_name, setFeaturedName] = useState('');
   const [featured_price, setFeaturedPrice] = useState(0);
+  const [sellersGroup, setSellersGroup] = useState<any[]>([]);
   const [searchParam, setSearchParam] = useState<any>({
     category: "all",
     sort: "recent",
@@ -134,6 +135,19 @@ const Home: React.FC<HomeProps> = () => {
 
     loadExploreData();
   }, [searchParam, explorePageNum, myInfo]);
+
+  useEffect(() => {
+    let group = [];
+    for (let index = 0; index < sellers.length; index += 3) {
+        let subgroup = [];
+        if (sellers[index]) subgroup.push(sellers[index]);
+        if (sellers[index + 1]) subgroup.push(sellers[index + 1]);
+        if (sellers[index + 2]) subgroup.push(sellers[index + 2]);
+
+        group.push(subgroup);
+    }
+    setSellersGroup(group);
+}, [sellers]);
 
   useEffect(() => {
     const loadNftTokens = async () => {
@@ -362,34 +376,47 @@ const Home: React.FC<HomeProps> = () => {
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
-        <div className="row text-center">
+        <div className="text-center">
           {
             loading ? (
-              <div className="my-5 d-flex justify-content-center w-100">
-                <LoadingBar />
-              </div>
-            ) : (
-              sellers.length > 0 ?
-                sellers.map((seller, index) => (
-                  index < 6 &&
-                  <div key={index} className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 seller-segment mb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
-                    <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} className="seg-img" alt="seller" />
-                    <div className="seg-name pt-2 mt-3">{seller.name}</div>
-                    <div className="seg-type pt-2">{seller.type || 'Seller'}</div>
-                    <div className="seg-price pt-2">{seller.amount || '$30.00'} PUML</div>
-                    <div className="seg-price-eth pt-2">{seller.price || '0.15'} ETH</div>
-                  </div>
-                ))
-                // <TopUsers users={sellers}></TopUsers>
-                :
-                <div className="d-flex w-100 justify-content-center">
-                  <NoItem
-                    title="No Users found"
-                    description="Come back soon! Or try to browse something for you on our marketplace"
-                    btnLink="/"
-                    btnLabel="Browse marketplace"
-                  />
+                <div className="my-5 d-flex justify-content-center w-100">
+                    <LoadingBar />
                 </div>
+            ) : (
+                sellers.length > 0 ?
+                  <div className="d-flex flex-row">
+                      {
+                          sellersGroup.map((sellerGroup, gIndex) => (
+                              <div key={gIndex} className="flex-fill d-flex flex-column">
+                                  {
+                                      sellerGroup.map((seller: any, sIndex: number) => (
+                                          <div key={sIndex} className="seller-segment mb-4" onClick={() => history.push(`/users/${seller.wallet}`)}>
+                                              <div className="seg-name mr-2">{gIndex * 3 + sIndex + 1}</div>
+                                              <Image src={seller.avatar ? `${configs.DEPLOY_URL}${seller.avatar}` : imageAvatar} className="seg-img" alt="seller" />
+                                              <div className="d-flex flex-column">
+                                                  <div className="seg-name">{seller.name}</div>
+                                                  <div>
+                                                      <span className="seg-price">{seller.amount || '$30'} PUML</span>
+                                                      <span className="seg-price-eth"> • {seller.price || '0.15'} ETH</span>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      ))
+                                  }
+                              </div>
+
+                          ))
+                      }
+                  </div>
+                  :
+                  <div className="d-flex w-100 justify-content-center">
+                      <NoItem
+                          title="No Users found"
+                          description="Come back soon! Or try to browse something for you on our marketplace"
+                          btnLink="/"
+                          btnLabel="Browse marketplace"
+                      />
+                  </div>
             )
           }
         </div>
