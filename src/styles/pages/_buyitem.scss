@@ -20,6 +20,38 @@
         border-radius: 50px;
     }
 
+    .property {
+        .property-title {
+            color: $black;
+            font-weight: $font-weight-bold;
+            font-size: 18px;
+        }
+
+        .property-body {
+            border-top: 1px solid $black;
+            background-color: $gray-100;
+            margin-right: 2px;
+            margin-left: 2px;
+            .property-item {
+                border: 1px solid $primary;
+                border-radius: 4px;
+                text-align: center;
+                background-color: $white;
+                padding: 12px;
+                .field {
+                    color: $primary;
+                    font-size: 14px;
+                    font-weight: $font-weight-bold;
+                }
+                .value {
+                    color: $black;
+                    font-size: 18px;
+                    font-weight: $font-weight-bold;
+                }
+            }
+        }
+    }
+
     .item-info {
         width: 50%;
         padding-left: 40px;
@@ -69,7 +101,7 @@
         .item-members {
             cursor: pointer;
             font-weight: $font-weight-bold;
-            
+
             .member-type {
                 color: $gray-600;
                 font-size: 14px;
