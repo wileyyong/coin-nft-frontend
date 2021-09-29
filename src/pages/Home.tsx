@@ -384,7 +384,7 @@ const Home: React.FC<HomeProps> = () => {
                 </div>
             ) : (
                 sellers.length > 0 ?
-                  <div className="d-flex flex-row">
+                  <div className="d-flex flex-row flex-wrap">
                       {
                           sellersGroup.map((sellerGroup, gIndex) => (
                               <div key={gIndex} className="flex-fill d-flex flex-column">
