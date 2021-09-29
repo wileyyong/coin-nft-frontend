@@ -419,7 +419,7 @@ const Home: React.FC<HomeProps> = () => {
                   </div>
             )
           }
-      </div>
+        </div>
       </div>
       <div className="section">
         <h1 className="font-weight-bold section-title">Hot Bids</h1>
