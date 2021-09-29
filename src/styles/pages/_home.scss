@@ -147,7 +147,19 @@
             height: auto;
             top: 10%;
             right: 5%;
-
+            .upload-image {
+                display: none;
+                position: absolute;
+                left: 20px;
+                bottom: 130px;
+                font-size: 24px;
+                color: $primary;
+            }
+            &:hover {
+                .upload-image {
+                    display: block;
+                }
+            }
             .ticket-img {
                 width: 100%;
                 height: auto;
@@ -160,6 +172,20 @@
             .ticket-content {
                 background-color: $white;
                 color: $black;
+                .edit-content {
+                    position: absolute;
+                    bottom: 20px;
+                    right: 20px;
+                    font-size: 24px;
+                    color: $secondary;
+                    cursor: pointer;
+                    display: none;
+                }
+                &:hover {
+                    .edit-content {
+                        display: block;
+                    }
+                }
                 .title {
                     padding-top: 20px;
                     padding-bottom: 20px;

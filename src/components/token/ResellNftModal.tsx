@@ -1,13 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { NotificationManager } from "react-notifications";
 import {
   B1NormalTextTitle,
   B2NormalTextTitle,
   BigTitle,
   FlexJustifyBetweenDiv,
 } from "components/common/common.styles";
+import { useAppSelector } from "store/hooks";
 import DateTimeService from "service/dateTime";
+import { getNftServiceFee } from "store/Nft/nft.selector";
 
 interface ResellNftModalProps {
   handleClose?: any;
@@ -24,12 +27,13 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
 }) => {
   const [validated, setValidated] = useState(false);
   const [expiryOption, setExpiryOption] = useState("3");
-
+  const [isInstantPrice, setIsInstantPrice] = useState(false);
+  const [isAuction, setIsAuction] = useState(true);
+  const serviceFee = useAppSelector(getNftServiceFee);
   const [newOffer, setNewOffer] = useState<any>({
     min_bid_price: 0,
     expiry_date: "",
-    offer_price: 0,
-    quantity: 1,
+    offer_price: 0
   });
 
   const expiryDateOptions = [
@@ -59,6 +63,12 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
     },
   ];
 
+  const instantReceiveAmount = () => {
+    let remainPer = 100 - serviceFee;
+    if (!newOffer.offer_price) newOffer.offer_price = 0;
+    return (newOffer.offer_price * remainPer) / 100;
+  };
+
   useEffect(() => {
     let date = DateTimeService.getIsoDateTimeWithDays(parseInt(expiryOption));
     setNewOffer({ ...newOffer, expiry_date: date });
@@ -69,6 +79,27 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
     e.stopPropagation();
     const form = e.currentTarget;
     if (form.checkValidity() !== false) {
+      if (!isInstantPrice && !isAuction) {
+        NotificationManager.error(
+          "Please choose at least one option. (Auction or Direct Sale)",
+          "Error"
+        );
+        return;
+      }
+      if (isInstantPrice && newOffer.offer_price === '0') {
+        NotificationManager.error(
+          "Please input at least 0.001 of Offer price.",
+          "Error"
+        );
+        return;
+      }
+      if (isAuction && newOffer.min_bid_price === '0') {
+        NotificationManager.error(
+          "Please input at least 0.001 of bid price.",
+          "Error"
+        );
+        return;
+      }
       handleSubmit(newOffer);
     }
     setValidated(true);
@@ -103,22 +134,82 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
             <Form noValidate validated={validated} onSubmit={onSubmit}>
               <FlexJustifyBetweenDiv className="mt-4">
                 <BigTitle>Put up for sale</BigTitle>
+                <Form.Check
+                  type="switch"
+                  id="put-up-sale-switch"
+                  checked={isAuction}
+                  name="is_auction"
+                  onChange={(e: any) => setIsAuction(e.target.checked)}
+                />
               </FlexJustifyBetweenDiv>
               <B2NormalTextTitle className="faint-color mt-2">
                 You will receive bids for this item.
               </B2NormalTextTitle>
-              <div>
-                <B1NormalTextTitle className="mt-3">
-                  Minimum bid price
-                </B1NormalTextTitle>
-                <Form.Row className="mt-1">
+              {isAuction && (
+                <div>
+                  <B1NormalTextTitle className="mt-3">
+                    Minimum bid price
+                  </B1NormalTextTitle>
+                  <Form.Row className="mt-1">
+                    <Form.Group as={Col} md="12">
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="Enter Minimum Bid in ETH"
+                        name="min_bid_price"
+                        value={newOffer.min_bid_price || ''}
+                        onChange={(e) => handleChange(e)}
+                        pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
+                        maxLength={10}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Please input valid value.
+                      </Form.Control.Feedback>
+                    </Form.Group>
+                  </Form.Row>
+                  <B1NormalTextTitle>Expiry Date</B1NormalTextTitle>
+                  <Form.Row className="mt-1">
+                    <Form.Group as={Col} md="6">
+                      <Form.Control
+                        as="select"
+                        value={expiryOption}
+                        onChange={(e) => {
+                          setExpiryOption(e.target.value);
+                        }}
+                      >
+                        {expiryDateOptions.map((eOpt, index) => {
+                          return (
+                            <option value={eOpt.value} key={index}>
+                              {eOpt.label}
+                            </option>
+                          );
+                        })}
+                      </Form.Control>
+                    </Form.Group>
+                  </Form.Row>
+                </div>
+              )}
+              <FlexJustifyBetweenDiv className="mt-4">
+                <BigTitle>Instant Sell Price</BigTitle>
+                <Form.Check
+                  type="switch"
+                  id="instant-sell-price-switch"
+                  checked={isInstantPrice}
+                  onChange={(e) => setIsInstantPrice(e.target.checked)}
+                />
+              </FlexJustifyBetweenDiv>
+              <B2NormalTextTitle className="faint-color mt-2">
+                Enter price to allow users instantly purchase your NFT
+              </B2NormalTextTitle>
+              {isInstantPrice && (
+                <Form.Row className="mt-4">
                   <Form.Group as={Col} md="12">
                     <Form.Control
                       required
                       type="text"
-                      placeholder="Enter Minimum Bid in ETH"
-                      name="min_bid_price"
-                      value={newOffer.min_bid_price || ''}
+                      placeholder="Enter price for one piece"
+                      name="offer_price"
+                      value={newOffer.offer_price || ''}
                       onChange={(e) => handleChange(e)}
                       pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
                       maxLength={10}
@@ -126,29 +217,16 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
                     <Form.Control.Feedback type="invalid">
                       Please input valid value.
                     </Form.Control.Feedback>
+                    <B2NormalTextTitle className="faint-color mt-3">
+                      Service Fee {serviceFee} %
+                    </B2NormalTextTitle>
+                    <br />
+                    <B2NormalTextTitle className="faint-color mt-1">
+                      You will receive {instantReceiveAmount()} ETH
+                    </B2NormalTextTitle>
                   </Form.Group>
                 </Form.Row>
-                <B1NormalTextTitle>Expiry Date</B1NormalTextTitle>
-                <Form.Row className="mt-1">
-                  <Form.Group as={Col} md="6">
-                    <Form.Control
-                      as="select"
-                      value={expiryOption}
-                      onChange={(e) => {
-                        setExpiryOption(e.target.value);
-                      }}
-                    >
-                      {expiryDateOptions.map((eOpt, index) => {
-                        return (
-                          <option value={eOpt.value} key={index}>
-                            {eOpt.label}
-                          </option>
-                        );
-                      })}
-                    </Form.Control>
-                  </Form.Group>
-                </Form.Row>
-              </div>
+              )}
               <Button
                 type="submit"
                 variant="primary"

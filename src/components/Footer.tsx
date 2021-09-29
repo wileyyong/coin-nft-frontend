@@ -1,6 +1,6 @@
 import { Image } from "react-bootstrap";
 
-import logo_footer from "assets/imgs/puml-logo-footer.png";
+import logo from "assets/imgs/logo.png";
 import image1 from "assets/imgs/path.png";
 import image2 from "assets/imgs/twitter.png";
 import image3 from "assets/imgs/youtube.png";
@@ -10,11 +10,7 @@ const Footer = () => {
     <footer className="footer-container">
       <div>
         <div className="d-flex align-items-center justify-content-center footer-top">
-          <Image className="logo-image" src={logo_footer} alt="logo"></Image>
-          <div className="d-flex flex-column">
-            <div className="font-weight-bold font-italic">PUML</div>
-            <div className="logo-title text-primary font-weight-bold font-italic">Better Health</div>
-          </div>
+          <Image className="logo-image" src={logo} alt="logo"></Image>
         </div>
         <div className="d-flex flex-wrap justify-content-center">
           <div className="item-content font-weight-bold">Top Sellers</div>

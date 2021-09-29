@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import itemLogo from "assets/imgs/puml-logo-footer.png";
 import imgAvatar from "assets/imgs/avatar.png";
 
@@ -13,9 +14,10 @@ import configs from "configs";
 import Layout from "components/Layout";
 import BidHistoryItem from "components/token/BidHistoryItem";
 import PlaceBidModal from "components/token/PlaceBidModal";
+import BuyTokenModal from "components/token/BuyTokenModal";
 import Utility from "service/utility";
 import Tabs from "components/common/Tabs";
-import { BigNumberAdd, BigNumberMul } from "service/number";
+import { BigNumberAdd, BigNumberMul, toFixed } from "service/number";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import DateTimeService from "service/dateTime";
 import HistoryItem from "components/token/HistoryItem";
@@ -27,7 +29,7 @@ import { NftCreateStatus } from "model/NftCreateStatus";
 import ShareNFTModal from "components/token/ShareNFTModal";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import { getETHUSDTCurrency, getNftServiceFee } from "store/Nft/nft.selector";
 import { getMyInfo, getWalletAddress } from "store/User/user.selector";
 import { connectUserWallet, getWalletBalance } from "store/User/user.slice";
 
@@ -50,7 +52,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const params: any = useParams();
     const history = useHistory();
     const dispatch = useAppDispatch();
-
+    const serviceFee = useAppSelector(getNftServiceFee);
     const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
     const walletAddress = useAppSelector(getWalletAddress);
     const userInfo = useAppSelector(getMyInfo);
@@ -61,11 +63,12 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const [highestBidder, setHighestBidder] = useState<any>(null);
     const [creator, setCreator] = useState<any>(null);
     const [remainTimeObj, setRemainTimeObj] = useState<any>({});
-
+    const [owner, setOwner] = useState<any>(null);
     const tokenImgEl = useRef(null);
     const tokenVideoEl = useRef(null);
     const [sizeObj, setSizeObj] = useState<any>(null);
     const [timeObj, setTimeObj] = useState<any>(null);
+    const [showBuyTokenModal, setShowBuyTokenModal] = useState(false);
     const [showResellDialog, setShowResellDialog] = useState(false);
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE);
@@ -152,13 +155,25 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             setBidHistory(bids);
             if (bids.length) setHighestBidder(bids[0]);
             if (token.creator) setCreator(token.creator);
+            if (token.owners.length > 0) {
+                const offerCreator = token.owners.find((it: any) => {
+                    return it.user._id === offer.creator._id;
+                });
+                if (offerCreator) {
+                    setOwner(offerCreator);
+                } else {
+                    setOwner(token.owners[0]);
+                }
+            }
             setLoading(false);
         }
     };
 
     const isOwner = () => {
-        if (token && token.owners) {
-            return token.owners[0];
+        if (token && token.owners && offer) {
+            return token.owners.find((it: any) => {
+                return it.user._id === offer.creator._id;
+            });
         }
     }
 
@@ -367,17 +382,69 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
       };
 
-      const submitted = async (form: any) => {
+    const submitted = async (form: any) => {
         setShowStatusModal(true);
         setShowResellDialog(false);
         resellFormData.current = form;
         await approveNft();
-      };
-    
-      const isCreator = () => {
+    };
+
+    const isCreator = () => {
         if (offer && offer.creator && userInfo._id === offer.creator._id) return true;
         return false;
-      };
+    };
+
+    const isDirectSale = () => {
+        if (offer) return offer.type === "direct" || offer.type === "both";
+        return false;
+    };
+
+    const getOfferPriceWithServiceFee = () => {
+        let overFlowPer = 100 + serviceFee;
+        if (offer) return toFixed((offer.offer_price * overFlowPer) / 100, 3);
+    };
+
+    const onDirectBuyClicked = () => {
+        if (checkOfferReady()) setShowBuyTokenModal(true);
+    };
+
+    const directBuy = async () => {
+        try {
+          setTransProgressing(true);
+          if (offer) {
+            let buyResult = await SmartContract.directBuy(
+              token.chain_id,
+              offer.offer_price
+            )
+            if (buyResult.success && buyResult.transactionHash) {
+              dispatch(getWalletBalance());
+              await OfferController.directBuy(offer._id, {
+                price: offer.offer_price,
+                hash: buyResult.transactionHash,
+                copies: 1
+              });
+              NotificationManager.success(
+                "You buy this item successfully.",
+                "Success"
+              );
+              setShowBuyTokenModal(false);
+              loadOffer();
+            } else {
+              NotificationManager.error(
+                "You failed to buy this item directly.",
+                "Error"
+              );
+            }
+            setTransProgressing(false);
+          }
+        } catch (err) {
+          NotificationManager.error(
+            "You failed to buy this item directly.",
+            "Error"
+          );
+          setTransProgressing(false);
+        }
+    };
 
     const Details = () => (
         <div className="d-flex flex-column pt-2">
@@ -385,6 +452,15 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 <Image src={itemLogo} className="member-image"></Image>
                 <div className="address">{token._id}</div>
             </div>
+            {owner && (
+                <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/${owner.user.wallet}`)}>
+                    <Image src={configs.DEPLOY_URL + owner.user.avatar} className="member-image mr-2"></Image>
+                    <div className="d-flex flex-column pt-2">
+                        <div className="member-type pb-1">Owner</div>
+                        <div className="member-name">{owner.user.name}</div>
+                    </div>
+                </div>
+            )}
             {sizeObj && (
               <div className="mr-3 mr-md-5">
                 <B3NormalTextTitle>Size</B3NormalTextTitle>
@@ -430,6 +506,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             )}
         </div>
     );
+
     const History = () => (
         <div className="history-list">
             {histories.length > 0 ? (
@@ -457,35 +534,68 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             </div> :
                 <Container className="buyitem-container">
                     <div className="row">
-                        <div className="col-12 col-md-6 col-lg-6 col-xl-5 d-flex flex-row pb-4">
+                        <div className="col-12 col-md-6 col-lg-6 col-xl-5 pb-4">
                             <div className="featured-media w-100">
                                 {isPicture() ? (
-                                <img
-                                    id="token-img"
-                                    ref={tokenImgEl}
-                                    className="media my-4"
-                                    src={getTokenMedia()}
-                                    alt="tokenImage"
-                                />
-                                ) : (
-                                token &&
-                                token.media && (
-                                    <video
-                                    ref={tokenVideoEl}
-                                    src={getTokenMedia()}
-                                    className="media my-4"
-                                    loop
-                                    autoPlay
-                                    controls
-                                    >
-                                    <source type="video/mp4"></source>
-                                    <source type="video/webm"></source>
-                                    <source type="video/ogg"></source>
-                                    Your browser does not support HTML5 video.
-                                    </video>
-                                )
+                                    <img
+                                        id="token-img"
+                                        ref={tokenImgEl}
+                                        className="media my-4"
+                                        src={getTokenMedia()}
+                                        alt="tokenImage"
+                                    />
+                                    ) : (
+                                    token &&
+                                    token.media && (
+                                        <video
+                                            ref={tokenVideoEl}
+                                            src={getTokenMedia()}
+                                            className="media my-4"
+                                            loop
+                                            autoPlay
+                                            controls
+                                        >
+                                            <source type="video/mp4"></source>
+                                            <source type="video/webm"></source>
+                                            <source type="video/ogg"></source>
+                                            Your browser does not support HTML5 video.
+                                        </video>
+                                    )
                                 )}
                             </div>
+                            {isDirectSale() && (
+                                <>
+                                    {offer && offer.status === "pending" && (
+                                        owner && owner.user && owner.user.wallet !== walletAddress ? (
+                                            <Button
+                                                variant="primary"
+                                                className="mt-4 buy-now w-50 text-white"
+                                                onClick={() => {
+                                                    onDirectBuyClicked();
+                                                }}
+                                            >
+                                            <span>Buy Now</span>
+                                            </Button>
+                                        ) : ''
+                                    )}
+                                    <div className="my-5 d-block">
+                                        <span className="o-5">Service Fee</span>&nbsp;&nbsp;
+                                        {serviceFee}%<br></br>
+                                        {
+                                            owner && owner.user && owner.user._id === userInfo._id && (
+                                                <>
+                                                    <span className="o-5">You will receive</span>&nbsp;&nbsp;
+                                                    {getOfferPriceWithServiceFee()}
+                                                    &nbsp; ETH&nbsp;&nbsp;
+                                                    <span className="o-5">
+                                                        (${getDollarPrice(getOfferPriceWithServiceFee())})
+                                                    </span>
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                </>
+                            )}
                         </div>
                         <div className="col-12 col-md-6 col-lg-7 col-xl-8 d-flex flex-column flex-fill item-info">
                             <div className="item-title pb-4 d-flex align-items-center">
@@ -502,11 +612,24 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="item-price pb-4">
-                                <span className="for-sale">For Sale • Highest Bid </span>
-                                <span className="text-dark">{offer ? `${offer.min_bid}` : ''} ETH • </span>
-                                <span className="price-puml">{offer ? `$${getDollarPrice(offer.min_bid)} ` : ' '} PUML</span>
-                            </div>
+                            {
+                                offer && offer.min_bid && (
+                                    <div className="item-price pb-4">
+                                        <span className="for-sale">For Sale • Highest Bid </span>
+                                        <span className="text-dark">{offer ? `${offer.min_bid}` : ''} ETH • </span>
+                                        <span className="price-puml">{offer ? `$${getDollarPrice(offer.min_bid)} ` : ' '} PUML</span>
+                                    </div>
+                                )
+                            }
+                            {
+                                offer && offer.offer_price && (
+                                    <div className="item-price pb-4">
+                                        <span className="for-sale">For Sale • Direct buy Price </span>
+                                        <span className="text-dark">{offer ? `${offer.offer_price}` : ''} ETH • </span>
+                                        <span className="price-puml">{offer ? `$${getDollarPrice(offer.offer_price)} ` : ' '} PUML</span>
+                                    </div>
+                                )
+                            }
                             <div className="d-flex flex-row">
                                 {creator && (
                                     <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/${creator.wallet}`)}>
@@ -517,7 +640,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                         </div>
                                     </div>
                                 )}
-                                <FlexAlignCenterDiv className="pointer-cursor d-flex align-items-center" onClick={() => token.collections ? history.push(`/collections/${token.collections._id}`) : history.push('/collections/puml')}>
+                                <FlexAlignCenterDiv className="pointer-cursor d-flex align-items-center" onClick={() => token.collections ? history.push(`/collections/${token.collections._id}`) : ''}>
                                     <NftAvatar
                                         className="mr-3"
                                         imagePath={getCollectionImgPath()}
@@ -536,99 +659,118 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     tabs={tabs}
                                 />
                             </div>
-                            <Row className="auction-end-details pb-3">
-                                <Col md="6" className="highest-bidder">
-                                    {highestBidder ? (
-                                        <>
-                                        <MidTextTitle>
-                                            <span className="text-gray">Highest bid by</span>{" "}
-                                            <span style={{ whiteSpace: 'pre-wrap' }}>{highestBidder.user ? highestBidder.user.name : ""}</span>
-                                        </MidTextTitle>
-                                        <div className="bid-history-item d-flex mt-3 mb-2">
-                                            <NftAvatar
-                                            imagePath={getAvatar("highestBidder")}
-                                            className="mr-3"
-                                            ></NftAvatar>
-                                            <div>
-                                            <B2NormalTextTitle>
-                                                {highestBidder.price} ETH •&nbsp;
-                                            </B2NormalTextTitle>
-                                            <B1NormalTextTitle className="faint-color">
-                                                ${getDollarPrice(highestBidder.price)}
-                                            </B1NormalTextTitle>
-                                            </div>
-                                        </div>
-                                        </>
-                                    ) : offer && offer.status === "pending" ? (
-                                        <MidTextTitle>
-                                            Be the first one to bid!
-                                        </MidTextTitle>
-                                    ) : (
-                                        <MidTextTitle>No bidders on this auction.</MidTextTitle>
-                                    )}
-                                </Col>
-                                <Col md="6" className="pl-md-4">
-                                    {offer && offer.status === "completed" && (
-                                        <MidTextTitle className="mt-3">Auction Ended</MidTextTitle>
-                                    )}
-                                    {isExpired() && (
-                                        <MidTextTitle className="mt-3">
-                                        Auction Expired
-                                        </MidTextTitle>
-                                    )}
-                                    {offer && offer.status === "pending" && !isExpired() && (
-                                        <>
-                                        <MidTextTitle className="faint-color">
-                                            Auction ends
-                                        </MidTextTitle>
-                                        {
-                                            remainTimeObj && remainTimeObj.sec ? (
-                                            <div className="d-flex align-items-end mt-3">
-                                                <div>
-                                                <MidTextTitle>{remainTimeObj.day}</MidTextTitle>
-                                                <B1NormalTextTitle className="mt-1 faint-color">
-                                                    Days
-                                                </B1NormalTextTitle>
+                            {
+                                isAuction() && (
+                                    <Row className="auction-end-details pb-3">
+                                        <Col md="6" className="highest-bidder">
+                                            {highestBidder ? (
+                                                <>
+                                                <MidTextTitle>
+                                                    <span className="text-gray">Highest bid by</span>{" "}
+                                                    <span style={{ whiteSpace: 'pre-wrap' }}>{highestBidder.user ? highestBidder.user.name : ""}</span>
+                                                </MidTextTitle>
+                                                <div className="bid-history-item d-flex mt-3 mb-2">
+                                                    <NftAvatar
+                                                    imagePath={getAvatar("highestBidder")}
+                                                    className="mr-3"
+                                                    ></NftAvatar>
+                                                    <div>
+                                                    <B2NormalTextTitle>
+                                                        {highestBidder.price} ETH •&nbsp;
+                                                    </B2NormalTextTitle>
+                                                    <B1NormalTextTitle className="faint-color">
+                                                        ${getDollarPrice(highestBidder.price)}
+                                                    </B1NormalTextTitle>
+                                                    </div>
                                                 </div>
-                                                <div className="ml-2 ml-md-4">
-                                                <MidTextTitle>{remainTimeObj.hour}</MidTextTitle>
-                                                <B1NormalTextTitle className="mt-1 faint-color">
-                                                    Hours
-                                                </B1NormalTextTitle>
-                                                </div>
-                                                <div className="ml-2 ml-md-4">
-                                                <MidTextTitle>{remainTimeObj.min}</MidTextTitle>
-                                                <B1NormalTextTitle className="mt-1 faint-color">
-                                                    Min
-                                                </B1NormalTextTitle>
-                                                </div>
-                                                <div className="ml-2 ml-md-4">
-                                                <MidTextTitle>{remainTimeObj.sec}</MidTextTitle>
-                                                <B1NormalTextTitle className="mt-1 faint-color">
-                                                    Sec
-                                                </B1NormalTextTitle>
-                                                </div>
-                                            </div>
-                                            ) : ''
-                                        }
-                                        </>
-                                    )}
-                                </Col>
-                            </Row>
+                                                </>
+                                            ) : offer && offer.status === "pending" ? (
+                                                <MidTextTitle>
+                                                    Be the first one to bid!
+                                                </MidTextTitle>
+                                            ) : (
+                                                <MidTextTitle>No bidders on this auction.</MidTextTitle>
+                                            )}
+                                        </Col>
+                                        <Col md="6" className="pl-md-4">
+                                            {offer && offer.status === "completed" && (
+                                                <MidTextTitle className="mt-3">Auction Ended</MidTextTitle>
+                                            )}
+                                            {isExpired() && (
+                                                <MidTextTitle className="mt-3">
+                                                Auction Expired
+                                                </MidTextTitle>
+                                            )}
+                                            {offer && offer.status === "pending" && !isExpired() && (
+                                                <>
+                                                <MidTextTitle className="faint-color">
+                                                    Auction ends
+                                                </MidTextTitle>
+                                                {
+                                                    remainTimeObj && remainTimeObj.sec ? (
+                                                    <div className="d-flex align-items-end mt-3">
+                                                        <div>
+                                                        <MidTextTitle>{remainTimeObj.day}</MidTextTitle>
+                                                        <B1NormalTextTitle className="mt-1 faint-color">
+                                                            Days
+                                                        </B1NormalTextTitle>
+                                                        </div>
+                                                        <div className="ml-2 ml-md-4">
+                                                        <MidTextTitle>{remainTimeObj.hour}</MidTextTitle>
+                                                        <B1NormalTextTitle className="mt-1 faint-color">
+                                                            Hours
+                                                        </B1NormalTextTitle>
+                                                        </div>
+                                                        <div className="ml-2 ml-md-4">
+                                                        <MidTextTitle>{remainTimeObj.min}</MidTextTitle>
+                                                        <B1NormalTextTitle className="mt-1 faint-color">
+                                                            Min
+                                                        </B1NormalTextTitle>
+                                                        </div>
+                                                        <div className="ml-2 ml-md-4">
+                                                        <MidTextTitle>{remainTimeObj.sec}</MidTextTitle>
+                                                        <B1NormalTextTitle className="mt-1 faint-color">
+                                                            Sec
+                                                        </B1NormalTextTitle>
+                                                        </div>
+                                                    </div>
+                                                    ) : ''
+                                                }
+                                                </>
+                                            )}
+                                        </Col>
+                                    </Row>
+                                )
+                            }
                             <div className="row pt-2">
                                 {isOwner() && isOwner().user.wallet !== walletAddress && !isBidder() ? (
-                                    !isExpired() && <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => onPlaceBidClicked()}>Place a Bid</Button></div>
+                                    !isExpired() && isAuction() && <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => onPlaceBidClicked()}>Place a Bid</Button></div>
                                     ) : (
                                         isOwner() && isOwner().user.wallet === walletAddress && (offer.status !== 'pending' || isExpired()) &&
                                         <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => {setShowResellDialog(true);}}>Resell</Button></div>
                                     )
                                 }
-                                <div className="col-12 col-sm-6"><Button className="btn-gray mr-2" onClick={() => {setShowShareModal(true);}}>Share</Button></div>
+                                {
+                                    owner && owner.user.wallet === walletAddress && (
+                                        <div className="col-12 col-sm-6"><Button className="btn-gray mr-2" onClick={() => {setShowShareModal(true);}}>Share</Button></div>
+                                    )
+                                }
                             </div>
                         </div>
                     </div>
                 </Container>
             }
+            {showBuyTokenModal && offer && (
+                <BuyTokenModal
+                    show={showBuyTokenModal}
+                    offer={offer}
+                    handleClose={() => {
+                        setShowBuyTokenModal(false);
+                    }}
+                    owner={owner}
+                    directBuy={() => { directBuy() }}
+                ></BuyTokenModal>
+            )}
             {showPlaceBidModal && (
                 <PlaceBidModal
                     show={showPlaceBidModal}
@@ -648,6 +790,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         handleClose={() => {
                             setShowShareModal(false);
                         }}
+                        item={token}
                     ></ShareNFTModal>
                 )
             }

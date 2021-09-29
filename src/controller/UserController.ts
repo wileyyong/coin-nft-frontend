@@ -24,6 +24,9 @@ class UserController {
     public static userSettings(payload: any) {
         return API.post(`${configs.API.USERS_URL}/settings`, payload);
     }
+    public static updateFeatured(payload: any) {
+        return API.post(`${configs.API.USERS_URL}/featured`, payload);
+    }
     public static getTopUsers(type: string, days: number) {
         return API.get(`${configs.API.USERS_URL}/tops/${type}?days=${days}`).then(res => res.data.users);
     }
@@ -35,6 +38,9 @@ class UserController {
     }
     public static uploadCover(payload: any) {
         return API.post(`${configs.API.USERS_URL}/cover`, payload);
+    }
+    public static uploadFeaturedImage(payload: any) {
+        return API.post(`${configs.API.USERS_URL}/featuredImage`, payload);
     }
     public static userSearch(params: any, page: number) {
         return API.post(`/users/search${page === 1 ? '' : '?page='+page}`, params).then(res => res.data);

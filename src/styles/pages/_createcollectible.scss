@@ -143,7 +143,7 @@
     }
 
     .preview-area {
-        padding-top: 0px;
+        padding-top: 0;
 
         @include media-breakpoint-down(sm) {
             padding-top: 40px;
