@@ -235,16 +235,21 @@
         }
 
         .seller-segment {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
             cursor: pointer;
+            text-align: left;
             .seg-img {
-                width: 200px;
-                height: 200px;
+                width: 50px;
+                height: 50px;
                 border: 2px solid $purple;
                 border-radius: 100%;
+                margin-right: 12px;
             }
             .seg-name {
-                font-size: 18px;
                 font-weight: $font-weight-bold;
+                font-size: 16px;
                 color: $black;
             }
             .seg-type {
@@ -253,14 +258,14 @@
                 color: $gray-600;
             }
             .seg-price {
-                font-size: 18px;
+                font-size: 14px;
                 font-weight: $font-weight-bold;
                 color: $primary;
             }
             .seg-price-eth {
                 font-size: 14px;
                 font-weight: $font-weight-bold;
-                color: $black;
+                color: $blue;
             }
         }
     }
