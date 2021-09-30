@@ -288,10 +288,6 @@ const Home: React.FC<HomeProps> = () => {
         });
     }
 
-    // const onCheckVerified = (val: boolean) => {
-    //     setSearchParam({ ...searchParam, verified: val });
-    // }
-
     return (
         <Layout className="home-container" ref={layoutView}>
             <div className="section-intro">
@@ -321,7 +317,7 @@ const Home: React.FC<HomeProps> = () => {
                             ) : ''
                         }
                     </div>
-                </div>
+               </div>
                 <Image className="intro-image" src={homeintroImage}></Image>
                 <div className="intro-ticket">
                     <Image className="ticket-img" src={ticketImage} alt="ticket"></Image>
