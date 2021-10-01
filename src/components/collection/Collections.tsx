@@ -14,9 +14,7 @@ interface CollectionsProps {
 }
 
 const _pageNumber = {
-  hot: 1,
-  featured: 1,
-  sponsored: 1
+  hot: 1
 };
 
 const _pages = {
@@ -35,12 +33,6 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
     let pageNumber = 1;
     if (type === 'hot') {
       pageNumber = pageNum.hot;
-    }
-    if (type === 'featured') {
-      pageNumber = pageNum.featured;
-    }
-    if (type === 'sponsored') {
-      pageNumber = pageNum.sponsored;
     }
 
     const loadCollections = async () => {
@@ -88,7 +80,7 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
   }
 
   return (
-    <FlexSlideContainer className="slide-container flex-wrap" id={`slider_${type}`}>
+    <FlexSlideContainer className="slide-container" id={`slider_${type}`}>
       {loading ? (
         <div className="d-flex my-4 justify-content-center w-100">
           <LoadingBar />
