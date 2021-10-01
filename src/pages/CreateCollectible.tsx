@@ -312,6 +312,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             collection: collectible.collection,
             locked: collectible.locked,
             offchain: collectible.offchain,
+            properties: JSON.stringify(propertyList)
         };
     };
 
@@ -323,6 +324,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 let formData = Utility.getFormDataFromObject(getPureNftObj());
                 result = await NftController.create(formData);
                 setNftFromDB(result);
+                return;
             } catch (err) {
                 setCreateNftStatus(NftCreateStatus.MINT_FAILED);
             }
@@ -414,8 +416,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                         offerObj["offer_price"] = collectible.offer_price;
                     if (collectible.is_auction)
                         offerObj["min_bid"] = collectible.min_bid_price;
-                    if(propertyList.length > 0)
-                        offerObj["properties"] = JSON.stringify(propertyList);
                     
                     await OfferController.create(offerObj);
 
@@ -815,8 +815,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                                 <BigTitle className="text-black">Properties</BigTitle>
                                                             </Form.Label>
                                                             {
-                                                                propertyList.map(item => (
+                                                                propertyList.map((item, index) => (
                                                                     <Form.Control
+                                                                        key={index}
                                                                         as="textarea"
                                                                         placeholder={item.field}
                                                                         name={item.field}
