@@ -54,15 +54,17 @@ let properties = [
         name: 'Art',
         list: [
             { field: 'Width', value: '' },
-            { field: 'Height', value: '' }
+            { field: 'Height', value: '' },
+            { field: 'Art', value: '' }
         ]
     },
     {
-        type: 'games',
+        type: 'Games',
         name: 'Games',
         list: [
             { field: 'CPU', value: '' },
-            { field: 'Memory', value: '' }
+            { field: 'Memory', value: '' },
+            { field: 'Game', value: '' }
         ]
     },
     {
@@ -70,13 +72,16 @@ let properties = [
         name: "Music",
         list: [
             { field: 'Size', value: '' },
-            { field: 'Mins', value: '' }
+            { field: 'Mins', value: '' },
+            { field: 'Music', value: '' }
         ]
     },
     {
         type: 'athlete',
         name: "Athlete",
         list: [
+            { field: 'Height', value: '' },
+            { field: 'Weight', value: '' },
             { field: 'Athlete', value: '' }
         ]
     },
@@ -84,8 +89,9 @@ let properties = [
         type: 'sport',
         name: "Sport",
         list: [
-            { field: 'Width', value: '' },
-            { field: 'Height', value: '' }
+            { field: 'Height', value: '' },
+            { field: 'Weight', value: '' },
+            { field: 'Sport', value: '' }
         ]
     },
     {
@@ -94,14 +100,16 @@ let properties = [
         list: [
             { field: 'Club', value: '' },
             { field: 'Country', value: '' },
-            { field: 'Number', value: '' }
+            { field: 'Soccer', value: '' },
         ]
     },
     {
         type: 'olympics',
         name: "Olympics",
         list: [
-            { field: 'Country', value: '' }
+            { field: 'Type', value: '' },
+            { field: 'Country', value: '' },
+            { field: 'Olympic', value: '' }
         ]
     },
     {
@@ -109,7 +117,8 @@ let properties = [
         name: "Photography",
         list: [
             { field: 'Width', value: '' },
-            { field: 'Height', value: '' }
+            { field: 'Height', value: '' },
+            { field: 'Photo', value: '' }
         ]
     },
 ];
@@ -151,7 +160,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         is_auction: true,
         locked: "",
         offchain: true,
-        properties: []
+        properties: ''
     });
     const [showCollectionDialog, setShowCollectionDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -405,10 +414,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                         offerObj["offer_price"] = collectible.offer_price;
                     if (collectible.is_auction)
                         offerObj["min_bid"] = collectible.min_bid_price;
-                    if(collectible.properties.lenth > 0)
-                        offerObj["properties"] = collectible.properties;
+                    if(propertyList.length > 0)
+                        offerObj["properties"] = JSON.stringify(propertyList);
                     
-                    console.log(offerObj);
                     await OfferController.create(offerObj);
 
                     setCreateNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
@@ -449,7 +457,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 let collect = {...collectible};
                 collect.properties = proList;
                 setCollectible({...collect});
-                console.log(collectible);
                 break;
             }
         }
