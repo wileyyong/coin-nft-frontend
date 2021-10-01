@@ -48,6 +48,86 @@ import CreateNftStatusModal from "components/token/CreateNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
 import OfferController from "controller/OfferController";
 
+let properties = [
+    {
+        type: 'art',
+        name: 'Art',
+        list: [
+            { field: 'Width', value: '' },
+            { field: 'Height', value: '' },
+            { field: 'Art', value: '' }
+        ]
+    },
+    {
+        type: 'Games',
+        name: 'Games',
+        list: [
+            { field: 'CPU', value: '' },
+            { field: 'Memory', value: '' },
+            { field: 'Game', value: '' }
+        ]
+    },
+    {
+        type: 'music',
+        name: "Music",
+        list: [
+            { field: 'Size', value: '' },
+            { field: 'Mins', value: '' },
+            { field: 'Music', value: '' }
+        ]
+    },
+    {
+        type: 'athlete',
+        name: "Athlete",
+        list: [
+            { field: 'Height', value: '' },
+            { field: 'Weight', value: '' },
+            { field: 'Athlete', value: '' }
+        ]
+    },
+    {
+        type: 'sport',
+        name: "Sport",
+        list: [
+            { field: 'Height', value: '' },
+            { field: 'Weight', value: '' },
+            { field: 'Sport', value: '' }
+        ]
+    },
+    {
+        type: 'soccer',
+        name: "Soccer",
+        list: [
+            { field: 'Club', value: '' },
+            { field: 'Country', value: '' },
+            { field: 'Soccer', value: '' },
+        ]
+    },
+    {
+        type: 'olympics',
+        name: "Olympics",
+        list: [
+            { field: 'Type', value: '' },
+            { field: 'Country', value: '' },
+            { field: 'Olympic', value: '' }
+        ]
+    },
+    {
+        type: 'photography',
+        name: "Photography",
+        list: [
+            { field: 'Width', value: '' },
+            { field: 'Height', value: '' },
+            { field: 'Photo', value: '' }
+        ]
+    },
+];
+
+interface propertyInterface {
+    field: string,
+    value: string
+}
+
 interface CreateCollectibleProps { }
 
 const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
@@ -80,6 +160,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         is_auction: true,
         locked: "",
         offchain: true,
+        properties: ''
     });
     const [showCollectionDialog, setShowCollectionDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -88,6 +169,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const [nftFromDB, setNftFromDB] = useState<any>(null);
     const [chainId, setChainId] = useState(null);
+
+    const [propertyList, setPropertyList] = useState<propertyInterface[] | []>([]);
 
     const expiryDateOptions = [
         {
@@ -163,10 +246,10 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     };
 
     const instantReceiveAmount = () => {
-        if(serviceFee) {
-          let remainPer = 100 - serviceFee;
-          return (collectible.offer_price * remainPer) / 100;
-        } 
+        if (serviceFee) {
+            let remainPer = 100 - serviceFee;
+            return (collectible.offer_price * remainPer) / 100;
+        }
         return collectible.offer_price
     };
 
@@ -229,6 +312,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             collection: collectible.collection,
             locked: collectible.locked,
             offchain: collectible.offchain,
+            properties: JSON.stringify(propertyList)
         };
     };
 
@@ -331,7 +415,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                         offerObj["offer_price"] = collectible.offer_price;
                     if (collectible.is_auction)
                         offerObj["min_bid"] = collectible.min_bid_price;
-
+                    
                     await OfferController.create(offerObj);
 
                     setCreateNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
@@ -355,19 +439,33 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const handleChange = (e: any) => {
         let fieldName = e.target.name;
-        if(fieldName === 'offer_price' || fieldName === 'min_bid_price' || fieldName === 'royalties') {
+        if (fieldName === 'offer_price' || fieldName === 'min_bid_price' || fieldName === 'royalties') {
             const regex = /^[0-9]\d*(?:[.]\d*)?$/;
             if (e.target.value !== '' && !regex.test(e.target.value)) {
                 e.preventDefault();
                 return;
             }
         }
+
+        let proList = [...propertyList];
+        for(var i = 0; i < proList.length; i ++)
+        {
+            if(fieldName === proList[i].field) {
+                proList[i].value = e.target.value;
+                setPropertyList(proList);
+                let collect = {...collectible};
+                collect.properties = proList;
+                setCollectible({...collect});
+                break;
+            }
+        }
+
         if (e.target.type === "checkbox") {
             let fieldVal = e.target.checked;
             setCollectible({ ...collectible, [fieldName]: fieldVal });
         } else {
             let fieldVal = e.target.value;
-            if(fieldVal.length>1 && fieldVal[0] === '0' && fieldVal[1] !== '.') {
+            if (fieldVal.length > 1 && fieldVal[0] === '0' && fieldVal[1] !== '.') {
                 fieldVal = fieldVal.substring(1)
             }
             setCollectible({ ...collectible, [fieldName]: fieldVal });
@@ -392,6 +490,22 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             ...collectible,
             categories: selectedCategories.join("|"),
         });
+
+        let prolist = [];
+
+        for (var i = 0; i < selectedCategories.length; i++) {
+            const category = selectedCategories[i];
+            for (var index = 0; index < properties.length; index++) {
+                let property = properties[index];
+                if (category === property.type) {
+                    for (var p = 0; p < property.list.length; p++) {
+                        prolist.push(property.list[p])
+                    }
+                }
+            }
+        }
+
+        setPropertyList(prolist);
     }, [selectedCategories]);
 
     useEffect(() => {
@@ -471,19 +585,19 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 </B1NormalTextTitle>
                                                 <Form.Row className="mt-1">
                                                     <Form.Group as={Col} md="12">
-                                                    <Form.Control
-                                                        required
-                                                        type="text"
-                                                        placeholder="Enter Minimum Bid in ETH"
-                                                        name="min_bid_price"
-                                                        value={collectible.min_bid_price || ''}
-                                                        onChange={(e) => handleChange(e)}
-                                                        pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
-                                                        maxLength={7}
-                                                    />
-                                                    <Form.Control.Feedback type="invalid">
-                                                        Please input valid minimum bid price.
-                                                    </Form.Control.Feedback>
+                                                        <Form.Control
+                                                            required
+                                                            type="text"
+                                                            placeholder="Enter Minimum Bid in ETH"
+                                                            name="min_bid_price"
+                                                            value={collectible.min_bid_price || ''}
+                                                            onChange={(e) => handleChange(e)}
+                                                            pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
+                                                            maxLength={7}
+                                                        />
+                                                        <Form.Control.Feedback type="invalid">
+                                                            Please input valid minimum bid price.
+                                                        </Form.Control.Feedback>
                                                     </Form.Group>
                                                 </Form.Row>
                                                 <B1NormalTextTitle className="text-black">Expiry Date</B1NormalTextTitle>
@@ -522,24 +636,24 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         </B2NormalTextTitle>
                                         {isInstantPrice && (
                                             <Form.Row className="mt-4">
-                                            <Form.Group as={Col} md="12">
-                                                <Form.Control
-                                                required
-                                                type="text"
-                                                placeholder="Enter price for one piece"
-                                                name="offer_price"
-                                                value={collectible.offer_price || ''}
-                                                pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
-                                                maxLength={10}
-                                                onChange={(e) => handleChange(e)}
-                                                />
-                                                <B2NormalTextTitle className="mt-3">
-                                                <span className="o-5">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
-                                                </B2NormalTextTitle>
-                                                <B2NormalTextTitle className="mt-2">
-                                                <span className="o-5">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount() ? `${instantReceiveAmount()} ETH`: ''}
-                                                </B2NormalTextTitle>
-                                            </Form.Group>
+                                                <Form.Group as={Col} md="12">
+                                                    <Form.Control
+                                                        required
+                                                        type="text"
+                                                        placeholder="Enter price for one piece"
+                                                        name="offer_price"
+                                                        value={collectible.offer_price || ''}
+                                                        pattern="^(0|[1-9]\d*)?(\.\d+)?(?<=\d)$"
+                                                        maxLength={10}
+                                                        onChange={(e) => handleChange(e)}
+                                                    />
+                                                    <B2NormalTextTitle className="mt-3">
+                                                        <span className="o-5">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
+                                                    </B2NormalTextTitle>
+                                                    <B2NormalTextTitle className="mt-2">
+                                                        <span className="o-5">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount() ? `${instantReceiveAmount()} ETH` : ''}
+                                                    </B2NormalTextTitle>
+                                                </Form.Group>
                                             </Form.Row>
                                         )}
                                     </Col>
@@ -693,6 +807,28 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         </B1NormalTextTitle>
                                                     </Form.Group>
                                                 </Form.Row>
+                                                {selectedCategories.length > 0 && (
+                                                    <Form.Row className="mt-4">
+                                                        <Form.Group as={Col} md="12">
+                                                            <Form.Label>
+                                                                <BigTitle className="text-black">Properties</BigTitle>
+                                                            </Form.Label>
+                                                            {
+                                                                propertyList.map((item, index) => (
+                                                                    <Form.Control
+                                                                        key={index}
+                                                                        as="textarea"
+                                                                        placeholder={item.field}
+                                                                        name={item.field}
+                                                                        rows={1}
+                                                                        onChange={(e) => handleChange(e)}
+                                                                        className="mb-2"
+                                                                    />
+                                                                ))
+                                                            }
+                                                        </Form.Group>
+                                                    </Form.Row>
+                                                )}
                                                 <FlexAlignCenterDiv className="mt-4">
                                                     {!isAuth && (
                                                         <div className="mr-4">
