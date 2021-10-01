@@ -324,7 +324,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 let formData = Utility.getFormDataFromObject(getPureNftObj());
                 result = await NftController.create(formData);
                 setNftFromDB(result);
-                return;
             } catch (err) {
                 setCreateNftStatus(NftCreateStatus.MINT_FAILED);
             }

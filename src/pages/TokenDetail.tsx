@@ -45,33 +45,6 @@ import {
 
 import imgProperty from "assets/imgs/property.png";
 
-const properties = [
-    {
-        field: "HEIGHT",
-        value: "6.1 feet"
-    },
-    {
-        field: "Weight",
-        value: "94kg"
-    },
-    {
-        field: "Athlete",
-        value: "Vollyball"
-    },
-    {
-        field: "HEIGHT",
-        value: "6.1 feet"
-    },
-    {
-        field: "Weight",
-        value: "94kg"
-    },
-    {
-        field: "Athlete",
-        value: "Vollyball"
-    }
-];
-
 interface TokenDetailProps { }
 
 const TokenDetail: React.FC<TokenDetailProps> = () => {
@@ -108,6 +81,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const [likes, setLikes] = useState(0);
     const [selectedTab, setSelectedTab] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [properties, setProperties] = useState([]);
 
     const resellFormData = useRef({
         min_bid_price: 0,
@@ -173,6 +147,9 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             bids.sort(function (a: any, b: any) {
                 return b.price - a.price;
             });
+            if (token.properties) {
+                setProperties(JSON.parse(token.properties));
+            }
             setOffer(offer);
             setToken(token);
             if (token.liked) {
@@ -556,7 +533,6 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         { label: "Bids", Component: Bid },
         { label: "History", Component: History },
     ];
-
     return (
         <Layout ref={layoutView}>
             {loading ? <div className="my-5 d-flex justify-content-center">
@@ -600,11 +576,11 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 </div>
                                 <div className="property-body row">
                                     {
-                                        properties.map((item, index) => (
-                                            <div className="flex-fill col-12 col-md-4 pt-2">
+                                        properties && properties.length > 0 && properties.map((it, index) => (
+                                            <div className="flex-fill col-12 col-md-4 pt-2" key={index}>
                                                 <div className="property-item">
-                                                    <div className="field pb-2">{item.field}</div>
-                                                    <div className="value">{item.value}</div>
+                                                    <div className="field pb-2">{it['field']}</div>
+                                                    <div className="value">{it && it['value']}</div>
                                                 </div>
                                             </div>
                                         ))
