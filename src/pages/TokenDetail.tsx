@@ -770,7 +770,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 {isOwner() && isOwner().user.wallet !== walletAddress && !isBidder() ? (
                                     !isExpired() && isAuction() && <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => onPlaceBidClicked()}>Place a Bid</Button></div>
                                 ) : (
-                                    isOwner() && isOwner().user.wallet === walletAddress && isExpired() &&
+                                    isOwner() && isOwner().user.wallet === walletAddress && isExpired() && (!offer || (offer.status === 'expired')) &&
                                     <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => { setShowResellDialog(true); }}>Resell</Button></div>
                                 )
                                 }

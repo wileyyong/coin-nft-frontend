@@ -200,7 +200,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         {item.collections ? item.collections.name : "PUML"}
       </SmallTextTitleGrey>
 
-      {hasResellPermission() ? (
+      {hasResellPermission() && (!item.offer || (item.offer.status === 'expired')) ? (
         <Button
           variant="primary"
           className="full-width mt-3 outline-btn"
