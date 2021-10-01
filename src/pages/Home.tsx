@@ -19,7 +19,7 @@ import {
 import { NotificationManager } from "react-notifications";
 import Utility from "service/utility";
 
-import { FaCheck, FaPen, FaSave } from "react-icons/fa";
+import { FaCamera, FaCheck, FaPen, FaSave } from "react-icons/fa";
 import { getMyInfo } from "store/User/user.selector";
 import { BigNumberMul } from "service/number";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
@@ -396,7 +396,6 @@ const Home: React.FC<HomeProps> = () => {
                                                     ))
                                                 }
                                             </div>
-
                                         ))
                                     }
                                 </div>
