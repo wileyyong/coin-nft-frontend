@@ -2,7 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import Layout from "components/Layout";
 import { NotificationManager } from "react-notifications";
-import { Button, Image, Dropdown, Form } from "react-bootstrap";
+import { Button, Image, Dropdown, Form, FormControl } from "react-bootstrap";
 import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
 import { getNftCategories } from "store/Nft/nft.selector";
@@ -36,10 +36,11 @@ import LoadingBar from "components/common/LoadingBar";
 import { useHistory } from 'react-router-dom';
 import imageAvatar from "assets/imgs/seller1.png";
 import configs from "configs";
-import { FaCamera, FaCheck, FaPen, FaSave } from "react-icons/fa";
+import { FaCamera, FaCheck, FaPen, FaSave, FaSearch } from "react-icons/fa";
 import { getMyInfo } from "store/User/user.selector";
 import { BigNumberMul } from "service/number";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import { AiOutlineClose } from "react-icons/ai";
 
 interface HomeProps { }
 
@@ -69,10 +70,12 @@ const Home: React.FC<HomeProps> = () => {
   const [featured_name, setFeaturedName] = useState('');
   const [featured_price, setFeaturedPrice] = useState(0);
   const [sellersGroup, setSellersGroup] = useState<any[]>([]);
+  const [searchKey, setSearchKey] = useState('');
   const [searchParam, setSearchParam] = useState<any>({
     category: "all",
     sort: "recent",
-    verified: false
+    verified: false,
+    name: ''
   });
   const [loading, setLoading] = useState(false);
   const nftCategories = useAppSelector(getNftCategories);
@@ -116,15 +119,23 @@ const Home: React.FC<HomeProps> = () => {
       setFeaturedPrice(myInfo.featured_price || 0);
       setFeaturedName(myInfo.featured_name || '');
       let params = {};
-      if (searchParam.category === "all") {
-        params = { sort: searchParam.sort, verfied: searchParam.verified };
+      if (searchParam.name === '') {
+        if (searchParam.category === "all") {
+          params = { sort: searchParam.sort, verfied: searchParam.verified };
+        } else {
+          params = { ...searchParam };
+        }
+      } else if (searchParam.category === "all") {
+        params = { sort: searchParam.sort, verfied: searchParam.verified, name: searchParam.name };
       } else {
         params = { ...searchParam };
       }
+      
       if (explorePageNum > 1) {
         params = { page: explorePageNum, ...params };
       }
       setExploreLoading(true);
+      console.log(params);
       let { offers, pages } = await OfferController.getList("explore", params);
       setExplorePages(pages);
       setExploreAuctions(
@@ -183,12 +194,6 @@ const Home: React.FC<HomeProps> = () => {
   const connectMetaMask = () => {
     dispatch(connectUserWallet());
   }
-
-  useEffect(() => {
-    if (Storage.get('home_filter')) {
-      setSearchParam(JSON.parse(Storage.get('home_filter')));
-    }
-  }, []);
 
   const fileChanged = (e: any) => {
     const file = e.target.files[0];
@@ -285,6 +290,16 @@ const Home: React.FC<HomeProps> = () => {
       }
     });
   }
+
+  const onKeyDown = (e: any) => {
+    if (e.charCode === 13) {
+      onSearch();
+    }
+  };
+
+  const onSearch = () => {
+    setSearchParam({ ...searchParam, name: searchKey });
+  };
 
   return (
     <Layout className="home-container" ref={layoutView}>
@@ -460,6 +475,22 @@ const Home: React.FC<HomeProps> = () => {
       <div className="section">
         <div className="d-flex flex-row align-items-center flex-wrap">
           <h1 className="font-weight-bold section-title mr-4">Explore</h1>
+          <FlexAlignCenterDiv className="header-search-form ml-0 ml-xl-3">
+            <FaSearch className="search-icon" style={{ cursor: "pointer" }} onClick={() => onSearch()} />
+            <FormControl
+              type="text"
+              placeholder="Search by item"
+              className="ml-sm-2"
+              value={searchKey}
+              onChange={(e) => setSearchKey(e.target.value)}
+              onKeyPress={(e?: any) => onKeyDown(e)}
+            />
+            {
+              searchKey && (
+                <AiOutlineClose className="clear-icon pointer-cursor" onClick={() => setSearchKey('')} />
+              )
+            }
+          </FlexAlignCenterDiv>
           <div className="category-list d-flex flex-wrap">
             {nftCategories.map((eType, index) => {
               return (

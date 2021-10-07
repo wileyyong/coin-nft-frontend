@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { Fragment, useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 
 import { Row, Col, Button, Image, Nav, Tab } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
@@ -8,7 +8,6 @@ import Layout from "components/Layout";
 import TokenView from "components/token/TokenView";
 import {
     BigTitle,
-    B2NormalTextTitleGrey,
     NormalTextTitle,
     FilterIcon
 } from "components/common/common.styles";
@@ -447,26 +446,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                                             />
                                         )}
                                     </div>
-                                    <div className="notice-view">
-                                        <div className="notice py-4">
-                                            <B2NormalTextTitleGrey>
-                                                Create collections (your own storefonts), upload digital
-                                                creations, configure your commision, and sell NFTs to
-                                                your fans - all for free! You can also manage smart
-                                                contracts than you created outside ofNFT’s.
-                                            </B2NormalTextTitleGrey>
-                                        </div>
-                                        <div className="btn-section">
-                                            <Link to="/collectible">
-                                                <Button
-                                                    variant="primary"
-                                                    className="default-btn-size btn-create fill-btn"
-                                                >
-                                                    <span>Create NFT</span>
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </div>
                                 </div>
                             </Tab.Pane>
                             <Tab.Pane eventKey="collectibles">
@@ -537,26 +516,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
                                         </div>
                                     </Fragment>
                                 )}
-                                <div className="notice-view">
-                                    <div className="notice py-4">
-                                        <B2NormalTextTitleGrey>
-                                            Create collections (your own storefonts), upload digital
-                                            creations, configure your commision, and sell NFTs to your
-                                            fans - all for free! You can also manage smart contracts
-                                            than you created outside ofNFT’s.
-                                        </B2NormalTextTitleGrey>
-                                    </div>
-                                    <div className="btn-section">
-                                        <Link to="/collectible">
-                                            <Button
-                                                variant="primary"
-                                                className="default-btn-size btn-create fill-btn"
-                                            >
-                                                <span>Create NFT</span>
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </div>
                             </Tab.Pane>
                             <Tab.Pane eventKey="activity">
                                 <div className="tokens-section">
@@ -648,26 +607,6 @@ const UserProfile: React.FC<UserProfileProps> = () => {
 
                                         </div>
                                     )}
-                                    <div className="notice-view">
-                                        <div className="notice py-4">
-                                            <B2NormalTextTitleGrey>
-                                                Create collections (your own storefonts), upload digital
-                                                creations, configure your commision, and sell NFTs to
-                                                your fans - all for free! You can also manage smart
-                                                contracts than you created outside ofNFT’s.
-                                            </B2NormalTextTitleGrey>
-                                        </div>
-                                        <div className="btn-section">
-                                            <Link to="/collectible">
-                                                <Button
-                                                    variant="primary"
-                                                    className="default-btn-size btn-create fill-btn"
-                                                >
-                                                    <span>Create NFT</span>
-                                                </Button>
-                                            </Link>
-                                        </div>
-                                    </div>
                                 </div>
                             </Tab.Pane>
                         </Tab.Content>

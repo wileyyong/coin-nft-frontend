@@ -19,8 +19,7 @@ import NoItem from "components/common/noItem";
 import OnSaleItem from "components/myitems/OnSaleItem";
 import ExpiringAuction from "components/myitems/ExpiringAuction";
 import {
-    BigTitle,
-    B2NormalTextTitleGrey,
+    BigTitle
 } from "components/common/common.styles";
 import CoverImage from 'assets/imgs/default_rect.svg';
 
@@ -324,26 +323,6 @@ const MyItems: React.FC<MyItemProps> = () => {
                                         </div>
                                     </Fragment>
                                 )}
-                                <div className="notice-view">
-                                    <div className="notice">
-                                        <B2NormalTextTitleGrey className="text-dark">
-                                            Create collections (your own storefonts), upload digital
-                                            creations, configure your commision, and sell NFTs to your
-                                            fans - all for free! You can also manage smart contracts
-                                            than you created outside of NFT’s.
-                                        </B2NormalTextTitleGrey>
-                                    </div>
-                                    <div className="btn-section">
-                                        <Link to="/create-collectible">
-                                            <Button
-                                                variant="primary"
-                                                className="default-btn-size btn-create fill-btn"
-                                            >
-                                                <span>Create NFT</span>
-                                            </Button>
-                                        </Link>
-                                    </div>
-                                </div>
                             </Tab.Pane>
                             <Tab.Pane eventKey="expiring">
                                 <div className="auction-section">

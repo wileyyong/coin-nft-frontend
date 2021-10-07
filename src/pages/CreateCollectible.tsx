@@ -18,7 +18,7 @@ import {
     NftAvatar,
 } from "components/common/common.styles";
 import Layout from "components/Layout";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaTrash } from "react-icons/fa";
 import FileUploader from "components/common/uploader/FileUploader";
 import { Link } from "react-router-dom";
 
@@ -48,81 +48,6 @@ import CreateNftStatusModal from "components/token/CreateNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
 import OfferController from "controller/OfferController";
 
-let properties = [
-    {
-        type: 'art',
-        name: 'Art',
-        list: [
-            { field: 'Width', value: '' },
-            { field: 'Height', value: '' },
-            { field: 'Art', value: '' }
-        ]
-    },
-    {
-        type: 'Games',
-        name: 'Games',
-        list: [
-            { field: 'CPU', value: '' },
-            { field: 'Memory', value: '' },
-            { field: 'Game', value: '' }
-        ]
-    },
-    {
-        type: 'music',
-        name: "Music",
-        list: [
-            { field: 'Size', value: '' },
-            { field: 'Mins', value: '' },
-            { field: 'Music', value: '' }
-        ]
-    },
-    {
-        type: 'athlete',
-        name: "Athlete",
-        list: [
-            { field: 'Height', value: '' },
-            { field: 'Weight', value: '' },
-            { field: 'Athlete', value: '' }
-        ]
-    },
-    {
-        type: 'sport',
-        name: "Sport",
-        list: [
-            { field: 'Height', value: '' },
-            { field: 'Weight', value: '' },
-            { field: 'Sport', value: '' }
-        ]
-    },
-    {
-        type: 'soccer',
-        name: "Soccer",
-        list: [
-            { field: 'Club', value: '' },
-            { field: 'Country', value: '' },
-            { field: 'Soccer', value: '' },
-        ]
-    },
-    {
-        type: 'olympics',
-        name: "Olympics",
-        list: [
-            { field: 'Type', value: '' },
-            { field: 'Country', value: '' },
-            { field: 'Olympic', value: '' }
-        ]
-    },
-    {
-        type: 'photography',
-        name: "Photography",
-        list: [
-            { field: 'Width', value: '' },
-            { field: 'Height', value: '' },
-            { field: 'Photo', value: '' }
-        ]
-    },
-];
-
 interface propertyInterface {
     field: string,
     value: string
@@ -145,6 +70,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const [selectedCategories, setSelectedCategories] = useState<any[]>([]);
     const nftCategories = useAppSelector(getNftCategories);
     const collectionItems = useAppSelector(getMyCollections);
+    const [propertyKey, setPropertyKey] = useState('');
+    const [propertyValue, setPropertyValue] = useState('');
 
     const [collectible, setCollectible] = useState<any>({
         name: "",
@@ -447,19 +374,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             }
         }
 
-        let proList = [...propertyList];
-        for(var i = 0; i < proList.length; i ++)
-        {
-            if(fieldName === proList[i].field) {
-                proList[i].value = e.target.value;
-                setPropertyList(proList);
-                let collect = {...collectible};
-                collect.properties = proList;
-                setCollectible({...collect});
-                break;
-            }
-        }
-
         if (e.target.type === "checkbox") {
             let fieldVal = e.target.checked;
             setCollectible({ ...collectible, [fieldName]: fieldVal });
@@ -491,22 +405,52 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             categories: selectedCategories.join("|"),
         });
 
-        let prolist = [];
+        // let prolist = [];
 
-        for (var i = 0; i < selectedCategories.length; i++) {
-            const category = selectedCategories[i];
-            for (var index = 0; index < properties.length; index++) {
-                let property = properties[index];
-                if (category === property.type) {
-                    for (var p = 0; p < property.list.length; p++) {
-                        prolist.push(property.list[p])
-                    }
+        // for (var i = 0; i < selectedCategories.length; i++) {
+        //     const category = selectedCategories[i];
+        //     for (var index = 0; index < properties.length; index++) {
+        //         let property = properties[index];
+        //         if (category === property.type) {
+        //             for (var p = 0; p < property.list.length; p++) {
+        //                 prolist.push(property.list[p])
+        //             }
+        //         }
+        //     }
+        // }
+
+        // setPropertyList(prolist);
+    }, [selectedCategories]);
+
+    const onAddProperty = () => {
+        if (!propertyKey || !propertyValue) {
+            NotificationManager.error(
+                "Please input property key and value!",
+                "Error"
+            );
+            return;
+        }
+        const property = {field: propertyKey, value: propertyValue};
+        let proList = [...propertyList];
+        proList.push(property);
+        setPropertyList(proList);
+        setPropertyKey('');
+        setPropertyValue('');
+    };
+
+    const onRemoveItem = (idx: number) => {
+        let list = [];
+        if (propertyList.length > 0) {
+            for (let i = 0; i < propertyList.length; i++) {
+                const property = propertyList[i];
+                if (idx !== i) {
+                    list.push(property);
                 }
             }
         }
-
-        setPropertyList(prolist);
-    }, [selectedCategories]);
+        setPropertyList(list);
+        setCollectible({ ...collectible, properties: list });
+    };
 
     useEffect(() => {
         let date = DateTimeService.getIsoDateTimeWithDays(parseInt(expiryOption));
@@ -807,28 +751,71 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         </B1NormalTextTitle>
                                                     </Form.Group>
                                                 </Form.Row>
-                                                {selectedCategories.length > 0 && (
-                                                    <Form.Row className="mt-4">
-                                                        <Form.Group as={Col} md="12">
-                                                            <Form.Label>
-                                                                <BigTitle className="text-black">Properties</BigTitle>
-                                                            </Form.Label>
-                                                            {
-                                                                propertyList.map((item, index) => (
-                                                                    <Form.Control
-                                                                        key={index}
-                                                                        as="textarea"
-                                                                        placeholder={item.field}
-                                                                        name={item.field}
-                                                                        rows={1}
-                                                                        onChange={(e) => handleChange(e)}
-                                                                        className="mb-2"
-                                                                    />
-                                                                ))
-                                                            }
-                                                        </Form.Group>
-                                                    </Form.Row>
-                                                )}
+                                                <Form.Row className="mt-4">
+                                                    <Form.Group as={Col} md="12">
+                                                        <Form.Label>
+                                                            <BigTitle className="text-black">Properties</BigTitle>
+                                                        </Form.Label>
+                                                        <div className="property">
+                                                            <div className="property-body row">
+                                                                {
+                                                                    propertyList && propertyList.length > 0 && propertyList.map((it, index) => (
+                                                                        <div className="flex-fill col-12 col-md-4 pt-2" key={index}>
+                                                                            <div className="property-item mb-2">
+                                                                                <div className="field pb-2">{it['field']}</div>
+                                                                                <div className="value">{it && it['value']}</div>
+                                                                                <div className="trash text-danger" onClick={() => onRemoveItem(index)}>
+                                                                                    <FaTrash />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <Row>
+                                                            <Col sm="5" className="my-1">
+                                                                <Form.Control
+                                                                    type="text"
+                                                                    placeholder="Key"
+                                                                    name="key"
+                                                                    value={propertyKey}
+                                                                    onChange={(e) => setPropertyKey(e.target.value)}
+                                                                />
+                                                            </Col>
+                                                            <Col sm="5" className="my-1">
+                                                                <Form.Control
+                                                                    type="text"
+                                                                    placeholder="Value"
+                                                                    name="value"
+                                                                    value={propertyValue}
+                                                                    onChange={(e) => setPropertyValue(e.target.value)}
+                                                                />
+                                                            </Col>
+                                                            <Col sm="2" className="text-right my-1">
+                                                                <Button
+                                                                    variant="primary"
+                                                                    onClick={() => onAddProperty()}
+                                                                >
+                                                                    Add
+                                                                </Button>
+                                                            </Col>
+                                                        </Row>
+                                                        {/* {
+                                                            propertyList.map((item, index) => (
+                                                                <Form.Control
+                                                                    key={index}
+                                                                    as="textarea"
+                                                                    placeholder={item.field}
+                                                                    name={item.field}
+                                                                    rows={1}
+                                                                    onChange={(e) => handleChange(e)}
+                                                                    className="mb-2"
+                                                                />
+                                                            ))
+                                                        } */}
+                                                    </Form.Group>
+                                                </Form.Row>
                                                 <FlexAlignCenterDiv className="mt-4">
                                                     {!isAuth && (
                                                         <div className="mr-4">
