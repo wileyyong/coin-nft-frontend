@@ -407,7 +407,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     };
 
     const getOfferPriceWithServiceFee = () => {
-        let overFlowPer = 100 + serviceFee;
+        let overFlowPer = 100 - serviceFee;
         if (offer) return toFixed((offer.offer_price * overFlowPer) / 100, 3);
     };
 

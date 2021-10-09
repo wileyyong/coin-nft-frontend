@@ -13,23 +13,6 @@
         }
     }
 
-    .container {
-        padding-right: 240px;
-        padding-left: 240px;
-        @include media-breakpoint-down(lg) {
-            padding-right: 160px;
-            padding-left: 160px;
-        }
-        @include media-breakpoint-down(md) {
-            padding-right: 80px;
-            padding-left: 80px;
-        }
-        @include media-breakpoint-down(sm) {
-            padding-right: 20px;
-            padding-left: 20px;
-        }
-    }
-
     .connect-wallet {
         cursor: pointer;
     }

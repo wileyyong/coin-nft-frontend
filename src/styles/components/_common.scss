@@ -315,6 +315,20 @@
 
 .collection-item {
     cursor: pointer;
+    margin-bottom: 10px;
+    width: 20%;
+    @media screen and (max-width: 1600px) {
+        width: 25%;
+    }
+    @media screen and (max-width: 1400px) {
+        width: 33%;
+    }
+    @media screen and (max-width: 1064px) {
+        width: 50%;
+    }
+    @media screen and (max-width: 670px) {
+        width: 100%;
+    }
     .collection-item-bg {
         padding-bottom: 50%;
         background-position: center center;
@@ -479,22 +493,6 @@
 
 .slide-container {
     width: 100%;
-    .collection-item {
-        margin-bottom: 10px;
-        width: 20%;
-        @media screen and (max-width: 1600px) {
-            width: 25%;
-        }
-        @media screen and (max-width: 1400px) {
-            width: 33%;
-        }
-        @media screen and (max-width: 1064px) {
-            width: 50%;
-        }
-        @media screen and (max-width: 670px) {
-            width: 100%;
-        }
-    }
 }
 
 .property {
