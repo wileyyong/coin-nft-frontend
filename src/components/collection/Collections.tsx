@@ -5,9 +5,9 @@ import {
   FlexSlideContainer,
 } from "../common/common.styles";
 import CollectionItem from "./CollectionItem";
-import { HiOutlineChevronDoubleLeft, HiOutlineChevronDoubleRight } from 'react-icons/hi';
 import NoItem from "components/common/noItem";
 import LoadingBar from "components/common/LoadingBar";
+import Carousel from 'react-bootstrap/Carousel';
 
 interface CollectionsProps {
   type: string;
@@ -23,12 +23,50 @@ const _pages = {
 
 const Collections: React.FC<CollectionsProps> = ({ type }) => {
   const [collectionList, setCollections] = useState<any[]>([]);
-  const [pageNum, setPageNumber] = useState(_pageNumber);
+  const [pageNum] = useState(_pageNumber);
   const [pages, setPages] = useState(_pages);
-  const [showItems, setShowItems] = useState(4);
-  const [increaseVal, setIncreaseVal] = useState(3);
-  const [showArrows, setShowArrows] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [shows, setShows] = useState(5);
+
+  const getWidth = () => window.innerWidth 
+  || document.documentElement.clientWidth 
+  || document.body.clientWidth;
+
+  let [width, setWidth] = useState(getWidth());
+
+  useEffect(() => {
+    let timeoutId: any = null;
+    const resizeListener = () => {
+      // prevent execution of previous setTimeout
+      clearTimeout(timeoutId);
+      // change width from the state object after 150 milliseconds
+      timeoutId = setTimeout(() => setWidth(getWidth()), 150);
+    };
+    // set resize listener
+    window.addEventListener('resize', resizeListener);
+
+    // clean up function
+    return () => {
+      // remove resize listener
+      window.removeEventListener('resize', resizeListener);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (width < 1600) {
+      setShows(4);
+    }
+    if (width < 1400) {
+      setShows(3);
+    }
+    if (width < 1064) {
+      setShows(2);
+    }
+    if (width < 670) {
+      setShows(1);
+    }
+  }, [width]);
+
   useEffect(() => {
     let pageNumber = 1;
     if (type === 'hot') {
@@ -38,11 +76,6 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
     const loadCollections = async () => {
       setLoading(true);
       let data = await CollectionController.getList(type, pageNumber);
-      if (data.collections.length >= showItems) {
-        setShowArrows(true);
-      } else {
-        setShowArrows(false);
-      }
       if (data.pages) {
         if (pageNum.hot === 1) {
           pages.hot = data.pages;
@@ -50,33 +83,22 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
         setCollections(pageNum.hot === 1 ? data.collections : collectionList.concat(data.collections));
       }
       setPages(pages);
-      setIncreaseVal(3);
       setLoading(false);
     }
 
     loadCollections();
   }, [type, pageNum]);
 
-  const onNextCollections = () => {
-    let slideElement = document.getElementById(`slider_${type}`);
-    if (slideElement && slideElement.scrollWidth > slideElement.offsetWidth) {
-      slideElement.scrollTo({ left: slideElement.scrollWidth, behavior: 'smooth' });
-      if (showItems < collectionList.length) {
-        setShowItems(showItems + increaseVal);
-      } else {
-        if (pages.hot > pageNum.hot) {
-          pageNum.hot += 1;
-        }
-        setPageNumber(pageNum);
+  const getGroup = () => {
+    if (collectionList && collectionList.length > 0) {
+      let groups = [];
+      var i = 0;
+      while (i < collectionList.length) {
+        groups.push(collectionList.slice(i, i += shows));
       }
+      return groups;
     }
-  }
-
-  const onPrevCollections = () => {
-    let slideElement = document.getElementById(`slider_${type}`);
-    if (slideElement && slideElement.scrollWidth > slideElement.offsetWidth) {
-      slideElement.scrollTo({ left: 0, behavior: 'smooth' });
-    }
+    return [];
   }
 
   return (
@@ -97,21 +119,19 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
                 />
               )
             }
-            {
-              showArrows && (
-                <div className="arrow-btn left pointer-cursor" onClick={() => onPrevCollections()}><HiOutlineChevronDoubleLeft /></div>
-              )
-            }
-            {collectionList.map((collection, index) => (
-              index < showItems && (
-                <CollectionItem item={collection} key={index} />
-              )
-            ))}
-            {
-              showArrows && (
-                <div className="arrow-btn right pointer-cursor" onClick={() => onNextCollections()}><HiOutlineChevronDoubleRight /></div>
-              )
-            }
+            <Carousel className="w-100">
+              {
+                getGroup() && getGroup().length > 0 && getGroup().map((group, idx) => (
+                  <Carousel.Item key={idx}>
+                    <div className="w-100 d-flex flex-nowrap">
+                      {group.map((collection, index) => (
+                        <CollectionItem item={collection} key={index} />
+                      ))}
+                    </div>
+                  </Carousel.Item>
+                ))
+              }
+            </Carousel>
           </>
         )
       }

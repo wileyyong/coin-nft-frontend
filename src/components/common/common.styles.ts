@@ -168,7 +168,6 @@ export const FlexSlideContainer = styled.div`
   direction: row;
   justify-content: flex-start;
   margin: 25px 0;
-  overflow-x: auto;
   flex-wrap: nowrap;
 `;
 

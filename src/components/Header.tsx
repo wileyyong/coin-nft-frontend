@@ -101,17 +101,21 @@ const Header: React.FC<HeaderProps> = () => {
                     My Items
                   </Nav.Link>
                 </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link
-                    eventKey="3"
-                    as={Link}
-                    to="/create-collectible"
-                    className="mr-lg-3"
-                    active={location.pathname === "/create-collectible"}
-                  >
-                    Create NFT
-                  </Nav.Link>
-                </Nav.Item>
+                {
+                  walletAddress === configs.ADMIN_ADDRESS.toLowerCase() && (
+                    <Nav.Item>
+                      <Nav.Link
+                        eventKey="3"
+                        as={Link}
+                        to="/create-collectible"
+                        className="mr-lg-3"
+                        active={location.pathname === "/create-collectible"}
+                      >
+                        Create NFT
+                      </Nav.Link>
+                    </Nav.Item>
+                  )
+                }
                 <Nav.Item className="d-flex pr-4 mr-4 buttons">
                   <NavDropdown
                     title={getDropdownAvatar()}

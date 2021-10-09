@@ -21,6 +21,9 @@ class UserController {
     public static getSettings() {
         return API.get(`${configs.API.USERS_URL}/settings`).then(res => res.data.user);
     }
+    public static getFeatured() {
+        return API.get(`${configs.API.USERS_URL}/featured`).then(res => res.data);
+    }
     public static userSettings(payload: any) {
         return API.post(`${configs.API.USERS_URL}/settings`, payload);
     }

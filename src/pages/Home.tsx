@@ -37,7 +37,7 @@ import { useHistory } from 'react-router-dom';
 import imageAvatar from "assets/imgs/seller1.png";
 import configs from "configs";
 import { FaCamera, FaCheck, FaPen, FaSave, FaSearch } from "react-icons/fa";
-import { getMyInfo } from "store/User/user.selector";
+import { getMyInfo, getWalletAddress } from "store/User/user.selector";
 import { BigNumberMul } from "service/number";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
 import { AiOutlineClose } from "react-icons/ai";
@@ -48,6 +48,7 @@ const Home: React.FC<HomeProps> = () => {
   const history = useHistory();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+  const walletAddress = useAppSelector(getWalletAddress);
   const layoutView = useRef(null);
   const myInfo = useAppSelector(getMyInfo);
   const dispatch = useAppDispatch();
@@ -111,13 +112,15 @@ const Home: React.FC<HomeProps> = () => {
 
   useEffect(() => {
     const loadExploreData = async () => {
-      if (myInfo && myInfo.featured) {
-        setFeaturedImage(`${configs.DEPLOY_URL}${myInfo.featured}`)
+      const featuredNFT = await UserController.getFeatured();
+
+      if (featuredNFT && featuredNFT.featured) {
+        setFeaturedImage(`${configs.DEPLOY_URL}${featuredNFT.featured}`)
       } else {
         setFeaturedImage(null);
       }
-      setFeaturedPrice(myInfo.featured_price || 0);
-      setFeaturedName(myInfo.featured_name || '');
+      setFeaturedPrice(featuredNFT.featured_price || 0);
+      setFeaturedName(featuredNFT.featured_name || '');
       let params = {};
       if (searchParam.name === '') {
         if (searchParam.category === "all") {
@@ -135,7 +138,6 @@ const Home: React.FC<HomeProps> = () => {
         params = { page: explorePageNum, ...params };
       }
       setExploreLoading(true);
-      console.log(params);
       let { offers, pages } = await OfferController.getList("explore", params);
       setExplorePages(pages);
       setExploreAuctions(
@@ -340,9 +342,13 @@ const Home: React.FC<HomeProps> = () => {
               </div>
             ) : ''
           }
-          <div className="upload-image pointer-cursor" onClick={() => onUploadImage()}>
-            <FaCamera />
-          </div>
+          {
+            walletAddress === configs.ADMIN_ADDRESS.toLowerCase() && (
+              <div className="upload-image pointer-cursor" onClick={() => onUploadImage()}>
+                <FaCamera />
+              </div>
+            )
+          }
           <Image className="ticket-img" src={featuredImage || ticketImage} alt="ticket"></Image>
           <div className="d-flex flex-column align-items-center ticket-content">
             {
@@ -373,10 +379,16 @@ const Home: React.FC<HomeProps> = () => {
               )
             }
             {
-              editFeatured ? (
-                <div className="edit-content" onClick={() => handleSaveFeatured()}><FaSave /></div>
-              ) : (
-                <div className="edit-content" onClick={() => setEditFeatured(true)}><FaPen /></div>
+              walletAddress === configs.ADMIN_ADDRESS.toLowerCase() && (
+                <>
+                  {
+                    editFeatured ? (
+                      <div className="edit-content" onClick={() => handleSaveFeatured()}><FaSave /></div>
+                    ) : (
+                      <div className="edit-content" onClick={() => setEditFeatured(true)}><FaPen /></div>
+                    )
+                  }
+                </>
               )
             }
           </div>
@@ -389,7 +401,7 @@ const Home: React.FC<HomeProps> = () => {
           />
         </div>
       </div>
-      <div className="section">
+      <div className="section top-sellers">
         <h1 className="font-weight-bold section-title">Top Sellers</h1>
         <div className="text-center">
           {

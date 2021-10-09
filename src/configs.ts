@@ -39,7 +39,9 @@ const configs = {
 
     /* Smart Contract */
     PUML721_ADDRESS: process.env.REACT_APP_PUML721_ADDRESS,
-    ENGINE_ADDRESS: process.env.REACT_APP_ENGINE_ADDRESS
+    ENGINE_ADDRESS: process.env.REACT_APP_ENGINE_ADDRESS,
+    // ADMIN_ADDRESS: process.env.ADMIN_ADDRESS,
+    ADMIN_ADDRESS: '0xe15f2992ea8b06caa2da8f2291b72dc739dddfc1'
 };
 
 export default configs;
