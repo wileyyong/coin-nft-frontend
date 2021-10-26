@@ -110,28 +110,29 @@ const Collections: React.FC<CollectionsProps> = ({ type }) => {
         ) : (
           <>
             {
-              collectionList.length === 0 && (
+              collectionList.length === 0 ? (
                 <NoItem
                   title="No Collections found"
                   description="Come back soon! Or try to browse something for you on our marketplace"
                   btnLink="/"
                   btnLabel="Browse marketplace"
                 />
+              ) : (
+                <Carousel className="w-100">
+                  {
+                    getGroup() && getGroup().length > 0 && getGroup().map((group, idx) => (
+                      <Carousel.Item key={idx}>
+                        <div className="w-100 d-flex flex-nowrap">
+                          {group.map((collection, index) => (
+                            <CollectionItem item={collection} key={index} />
+                          ))}
+                        </div>
+                      </Carousel.Item>
+                    ))
+                  }
+                </Carousel>
               )
             }
-            <Carousel className="w-100">
-              {
-                getGroup() && getGroup().length > 0 && getGroup().map((group, idx) => (
-                  <Carousel.Item key={idx}>
-                    <div className="w-100 d-flex flex-nowrap">
-                      {group.map((collection, index) => (
-                        <CollectionItem item={collection} key={index} />
-                      ))}
-                    </div>
-                  </Carousel.Item>
-                ))
-              }
-            </Carousel>
           </>
         )
       }
