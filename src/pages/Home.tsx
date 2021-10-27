@@ -37,7 +37,7 @@ import { useHistory } from 'react-router-dom';
 import imageAvatar from "assets/imgs/seller1.png";
 import configs from "configs";
 import { FaCamera, FaCheck, FaPen, FaSave, FaSearch } from "react-icons/fa";
-import { getWalletAddress } from "store/User/user.selector";
+import { getMyInfo, getWalletAddress } from "store/User/user.selector";
 import { BigNumberMul } from "service/number";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
 import { AiOutlineClose } from "react-icons/ai";
@@ -50,6 +50,7 @@ const Home: React.FC<HomeProps> = () => {
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
   const walletAddress = useAppSelector(getWalletAddress);
   const layoutView = useRef(null);
+  const myInfo = useAppSelector(getMyInfo);
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(isAuthenticated);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
@@ -111,15 +112,6 @@ const Home: React.FC<HomeProps> = () => {
 
   useEffect(() => {
     const loadExploreData = async () => {
-      const featuredNFT = await UserController.getFeatured();
-
-      if (featuredNFT && featuredNFT.featured) {
-        setFeaturedImage(`${configs.DEPLOY_URL}${featuredNFT.featured}`)
-      } else {
-        setFeaturedImage(null);
-      }
-      setFeaturedPrice(featuredNFT.featured_price || 0);
-      setFeaturedName(featuredNFT.featured_name || '');
       let params = {};
       if (searchParam.name === '') {
         if (searchParam.category === "all") {
@@ -146,7 +138,7 @@ const Home: React.FC<HomeProps> = () => {
     };
 
     loadExploreData();
-  }, [searchParam, explorePageNum]);
+  }, [searchParam, explorePageNum, myInfo]);
 
   useEffect(() => {
     let group = [];
@@ -169,7 +161,7 @@ const Home: React.FC<HomeProps> = () => {
       setLoading(false);
     }
     loadNftTokens();
-  }, [])
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -188,6 +180,15 @@ const Home: React.FC<HomeProps> = () => {
         console.log(err);
         setLoading(false);
       }
+      const featuredNFT = await UserController.getFeatured();
+
+      if (featuredNFT && featuredNFT.featured) {
+        setFeaturedImage(`${configs.DEPLOY_URL}${featuredNFT.featured}`)
+      } else {
+        setFeaturedImage(null);
+      }
+      setFeaturedPrice(featuredNFT.featured_price || 0);
+      setFeaturedName(featuredNFT.featured_name || '');
     }
     loadData();
   }, [])
