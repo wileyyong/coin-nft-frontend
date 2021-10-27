@@ -15,6 +15,7 @@ interface BuyTokenModalProps {
   directBuy?: any;
   show: boolean;
   offer: any;
+  token: any;
   owner: any;
 }
 
@@ -23,12 +24,12 @@ const BuyTokenModal: React.FC<BuyTokenModalProps> = ({
   handleClose,
   directBuy,
   offer,
+  token,
   owner
 }) => {
   const [price] = useState<any>(offer.offer_price);
   const serviceFee = useAppSelector(getNftServiceFee);
   const balance = useAppSelector(getWalletBalance);
-  const token = offer.token;
 
   return (
     <Modal show={show} onHide={handleClose} className="buy-token-modal">

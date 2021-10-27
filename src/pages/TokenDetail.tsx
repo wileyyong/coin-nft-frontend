@@ -148,7 +148,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 return b.price - a.price;
             });
             if (token.properties) {
-                setProperties(JSON.parse(token.properties));
+                setProperties(token.properties);
             }
             setOffer(offer);
             setToken(token);
@@ -654,6 +654,17 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     </div>
                                 )
                             }
+                            {token && token.categories && (
+                                <div className="d-flex mt-3 flex-wrap">
+                                    {token.categories.map((category: any, index: number) => {
+                                    return (
+                                        <div className="nft-type-btn mr-2" key={index}>
+                                        {category.name}
+                                        </div>
+                                    );
+                                    })}
+                                </div>
+                            )}
                             <div className="d-flex flex-row">
                                 {creator && (
                                     <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/${creator.wallet}`)}>
@@ -791,6 +802,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     handleClose={() => {
                         setShowBuyTokenModal(false);
                     }}
+                    token={token}
                     owner={owner}
                     directBuy={() => { directBuy() }}
                 ></BuyTokenModal>

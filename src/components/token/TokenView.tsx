@@ -138,10 +138,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         );
         if (result) {
           dispatch(getWalletBalance());
-          if (!result.success) {
-            setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
-            return;
-          }
+          // if (!result.success) {
+          //   setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
+          //   return;
+          // }
           let offerObj: any = {
             token_id: item._id,
           };

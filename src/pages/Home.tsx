@@ -37,7 +37,7 @@ import { useHistory } from 'react-router-dom';
 import imageAvatar from "assets/imgs/seller1.png";
 import configs from "configs";
 import { FaCamera, FaCheck, FaPen, FaSave, FaSearch } from "react-icons/fa";
-import { getMyInfo, getWalletAddress } from "store/User/user.selector";
+import { getWalletAddress } from "store/User/user.selector";
 import { BigNumberMul } from "service/number";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
 import { AiOutlineClose } from "react-icons/ai";
@@ -50,7 +50,6 @@ const Home: React.FC<HomeProps> = () => {
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
   const walletAddress = useAppSelector(getWalletAddress);
   const layoutView = useRef(null);
-  const myInfo = useAppSelector(getMyInfo);
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(isAuthenticated);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
@@ -147,7 +146,7 @@ const Home: React.FC<HomeProps> = () => {
     };
 
     loadExploreData();
-  }, [searchParam, explorePageNum, myInfo]);
+  }, [searchParam, explorePageNum]);
 
   useEffect(() => {
     let group = [];
