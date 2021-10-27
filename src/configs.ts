@@ -41,7 +41,7 @@ const configs = {
     PUML721_ADDRESS: process.env.REACT_APP_PUML721_ADDRESS,
     ENGINE_ADDRESS: process.env.REACT_APP_ENGINE_ADDRESS,
     // ADMIN_ADDRESS: process.env.ADMIN_ADDRESS,
-    ADMIN_ADDRESS: '0x64c7Cbb0B194d15e64741Dd002015F846a663E93'
+    ADMIN_ADDRESS: '0xe15f2992ea8b06caa2da8f2291b72dc739dddfc1'
 };
 
 export default configs;
