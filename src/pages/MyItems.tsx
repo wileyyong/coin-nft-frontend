@@ -28,7 +28,7 @@ interface MyItemProps { }
 const _categories = [
     { title: "On sale", count: 0, active: false, path: "on_sale" },
     { title: "Collectibles", count: 0, active: false, path: "collectibles" },
-    { title: "Expiring auctions", count: 0, active: false, path: "expiring" },
+    { title: "Sold", count: 0, active: false, path: "sold" },
 ];
 
 const _userInfo = {
@@ -324,9 +324,9 @@ const MyItems: React.FC<MyItemProps> = () => {
                                     </Fragment>
                                 )}
                             </Tab.Pane>
-                            <Tab.Pane eventKey="expiring">
+                            <Tab.Pane eventKey="sold">
                                 <div className="auction-section">
-                                    <BigTitle>Expiring Auctions</BigTitle>
+                                    <BigTitle>Sold Tokens</BigTitle>
                                     {loading && pageNum === 1 ? (
                                         <div className="text-center mt-5 loading-bar">
                                             <LoadingBar />

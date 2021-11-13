@@ -22,7 +22,7 @@ const ActivityItem: React.FC<ActivityItemProps> = ({item}) => {
   const history = useHistory();
   const getTokenThumbnail = () => {
     if (item.offer && item.offer.token && item.offer.token._id) {
-      let media = item.offer.token.thumbnail ? item.offer.token.thumbnail.toLowerCase() : item.offer.token.media.toLowerCase();
+      let media = item.offer.token.media_type && item.offer.token.media_type.toLowerCase();
       if (
         media.includes("mp3") ||
         media.includes("mp4") ||
@@ -30,9 +30,9 @@ const ActivityItem: React.FC<ActivityItemProps> = ({item}) => {
       ) {
         return `${configs.DEPLOY_URL}/content/collection/puml.png`;
       }
-      return `${configs.DEPLOY_URL}${item.offer.token.thumbnail || item.offer.token.media}`;
+      return `${item.offer.token.thumbnail || item.offer.token.media}`;
     } else if (item.token) {
-      let media = item.token.thumbnail ? item.token.thumbnail.toLowerCase() : item.token.media.toLowerCase();
+      let media = item.token.media_type && item.token.media_type.toLowerCase();
       if (
         media.includes("mp3") ||
         media.includes("mp4") ||
@@ -40,9 +40,9 @@ const ActivityItem: React.FC<ActivityItemProps> = ({item}) => {
       ) {
         return `${configs.DEPLOY_URL}/content/collection/puml.png`;
       }
-      return `${configs.DEPLOY_URL}${item.token.thumbnail || item.token.media}`;
+      return `${item.token.thumbnail || item.token.media}`;
     } else if (item.to_user) {
-      return `${configs.DEPLOY_URL}${item.to_user.thumbnail || item.to_user.avatar}`;
+      return `${item.to_user.thumbnail || item.to_user.avatar}`;
     }
     return `${configs.DEPLOY_URL}/content/collection/puml.png`;
   };

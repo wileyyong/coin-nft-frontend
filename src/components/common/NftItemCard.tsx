@@ -22,7 +22,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
 
     const getMedia = () => {
         if (item.thumbnail || item.media) {
-            let media = item.thumbnail ? item.thumbnail.toLowerCase() : item.media.toLowerCase();
+            let media = item.media_type && item.media_type.toLowerCase();
             if (
                 media.includes("mp3") ||
                 media.includes("mp4") ||
@@ -30,9 +30,9 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
             ) {
                 return `${configs.DEPLOY_URL}/content/collection/puml.png`;
             }
-            return `${configs.DEPLOY_URL}${item.thumbnail || item.media}`;
+            return `${item.thumbnail || item.media}`;
         } else if (item.token.thumbnail || item.token.media) {
-            let media = item.token.thumbnail ? item.token.thumbnail.toLowerCase() : item.token.media.toLowerCase();
+            let media = item.token.media_type && item.token.media_type.toLowerCase();
             if (
                 media.includes("mp3") ||
                 media.includes("mp4") ||
@@ -40,7 +40,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
             ) {
                 return `${configs.DEPLOY_URL}/content/collection/puml.png`;
             }
-            return `${configs.DEPLOY_URL}${item.token.thumbnail || item.token.media}`;
+            return `${item.token.thumbnail || item.token.media}`;
         }
     }
 
@@ -70,7 +70,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                         <span className="eth-price"> • {getOwner()? getOwner().price : item.offer_price} ETH</span>
                     </div>
                 )}
-                {
+                {/* {
                     item.description ? (
                         <div className="card-content pt-2">{item.description}</div>
                     ) : (
@@ -80,7 +80,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                             <div className="card-content pt-2"></div>
                         )
                     )
-                }
+                } */}
                 {item.status === 'pending' && <NormalTextTitle className="faint-color mt-2">{
                     (item.type === 'direct' || item.type === 'both') ? 'Buy now' : 'Place a bid'
                 }</NormalTextTitle>}

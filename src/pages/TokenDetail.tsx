@@ -148,7 +148,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 return b.price - a.price;
             });
             if (token.properties && token.properties.length) {
-                setProperties(token.properties);
+                setProperties(JSON.parse(token.properties));
             }
             setOffer(offer);
             setToken(token);
@@ -212,7 +212,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     };
 
     const getTokenMedia = () => {
-        return `${configs.DEPLOY_URL}${token.media}`;
+        return `${token.thumbnail || token.media}`;
     };
 
     const getCollectionImgPath = () => {
@@ -223,7 +223,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
 
     const isPicture = () => {
         if (token.media) {
-            let media = token.media.toLowerCase();
+            let media = token.media_type.toLowerCase();
             if (media.includes("png") || media.includes("gif") || media.includes("jpeg") || media.includes("jpg") || media.includes("webp")) return true;
             return false;
         }
@@ -468,25 +468,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     </div>
                 </div>
             )}
-            {sizeObj && (
-                <div className="mr-3 mr-md-5">
-                    <B3NormalTextTitle>Size</B3NormalTextTitle>
-                    <p>
-                        {sizeObj.x}x{sizeObj.y}
-                    </p>
-                </div>
-            )}
-            {timeObj && (
-                <div>
-                    <B3NormalTextTitle>Time</B3NormalTextTitle>
-                    <p>{timeObj.duration} sec</p>
-                </div>
-            )}
-            <div className="item-description pb-4">
-                <div className="title">Description</div>
-                <div className="content pt-1"><ReadMore maxChars={250} text={token.description} /></div>
-            </div>
-            <div className="item-description pb-4">
+            <div className="item-description my-4">
                 <div className="title">{token.royalties}% Royalties</div>
                 {
                     isOwner() && isOwner().user.wallet === walletAddress && (
@@ -665,7 +647,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     })}
                                 </div>
                             )}
-                            <div className="d-flex flex-row">
+                            <div className="d-flex flex-row flex-wrap mb-3">
                                 {creator && (
                                     <div className="d-flex flex-row align-items-center item-members pr-4" onClick={() => history.push(`/users/${creator.wallet}`)}>
                                         <Image src={configs.DEPLOY_URL + creator.avatar} className="member-image mr-2"></Image>
@@ -685,7 +667,24 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     </B1NormalTextTitle>
                                 </FlexAlignCenterDiv>
                             </div>
-
+                            {sizeObj && (
+                                <div className="mr-3 mr-md-5">
+                                    <B3NormalTextTitle>Size</B3NormalTextTitle>
+                                    <p>
+                                        {sizeObj.x}x{sizeObj.y}
+                                    </p>
+                                </div>
+                            )}
+                            {timeObj && (
+                                <div>
+                                    <B3NormalTextTitle>Time</B3NormalTextTitle>
+                                    <p>{timeObj.duration} sec</p>
+                                </div>
+                            )}
+                            <div className="item-description">
+                                <div className="title">Description</div>
+                                <div className="content pt-1"><ReadMore maxChars={250} text={token.description} /></div>
+                            </div>
                             <div className="buyitem-tab pt-2">
                                 <Tabs
                                     className="mt-4"

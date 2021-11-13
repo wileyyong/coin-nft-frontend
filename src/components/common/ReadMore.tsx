@@ -32,7 +32,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({text, maxChars}) => {
         {formattedString()}
         {
           text && text.length > maxChars && (
-            <span className="primary-color pointer-cursor ml-2">
+            <span className="text-primary pointer-cursor ml-2">
               {
                 isReadMore ? (
                   <span onClick={() => triggerReadMore(false)}>View Less</span>

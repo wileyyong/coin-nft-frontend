@@ -1,7 +1,7 @@
 import React from "react";
 import configs from 'configs';
 import { useHistory } from 'react-router-dom';
-import { B1NormalTextTitle, NftAvatar, SubDescription } from "../common/common.styles";
+import { B1NormalTextTitle, NftAvatar } from "../common/common.styles";
 
 interface CollectionItemProps {
   item: any;
@@ -35,7 +35,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
       </div>
       <div className="background-gray d-flex flex-column align-items-center pt-1 pb-2">
         <B1NormalTextTitle className="mt-4 text-center title pt-2">{item.name}</B1NormalTextTitle>
-        <SubDescription className="mt-1 text-center sub-title pt-2 pb-2 font-size-sm" style={{minHeight: 35}}>{item.description}</SubDescription>
+        {/* <SubDescription className="mt-1 text-center sub-title pt-2 pb-2 font-size-sm" style={{minHeight: 35}}>{item.description}</SubDescription> */}
       </div>
     </div>
   );

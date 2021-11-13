@@ -40,7 +40,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   });
 
   const getTokenThumbnail = () => {
-    let media = item.thumbnail ? item.thumbnail.toLowerCase() : item.media.toLowerCase();
+    let media = item.media_type && item.media_type.toLowerCase();
     if (
       media.includes("mp3") ||
       media.includes("mp4") ||
@@ -48,7 +48,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
     ) {
       return `${configs.DEPLOY_URL}/content/collection/puml.png`;
     }
-    return `${configs.DEPLOY_URL}${item.thumbnail || item.media}`;
+    return `${item.thumbnail || item.media}`;
   };
 
   const getCurrentBidPrice = () => {
@@ -178,9 +178,6 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
 
   return (
     <div className="token-view auction-item mr-4 p-4">
-      {item && item.copies && (
-        <div className="multiple" />
-      )}
       <div className="token-img-area mt-2">
         <div className="pre-token-img" onClick={tokenViewClicked}>
           {item.media ? (
@@ -200,7 +197,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         {item.collections ? item.collections.name : "PUML"}
       </SmallTextTitleGrey>
 
-      {hasResellPermission() && (!item.offer || (item.offer.status === 'expired')) ? (
+      {hasResellPermission() && item.offer && item.offer.status === 'expired' ? (
         <Button
           variant="primary"
           className="full-width mt-3 outline-btn"
