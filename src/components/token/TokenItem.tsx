@@ -16,7 +16,7 @@ interface TokenItemProps {
 const TokenItem: React.FC<TokenItemProps> = ({ item }) => {
   const history = useHistory();
   const getTokenThumbnail = () => {
-    return `${configs.DEPLOY_URL}${item.thumbnail || item.media}`;
+    return `${item.thumbnail || item.media}`;
   };
 
   const getLink = () => {

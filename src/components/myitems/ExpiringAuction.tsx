@@ -17,7 +17,7 @@ const AuctionItem: React.FC<AuctionItemProps> = ({ item }) => {
   const token = item.token || {};
 
   const getTokenThumbnail = () => {
-    return `${configs.DEPLOY_URL}${token.thumbnail || token.media}`;
+    return `${token.thumbnail || token.media}`;
   };
 
   return (

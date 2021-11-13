@@ -14,7 +14,7 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
   const token = item.token || {};
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
   const getTokenThumbnail = () => {
-    return `${configs.DEPLOY_URL}${token.thumbnail || token.media}`;
+    return `${token.thumbnail || token.media}`;
   };
 
   const getCurrentBidPrice = () => {
