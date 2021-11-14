@@ -7,7 +7,6 @@ import {
   SubDescription,
 } from "../common/common.styles";
 import moment from 'moment';
-import configs from "configs";
 
 interface AuctionItemProps {
   item: any;

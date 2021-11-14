@@ -161,16 +161,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             setBidHistory(bids);
             if (bids.length) setHighestBidder(bids[0]);
             if (token.creator) setCreator(token.creator);
-            if (token.owners.length > 0) {
-                const offerCreator = token.owners.find((it: any) => {
-                    return it.user._id === offer.creator._id;
-                });
-                if (offerCreator) {
-                    setOwner(offerCreator);
-                } else {
-                    setOwner(token.owners[0]);
-                }
-            }
+            setOwner(token.owners[0]);
             setLoading(false);
         }
     };
@@ -741,7 +732,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                                         Auction ends
                                                     </MidTextTitle>
                                                     {
-                                                        remainTimeObj && remainTimeObj.sec ? (
+                                                        remainTimeObj ? (
                                                             <div className="d-flex align-items-end mt-3">
                                                                 <div>
                                                                     <MidTextTitle>{remainTimeObj.day}</MidTextTitle>
@@ -780,7 +771,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 {isOwner() && isOwner().user.wallet !== walletAddress && !isBidder() ? (
                                     !isExpired() && isAuction() && <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => onPlaceBidClicked()}>Place a Bid</Button></div>
                                 ) : (
-                                    isOwner() && isOwner().user.wallet === walletAddress && isExpired() && (!offer || (offer.status === 'expired')) &&
+                                    isOwner() && isOwner().user.wallet === walletAddress && (!offer || (offer.status !== 'pending')) &&
                                     <div className="col-12 col-sm-6"><Button className="btn-primary mr-2 mb-2" onClick={() => { setShowResellDialog(true); }}>Resell</Button></div>
                                 )
                                 }

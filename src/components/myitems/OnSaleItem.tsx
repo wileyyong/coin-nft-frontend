@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import configs from "configs";
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";

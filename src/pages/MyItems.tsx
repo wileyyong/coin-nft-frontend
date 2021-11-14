@@ -17,7 +17,6 @@ import TokenController from "controller/TokenController";
 import LoadingBar from "components/common/LoadingBar";
 import NoItem from "components/common/noItem";
 import OnSaleItem from "components/myitems/OnSaleItem";
-import ExpiringAuction from "components/myitems/ExpiringAuction";
 import {
     BigTitle
 } from "components/common/common.styles";
@@ -335,7 +334,7 @@ const MyItems: React.FC<MyItemProps> = () => {
                                         <div className="item-list mt-3 mt-md-5">
                                             {itemList.length > 0 ? (
                                                 itemList.map((auction: any, i: number) => (
-                                                    <ExpiringAuction key={i} item={auction}></ExpiringAuction>
+                                                    <TokenView key={i} item={auction} user={userInfo}></TokenView>
                                                 ))
                                             ) : (
                                                 <NoItem
