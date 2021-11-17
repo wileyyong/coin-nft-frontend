@@ -13,7 +13,7 @@ const configs = {
     RPC_URL: "https://rinkeby.infura.io/v3/a6699e4ad89f4c4187e807f0709a360c",
     WALLET_APP_NAME: "PUML NFT",
     CURRENCY_API_URL: "https://api.binance.com/api/v1/ticker/price",
-
+    HASH_LINK_URL: "https://rinkeby.etherscan.io/tx/",
     /* API Info*/
     API: {
         BASE_URL: process.env.REACT_APP_API_POINT,

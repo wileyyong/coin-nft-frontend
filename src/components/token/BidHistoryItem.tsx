@@ -9,6 +9,7 @@ import configs from "configs";
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import Utility from "service/utility";
 
 interface BidHistoryItemProps {
   item: any;
@@ -17,6 +18,7 @@ interface BidHistoryItemProps {
 
 const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+
   const getDifferentHours = (date: string) => {
     if (date) {
       var now = moment(new Date()); //todays date
@@ -50,6 +52,9 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
           <B1NormalTextTitle>{item.user ? item.user.name : ''} </B1NormalTextTitle>
           <p className="mb-1">Offered {item.price} ETH • <span className="text-primary">${getDollarPrice(item.price)} PUML</span></p>
           <p className="time-ago mb-1">{getDifferentHours(item.date)} hours ago</p>
+          <a href={`${configs.HASH_LINK_URL}${item.hash}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
+            {Utility.getHiddenWalletAddress(item.hash)}
+          </a>
       </div>
     </div>
   );
