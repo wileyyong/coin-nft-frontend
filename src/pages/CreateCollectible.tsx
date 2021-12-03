@@ -49,7 +49,7 @@ import { NftCreateStatus } from "model/NftCreateStatus";
 import OfferController from "controller/OfferController";
 
 interface propertyInterface {
-    field: string,
+    trait_type: string,
     value: string
 }
 
@@ -87,7 +87,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         is_auction: true,
         locked: "",
         offchain: true,
-        properties: ''
+        attributes: []
     });
     const [showCollectionDialog, setShowCollectionDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -239,7 +239,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             collection: collectible.collection,
             locked: collectible.locked,
             offchain: collectible.offchain,
-            properties: JSON.stringify(propertyList)
+            attributes: propertyList
         };
     };
 
@@ -404,22 +404,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             ...collectible,
             categories: selectedCategories.join("|"),
         });
-
-        // let prolist = [];
-
-        // for (var i = 0; i < selectedCategories.length; i++) {
-        //     const category = selectedCategories[i];
-        //     for (var index = 0; index < properties.length; index++) {
-        //         let property = properties[index];
-        //         if (category === property.type) {
-        //             for (var p = 0; p < property.list.length; p++) {
-        //                 prolist.push(property.list[p])
-        //             }
-        //         }
-        //     }
-        // }
-
-        // setPropertyList(prolist);
     }, [selectedCategories]);
 
     const onAddProperty = () => {
@@ -430,7 +414,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             );
             return;
         }
-        const property = {field: propertyKey, value: propertyValue};
+        const property = {trait_type: propertyKey, value: propertyValue};
         let proList = [...propertyList];
         proList.push(property);
         setPropertyList(proList);
@@ -449,7 +433,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             }
         }
         setPropertyList(list);
-        setCollectible({ ...collectible, properties: list });
+        setCollectible({ ...collectible, attributes: list });
     };
 
     useEffect(() => {
@@ -762,7 +746,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                                     propertyList && propertyList.length > 0 && propertyList.map((it, index) => (
                                                                         <div className="flex-fill col-12 col-md-4 pt-2" key={index}>
                                                                             <div className="property-item mb-2">
-                                                                                <div className="field pb-2">{it['field']}</div>
+                                                                                <div className="field pb-2">{it['trait_type']}</div>
                                                                                 <div className="value">{it && it['value']}</div>
                                                                                 <div className="trash text-danger" onClick={() => onRemoveItem(index)}>
                                                                                     <FaTrash />

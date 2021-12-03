@@ -147,8 +147,8 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             bids.sort(function (a: any, b: any) {
                 return b.price - a.price;
             });
-            if (token.properties && token.properties.length) {
-                setProperties(JSON.parse(token.properties));
+            if (token.properties && token.attributes.length) {
+                setProperties(token.attributes);
             }
             setOffer(offer);
             setToken(token);
@@ -552,7 +552,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                         properties && properties.length > 0 && properties.map((it, index) => (
                                             <div className="flex-fill col-12 col-md-4 pt-2" key={index}>
                                                 <div className="property-item">
-                                                    <div className="field pb-2">{it['field']}</div>
+                                                    <div className="field pb-2">{it['trait_type']}</div>
                                                     <div className="value">{it && it['value']}</div>
                                                 </div>
                                             </div>
