@@ -147,7 +147,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             bids.sort(function (a: any, b: any) {
                 return b.price - a.price;
             });
-            if (token.properties && token.attributes.length) {
+            if (token.properties !== '') {
                 setProperties(JSON.parse(token.attributes));
             }
             setOffer(offer);
