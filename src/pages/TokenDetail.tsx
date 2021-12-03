@@ -148,7 +148,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 return b.price - a.price;
             });
             if (token.properties && token.attributes.length) {
-                setProperties(token.attributes);
+                setProperties(JSON.parse(token.attributes));
             }
             setOffer(offer);
             setToken(token);

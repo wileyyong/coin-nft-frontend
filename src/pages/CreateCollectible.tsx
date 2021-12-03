@@ -87,7 +87,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         is_auction: true,
         locked: "",
         offchain: true,
-        attributes: []
+        attributes: ''
     });
     const [showCollectionDialog, setShowCollectionDialog] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -239,7 +239,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             collection: collectible.collection,
             locked: collectible.locked,
             offchain: collectible.offchain,
-            attributes: propertyList
+            attributes: JSON.stringify(propertyList)
         };
     };
 
