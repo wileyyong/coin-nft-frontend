@@ -10,8 +10,18 @@ interface CollectionItemProps {
 const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
   const history = useHistory();
   const collectionImgUrl = () => {
-    if(item.image || item.thumbnail || item.media) return `${configs.DEPLOY_URL}${item.image || item.thumbnail || item.media}`;
-    return '';
+    let media = item.media_type && item.media_type.toLowerCase();
+    if (
+        media.includes("mp3") ||
+        media.includes("mp4") ||
+        media.includes("webm")
+    ) {
+      if (item.thumbnail) {
+        return `${item.thumbnail}`;
+      }
+        return `${configs.DEPLOY_URL}/content/collection/puml.png`;
+    }
+    return `${item.image || item.thumbnail || item.media}`;
   }
 
   const collectionCreatorImgUrl = () => {

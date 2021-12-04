@@ -28,6 +28,9 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                 media.includes("mp4") ||
                 media.includes("webm")
             ) {
+                if (item.thumbnail) {
+                    return `${item.thumbnail}`;
+                }
                 return `${configs.DEPLOY_URL}/content/collection/puml.png`;
             }
             return `${item.thumbnail || item.media}`;
@@ -38,6 +41,9 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                 media.includes("mp4") ||
                 media.includes("webm")
             ) {
+                if (item.token.thumbnail) {
+                    return `${item.token.thumbnail}`;
+                }
                 return `${configs.DEPLOY_URL}/content/collection/puml.png`;
             }
             return `${item.token.thumbnail || item.token.media}`;

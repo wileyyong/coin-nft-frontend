@@ -28,6 +28,9 @@ const ActivityItem: React.FC<ActivityItemProps> = ({item}) => {
         media.includes("mp4") ||
         media.includes("webm")
       ) {
+        if (item.thumbnail) {
+          return `${item.thumbnail}`;
+        }
         return `${configs.DEPLOY_URL}/content/collection/puml.png`;
       }
       return `${item.offer.token.thumbnail || item.offer.token.media}`;
@@ -38,6 +41,9 @@ const ActivityItem: React.FC<ActivityItemProps> = ({item}) => {
         media.includes("mp4") ||
         media.includes("webm")
       ) {
+        if (item.thumbnail) {
+          return `${item.thumbnail}`;
+        }
         return `${configs.DEPLOY_URL}/content/collection/puml.png`;
       }
       return `${item.token.thumbnail || item.token.media}`;
