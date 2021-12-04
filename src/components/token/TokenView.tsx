@@ -40,7 +40,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   });
 
   const getTokenThumbnail = () => {
-    let media = item.media_type && item.media_type.toLowerCase();
+    let media = item.media_type ? item.media_type.toLowerCase() : '';
     if (
       media.includes("mp3") ||
       media.includes("mp4") ||

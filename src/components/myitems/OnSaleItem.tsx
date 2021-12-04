@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import configs from 'configs';
 
 interface OnSaleItemProps {
   item: any;
@@ -13,6 +14,17 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
   const token = item.token || {};
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
   const getTokenThumbnail = () => {
+    let media = token.media_type ? token.media_type.toLowerCase() : '';
+    if (
+        media.includes("mp3") ||
+        media.includes("mp4") ||
+        media.includes("webm")
+    ) {
+      if (token.thumbnail) {
+        return `${token.thumbnail}`;
+      }
+        return `${configs.DEPLOY_URL}/content/collection/puml.png`;
+    }
     return `${token.thumbnail || token.media}`;
   };
 

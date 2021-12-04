@@ -22,7 +22,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
 
     const getMedia = () => {
         if (item.thumbnail || item.media) {
-            let media = item.media_type && item.media_type.toLowerCase();
+            let media = item.media_type ? item.media_type.toLowerCase() : '';
             if (
                 media.includes("mp3") ||
                 media.includes("mp4") ||
@@ -35,7 +35,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
             }
             return `${item.thumbnail || item.media}`;
         } else if (item.token.thumbnail || item.token.media) {
-            let media = item.token.media_type && item.token.media_type.toLowerCase();
+            let media = item.token.media_type ? item.token.media_type.toLowerCase() : '';
             if (
                 media.includes("mp3") ||
                 media.includes("mp4") ||
