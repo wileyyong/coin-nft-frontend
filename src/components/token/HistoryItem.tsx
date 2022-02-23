@@ -41,12 +41,12 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item }) => {
       case 'listed':
         return <div className="d-flex align-items-center">
           <B1NormalTextTitleGrey>Listed for&nbsp;</B1NormalTextTitleGrey>
-          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)} PUML</span></B1NormalTextTitle>
+          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
         </div>;
       case 'purchased':
         return <div className="d-flex align-items-center">
           <B1NormalTextTitleGrey>Purchased for&nbsp;</B1NormalTextTitleGrey>
-          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)} PUML</span></B1NormalTextTitle>
+          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
         </div>;
       case 'minted':
         return <div className="d-flex align-items-center">
@@ -55,7 +55,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item }) => {
       case 'offered':
         return <div className="d-flex align-items-center">
           <B1NormalTextTitleGrey>Bid&nbsp;</B1NormalTextTitleGrey>
-          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)} PUML</span></B1NormalTextTitle>
+          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
         </div>;
       default:
         break;

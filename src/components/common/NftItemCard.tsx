@@ -5,7 +5,7 @@ import {
 } from 'components/common/common.styles';
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
-import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import { getETHUSDTCurrency, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 
 interface nftItemProps {
     item: any;
@@ -15,6 +15,7 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
 
     const history = useHistory();
     const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+    const maticDollarPrice = useAppSelector(getMATICUSDTCurrency);
     const getOwner = () => {
         if (item && item.owners && item.owners.length) return item.owners[0];
         return null;
@@ -51,11 +52,20 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
     }
 
     const getDollarPrice = (ethValue: any) => {
+        let blockchain:string = item.token.blockchain ? item.token.blockchain : 'ETH';
+        let dollarPrice:any = 0;
         if (ethValue) {
-            let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
-            return dollarPrice;
+            switch (blockchain) {
+                case 'ETH':
+                   dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
+                   break;
+                case 'MATIC':
+                   dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
+                   break;
+                default:
+            }
         }
-        return 0;
+        return dollarPrice;
     }
 
     return (
@@ -66,14 +76,14 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                 <div className="card-title">{item.name || item.token.name}</div>
                 {item.type && (item.type === 'auction' || item.type === 'both') && (
                     <div>
-                        <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.min_bid)} PUML</span>
-                        <span className="eth-price"> • {getOwner()? getOwner().price : item.min_bid} ETH</span>
+                        <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.min_bid)}</span>
+                        <span className="eth-price"> • {getOwner()? getOwner().price : item.min_bid} {item.token.blockchain ? item.token.blockchain : 'ETH'}</span>
                     </div>
                 )}
                 {item.type && (item.type === 'direct' || item.type === 'both') && (
                     <div>
-                        <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.offer_price)} PUML</span>
-                        <span className="eth-price"> • {getOwner()? getOwner().price : item.offer_price} ETH</span>
+                        <span className="puml-price">${getDollarPrice(getOwner() ? getOwner().price : item.offer_price)}</span>
+                        <span className="eth-price"> • {getOwner()? getOwner().price : item.offer_price} {item.token.blockchain ? item.token.blockchain : 'ETH'}</span>
                     </div>
                 )}
                 {/* {

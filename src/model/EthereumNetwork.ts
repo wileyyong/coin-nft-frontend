@@ -4,5 +4,9 @@ export enum EthereumNetworkID {
     RinkebyNetwork = 4,
     GoerliNetwork = 5,
     KovanNetwork = 42,
-    XDaiNetwork = 100
+    BSCNetwork = 56,
+    BSCTestNetwork = 97,
+    XDaiNetwork = 100,
+    PolygonNetwork = 137,
+    MumbaiNetwork = 80001
 };

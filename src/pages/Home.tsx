@@ -374,7 +374,7 @@ const Home: React.FC<HomeProps> = () => {
               ) : (
                 <>
                   <div className="title">{featured_name || 'Christian Trist'}</div>
-                  <div className="price">${getDollarPrice(featured_price) || '30.00'} PUML <span className="text-dark"> • {featured_price || 0.01} ETH</span></div>
+                  <div className="price">${getDollarPrice(featured_price) || '30.00'} <span className="text-dark"> • {featured_price || 0.01} ETH</span></div>
                 </>
               )
             }
@@ -423,7 +423,7 @@ const Home: React.FC<HomeProps> = () => {
                                               <div className="d-flex flex-column">
                                                   <div className="seg-name">{seller.name}</div>
                                                   <div>
-                                                      <span className="seg-price">{seller.amount || '$30'} PUML</span>
+                                                      <span className="seg-price">{seller.amount || '$30'}</span>
                                                       <span className="seg-price-eth"> • {seller.price || '0.15'} ETH</span>
                                                   </div>
                                               </div>

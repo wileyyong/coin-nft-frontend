@@ -50,7 +50,7 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
       </NftAvatar>
       <div>
           <B1NormalTextTitle>{item.user ? item.user.name : ''} </B1NormalTextTitle>
-          <p className="mb-1">Offered {item.price} ETH • <span className="text-primary">${getDollarPrice(item.price)} PUML</span></p>
+          <p className="mb-1">Offered {item.price} ETH • <span className="text-primary">${getDollarPrice(item.price)}</span></p>
           <p className="time-ago mb-1">{getDifferentHours(item.date)} hours ago</p>
           <a href={`${configs.HASH_LINK_URL}${item.hash}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
             {Utility.getHiddenWalletAddress(item.hash)}

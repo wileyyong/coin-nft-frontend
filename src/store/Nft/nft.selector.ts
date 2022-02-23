@@ -11,3 +11,7 @@ export function getNftCategories(state: RootState): any[] {
 export function getETHUSDTCurrency(state: RootState): any {
   return state?.nft?.ethUsdTCurrency || '';
 }
+
+export function getMATICUSDTCurrency(state: RootState): any {
+  return state?.nft?.maticUsdTCurrency || '';
+}

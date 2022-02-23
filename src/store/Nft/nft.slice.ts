@@ -17,6 +17,9 @@ export const nftSlice = createSlice({
     setETHUSDTCurrency(state: Draft<NftReducerState>, action: PayloadAction<String>) {
       state.ethUsdTCurrency = action.payload;
     },
+    setMATICUSDTCurrency(state: Draft<NftReducerState>, action: PayloadAction<String>) {
+      state.maticUsdTCurrency = action.payload;
+    },
   }
 });
 
@@ -24,7 +27,7 @@ export const { reducer, actions } = nftSlice;
 export { reducer as nftReducer };
 
 // Actions
-export const { setNftServiceFee, setCategories, setETHUSDTCurrency } = actions;
+export const { setNftServiceFee, setCategories, setETHUSDTCurrency, setMATICUSDTCurrency } = actions;
 
 export const getNftCategories = () => async (dispatch: any) => {
   try {
@@ -40,6 +43,15 @@ export const getETHUSDTCurrency = () => async (dispatch: any) => {
     const data = await CurrencyController.getETHUSDTCurrency();
     if (data && data.price) {
       dispatch(setETHUSDTCurrency(data.price))
+    }
+  }catch(e){}
+}
+
+export const getMATICUSDTCurrency = () => async (dispatch: any) => {
+  try {
+    const data = await CurrencyController.getMATICUSDTCurrency();
+    if (data && data.price) {
+      dispatch(setMATICUSDTCurrency(data.price))
     }
   }catch(e){}
 }

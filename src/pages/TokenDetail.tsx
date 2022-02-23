@@ -614,7 +614,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     <div className="item-price pb-4">
                                         <span className="for-sale">For Sale • Highest Bid </span>
                                         <span className="text-dark">{offer ? `${offer.min_bid}` : ''} ETH • </span>
-                                        <span className="price-puml">{offer ? `$${getDollarPrice(offer.min_bid)} ` : ' '} PUML</span>
+                                        <span className="price-puml">{offer ? `$${getDollarPrice(offer.min_bid)} ` : ' '}</span>
                                     </div>
                                 )
                             }
@@ -623,7 +623,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                     <div className="item-price pb-4">
                                         <span className="for-sale">For Sale • Direct buy Price </span>
                                         <span className="text-dark">{offer ? `${offer.offer_price}` : ''} ETH • </span>
-                                        <span className="price-puml">{offer ? `$${getDollarPrice(offer.offer_price)} ` : ' '} PUML</span>
+                                        <span className="price-puml">{offer ? `$${getDollarPrice(offer.offer_price)} ` : ' '}</span>
                                     </div>
                                 )
                             }

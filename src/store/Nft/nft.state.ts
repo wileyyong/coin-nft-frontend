@@ -3,6 +3,7 @@ export type NftReducerState = {
   serviceFee: number;
   categories: any[];
   ethUsdTCurrency: any;
+  maticUsdTCurrency: any;
 }
 
 export const initCategories = [
@@ -15,5 +16,6 @@ export const initCategories = [
 export const NFT_INITIAL_STATE: NftReducerState = {
   serviceFee: 2.7,
   categories: initCategories,
-  ethUsdTCurrency: ''
+  ethUsdTCurrency: '',
+  maticUsdTCurrency: ''
 };

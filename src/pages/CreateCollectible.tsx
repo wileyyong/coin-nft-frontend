@@ -1,9 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Image } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import imgAvatar from "assets/imgs/avatar.png";
+import EthereumIcon from "assets/imgs/ethereum.svg";
+import PolygonIcon from "assets/imgs/polygon-matic.svg";
+import verifyBadge from 'assets/imgs/verify.svg';
 
 import {
     B1NormalTextTitle,
@@ -33,6 +36,7 @@ import {
     loadMyCollections,
     connectUserWallet,
     getWalletBalance,
+    switchNetwork
 } from "store/User/user.slice";
 import {
     getMyCollections,
@@ -47,6 +51,7 @@ import { getNftCategories, getNftServiceFee } from "store/Nft/nft.selector";
 import CreateNftStatusModal from "components/token/CreateNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
 import OfferController from "controller/OfferController";
+import EthUtil from 'ethereum/EthUtil';
 
 interface propertyInterface {
     trait_type: string,
@@ -98,6 +103,12 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const [chainId, setChainId] = useState(null);
 
     const [propertyList, setPropertyList] = useState<propertyInterface[] | []>([]);
+
+    const [network, setNetwork] = useState<any>({
+        name: 'Ethereum',
+        value: 'ETH',
+        key: configs.ONBOARD_NETWORK_ID
+    });
 
     const expiryDateOptions = [
         {
@@ -221,6 +232,10 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 );
                 return;
             }
+            const networkID = EthUtil.getNetwork();
+            if (networkID !== network.key) {
+                await switchNetwork(network.key);
+            }
             setCreateNftDialog(true);
             if (createNftStatus < NftCreateStatus.MINT_SUCCEED) {
                 createNft();
@@ -239,7 +254,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             collection: collectible.collection,
             locked: collectible.locked,
             offchain: collectible.offchain,
-            attributes: JSON.stringify(propertyList)
+            attributes: JSON.stringify(propertyList),
+            blockchain: network.value
         };
     };
 
@@ -441,6 +457,10 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         setCollectible({ ...collectible, expiry_date: date });
     }, [expiryOption]);
 
+    const changeBlockchain = (net: any) => {
+        setNetwork(net);
+    }
+
     return (
         <Layout className="create-collectible-container">
             <Container className="container">
@@ -471,6 +491,26 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                             <Form noValidate validated={validated} onSubmit={submitForm}>
                                 <Row className="mt-4 row-reserve">
                                     <Col md="6">
+                                        <div className="change-blockchain mb-4">
+                                            <BigTitle className="mt-4 mb-3">Blockchain</BigTitle>
+                                            <div className="blockchain-list">
+                                                <div className={network.name === 'Ethereum' ? 'blockchain-item selected' : 'blockchain-item'}
+                                                    onClick={() => changeBlockchain({name: 'Ethereum', value: 'ETH', key: configs.ONBOARD_NETWORK_ID})}
+                                                >
+                                                    <div className="blockchain-icon">
+                                                        <Image src={EthereumIcon} />
+                                                    </div>
+                                                    <div className="blockchain-name">Ethereum</div>
+                                                </div>
+                                                <div className={network.name === 'Polygon' ? 'blockchain-item selected' : 'blockchain-item'} 
+                                                    onClick={() => changeBlockchain({name: 'Polygon', value: 'MATIC', key: configs.ONBOARD_POLYGON_ID})}>
+                                                    <div className="blockchain-icon">
+                                                        <Image src={PolygonIcon} />
+                                                    </div>
+                                                    <div className="blockchain-name">Polygon (MATIC)</div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div className="upload-file">
                                             <div className="title mb-4">Upload file</div>
                                             <FileUploader
@@ -516,7 +556,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         <Form.Control
                                                             required
                                                             type="text"
-                                                            placeholder="Enter Minimum Bid in ETH"
+                                                            placeholder={`Enter Minimum Bid in ${network.value}`}
                                                             name="min_bid_price"
                                                             value={collectible.min_bid_price || ''}
                                                             onChange={(e) => handleChange(e)}
@@ -588,7 +628,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                     <Col md="6" className="preview-area">
                                         <BigTitle className="text-black pb-3">PREVIEW</BigTitle>
                                         <div className="auction-item p-4">
-                                            {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar"></NftAvatar>}
+                                            {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar">
+                                                {loggedInUserInfo.verified && <Image style={{ width: 12, height: 12 }} src={verifyBadge} />}
+                                                </NftAvatar>}
                                             <div className="token-img-area">
                                                 <div className="pre-token-img">
                                                     {previewThumbnail ? (
@@ -609,7 +651,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             <FlexAlignCenterDiv className="mt-2 text-black">
                                                 {collectible.is_auction ? (
                                                     <NormalTextTitle>
-                                                        Bid ~ {collectible.min_bid_price} ETH
+                                                        Bid ~ {collectible.min_bid_price} {network.value}
                                                     </NormalTextTitle>
                                                 ) : (
                                                     <NormalTextTitle>Buy Now</NormalTextTitle>

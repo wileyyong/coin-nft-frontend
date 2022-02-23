@@ -1,10 +1,11 @@
 import Onboard from "bnc-onboard";
 import Web3 from "web3";
 import configs from "../configs";
-import Storage from "service/storage"
+// import Storage from "service/storage"
 
 // set a variable to store instantiated web3
 let web3: any;
+declare let window: any;
 
 const wallets = [
   { walletName: "metamask", preferred: true },
@@ -72,12 +73,11 @@ const wallets = [
 
 const initializationOptions = {
   dappId: configs.ONBOARD_API_KEY,
-  networkId: configs.ONBOARD_NETWORK_ID,
+  networkId: window && window.ethereum && window.ethereum.networkVersion ? parseInt(window.ethereum.networkVersion) : (localStorage.getItem(configs.STORAGE.SELECTED_NETWORK) ? parseInt(`${localStorage.getItem(configs.STORAGE.SELECTED_NETWORK)}`) : configs.ONBOARD_NETWORK_ID),
   subscriptions: {
     wallet: (wallet:any) => {
       // instantiate web3 when the user has selected a wallet
       web3 = new Web3(wallet.provider)
-      Storage.set(configs.STORAGE.SELECTED_WALLET, wallet.name);
     }
   },
   walletSelect: {

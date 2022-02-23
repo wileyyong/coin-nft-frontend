@@ -5,7 +5,9 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { onboard } from "ethereum/OnBoard";
 import logoImg from "assets/imgs/logo.svg";
 import configs from "configs";
-import { FaEthereum } from "react-icons/fa";
+import EthUtil from 'ethereum/EthUtil';
+import EthereumIcon from "assets/imgs/ethereum.svg";
+import PolygonIcon from "assets/imgs/polygon-matic.svg";
 import {
   disconnectUserWallet
 } from "store/User/user.slice";
@@ -48,7 +50,7 @@ const Header: React.FC<HeaderProps> = () => {
         ></Image>
         <div className="ml-2">
           <NormalTextTitle className="text-primary">Balance</NormalTextTitle>
-          <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
+          <SmallTextTitleGrey>{balance} {getPriceType()}</SmallTextTitleGrey>
         </div>
       </div>
     );
@@ -60,6 +62,47 @@ const Header: React.FC<HeaderProps> = () => {
     document.querySelector(".navbar-collapse")?.classList.remove("show");
     document.querySelector(".navbar-toggler")?.classList.add("collapsed");
   };
+
+  const getPriceType = () => {
+    const network = EthUtil.getNetwork();
+    if (network) {
+      switch (network) {
+        case 1:
+        case 4:
+          return 'ETH';
+        case 137:
+        case 80001:
+          return 'MATIC';
+        case 56:
+        case 97:
+          return 'BNB';
+        default:
+          return 'ETH'
+      }
+    } else {
+      return 'ETH';
+    }
+  }
+
+  const getBlockImage = () => {
+    const network = EthUtil.getNetwork();
+    if (network) {
+      switch (network) {
+        case 1:
+        case 4:
+          return EthereumIcon;
+        case 137:
+        case 80001:
+          return PolygonIcon;
+        case 56:
+        case 97:
+        default:
+          return EthereumIcon;
+      }
+    } else {
+      return EthereumIcon;
+    }
+  }
 
   return (
     <div className="header-container">
@@ -129,10 +172,10 @@ const Header: React.FC<HeaderProps> = () => {
                         </B1NormalTextTitle>
                       )}
                       <FlexAlignCenterDiv>
-                        <FaEthereum size={22}></FaEthereum>
+                        <Image src={getBlockImage()} width="22" />
                         <div className="ml-2">
                           <NormalTextTitle className="text-black">Balance</NormalTextTitle>
-                          <SmallTextTitleGrey>{balance} ETH</SmallTextTitleGrey>
+                          <SmallTextTitleGrey>{balance} {getPriceType()}</SmallTextTitleGrey>
                         </div>
                       </FlexAlignCenterDiv>
                     </div>

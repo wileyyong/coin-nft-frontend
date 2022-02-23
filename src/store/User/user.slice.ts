@@ -9,7 +9,7 @@ import UserController from "controller/UserController";
 import CollectionController from "controller/CollectionController";
 import EthUtil from "ethereum/EthUtil";
 import configs from "configs";
-import { onboard } from "ethereum/OnBoard";
+import { onboard, web3 } from "ethereum/OnBoard";
 
 export const userSlice = createSlice({
   name: "user",
@@ -41,7 +41,7 @@ export const userSlice = createSlice({
     },
     setMyTokens(state: Draft<UserReducerState>, action: PayloadAction<any>) {
       state.myTokens = action.payload;
-    }
+    },
   },
 });
 
@@ -92,6 +92,7 @@ export const disconnectUserWallet = () => (dispatch: any) => {
   try {
     Storage.clearAuthToken();
     dispatch(setToken(null));
+    Storage.clearNetworkID();
     dispatch(setUserWalletAddress(""));
     dispatch(setUserWalletBalance("0"));
   } catch (e) {}
@@ -109,6 +110,7 @@ export const connectUserWallet = () => async (dispatch: any) => {
         const currentState = onboard.getState();
         const wallet = currentState.wallet
         if (currentState.address) {
+          Storage.set(configs.STORAGE.SELECTED_NETWORK, currentState.network);
           Storage.set(configs.STORAGE.SELECTED_WALLET, wallet.name);
           dispatch(setUserWalletAddress(currentState.address));
           dispatch(getWalletBalance());
@@ -117,6 +119,65 @@ export const connectUserWallet = () => async (dispatch: any) => {
     }
   } catch (e) {}
 };
+
+export const switchNetwork = async (net: number) => {
+  try {
+    await web3.currentProvider.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: `0x${net.toString(16)}` }],
+    });
+    Storage.set(configs.STORAGE.SELECTED_NETWORK, `${net}`);
+  } catch (err : any) {
+    if (err && net === configs.ONBOARD_POLYGON_ID) {
+      if (err.code === 4902) {
+        try {
+          await web3.currentProvider.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: `0x${net.toString(16)}`,
+                chainName: "Polygon Matic Network",
+                rpcUrls: [`${configs.POLYGON_RPC_URL}`],
+                nativeCurrency: {
+                  name: "Matic",
+                  symbol: "Matic",
+                  decimals: 18,
+                },
+                blockExplorerUrls: [`${configs.POLYGON_BLOCK_EXPLORER}`],
+              },
+            ],
+          });
+        } catch (error : any) {
+          alert(error && error.message);
+        }
+      }
+    }
+    if (err && net === configs.ONBOARD_NETWORK_ID) {
+      if (err.code === 4902) {
+        try {
+          await web3.currentProvider.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: `0x${net.toString(16)}`,
+                chainName: "Rinkeby Test Network",
+                rpcUrls: [`${configs.RPC_URL}`],
+                nativeCurrency: {
+                  name: "ETH",
+                  symbol: "ETH",
+                  decimals: 18,
+                },
+                blockExplorerUrls: [`${configs.BLOCK_EXPLORER}`],
+              },
+            ],
+          });
+        } catch (error : any) {
+          alert(error && error.message);
+        }
+      }
+    }
+  }
+}
 
 export const getMyInfo = (payload: string) => async (dispatch: any) => {
   try {

@@ -1,14 +1,42 @@
 import { abi as engineABI } from './abis/Engine.json';
-import { abi as PUML721ABI } from './abis/PUML721.json';
+import { abi as PUML721ABI } from './abis/PumlNFT.json';
 import { web3 } from './OnBoard';
 import configs from 'configs';
 import EthUtil from './EthUtil';
 
 class Contract {
 
+    getPuml721Address(net: any) {
+        if (net) {
+          switch(net) {
+            case configs.ONBOARD_POLYGON_ID:
+              return configs.MATIC_PUML721_ADDRESS;
+            case configs.ONBOARD_NETWORK_ID:
+              return configs.PUML721_ADDRESS;
+            default:
+              return configs.PUML721_ADDRESS;
+          }
+        }
+    }
+
+    getEngine721Address (net: any) {
+        if (net) {
+          switch(net) {
+            case configs.ONBOARD_POLYGON_ID:
+              return configs.MATIC_ENGINE721_ADDRESS;
+            case configs.ONBOARD_NETWORK_ID:
+              return configs.ENGINE721_ADDRESS;
+            default:
+              return configs.ENGINE721_ADDRESS;
+          }
+        }
+    }
+
     async createNft(tokenURI: any , royalties: any , locked_content: string = '') {
         if(web3) {
-            const PUMLContract = new web3.eth.Contract(PUML721ABI, configs.PUML721_ADDRESS);
+            const network = EthUtil.getNetwork();
+            const PUML_721_ADDRESS = this.getPuml721Address(network);
+            const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
             try{
                 const result: any = await PUMLContract.methods.createItem(tokenURI, royalties , locked_content).send({
                     from: EthUtil.getAddress()
@@ -25,10 +53,14 @@ class Contract {
     }
 
     async approve(tokenId: any) {
+        const network = EthUtil.getNetwork();
+        const PUML_721_ADDRESS = this.getPuml721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
-            const PUMLContract = new web3.eth.Contract(PUML721ABI, configs.PUML721_ADDRESS);
+            // const bytecode = await new web3.eth.getCode(ENGINE_721_ADDRESS);
+            const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
             try {
-                await PUMLContract.methods.approve(configs.ENGINE_ADDRESS, tokenId).send({
+                await PUMLContract.methods.approve(ENGINE_721_ADDRESS, tokenId).send({
                     from: EthUtil.getAddress()
                 });
                 return true;
@@ -40,10 +72,13 @@ class Contract {
     }
 
     async createOffer(tokenId: any, isDirectSale: boolean , isAuction: boolean , price: any, minPrice: any, startTime: any, duration: any) {
+        const network = EthUtil.getNetwork();
+        const PUML_721_ADDRESS = this.getPuml721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
-            const engineContract = new web3.eth.Contract(engineABI, configs.ENGINE_ADDRESS);
+            const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             try {
-                await engineContract.methods.createOffer(configs.PUML721_ADDRESS,tokenId,isDirectSale,isAuction,web3.utils.toWei('' + price),web3.utils.toWei('' + minPrice),startTime,duration).send({
+                await engineContract.methods.createOffer(PUML_721_ADDRESS,tokenId,isDirectSale,isAuction,web3.utils.toWei('' + price),web3.utils.toWei('' + minPrice),startTime,duration).send({
                     from: EthUtil.getAddress()
                 });
                 return true;
@@ -55,8 +90,10 @@ class Contract {
     }
 
     async getAuctionId(tokenId: any) {
+        const network = EthUtil.getNetwork();
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
-            const engineContract = new web3.eth.Contract(engineABI, configs.ENGINE_ADDRESS);
+            const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             try{
                 let auctionId = await engineContract.methods.getAuctionId(tokenId).call();
                 return auctionId;
@@ -68,10 +105,12 @@ class Contract {
     }
 
     async bid(tokenId:any, price: any) {
+        const network = EthUtil.getNetwork();
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             let auctionId = await this.getAuctionId(tokenId);
             if(auctionId!==null) {
-                const engineContract = new web3.eth.Contract(engineABI, configs.ENGINE_ADDRESS);
+                const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
                 const result: any = await engineContract.methods.bid(auctionId).send({
                     from: EthUtil.getAddress(),
                     value: web3.utils.toWei('' + price)
@@ -85,8 +124,11 @@ class Contract {
     }
 
     async directBuy(tokenId: any, price: any) {
+        const network = EthUtil.getNetwork();
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
-            const engineContract = new web3.eth.Contract(engineABI, configs.ENGINE_ADDRESS);
+            const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
+            // const bytecode = await new web3.eth.getCode(ENGINE_721_ADDRESS);
             const result: any = await engineContract.methods.buy(tokenId).send({
                 from: EthUtil.getAddress(),
                 value: web3.utils.toWei('' + price)

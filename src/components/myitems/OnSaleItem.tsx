@@ -52,7 +52,7 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
       <div className="card-info pt-3 pb-4">
         <div className="card-title">{token.name}</div>
         <div>
-          <span className="puml-price">${getDollarPrice(item.min_bid || item.offer_price)} PUML</span>
+          <span className="puml-price">${getDollarPrice(item.min_bid || item.offer_price)}</span>
           <span className="eth-price"> • {item.type === "direct" ? (
               "Not for Sale"
             ) : (

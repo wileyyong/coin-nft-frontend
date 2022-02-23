@@ -1,5 +1,7 @@
 
 import { web3, onboard } from './OnBoard';
+import Storage from 'service/storage';
+import configs from 'configs';
 
 class EthUtil {
 
@@ -16,6 +18,14 @@ class EthUtil {
             return ethBalance;
         }
         return 0;
+    }
+
+    getNetwork() {
+        const currentState = onboard.getState();
+        if (currentState.network) {
+          return currentState.network;
+        }
+        return parseInt(Storage.get(configs.STORAGE.SELECTED_NETWORK));
     }
    
 }

@@ -22,6 +22,10 @@ class Storage {
         this.remove(configs.STORAGE.TOKEN);
     }
 
+    clearNetworkID() {
+        this.remove(configs.STORAGE.SELECTED_NETWORK);
+    }
+
     remove(key: string) {
         localStorage.removeItem(key);
     }
