@@ -217,7 +217,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
               {item.offer.type === "auction" ? (
                 "Not for Sale"
               ) : (
-                <>From {item.offer.offer_price} ETH</>
+                <>From {item.offer.offer_price} {item.blockchain ? item.blockchain : "ETH"}</>
               )}
             </NormalTextTitle>
             <FlexAlignCenterDiv className="mt-1">
@@ -225,9 +225,9 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
                 item.offer.type === "both") && (
                 <NormalTextTitle className="faint-color">
                   {getCurrentBidPrice() ? (
-                    <>Current Bid {getCurrentBidPrice()} ETH</>
+                    <>Current Bid {getCurrentBidPrice()} {item.blockchain ? item.blockchain : "ETH"}</>
                   ) : (
-                    item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} ETH</> : ''
+                    item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} {item.blockchain ? item.blockchain : "ETH"}</> : ''
                   )}
                 </NormalTextTitle>
               )}
@@ -241,6 +241,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           setShowResellDialog(false);
         }}
         isResell={isCreator()}
+        token={item}
         handleSubmit={submitted}
       ></ResellNftModal>
       <ResellNftStatusModal

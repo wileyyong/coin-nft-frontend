@@ -82,7 +82,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
             </FlexJustifyBetweenDiv>
             {isBelowMinPrice() ? (
               <NormalTextTitle className="mt-2 danger-color">
-                You can not input below than {minPrice} ETH{" "}
+                You can not input below than {minPrice} {token.blockchain ? token.blockchain : "ETH"}{" "}
               </NormalTextTitle>
             ) : (
               ''
@@ -90,11 +90,11 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
             <DivideLine className="mt-2"></DivideLine>
             <FlexJustifyBetweenDiv className="mt-3">
               <div>Your balance</div>
-              <B2NormalTextTitle>{balance} ETH</B2NormalTextTitle>
+              <B2NormalTextTitle>{balance} {token.blockchain ? token.blockchain : "ETH"}</B2NormalTextTitle>
             </FlexJustifyBetweenDiv>
             <FlexJustifyBetweenDiv className="mt-2">
               <div>Total bid amount</div>
-              <B2NormalTextTitle>{getTotalBidPrice()} ETH</B2NormalTextTitle>
+              <B2NormalTextTitle>{getTotalBidPrice()} {token.blockchain ? token.blockchain : "ETH"}</B2NormalTextTitle>
             </FlexJustifyBetweenDiv>
             <Button
               variant="primary"

@@ -411,6 +411,11 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     };
 
     const submitted = async (form: any) => {
+        const networkID = EthUtil.getNetwork();
+        if (networkID !== network) {
+            await switchNetwork(network);
+            await dispatch(getWalletBalance());
+        }
         setShowStatusModal(true);
         setShowResellDialog(false);
         resellFormData.current = form;
@@ -618,7 +623,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                                 <>
                                                     <span className="o-5">You will receive</span>&nbsp;&nbsp;
                                                     {getOfferPriceWithServiceFee()}
-                                                    &nbsp; ETH&nbsp;&nbsp;
+                                                    &nbsp; {token.blockchain ? token.blockchain : 'ETH'}&nbsp;&nbsp;
                                                     <span className="o-5">
                                                         (${getDollarPrice(getOfferPriceWithServiceFee())})
                                                     </span>
@@ -861,6 +866,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 handleClose={() => {
                     setShowResellDialog(false);
                 }}
+                token={token}
                 isResell={!isCreator()}
                 handleSubmit={submitted}
             ></ResellNftModal>

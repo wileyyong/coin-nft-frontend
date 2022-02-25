@@ -17,13 +17,15 @@ interface ResellNftModalProps {
   handleSubmit?: any;
   show: boolean;
   isResell?: boolean;
+  token?: any
 }
 
 const ResellNftModal: React.FC<ResellNftModalProps> = ({
   show,
   handleClose,
   handleSubmit,
-  isResell
+  isResell,
+  token
 }) => {
   const [validated, setValidated] = useState(false);
   const [expiryOption, setExpiryOption] = useState("3");
@@ -155,7 +157,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
                       <Form.Control
                         required
                         type="text"
-                        placeholder="Enter Minimum Bid in ETH"
+                        placeholder={`Enter Minimum Bid in ${token.blockchain ? token.blockchain : "ETH"}`}
                         name="min_bid_price"
                         value={newOffer.min_bid_price || ''}
                         onChange={(e) => handleChange(e)}
@@ -222,7 +224,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
                     </B2NormalTextTitle>
                     <br />
                     <B2NormalTextTitle className="faint-color mt-1">
-                      You will receive {instantReceiveAmount()} ETH
+                      You will receive {instantReceiveAmount()} {token.blockchain ? token.blockchain : "ETH"}
                     </B2NormalTextTitle>
                   </Form.Group>
                 </Form.Row>

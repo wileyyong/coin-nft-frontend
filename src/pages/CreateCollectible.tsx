@@ -623,7 +623,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         <span className="o-5">Service Fee</span>&nbsp;&nbsp;{serviceFee} %
                                                     </B2NormalTextTitle>
                                                     <B2NormalTextTitle className="mt-2">
-                                                        <span className="o-5">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount() ? `${instantReceiveAmount()} ETH` : ''}
+                                                        <span className="o-5">You will receive</span>&nbsp;&nbsp;{instantReceiveAmount() ? `${instantReceiveAmount()} ${network.value}` : ''}
                                                     </B2NormalTextTitle>
                                                 </Form.Group>
                                             </Form.Row>
