@@ -24,8 +24,8 @@ class NftController {
         return API.post(`${configs.API.TOKEN_URL}/${id}/chain`, payload).then(res => res.data)
     }
 
-    public static delete(id: any) {
-        return API.delete(`${configs.API.TOKEN_URL}/${id}`).then(res => res.data)
+    public static delete(id: any, user: any) {
+        return API.delete(`${configs.API.TOKEN_URL}/${id}/${user}`).then(res => res.data)
     }
 
 }

@@ -29,9 +29,9 @@ import { NftCreateStatus } from "model/NftCreateStatus";
 import ShareNFTModal from "components/token/ShareNFTModal";
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
-import { getETHUSDTCurrency, getNftServiceFee } from "store/Nft/nft.selector";
+import { getETHUSDTCurrency, getNftServiceFee, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 import { getMyInfo, getWalletAddress } from "store/User/user.selector";
-import { connectUserWallet, getWalletBalance } from "store/User/user.slice";
+import { connectUserWallet, getWalletBalance, switchNetwork } from "store/User/user.slice";
 
 import {
     B1NormalTextTitle,
@@ -42,6 +42,8 @@ import {
     FlexAlignCenterDiv,
     NftAvatar,
 } from "components/common/common.styles";
+import EthUtil from 'ethereum/EthUtil';
+import { EthereumNetworkID } from 'model/EthereumNetwork';
 
 import imgProperty from "assets/imgs/property.png";
 
@@ -56,6 +58,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const dispatch = useAppDispatch();
     const serviceFee = useAppSelector(getNftServiceFee);
     const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+    const maticDollarPrice = useAppSelector(getMATICUSDTCurrency);
     const walletAddress = useAppSelector(getWalletAddress);
     const userInfo = useAppSelector(getMyInfo);
     const [offer, setOffer] = useState<any>(null);
@@ -82,6 +85,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [loading, setLoading] = useState(false);
     const [properties, setProperties] = useState([]);
+    const [network, setNetwork] = useState<any>(EthereumNetworkID.RinkebyNetwork);
 
     const resellFormData = useRef({
         min_bid_price: 0,
@@ -139,6 +143,18 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         if (params.id) {
             setLoading(true);
             const { offer, history, token } = await TokenController.getById(params.id);
+
+            if (token.blockchain) {
+                switch (token.blockchain) {
+                    case 'ETH':
+                        setNetwork(EthereumNetworkID.RinkebyNetwork);
+                        break;
+                    case 'MATIC':
+                        setNetwork(EthereumNetworkID.MumbaiNetwork)
+                        break;
+                    default:
+                }
+            }
             history.sort(function (a: any, b: any) {
                 return b.date - a.date;
             });
@@ -233,6 +249,11 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const submitBid = async (price: any) => {
         try {
             if (offer) {
+                const networkID = EthUtil.getNetwork();
+                if (networkID !== network) {
+                    await switchNetwork(network);
+                    await dispatch(getWalletBalance());
+                }
                 setTransProgressing(true);
                 const result = await SmartContract.bid(token.chain_id, price);
                 if (result.success && result.transactionHash) {
@@ -281,11 +302,20 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     };
 
     const getDollarPrice = (ethValue: any) => {
+        let blockchain:string = token.blockchain ? token.blockchain : 'ETH';
+        let dollarPrice:any = 0;
         if (ethValue) {
-            let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
-            return dollarPrice;
+            switch (blockchain) {
+                case 'ETH':
+                   dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
+                   break;
+                case 'MATIC':
+                   dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
+                   break;
+                default:
+            }
         }
-        return 0;
+        return dollarPrice;
     };
 
     const getAvatar = (type: any) => {
@@ -410,6 +440,11 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         try {
             setTransProgressing(true);
             if (offer) {
+                const networkID = EthUtil.getNetwork();
+                if (networkID !== network) {
+                    await switchNetwork(network);
+                    await dispatch(getWalletBalance());
+                }
                 let buyResult = await SmartContract.directBuy(
                     token.chain_id,
                     offer.offer_price
@@ -613,7 +648,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 offer && offer.min_bid && (
                                     <div className="item-price pb-4">
                                         <span className="for-sale">For Sale • Highest Bid </span>
-                                        <span className="text-dark">{offer ? `${offer.min_bid}` : ''} ETH • </span>
+                                        <span className="text-dark">{offer ? `${offer.min_bid}` : ''} {token.blockchain ? token.blockchain : 'ETH'} • </span>
                                         <span className="price-puml">{offer ? `$${getDollarPrice(offer.min_bid)} ` : ' '}</span>
                                     </div>
                                 )
@@ -622,7 +657,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                 offer && offer.offer_price && (
                                     <div className="item-price pb-4">
                                         <span className="for-sale">For Sale • Direct buy Price </span>
-                                        <span className="text-dark">{offer ? `${offer.offer_price}` : ''} ETH • </span>
+                                        <span className="text-dark">{offer ? `${offer.offer_price}` : ''} {token.blockchain ? token.blockchain : 'ETH'} • </span>
                                         <span className="price-puml">{offer ? `$${getDollarPrice(offer.offer_price)} ` : ' '}</span>
                                     </div>
                                 )
@@ -701,7 +736,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                                                         ></NftAvatar>
                                                         <div>
                                                             <B2NormalTextTitle>
-                                                                {highestBidder.price} ETH •&nbsp;
+                                                                {highestBidder.price} {token.blockchain ? token.blockchain : 'ETH'} •&nbsp;
                                                             </B2NormalTextTitle>
                                                             <B1NormalTextTitle className="faint-color">
                                                                 ${getDollarPrice(highestBidder.price)}

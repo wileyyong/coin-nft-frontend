@@ -11,7 +11,7 @@ import imgAvatar from "assets/imgs/avatar.png";
 import configs from "configs";
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
-import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import { getETHUSDTCurrency, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 
 interface HistoryItemProps {
   item: any;
@@ -19,12 +19,22 @@ interface HistoryItemProps {
 
 const HistoryItem: React.FC<HistoryItemProps> = ({ item }) => {
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+  const maticDollarPrice = useAppSelector(getMATICUSDTCurrency);
   const getDollarPrice = (ethValue: any) => {
+    let blockchain:string = item.token.blockchain ? item.token.blockchain : 'ETH';
+    let dollarPrice:any = 0;
     if (ethValue) {
-        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
-        return dollarPrice;
+        switch (blockchain) {
+            case 'ETH':
+                dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
+                break;
+            case 'MATIC':
+                dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
+                break;
+            default:
+        }
     }
-    return 0;
+    return dollarPrice;
   };
   const getDetailDateTime = (history: any) => {
     return <div className="detail-info d-flex align-items-center"><SmallTextTitleGrey>by&nbsp;</SmallTextTitleGrey>
@@ -41,12 +51,12 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item }) => {
       case 'listed':
         return <div className="d-flex align-items-center">
           <B1NormalTextTitleGrey>Listed for&nbsp;</B1NormalTextTitleGrey>
-          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
+          <B1NormalTextTitle>{history.price} {item.token.blockchain ? item.token.blockchain : 'ETH'} • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
         </div>;
       case 'purchased':
         return <div className="d-flex align-items-center">
           <B1NormalTextTitleGrey>Purchased for&nbsp;</B1NormalTextTitleGrey>
-          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
+          <B1NormalTextTitle>{history.price} {item.token.blockchain ? item.token.blockchain : 'ETH'} • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
         </div>;
       case 'minted':
         return <div className="d-flex align-items-center">
@@ -55,7 +65,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({ item }) => {
       case 'offered':
         return <div className="d-flex align-items-center">
           <B1NormalTextTitleGrey>Bid&nbsp;</B1NormalTextTitleGrey>
-          <B1NormalTextTitle>{history.price} ETH • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
+          <B1NormalTextTitle>{history.price} {item.token.blockchain ? item.token.blockchain : 'ETH'} • <span className="text-primary">${getDollarPrice(history.price)}</span></B1NormalTextTitle>
         </div>;
       default:
         break;

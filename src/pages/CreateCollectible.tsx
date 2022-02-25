@@ -235,6 +235,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             const networkID = EthUtil.getNetwork();
             if (networkID !== network.key) {
                 await switchNetwork(network.key);
+                await dispatch(getWalletBalance());
             }
             setCreateNftDialog(true);
             if (createNftStatus < NftCreateStatus.MINT_SUCCEED) {
@@ -254,7 +255,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             collection: collectible.collection,
             locked: collectible.locked,
             offchain: collectible.offchain,
-            attributes: JSON.stringify(propertyList),
+            attributes: propertyList.length > 0 ? JSON.stringify(propertyList) : "",
             blockchain: network.value
         };
     };
@@ -271,7 +272,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 setCreateNftStatus(NftCreateStatus.MINT_FAILED);
             }
         }
-        if (result && result.link) {
+        if (result && result.link && result.token) {
             const tokenURI = `${configs.DEPLOY_URL}${result.link}`;
             const royalties = result.token.royalties || 0;
             const locked_content = result.token.locked || "";
@@ -302,6 +303,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                     }
                 } else {
                     setCreateNftStatus(NftCreateStatus.MINT_FAILED);
+                    const res = await NftController.delete(result.token._id, loggedInUserInfo._id);
+                    console.log(contractResult.error);
+                    console.log(res);
                 }
             } catch (err) {
                 setCreateNftStatus(NftCreateStatus.MINT_FAILED);

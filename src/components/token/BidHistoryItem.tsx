@@ -8,7 +8,7 @@ import imgAvatar from "assets/imgs/avatar.png";
 import configs from "configs";
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
-import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import { getETHUSDTCurrency, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 import Utility from "service/utility";
 
 interface BidHistoryItemProps {
@@ -18,6 +18,7 @@ interface BidHistoryItemProps {
 
 const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+  const maticDollarPrice = useAppSelector(getMATICUSDTCurrency);
 
   const getDifferentHours = (date: string) => {
     if (date) {
@@ -37,11 +38,20 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
   }
 
   const getDollarPrice = (ethValue: any) => {
+    let blockchain:string = token.blockchain ? token.blockchain : 'ETH';
+    let dollarPrice:any = 0;
     if (ethValue) {
-        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
-        return dollarPrice;
+        switch (blockchain) {
+            case 'ETH':
+                dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
+                break;
+            case 'MATIC':
+                dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
+                break;
+            default:
+        }
     }
-    return 0;
+    return dollarPrice;
   }
 
   return (
@@ -50,7 +60,7 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
       </NftAvatar>
       <div>
           <B1NormalTextTitle>{item.user ? item.user.name : ''} </B1NormalTextTitle>
-          <p className="mb-1">Offered {item.price} ETH • <span className="text-primary">${getDollarPrice(item.price)}</span></p>
+          <p className="mb-1">Offered {item.price} {token.blockchain ? token.blockchain : 'ETH'} • <span className="text-primary">${getDollarPrice(item.price)}</span></p>
           <p className="time-ago mb-1">{getDifferentHours(item.date)} hours ago</p>
           <a href={`${configs.HASH_LINK_URL}${item.hash}`} target="_blank" className="social-link-item text-center" rel="noreferrer">
             {Utility.getHiddenWalletAddress(item.hash)}
