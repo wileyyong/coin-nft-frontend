@@ -15,11 +15,15 @@ const ChooseCollectionItem: React.FC<ChooseCollectionItemProps> = ({ item, onSel
     if(isSelected) className += ' selected'; 
     return className;
   }
+  const getCollectionImage = () => {
+    if (item.image.indexOf("https://") > -1) return item.image;
+    return `${configs.DEPLOY_URL}${item.image}`;
+  };
   return (
     <div className={getClassName()} onClick={onSelected}>
         <div className="c-nft-avatar">
           {
-            item.name==='PUML' ? (<img src={configs.DEPLOY_URL + '/content/collection/puml.png'} />): (item.image && <img src={configs.DEPLOY_URL + item.image} alt="avatar" />)
+            item.name==='PUML' ? (<img src={configs.DEPLOY_URL + '/content/collection/puml.png'} />): (item.image && <img src={getCollectionImage()} alt="avatar" />)
           }
         </div>
         <B3NormalTextTitle className="mt-3 faint-color">{item.name}</B3NormalTextTitle>

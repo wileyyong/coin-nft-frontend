@@ -11,6 +11,7 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
   const history = useHistory();
   const collectionImgUrl = () => {
     if (item.image) {
+      if (item.image.indexOf("https://") > -1) return item.image;
       return `${configs.DEPLOY_URL}${item.image}`;
     }
       return `${configs.DEPLOY_URL}/content/collection/puml.png`;
