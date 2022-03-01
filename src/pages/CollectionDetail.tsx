@@ -109,11 +109,18 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
         if (collectionInfo.creator && collectionInfo.creator.avatar) return `${configs.DEPLOY_URL}${collectionInfo.creator.avatar}`;
         return imgAvatar;
     };
+    const getCollectionInfoImage = () => {
+        if (collectionInfo.image) {
+            if (collectionInfo.image.includes("https://")) return collectionInfo.image;
+            return `${configs.DEPLOY_URL}${collectionInfo.image}`;
+        }
+        return CoverImage;
+    };
 
     return (
         <Layout className="collection-detail-container">
             <div className="d-flex flex-column align-items-center">
-                <div style={{ backgroundImage: `url("${collectionInfo.image ? configs.DEPLOY_URL + collectionInfo.image : CoverImage}")` }} className="background-item"></div>
+                <div style={{ backgroundImage: `url("${getCollectionInfoImage()}")` }} className="background-item"></div>
                 <div className="d-flex flex-row align-items-center justify-content-center">
                     <div className="avatar" style={{ backgroundImage: `url(${getUserImgAvatar()})` }}></div>
                 </div>

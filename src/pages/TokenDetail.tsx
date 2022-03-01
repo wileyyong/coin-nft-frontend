@@ -223,8 +223,13 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     };
 
     const getCollectionImgPath = () => {
-        if (token && token.collections && token.collections.image)
+        // if (token && token.collections && token.collections.image)
+        //     return `${configs.DEPLOY_URL}${token.collections.image}`;
+        // return `${configs.DEPLOY_URL}/content/collection/puml.png`;
+        if (token && token.collections && token.collections.image) {
+            if (token.collections.image.includes("https://")) return token.collections.image;
             return `${configs.DEPLOY_URL}${token.collections.image}`;
+        }
         return `${configs.DEPLOY_URL}/content/collection/puml.png`;
     };
 

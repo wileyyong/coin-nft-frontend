@@ -16,7 +16,7 @@ const ChooseCollectionItem: React.FC<ChooseCollectionItemProps> = ({ item, onSel
     return className;
   }
   const getCollectionImage = () => {
-    if (item.image.indexOf("https://") > -1) return item.image;
+    if (item.image.includes("https://")) return item.image;
     return `${configs.DEPLOY_URL}${item.image}`;
   };
   return (
