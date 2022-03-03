@@ -110,6 +110,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         key: configs.ONBOARD_NETWORK_ID
     });
 
+    const [contractAddress, setContractAddress] = useState<string>('');
+    const [engineAddress, setEngineAddress] = useState<string>('');
+
     const expiryDateOptions = [
         {
             value: "1",
@@ -191,14 +194,33 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         return collectible.offer_price
     };
 
+    const getPureCollectionObj = (collection: any, contract_address: string, engine_address: string) => {
+        return {
+            name: collection.name,
+            symbol: collection.symbol,
+            description: collection.description,
+            short: collection.short,
+            image: collection.image,
+            network: network.value,
+            contract_address: contract_address,
+            engine_address: engine_address
+        };
+    };
+
     const createCollection = async (collection: any) => {
         setIsLoading(true);
-        let formData = Utility.getFormDataFromObject(collection);
+        let {contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
+        if (contractAddress === '') {
+            window.location.reload();
+        }
+        let formData = Utility.getFormDataFromObject(getPureCollectionObj(collection, contractAddress, engineAddress));
         try {
             await CollectionController.create(formData);
             loadCollections();
             setIsLoading(false);
             setShowCollectionDialog(false);
+            setContractAddress(contractAddress);
+            setEngineAddress(engineAddress)
             NotificationManager.success(
                 "Collection is created successfully.",
                 "Success"
@@ -207,6 +229,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             setIsLoading(false);
             NotificationManager.error("Create Collection Failed!", "Error");
         }
+        window.location.reload();
     };
 
     const submitForm = async (e: any) => {
@@ -280,7 +303,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 const contractResult = await SmartContract.createNft(
                     tokenURI,
                     royalties * 100,
-                    locked_content
+                    locked_content,
+                    contractAddress
                 );
                 if (contractResult.success) {
                     dispatch(getWalletBalance());
@@ -317,7 +341,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         setCreateNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
         try {
             if (chainId) {
-                let result: any = await SmartContract.approve(chainId);
+                let result: any = await SmartContract.approve(chainId, contractAddress, engineAddress);
                 if (result) {
                     dispatch(getWalletBalance());
                     setCreateNftStatus(NftCreateStatus.APPROVE_SUCCEED);
@@ -349,7 +373,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                     collectible.offer_price,
                     collectible.min_bid_price,
                     auctionStart,
-                    duration
+                    duration,
+                    contractAddress,
+                    engineAddress
                 );
                 if (result) {
                     dispatch(getWalletBalance());
@@ -413,6 +439,19 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const loadCollections = () => {
         dispatch(loadMyCollections());
+    };
+
+    const chooseCollection = (cItem: any) => {
+        setCollectible({
+            ...collectible,
+            collection: cItem._id,
+        });
+        if (cItem.name !== 'PUML' && cItem.contract_address) {
+            setContractAddress(cItem.contract_address);
+        }
+        if (cItem.name !== 'PUML' && cItem.engine_address) {
+            setEngineAddress(cItem.engine_address);
+        }
     };
 
     useEffect(() => {
@@ -686,17 +725,14 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             </div>
                                             {collectionItems.map((cItem: any, index: number) => {
                                                 return (
-                                                    <ChooseCollectionItem
-                                                        item={cItem}
-                                                        key={index}
-                                                        onSelected={() => {
-                                                            setCollectible({
-                                                                ...collectible,
-                                                                collection: cItem._id,
-                                                            });
-                                                        }}
-                                                        isSelected={collectible.collection === cItem._id}
-                                                    />
+                                                    ((cItem.network && cItem.network === network.value) || cItem.name ==='PUML') && (
+                                                        <ChooseCollectionItem
+                                                            item={cItem}
+                                                            key={index}
+                                                            onSelected={() => chooseCollection(cItem)}
+                                                            isSelected={collectible.collection === cItem._id}
+                                                        />
+                                                    )
                                                 );
                                             })}
                                         </div>

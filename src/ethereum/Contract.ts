@@ -1,5 +1,5 @@
-import { abi as engineABI } from './abis/Engine.json';
-import { abi as PUML721ABI } from './abis/PumlNFT.json';
+import { abi as engineABI, bytecode as engineBytecode } from './abis/Engine.json';
+import { abi as PUML721ABI, bytecode as PUMLbytecode } from './abis/PumlNFT.json';
 import { web3 } from './OnBoard';
 import configs from 'configs';
 import EthUtil from './EthUtil';
@@ -32,10 +32,66 @@ class Contract {
         }
     }
 
-    async createNft(tokenURI: any , royalties: any , locked_content: string = '') {
+    getRpcURL (net: any) {
+        if (net) {
+          switch(net) {
+            case configs.ONBOARD_POLYGON_ID:
+              return configs.POLYGON_RPC_URL;
+            case configs.ONBOARD_NETWORK_ID:
+              return configs.RPC_URL;
+            default:
+              return configs.RPC_URL;
+          }
+        }
+    }
+
+    async createCollection(name: string, symbol: string) {
+        if(web3) {
+            try{
+                let deploy_contract: any = await new web3.eth.Contract(PUML721ABI);
+                let deploy_engine: any = await new web3.eth.Contract(engineABI);
+                let parameter = {
+                    from: EthUtil.getAddress()
+                }
+
+                const contract_address: string = await deploy_contract.deploy({
+                    data: PUMLbytecode,
+                    arguments: [name, symbol]
+                }).send(parameter, (err: any, transactionHash: any) => {
+                    console.log('Contact Transaction Hash :', transactionHash);
+                }).on('confirmation', () => {
+                }).then((newContractInstance: any) => {
+                    // console.log('Deployed Contract Address : ', newContractInstance.options.address);
+                    return newContractInstance.options.address;
+                });
+
+                const engine_address: string = await deploy_engine.deploy({
+                    data: engineBytecode
+                }).send(parameter, (err: any, transactionHash: any) => {
+                    console.log('Engine Transaction Hash :', transactionHash);
+                }).on('confirmation', () => {
+                }).then((newContractInstance: any) => {
+                    // console.log('Deployed Engine Address : ', newContractInstance.options.address);
+                    return newContractInstance.options.address;
+                });
+                return {contractAddress: contract_address, engineAddress: engine_address};
+
+            }catch(err) {
+                return {contractAddress: '', engineAddress: ''};
+            }
+        }
+        return {contractAddress: '', engineAddress: ''};
+    }
+
+    async createNft(
+        tokenURI: any , 
+        royalties: any , 
+        locked_content: string = '', 
+        contract_address: string = ''
+    ) {
         if(web3) {
             const network = EthUtil.getNetwork();
-            const PUML_721_ADDRESS = this.getPuml721Address(network);
+            const PUML_721_ADDRESS = contract_address !== '' ? contract_address : this.getPuml721Address(network);
             const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
             try{
                 const result: any = await PUMLContract.methods.createItem(tokenURI, royalties , locked_content).send({
@@ -52,10 +108,10 @@ class Contract {
         return { success: false, error: 'Failed to create NFT!' };
     }
 
-    async approve(tokenId: any) {
+    async approve(tokenId: any, contract_address: string = '', engine_address: string = '') {
         const network = EthUtil.getNetwork();
-        const PUML_721_ADDRESS = this.getPuml721Address(network);
-        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
+        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : this.getPuml721Address(network);
+        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             // const bytecode = await new web3.eth.getCode(ENGINE_721_ADDRESS);
             const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
@@ -71,10 +127,20 @@ class Contract {
         return false;
     }
 
-    async createOffer(tokenId: any, isDirectSale: boolean , isAuction: boolean , price: any, minPrice: any, startTime: any, duration: any) {
+    async createOffer(
+        tokenId: any, 
+        isDirectSale: boolean , 
+        isAuction: boolean , 
+        price: any, 
+        minPrice: any, 
+        startTime: any, 
+        duration: any, 
+        contract_address: string = '',
+        engine_address: string = ''
+    ) {
         const network = EthUtil.getNetwork();
-        const PUML_721_ADDRESS = this.getPuml721Address(network);
-        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
+        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : this.getPuml721Address(network);
+        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             try {
@@ -104,9 +170,9 @@ class Contract {
         return null;
     }
 
-    async bid(tokenId:any, price: any) {
+    async bid(tokenId:any, price: any, engine_address: string = '') {
         const network = EthUtil.getNetwork();
-        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             let auctionId = await this.getAuctionId(tokenId);
             if(auctionId!==null) {
@@ -123,9 +189,9 @@ class Contract {
         return { success: false, error: 'Failed to bid to this item!' };
     }
 
-    async directBuy(tokenId: any, price: any) {
+    async directBuy(tokenId: any, price: any, engine_address: string = '') {
         const network = EthUtil.getNetwork();
-        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             // const bytecode = await new web3.eth.getCode(ENGINE_721_ADDRESS);

@@ -18,6 +18,7 @@ import { useHistory } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getMyInfo } from "store/User/user.selector";
 import { getWalletBalance } from "store/User/user.slice";
+import CollectionController from "controller/CollectionController";
 
 interface TokenViewProps {
   item: any;
@@ -98,7 +99,20 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
     setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
     try {
       if (item.chain_id) {
-        let result: any = await SmartContract721.approve(item.chain_id);
+        let result: any;
+        let collection: any 
+        if (item.collectionsId) collection = await CollectionController.getById(item.collectionsId);
+
+        if (collection) {
+            result = await SmartContract721.approve(
+              item.chain_id, 
+              collection.collection.contract_address, 
+              collection.collection.engine_address
+            );
+        } else {
+            result = await SmartContract721.approve(item.chain_id);
+        }
+
         if (result) {
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
           dispatch(getWalletBalance());
@@ -130,15 +144,36 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
               "now",
               resellFormData.current.expiry_date
             );
-        let result: any = await SmartContract721.createOffer(
-          item.chain_id,
-          isDirectSale,
-          isAuction,
-          offerPrice,
-          minBidPrice,
-          auctionStart,
-          duration
-        );
+
+        let result: any;
+
+        let collection: any 
+        if (item.collectionsId) collection = await CollectionController.getById(item.collectionsId);
+
+        if (collection) {
+          result = await SmartContract721.createOffer(
+            item.chain_id,
+            isDirectSale,
+            isAuction,
+            offerPrice,
+            minBidPrice,
+            auctionStart,
+            duration,
+            collection.collection.contract_address,
+            collection.collection.engine_address
+          );
+        } else {
+          result = await SmartContract721.createOffer(
+            item.chain_id,
+            isDirectSale,
+            isAuction,
+            offerPrice,
+            minBidPrice,
+            auctionStart,
+            duration
+          );
+        }
+
         if (result) {
           dispatch(getWalletBalance());
           // if (!result.success) {

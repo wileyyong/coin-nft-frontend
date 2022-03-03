@@ -46,6 +46,7 @@ import EthUtil from 'ethereum/EthUtil';
 import { EthereumNetworkID } from 'model/EthereumNetwork';
 
 import imgProperty from "assets/imgs/property.png";
+import CollectionController from 'controller/CollectionController';
 
 interface TokenDetailProps { }
 
@@ -260,7 +261,16 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     await dispatch(getWalletBalance());
                 }
                 setTransProgressing(true);
-                const result = await SmartContract.bid(token.chain_id, price);
+
+                let collection: any 
+                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+
+                let result: any;
+                if (collection) {
+                    result = await SmartContract.bid(token.chain_id, price, collection.collection.engine_address);
+                } else {
+                    result = await SmartContract.bid(token.chain_id, price);
+                }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
                     await OfferController.placeBid(offer._id, {
@@ -352,7 +362,20 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
         try {
             if (token.chain_id) {
-                let result: any = await SmartContract.approve(token.chain_id);
+                let result: any;
+
+                let collection: any 
+                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+
+                if (collection) {
+                    result = await SmartContract.approve(
+                        token.chain_id, 
+                        collection.collection.contract_address, 
+                        collection.collection.engine_address
+                    );
+                } else {
+                    result = await SmartContract.approve(token.chain_id);
+                }
                 if (result) {
                     setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
                     dispatch(getWalletBalance());
@@ -378,15 +401,34 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     "now",
                     resellFormData.current.expiry_date
                 );
-                let result: any = await SmartContract.createOffer(
-                    token.chain_id,
-                    isDirectSale,
-                    isAuction,
-                    offerPrice,
-                    minBidPrice,
-                    auctionStart,
-                    duration
-                );
+                let result: any;
+
+                let collection: any;
+                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+
+                if (collection) {
+                    result = await SmartContract.createOffer(
+                        token.chain_id,
+                        isDirectSale,
+                        isAuction,
+                        offerPrice,
+                        minBidPrice,
+                        auctionStart,
+                        duration,
+                        collection.collection.contract_address,
+                        collection.collection.engine_address
+                    );
+                } else {
+                    result = await SmartContract.createOffer(
+                        token.chain_id,
+                        isDirectSale,
+                        isAuction,
+                        offerPrice,
+                        minBidPrice,
+                        auctionStart,
+                        duration
+                    );
+                }
                 if (result) {
                     dispatch(getWalletBalance());
                     let offerObj: any = {
@@ -455,10 +497,23 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     await switchNetwork(network);
                     await dispatch(getWalletBalance());
                 }
-                let buyResult = await SmartContract.directBuy(
-                    token.chain_id,
-                    offer.offer_price
-                )
+
+                let collection: any 
+                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+
+                let buyResult: any;
+                if (collection) {
+                    buyResult = await SmartContract.directBuy(
+                        token.chain_id,
+                        offer.offer_price,
+                        collection.collection.engine_address
+                    )
+                } else {
+                    buyResult = await SmartContract.directBuy(
+                        token.chain_id,
+                        offer.offer_price
+                    )
+                }
                 if (buyResult.success && buyResult.transactionHash) {
                     dispatch(getWalletBalance());
                     await OfferController.directBuy(offer._id, {
