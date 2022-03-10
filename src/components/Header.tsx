@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Navbar, Nav, Image, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -8,6 +8,7 @@ import configs from "configs";
 import EthUtil from 'ethereum/EthUtil';
 import EthereumIcon from "assets/imgs/ethereum.svg";
 import PolygonIcon from "assets/imgs/polygon-matic.svg";
+import PumlIcon from "assets/imgs/puml.png";
 import {
   disconnectUserWallet
 } from "store/User/user.slice";
@@ -25,6 +26,9 @@ import {
   getMyInfo,
 } from "store/User/user.selector";
 
+import { getWalletBalance as walletBalance } from "store/User/user.slice";
+import SmartContract from "ethereum/Contract";
+
 import imgAvatar from "assets/imgs/avatar.png";
 
 interface HeaderProps { }
@@ -37,6 +41,18 @@ const Header: React.FC<HeaderProps> = () => {
   const isAuth = useAppSelector(isAuthenticated);
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(getMyInfo);
+  const network = EthUtil.getNetwork();
+
+  const [balanceOfPUML, setBalanceOfPUML] = useState<any>(0);
+
+  useEffect(() => {
+    const balancePUML = async () => {
+      const balancePUMLx: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
+      setBalanceOfPUML(parseFloat(balancePUMLx).toFixed(3));
+    }
+    balancePUML();
+    dispatch(walletBalance());
+  });
 
   const getDropdownAvatar = () => {
     return (
@@ -64,7 +80,6 @@ const Header: React.FC<HeaderProps> = () => {
   };
 
   const getPriceType = () => {
-    const network = EthUtil.getNetwork();
     if (network) {
       switch (network) {
         case 1:
@@ -85,7 +100,6 @@ const Header: React.FC<HeaderProps> = () => {
   }
 
   const getBlockImage = () => {
-    const network = EthUtil.getNetwork();
     if (network) {
       switch (network) {
         case 1:
@@ -173,10 +187,19 @@ const Header: React.FC<HeaderProps> = () => {
                       )}
                       <FlexAlignCenterDiv>
                         <Image src={getBlockImage()} width="22" />
-                        <div className="ml-2">
+                        <div className="ml-1">
                           <NormalTextTitle className="text-black">Balance</NormalTextTitle>
                           <SmallTextTitleGrey>{balance} {getPriceType()}</SmallTextTitleGrey>
                         </div>
+                        {getPriceType() === 'ETH' && (
+                          <>
+                            <Image src={PumlIcon} width="22" className='ml-2' />
+                            <div className="ml-1">
+                              <NormalTextTitle className="text-black">Balance</NormalTextTitle>
+                              <SmallTextTitleGrey>{balanceOfPUML} PUML</SmallTextTitleGrey>
+                            </div>
+                          </>
+                        )}
                       </FlexAlignCenterDiv>
                     </div>
 

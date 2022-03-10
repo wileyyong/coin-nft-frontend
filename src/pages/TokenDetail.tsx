@@ -86,7 +86,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     const [selectedTab, setSelectedTab] = useState(0);
     const [loading, setLoading] = useState(false);
     const [properties, setProperties] = useState([]);
-    const [network, setNetwork] = useState<any>(EthereumNetworkID.RinkebyNetwork);
+    const [network, setNetwork] = useState<any>(EthereumNetworkID.RinkebyNetwork);    
 
     const resellFormData = useRef({
         min_bid_price: 0,
@@ -266,10 +266,18 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
 
                 let result: any;
-                if (collection) {
-                    result = await SmartContract.bid(token.chain_id, price, collection.collection.engine_address);
+                if (token.blockchain && token.blockchain === 'PUMLx') {
+                    let obj: any = {
+                        tokenId: token.chain_id,
+                        price: 0.00001
+                    };
+                    result = await TokenController.bidToken(obj);
                 } else {
-                    result = await SmartContract.bid(token.chain_id, price);
+                    if (collection) {
+                        result = await SmartContract.bid(token.chain_id, price, collection.collection.engine_address);
+                    } else {
+                        result = await SmartContract.bid(token.chain_id, price);
+                    }
                 }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
@@ -415,6 +423,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         minBidPrice,
                         auctionStart,
                         duration,
+                        token.blockchain,
                         collection.collection.contract_address,
                         collection.collection.engine_address
                     );
@@ -426,7 +435,8 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         offerPrice,
                         minBidPrice,
                         auctionStart,
-                        duration
+                        duration,
+                        token.blockchain
                     );
                 }
                 if (result) {
@@ -496,23 +506,40 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 if (networkID !== network) {
                     await switchNetwork(network);
                     await dispatch(getWalletBalance());
+                    if (token.blockchain === 'PUMLx') {
+                        await SmartContract.addCustomToken(configs.PUML20_ADDRESS, 'PUML', 18);
+                    }
                 }
 
                 let collection: any 
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
 
                 let buyResult: any;
-                if (collection) {
-                    buyResult = await SmartContract.directBuy(
-                        token.chain_id,
-                        offer.offer_price,
-                        collection.collection.engine_address
-                    )
+                if (token.blockchain && token.blockchain === 'PUMLx') {
+                    let obj: any = {
+                        tokenId: token.chain_id,
+                        price: 0.00001
+                    };
+                    let buyTokenResult = await TokenController.buyToken(obj);
+                    if (buyTokenResult.success) {
+                        buyResult = await SmartContract.transferToken(
+                            offer.creator.wallet,
+                            offer.offer_price
+                        )
+                    }
                 } else {
-                    buyResult = await SmartContract.directBuy(
-                        token.chain_id,
-                        offer.offer_price
-                    )
+                    if (collection) {
+                        buyResult = await SmartContract.directBuy(
+                            token.chain_id,
+                            offer.offer_price,
+                            collection.collection.engine_address
+                        )
+                    } else {
+                        buyResult = await SmartContract.directBuy(
+                            token.chain_id,
+                            offer.offer_price
+                        )
+                    }
                 }
                 if (buyResult.success && buyResult.transactionHash) {
                     dispatch(getWalletBalance());

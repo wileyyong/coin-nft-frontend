@@ -159,6 +159,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
             minBidPrice,
             auctionStart,
             duration,
+            item.blockchain,
             collection.collection.contract_address,
             collection.collection.engine_address
           );
@@ -170,7 +171,8 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
             offerPrice,
             minBidPrice,
             auctionStart,
-            duration
+            duration,
+            item.blockchain
           );
         }
 

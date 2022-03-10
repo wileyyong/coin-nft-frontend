@@ -37,6 +37,14 @@ class TokenController {
         let url = configs.API.TOKEN_URL;
         return API.get(`${url}/${id}/unlike`).then(res => res);
     }
+    public static buyToken(payload: any) {
+        let url = configs.API.TOKEN_URL;
+        return API.post(`${url}/buyToken`, payload).then(res => res.data);
+    }
+    public static bidToken(payload: any) {
+        let url = configs.API.TOKEN_URL;
+        return API.post(`${url}/bidToken`, payload).then(res => res.data);
+    }
 }
 
 export default TokenController;

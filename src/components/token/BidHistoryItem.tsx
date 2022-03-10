@@ -48,6 +48,9 @@ const BidHistoryItem: React.FC<BidHistoryItemProps> = ({ item, token }) => {
             case 'MATIC':
                 dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
                 break;
+            case 'PUMLx':
+                dollarPrice = (ethValue * 0.05).toFixed(2);
+                break;
             default:
         }
     }

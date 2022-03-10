@@ -62,6 +62,9 @@ const NftItemCard: React.FC<nftItemProps> = ({ item }) => {
                 case 'MATIC':
                    dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
                    break;
+                case 'PUMLx':
+                   dollarPrice = (ethValue * 0.05).toFixed(2);
+                   break;
                 default:
             }
         }

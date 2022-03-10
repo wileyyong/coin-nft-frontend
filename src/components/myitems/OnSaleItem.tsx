@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { BigNumberMul } from "service/number";
 import { useAppSelector } from "store/hooks";
-import { getETHUSDTCurrency } from "store/Nft/nft.selector";
+import { getETHUSDTCurrency, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 import configs from 'configs';
 
 interface OnSaleItemProps {
@@ -13,6 +13,7 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
   const history = useHistory();
   const token = item.token || {};
   const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
+  const maticDollarPrice = useAppSelector(getMATICUSDTCurrency);
   const getTokenThumbnail = () => {
     let media = token.media_type ? token.media_type.toLowerCase() : '';
     if (
@@ -38,11 +39,23 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
     return item.offer_price;
   };
   const getDollarPrice = (ethValue: any) => {
+    let blockchain:string = token.blockchain ? token.blockchain : 'ETH';
+    let dollarPrice:any = 0;
     if (ethValue) {
-        let dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
-        return dollarPrice;
+        switch (blockchain) {
+            case 'ETH':
+                dollarPrice = BigNumberMul(ethValue, ethDollarPrice).toFixed(2);
+                break;
+            case 'MATIC':
+                dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
+                break;
+            case 'PUMLx':
+                dollarPrice = (ethValue * 0.05).toFixed(2);
+                break;
+            default:
+        }
     }
-    return 0;
+    return dollarPrice;
   }
 
   return (
@@ -56,7 +69,7 @@ const OnSaleItem: React.FC<OnSaleItemProps> = ({ item }) => {
           <span className="eth-price"> • {item.type === "direct" ? (
               "Not for Sale"
             ) : (
-              <>From {getCurrentBidPrice() || item.min_bid} ETH</>
+              <>From {getCurrentBidPrice() || item.min_bid} {token.blockchain ? token.blockchain : 'ETH'}</>
             )}</span>
         </div>
         <div className="card-content pt-2">{token.description}</div>

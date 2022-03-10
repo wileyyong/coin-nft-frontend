@@ -1,5 +1,6 @@
 import { abi as engineABI, bytecode as engineBytecode } from './abis/Engine.json';
 import { abi as PUML721ABI, bytecode as PUMLbytecode } from './abis/PumlNFT.json';
+import { abi as iercABI } from './abis/IERC20.json';
 import { web3 } from './OnBoard';
 import configs from 'configs';
 import EthUtil from './EthUtil';
@@ -83,6 +84,31 @@ class Contract {
         return {contractAddress: '', engineAddress: ''};
     }
 
+    async addCustomToken (tokenAddress: string, tokenSymbol: string, tokenDecimals: number) {
+        if(web3) {
+            const PUMLContract = new web3.eth.Contract(PUML721ABI, configs.PUML20_ADDRESS);
+            if (!PUMLContract) {
+                await web3.currentProvider.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20',
+                        options: {
+                            address: tokenAddress,
+                            symbol: tokenSymbol,
+                            decimals: tokenDecimals,
+                        },
+                    },
+                });
+            }
+        }
+    }
+
+    async balanceCustomToken (tokenAddress: string) {
+        const custom_token = new web3.eth.Contract(PUML721ABI, tokenAddress);
+        const balance = await custom_token.methods.balanceOf(EthUtil.getAddress()).call();
+        return web3.utils.fromWei(balance, "ether");
+    }
+
     async createNft(
         tokenURI: any , 
         royalties: any , 
@@ -135,6 +161,7 @@ class Contract {
         minPrice: any, 
         startTime: any, 
         duration: any, 
+        tokenBlockchain: any,
         contract_address: string = '',
         engine_address: string = ''
     ) {
@@ -143,6 +170,10 @@ class Contract {
         const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
+            if (tokenBlockchain === 'PUMLx') {
+                price = 0.00001;
+                minPrice = 0.00001;
+            }
             try {
                 await engineContract.methods.createOffer(PUML_721_ADDRESS,tokenId,isDirectSale,isAuction,web3.utils.toWei('' + price),web3.utils.toWei('' + minPrice),startTime,duration).send({
                     from: EthUtil.getAddress()
@@ -194,11 +225,25 @@ class Contract {
         const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
-            // const bytecode = await new web3.eth.getCode(ENGINE_721_ADDRESS);
             const result: any = await engineContract.methods.buy(tokenId).send({
                 from: EthUtil.getAddress(),
-                value: web3.utils.toWei('' + price)
+                value: web3.utils.toWei('' + 0.00001)
             })
+
+            if(result.status === true) {
+                return { success: true , transactionHash: result.transactionHash };
+            }
+        }
+        return { success: false, error: 'Failed to buy this item directly!' };
+    }
+
+    async transferToken(toAddress: any, price: any) {
+        if(web3) {
+            const pumlContract = new web3.eth.Contract(iercABI, configs.PUML20_ADDRESS);
+            const result = await pumlContract.methods.transfer(toAddress, web3.utils.toWei('' + price)).send({
+                from: EthUtil.getAddress()
+            })
+
             if(result.status === true) {
                 return { success: true , transactionHash: result.transactionHash };
             }

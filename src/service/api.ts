@@ -8,7 +8,7 @@ var instance = axios.create({
 instance.interceptors.request.use(function (config) {
     // Set Token before request is sent
     var token:any = Storage.getAuthToken();
-    if (token) {
+    if (config && config.headers && token) {
         config.headers['Authorization'] = 'Bearer ' + token;
     }
     return config;

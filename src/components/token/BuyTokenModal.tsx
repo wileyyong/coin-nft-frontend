@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppSelector } from "store/hooks";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { getNftServiceFee } from "store/Nft/nft.selector";
@@ -9,6 +9,8 @@ import {
   FlexJustifyBetweenDiv
 } from "../common/common.styles";
 import { getWalletBalance } from "store/User/user.selector";
+import SmartContract from "ethereum/Contract";
+import configs from "configs";
 
 interface BuyTokenModalProps {
   handleClose?: any;
@@ -29,7 +31,16 @@ const BuyTokenModal: React.FC<BuyTokenModalProps> = ({
 }) => {
   const [price] = useState<any>(offer.offer_price);
   const serviceFee = useAppSelector(getNftServiceFee);
-  const balance = useAppSelector(getWalletBalance);
+  const [balance, setBalance] = useState<any>(useAppSelector(getWalletBalance));
+
+  const balancePUML = async () => {
+    const balanceOfPUML: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
+    setBalance(parseFloat(balanceOfPUML).toFixed(3));
+  }
+
+  useEffect(() => {
+    if (token.blockchain === 'PUMLx') balancePUML();
+  }, [token.blockchain]);
 
   return (
     <Modal show={show} onHide={handleClose} className="buy-token-modal">

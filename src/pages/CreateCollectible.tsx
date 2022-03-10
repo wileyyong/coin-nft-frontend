@@ -6,6 +6,7 @@ import { NotificationManager } from "react-notifications";
 import imgAvatar from "assets/imgs/avatar.png";
 import EthereumIcon from "assets/imgs/ethereum.svg";
 import PolygonIcon from "assets/imgs/polygon-matic.svg";
+import PumlIcon from "assets/imgs/puml.png";
 import verifyBadge from 'assets/imgs/verify.svg';
 
 import {
@@ -201,7 +202,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             description: collection.description,
             short: collection.short,
             image: collection.image,
-            network: network.value,
+            network: network.key,
             contract_address: contract_address,
             engine_address: engine_address
         };
@@ -259,6 +260,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             if (networkID !== network.key) {
                 await switchNetwork(network.key);
                 await dispatch(getWalletBalance());
+                if (network.value === 'PUMLx') {
+                    await SmartContract.addCustomToken(configs.PUML20_ADDRESS, 'PUML', 18);
+                }
             }
             setCreateNftDialog(true);
             if (createNftStatus < NftCreateStatus.MINT_SUCCEED) {
@@ -374,6 +378,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                     collectible.min_bid_price,
                     auctionStart,
                     duration,
+                    network.value,
                     contractAddress,
                     engineAddress
                 );
@@ -537,7 +542,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         <div className="change-blockchain mb-4">
                                             <BigTitle className="mt-4 mb-3">Blockchain</BigTitle>
                                             <div className="blockchain-list">
-                                                <div className={network.name === 'Ethereum' ? 'blockchain-item selected' : 'blockchain-item'}
+                                                <div className={`col-3 ${network.name === 'Ethereum' ? 'blockchain-item selected' : 'blockchain-item'}`} 
                                                     onClick={() => changeBlockchain({name: 'Ethereum', value: 'ETH', key: configs.ONBOARD_NETWORK_ID})}
                                                 >
                                                     <div className="blockchain-icon">
@@ -545,12 +550,19 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                     </div>
                                                     <div className="blockchain-name">Ethereum</div>
                                                 </div>
-                                                <div className={network.name === 'Polygon' ? 'blockchain-item selected' : 'blockchain-item'} 
+                                                <div className={`col-3 ${network.name === 'Polygon' ? 'blockchain-item selected' : 'blockchain-item'}`} 
                                                     onClick={() => changeBlockchain({name: 'Polygon', value: 'MATIC', key: configs.ONBOARD_POLYGON_ID})}>
                                                     <div className="blockchain-icon">
                                                         <Image src={PolygonIcon} />
                                                     </div>
                                                     <div className="blockchain-name">Polygon (MATIC)</div>
+                                                </div>
+                                                <div className={`col-3 ${network.name === 'PUMLx' ? 'blockchain-item selected' : 'blockchain-item'}`} 
+                                                    onClick={() => changeBlockchain({name: 'PUMLx', value: 'PUMLx', key: configs.ONBOARD_NETWORK_ID})}>
+                                                    <div className="blockchain-icon">
+                                                        <Image src={PumlIcon} />
+                                                    </div>
+                                                    <div className="blockchain-name">PUMLx</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -725,7 +737,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             </div>
                                             {collectionItems.map((cItem: any, index: number) => {
                                                 return (
-                                                    ((cItem.network && cItem.network === network.value) || cItem.name ==='PUML') && (
+                                                    ((cItem.network && cItem.network === network.key) || cItem.name ==='PUML') && (
                                                         <ChooseCollectionItem
                                                             item={cItem}
                                                             key={index}
