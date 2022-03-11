@@ -10,6 +10,7 @@ import CollectionController from "controller/CollectionController";
 import EthUtil from "ethereum/EthUtil";
 import configs from "configs";
 import { onboard, web3 } from "ethereum/OnBoard";
+import SmartContract from "ethereum/Contract";
 
 export const userSlice = createSlice({
   name: "user",
@@ -20,6 +21,12 @@ export const userSlice = createSlice({
       action: PayloadAction<string>
     ) {
       state.wallet.address = action.payload;
+    },
+    setUserWalletPumlx(
+      state: Draft<UserReducerState>,
+      action: PayloadAction<string>
+    ) {
+      state.wallet.pumlx = action.payload;
     },
     setUserWalletBalance(
       state: Draft<UserReducerState>,
@@ -53,6 +60,7 @@ export { reducer as userReducer };
 export const {
   setUserWalletAddress,
   setUserWalletBalance,
+  setUserWalletPumlx,
   setToken,
   setMyInfo,
   setMyCollection,
@@ -75,6 +83,15 @@ export const getWalletBalance = () => async (dispatch: any) => {
     let balance = await EthUtil.getBalance();
     if (balance) {
       dispatch(setUserWalletBalance(balance));
+    }
+  } catch (e) {}
+};
+
+export const getWalletPumlx = () => async (dispatch: any) => {
+  try {
+    let pumlx = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
+    if (pumlx) {
+      dispatch(setUserWalletPumlx(pumlx));
     }
   } catch (e) {}
 };

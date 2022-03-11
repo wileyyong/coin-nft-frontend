@@ -11,6 +11,12 @@ export function getWalletBalance(state: RootState): any {
   return 0;
 }
 
+export function getWalletPumlx(state: RootState): any {
+  let pumlx = state?.user?.wallet?.pumlx;
+  if(pumlx) return toFixed(pumlx,4);
+  return 0;
+}
+
 export function getCollections(state: RootState): any {
   return state?.user?.collections || [];
 }

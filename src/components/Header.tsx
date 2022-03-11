@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Navbar, Nav, Image, NavDropdown } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
@@ -24,12 +24,10 @@ import {
   getWalletBalance,
   isAuthenticated,
   getMyInfo,
+  getWalletPumlx,
 } from "store/User/user.selector";
 
-import { getWalletBalance as walletBalance } from "store/User/user.slice";
-import SmartContract from "ethereum/Contract";
-import Storage from "service/storage";
-
+import { getWalletBalance as walletBalance, getWalletPumlx as walletPumlx } from "store/User/user.slice";
 import imgAvatar from "assets/imgs/avatar.png";
 
 interface HeaderProps { }
@@ -39,24 +37,14 @@ const Header: React.FC<HeaderProps> = () => {
   const location = useLocation();
   const walletAddress = useAppSelector(getWalletAddress);
   const balance = useAppSelector(getWalletBalance);
+  const pumlx = useAppSelector(getWalletPumlx);
   const isAuth = useAppSelector(isAuthenticated);
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector(getMyInfo);
   const network = EthUtil.getNetwork();
 
-  const [balanceOfPUML, setBalanceOfPUML] = useState<any>(0);
-
   useEffect(() => {
-    const balancePUML = async () => {
-      const balancePUMLx: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
-      Storage.set("pumlxBalance", parseFloat(balancePUMLx).toFixed(3));
-      setBalanceOfPUML(parseFloat(balancePUMLx).toFixed(3));
-    }
-    if (!Storage.get("pumlxBalance")) {
-      balancePUML();
-    } else {
-      setBalanceOfPUML(Storage.get("pumlxBalance"))
-    }
+    dispatch(walletPumlx());
     dispatch(walletBalance());
   });
 
@@ -202,7 +190,7 @@ const Header: React.FC<HeaderProps> = () => {
                             <Image src={PumlIcon} width="22" className='ml-2' />
                             <div className="ml-1">
                               <NormalTextTitle className="text-black">Balance</NormalTextTitle>
-                              <SmallTextTitleGrey>{balanceOfPUML} PUML</SmallTextTitleGrey>
+                              <SmallTextTitleGrey>{pumlx} PUML</SmallTextTitleGrey>
                             </div>
                           </>
                         )}

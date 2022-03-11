@@ -31,8 +31,7 @@ import ShareNFTModal from "components/token/ShareNFTModal";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency, getNftServiceFee, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 import { getMyInfo, getWalletAddress } from "store/User/user.selector";
-import { connectUserWallet, getWalletBalance, switchNetwork } from "store/User/user.slice";
-import Storage from "service/storage";
+import { connectUserWallet, getWalletBalance, switchNetwork, getWalletPumlx } from "store/User/user.slice";
 
 import {
     B1NormalTextTitle,
@@ -517,8 +516,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         offer.offer_price
                     )
                     if (buyTokenResult.success) {
-                        const balancePUMLx: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
-                        Storage.set("pumlxBalance", parseFloat(balancePUMLx).toFixed(3));
+                        dispatch(getWalletPumlx());
                         let obj: any = {
                             tokenId: token.chain_id,
                             buyerAddress: EthUtil.getAddress()

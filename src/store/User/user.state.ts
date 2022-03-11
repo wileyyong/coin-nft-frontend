@@ -3,6 +3,7 @@ import Storage from 'service/storage';
 export type UserWallet = {
   address: string;
   balance: any;
+  pumlx: any;
 }
 
 export type UserReducerState = {
@@ -27,7 +28,7 @@ export const USER_INITIAL_STATE: UserReducerState = {
   loading: false,
   info: {},
   token: Storage.getAuthToken(),
-  wallet: { address: '', balance: 0 } as UserWallet,
+  wallet: { address: '', balance: 0, pumlx: 0 } as UserWallet,
   collections: initCollectionItems,
   myCollections: initCollectionItems,
   myTokens: []
