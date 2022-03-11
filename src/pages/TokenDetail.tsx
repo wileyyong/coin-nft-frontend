@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency, getNftServiceFee, getMATICUSDTCurrency } from "store/Nft/nft.selector";
 import { getMyInfo, getWalletAddress } from "store/User/user.selector";
 import { connectUserWallet, getWalletBalance, switchNetwork } from "store/User/user.slice";
+import Storage from "service/storage";
 
 import {
     B1NormalTextTitle,
@@ -262,22 +263,16 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 }
                 setTransProgressing(true);
 
-                let collection: any 
-                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
-
                 let result: any;
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let obj: any = {
-                        tokenId: token.chain_id,
-                        price: 0.00001
+                        tokenChainId: token.chain_id,
+                        tokenId: token._id,
+                        bidderAddress: EthUtil.getAddress()
                     };
                     result = await TokenController.bidToken(obj);
                 } else {
-                    if (collection) {
-                        result = await SmartContract.bid(token.chain_id, price, collection.collection.engine_address);
-                    } else {
-                        result = await SmartContract.bid(token.chain_id, price);
-                    }
+                    result = await SmartContract.bid(token.chain_id, price);
                 }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
@@ -291,6 +286,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         "Success"
                     );
                 } else {
+                    console.log("error", result.error);
                     NotificationManager.error("You failed to bid this item.", "Error");
                 }
                 setTransProgressing(false);
@@ -334,6 +330,9 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                    break;
                 case 'MATIC':
                    dollarPrice = BigNumberMul(ethValue, maticDollarPrice).toFixed(2);
+                   break;
+                case 'PUMLx':
+                   dollarPrice = (ethValue * 0.05).toFixed(2);
                    break;
                 default:
             }
@@ -511,35 +510,26 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     }
                 }
 
-                let collection: any 
-                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
-
                 let buyResult: any;
                 if (token.blockchain && token.blockchain === 'PUMLx') {
-                    let obj: any = {
-                        tokenId: token.chain_id,
-                        price: 0.00001
-                    };
-                    let buyTokenResult = await TokenController.buyToken(obj);
+                    let buyTokenResult = await SmartContract.transferToken(
+                        offer.creator.wallet,
+                        offer.offer_price
+                    )
                     if (buyTokenResult.success) {
-                        buyResult = await SmartContract.transferToken(
-                            offer.creator.wallet,
-                            offer.offer_price
-                        )
+                        const balancePUMLx: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
+                        Storage.set("pumlxBalance", parseFloat(balancePUMLx).toFixed(3));
+                        let obj: any = {
+                            tokenId: token.chain_id,
+                            buyerAddress: EthUtil.getAddress()
+                        };
+                        buyResult = await TokenController.buyToken(obj);
                     }
                 } else {
-                    if (collection) {
-                        buyResult = await SmartContract.directBuy(
-                            token.chain_id,
-                            offer.offer_price,
-                            collection.collection.engine_address
-                        )
-                    } else {
-                        buyResult = await SmartContract.directBuy(
-                            token.chain_id,
-                            offer.offer_price
-                        )
-                    }
+                    buyResult = await SmartContract.directBuy(
+                        token.chain_id,
+                        offer.offer_price
+                    )
                 }
                 if (buyResult.success && buyResult.transactionHash) {
                     dispatch(getWalletBalance());
@@ -555,6 +545,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     setShowBuyTokenModal(false);
                     loadOffer();
                 } else {
+                    console.log("error", buyResult.error);
                     NotificationManager.error(
                         "You failed to buy this item directly.",
                         "Error"

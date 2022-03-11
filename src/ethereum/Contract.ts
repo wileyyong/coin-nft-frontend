@@ -180,7 +180,7 @@ class Contract {
                 });
                 return true;
             }catch(err) {
-                console.log(err);
+                console.log("err", err);
             }
         }
         return false;
@@ -201,9 +201,9 @@ class Contract {
         return null;
     }
 
-    async bid(tokenId:any, price: any, engine_address: string = '') {
+    async bid(tokenId:any, price: any) {
         const network = EthUtil.getNetwork();
-        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             let auctionId = await this.getAuctionId(tokenId);
             if(auctionId!==null) {
@@ -220,14 +220,14 @@ class Contract {
         return { success: false, error: 'Failed to bid to this item!' };
     }
 
-    async directBuy(tokenId: any, price: any, engine_address: string = '') {
+    async directBuy(tokenId: any, price: any) {
         const network = EthUtil.getNetwork();
-        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             const result: any = await engineContract.methods.buy(tokenId).send({
                 from: EthUtil.getAddress(),
-                value: web3.utils.toWei('' + 0.00001)
+                value: web3.utils.toWei('' + price)
             })
 
             if(result.status === true) {

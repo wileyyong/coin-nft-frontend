@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import { isLessValue } from "service/number";
 import { useAppSelector } from "store/hooks";
 import { getWalletBalance } from "store/User/user.selector";
+import SmartContract from "ethereum/Contract";
+import configs from "configs";
 import {
   B2NormalTextTitle,
   BigTitle,
@@ -29,8 +31,19 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
   token,
   owner
 }) => {
-  const balance = useAppSelector(getWalletBalance);
+  // const balance = useAppSelector(getWalletBalance);
   const [price, setPrice] = useState<any>(minPrice);
+  const [balance, setBalance] = useState<any>(useAppSelector(getWalletBalance));
+
+  const balancePUML = async () => {
+    const balanceOfPUML: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
+    setBalance(parseFloat(balanceOfPUML).toFixed(3));
+  }
+
+  useEffect(() => {
+    if (token.blockchain === 'PUMLx') balancePUML();
+  }, [token.blockchain]);
+
 
   const isBelowMinPrice = () => {
     return isLessValue(price, minPrice);

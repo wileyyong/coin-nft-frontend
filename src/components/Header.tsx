@@ -28,6 +28,7 @@ import {
 
 import { getWalletBalance as walletBalance } from "store/User/user.slice";
 import SmartContract from "ethereum/Contract";
+import Storage from "service/storage";
 
 import imgAvatar from "assets/imgs/avatar.png";
 
@@ -48,9 +49,14 @@ const Header: React.FC<HeaderProps> = () => {
   useEffect(() => {
     const balancePUML = async () => {
       const balancePUMLx: any = await SmartContract.balanceCustomToken(configs.PUML20_ADDRESS);
+      Storage.set("pumlxBalance", parseFloat(balancePUMLx).toFixed(3));
       setBalanceOfPUML(parseFloat(balancePUMLx).toFixed(3));
     }
-    balancePUML();
+    if (!Storage.get("pumlxBalance")) {
+      balancePUML();
+    } else {
+      setBalanceOfPUML(Storage.get("pumlxBalance"))
+    }
     dispatch(walletBalance());
   });
 
