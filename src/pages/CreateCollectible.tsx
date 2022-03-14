@@ -236,11 +236,13 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     };
 
     const collectionSubmit = async () => {
-        const networkID = EthUtil.getNetwork();
-        if (networkID !== network.key) {
-            await switchNetwork(network.key);
+        if (network.value !== "PUMLx") {
+            const networkID = EthUtil.getNetwork();
+            if (networkID !== network.key) {
+                await switchNetwork(network.key);
+            }
+            setShowCollectionDialog(true);
         }
-        setShowCollectionDialog(true);
     }
 
     const submitForm = async (e: any) => {
@@ -745,7 +747,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             </div>
                                             {collectionItems.map((cItem: any, index: number) => {
                                                 return (
-                                                    ((cItem.network && cItem.network === network.key) || cItem.name ==='PUML') && (
+                                                    ((cItem.network && cItem.network === network.key && network.value !== 'PUMLx') || cItem.name ==='PUML') && (
                                                         <ChooseCollectionItem
                                                             item={cItem}
                                                             key={index}
