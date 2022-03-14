@@ -55,14 +55,15 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 
   const placeBid = () => {
     if (isBelowMinPrice()) return;
-    if (isLessValue(price, balance)) {
-      submitBid(price,1);
-    } else {
-      NotificationManager.error(
-        "You have no enough balance to process transaction.",
-        "Error"
-      );
-    }
+    // if (isLessValue(price, balance)) {
+    //   submitBid(price,1);
+    // } else {
+    //   NotificationManager.error(
+    //     "You have no enough balance to process transaction.",
+    //     "Error"
+    //   );
+    // }
+    submitBid(price,1);
   };
 
   return (

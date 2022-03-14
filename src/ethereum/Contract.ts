@@ -75,13 +75,13 @@ class Contract {
                     // console.log('Deployed Engine Address : ', newContractInstance.options.address);
                     return newContractInstance.options.address;
                 });
-                return {contractAddress: contract_address, engineAddress: engine_address};
+                return {success:true, contractAddress: contract_address, engineAddress: engine_address};
 
             }catch(err) {
-                return {contractAddress: '', engineAddress: ''};
+                return {success:false, contractAddress: '', engineAddress: ''};
             }
         }
-        return {contractAddress: '', engineAddress: ''};
+        return {success:false, contractAddress: '', engineAddress: ''};
     }
 
     async addCustomToken (tokenAddress: string, tokenSymbol: string, tokenDecimals: number) {
@@ -170,12 +170,23 @@ class Contract {
         const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
+            let buyPrice: number = price;
+            let minBidPrice: number = minPrice;
             if (tokenBlockchain === 'PUMLx') {
-                price = 0.00001;
-                minPrice = 0.00001;
+                buyPrice = 0.00001;
+                minBidPrice = 0.00001;
             }
             try {
-                await engineContract.methods.createOffer(PUML_721_ADDRESS,tokenId,isDirectSale,isAuction,web3.utils.toWei('' + price),web3.utils.toWei('' + minPrice),startTime,duration).send({
+                await engineContract.methods.createOffer(
+                    PUML_721_ADDRESS,
+                    tokenId,
+                    isDirectSale,
+                    isAuction,
+                    web3.utils.toWei('' + buyPrice),
+                    web3.utils.toWei('' + minBidPrice),
+                    startTime,
+                    duration
+                ).send({
                     from: EthUtil.getAddress()
                 });
                 return true;
@@ -208,7 +219,7 @@ class Contract {
             let auctionId = await this.getAuctionId(tokenId);
             if(auctionId!==null) {
                 const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
-                const result: any = await engineContract.methods.bid(auctionId).send({
+                const result: any = await engineContract.methods.bid(auctionId, '0x0000000000000000000000000000000000000000').send({
                     from: EthUtil.getAddress(),
                     value: web3.utils.toWei('' + price)
                 });
@@ -225,7 +236,7 @@ class Contract {
         const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
-            const result: any = await engineContract.methods.buy(tokenId).send({
+            const result: any = await engineContract.methods.buy(tokenId, '0x0000000000000000000000000000000000000000').send({
                 from: EthUtil.getAddress(),
                 value: web3.utils.toWei('' + price)
             })

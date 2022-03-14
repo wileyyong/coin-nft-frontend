@@ -264,12 +264,19 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
 
                 let result: any;
                 if (token.blockchain && token.blockchain === 'PUMLx') {
-                    let obj: any = {
-                        tokenChainId: token.chain_id,
-                        tokenId: token._id,
-                        bidderAddress: EthUtil.getAddress()
-                    };
-                    result = await TokenController.bidToken(obj);
+                    let bidTokenResult = await SmartContract.transferToken(
+                        configs.MAIN_ACCOUNT,
+                        price
+                    )
+                    if (bidTokenResult.success) {
+                        dispatch(getWalletPumlx());
+                        let obj: any = {
+                            tokenChainId: token.chain_id,
+                            tokenId: token._id,
+                            bidderAddress: EthUtil.getAddress()
+                        };
+                        result = await TokenController.bidToken(obj);
+                    }
                 } else {
                     result = await SmartContract.bid(token.chain_id, price);
                 }
