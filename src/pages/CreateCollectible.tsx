@@ -210,28 +210,38 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const createCollection = async (collection: any) => {
         setIsLoading(true);
-        let {contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
+        let {success, contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
         if (contractAddress === '') {
             window.location.reload();
         }
-        let formData = Utility.getFormDataFromObject(getPureCollectionObj(collection, contractAddress, engineAddress));
-        try {
-            await CollectionController.create(formData);
-            loadCollections();
-            setIsLoading(false);
-            setShowCollectionDialog(false);
-            setContractAddress(contractAddress);
-            setEngineAddress(engineAddress)
-            NotificationManager.success(
-                "Collection is created successfully.",
-                "Success"
-            );
-        } catch (err) {
-            setIsLoading(false);
-            NotificationManager.error("Create Collection Failed!", "Error");
+        if (success) {
+            let formData = Utility.getFormDataFromObject(getPureCollectionObj(collection, contractAddress, engineAddress));
+            try {
+                await CollectionController.create(formData);
+                loadCollections();
+                setIsLoading(false);
+                setShowCollectionDialog(false);
+                setContractAddress(contractAddress);
+                setEngineAddress(engineAddress)
+                NotificationManager.success(
+                    "Collection is created successfully.",
+                    "Success"
+                );
+            } catch (err) {
+                setIsLoading(false);
+                NotificationManager.error("Create Collection Failed!", "Error");
+            }
         }
         window.location.reload();
     };
+
+    const collectionSubmit = async () => {
+        const networkID = EthUtil.getNetwork();
+        if (networkID !== network.key) {
+            await switchNetwork(network.key);
+        }
+        setShowCollectionDialog(true);
+    }
 
     const submitForm = async (e: any) => {
         e.preventDefault();
@@ -721,9 +731,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         <div className="collection-types d-flex mt-4 text-black">
                                             <div
                                                 className="choose-collection-item p-4 mr-4 text-center"
-                                                onClick={() => {
-                                                    setShowCollectionDialog(true);
-                                                }}
+                                                onClick={() => collectionSubmit()}
                                             >
                                                 <div className="c-nft-avatar add-collection-btn">
                                                     <FaPlus></FaPlus>
