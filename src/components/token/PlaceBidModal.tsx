@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { NotificationManager } from "react-notifications";
+// import { NotificationManager } from "react-notifications";
 import { isLessValue } from "service/number";
 import { useAppSelector } from "store/hooks";
 import { getWalletBalance } from "store/User/user.selector";

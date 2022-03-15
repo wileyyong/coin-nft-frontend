@@ -183,7 +183,11 @@ const Home: React.FC<HomeProps> = () => {
       const featuredNFT = await UserController.getFeatured();
 
       if (featuredNFT && featuredNFT.featured) {
-        setFeaturedImage(`${configs.DEPLOY_URL}${featuredNFT.featured}`)
+        if (featuredNFT.featured.includes("https://")) {
+          setFeaturedImage(`${featuredNFT.featured}`)
+        } else {
+          setFeaturedImage(`${configs.DEPLOY_URL}${featuredNFT.featured}`)
+        }
       } else {
         setFeaturedImage(null);
       }

@@ -263,22 +263,28 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 setTransProgressing(true);
 
                 let result: any;
+                let collection: any 
+                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
+
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let bidTokenResult = await SmartContract.transferToken(
                         configs.MAIN_ACCOUNT,
                         price
                     )
+
                     if (bidTokenResult.success) {
                         dispatch(getWalletPumlx());
                         let obj: any = {
                             tokenChainId: token.chain_id,
                             tokenId: token._id,
-                            bidderAddress: EthUtil.getAddress()
+                            bidderAddress: EthUtil.getAddress(),
+                            engineAddress: engineAddress
                         };
                         result = await TokenController.bidToken(obj);
                     }
                 } else {
-                    result = await SmartContract.bid(token.chain_id, price);
+                    result = await SmartContract.bid(token.chain_id, price, engineAddress);
                 }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
@@ -379,16 +385,14 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
 
                 let collection: any 
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+                const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
+                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
 
-                if (collection) {
-                    result = await SmartContract.approve(
-                        token.chain_id, 
-                        collection.collection.contract_address, 
-                        collection.collection.engine_address
-                    );
-                } else {
-                    result = await SmartContract.approve(token.chain_id);
-                }
+                result = await SmartContract.approve(
+                    token.chain_id, 
+                    contractAddress, 
+                    engineAddress
+                );
                 if (result) {
                     setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
                     dispatch(getWalletBalance());
@@ -418,32 +422,21 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
 
                 let collection: any;
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+                const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
+                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
 
-                if (collection) {
-                    result = await SmartContract.createOffer(
-                        token.chain_id,
-                        isDirectSale,
-                        isAuction,
-                        offerPrice,
-                        minBidPrice,
-                        auctionStart,
-                        duration,
-                        token.blockchain,
-                        collection.collection.contract_address,
-                        collection.collection.engine_address
-                    );
-                } else {
-                    result = await SmartContract.createOffer(
-                        token.chain_id,
-                        isDirectSale,
-                        isAuction,
-                        offerPrice,
-                        minBidPrice,
-                        auctionStart,
-                        duration,
-                        token.blockchain
-                    );
-                }
+                result = await SmartContract.createOffer(
+                    token.chain_id,
+                    isDirectSale,
+                    isAuction,
+                    offerPrice,
+                    minBidPrice,
+                    auctionStart,
+                    duration,
+                    token.blockchain,
+                    contractAddress,
+                    engineAddress
+                );
                 if (result) {
                     dispatch(getWalletBalance());
                     let offerObj: any = {
@@ -517,6 +510,10 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 }
 
                 let buyResult: any;
+                let collection: any 
+                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
+                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
+
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let buyTokenResult = await SmartContract.transferToken(
                         offer.creator.wallet,
@@ -526,14 +523,16 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         dispatch(getWalletPumlx());
                         let obj: any = {
                             tokenId: token.chain_id,
-                            buyerAddress: EthUtil.getAddress()
+                            buyerAddress: EthUtil.getAddress(),
+                            engineAddress: engineAddress
                         };
                         buyResult = await TokenController.buyToken(obj);
                     }
                 } else {
                     buyResult = await SmartContract.directBuy(
                         token.chain_id,
-                        offer.offer_price
+                        offer.offer_price,
+                        engineAddress
                     )
                 }
                 if (buyResult.success && buyResult.transactionHash) {

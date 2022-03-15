@@ -209,6 +209,11 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     };
 
     const createCollection = async (collection: any) => {
+        const networkID = EthUtil.getNetwork();
+        if (networkID !== network.key) {
+            await switchNetwork(network.key);
+        }
+
         setIsLoading(true);
         let {success, contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
         if (contractAddress === '') {
@@ -236,13 +241,9 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     };
 
     const collectionSubmit = async () => {
-        if (network.value !== "PUMLx") {
-            const networkID = EthUtil.getNetwork();
-            if (networkID !== network.key) {
-                await switchNetwork(network.key);
-            }
-            setShowCollectionDialog(true);
-        }
+        if (network.value !== "ETH") return;
+
+        setShowCollectionDialog(true);
     }
 
     const submitForm = async (e: any) => {
@@ -747,7 +748,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             </div>
                                             {collectionItems.map((cItem: any, index: number) => {
                                                 return (
-                                                    ((cItem.network && cItem.network === network.key && network.value !== 'PUMLx') || cItem.name ==='PUML') && (
+                                                    ((cItem.network && cItem.network === network.key) || cItem.name ==='PUML') && (
                                                         <ChooseCollectionItem
                                                             item={cItem}
                                                             key={index}
