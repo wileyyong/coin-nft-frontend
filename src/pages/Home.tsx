@@ -65,6 +65,7 @@ const Home: React.FC<HomeProps> = () => {
   // const depositWalletShow = () => setShowDepositWallet(true);
   const [nftTokens, setNftTokens] = useState<any[]>([]);
   const [sellers, setSellers] = useState<any[]>([]);
+  const [featuredStored, setFeaturedStored] = useState<any>('');
   const [uploadFeaturedImage, setUploadFeaturedImage] = useState(null);
   const [featuredImage, setFeaturedImage] = useState<any>(null);
   const [editFeatured, setEditFeatured] = useState(false);
@@ -164,6 +165,7 @@ const Home: React.FC<HomeProps> = () => {
   }, []);
 
   useEffect(() => {
+    setFeaturedStored(Storage.get('featured'));
     const loadData = async () => {
       setLoading(true);
       try {
@@ -182,20 +184,34 @@ const Home: React.FC<HomeProps> = () => {
       }
       const featuredNFT = await UserController.getFeatured();
 
+      let image: string;
+      const name: string = (featuredNFT && featuredNFT.featured_name) ? featuredNFT.featured_name : '';
+      const price: number = (featuredNFT && featuredNFT.featured_price) ? featuredNFT.featured_price : 0;
       if (featuredNFT && featuredNFT.featured) {
         if (featuredNFT.featured.includes("https://")) {
-          setFeaturedImage(`${featuredNFT.featured}`)
+          image = featuredNFT.featured;
         } else {
-          setFeaturedImage(`${configs.DEPLOY_URL}${featuredNFT.featured}`)
+          image = `${configs.DEPLOY_URL}${featuredNFT.featured}`;
         }
       } else {
-        setFeaturedImage(null);
+        image = '';
       }
-      setFeaturedPrice(featuredNFT.featured_price || 0);
-      setFeaturedName(featuredNFT.featured_name || '');
+      if (featuredStored !== JSON.stringify(getFeaturedObj(name, price, image))) {
+        setFeaturedStored(JSON.stringify(getFeaturedObj(name, price, image)));
+      }
     }
     loadData();
   }, [])
+
+  useEffect(() => {
+    const setFeature = () => {
+      setFeaturedImage(featuredStored ? JSON.parse(featuredStored).featuredImage : ticketImage);
+      setFeaturedPrice(featuredStored ? JSON.parse(featuredStored).featured_price : 0.01);
+      setFeaturedName(featuredStored ? JSON.parse(featuredStored).featured_name : 'Christian Trist');
+      Storage.set('featured', featuredStored);
+    }
+    setFeature();
+  }, [featuredStored])
 
   const connectMetaMask = () => {
     dispatch(connectUserWallet());
@@ -221,18 +237,29 @@ const Home: React.FC<HomeProps> = () => {
       fileInputRef?.current?.click();
   }
 
+  const getFeaturedObj = (name: string, price: number, featured: string) => {
+    return {
+        featured_name: name,
+        featured_price: price,
+        featuredImage: featured
+    };
+  };
+
   const saveFeaturedImage = async() => {
     let data = {
       featuredImage: uploadFeaturedImage
     };
     let formdata = Utility.getFormDataFromObject(data);
-    await UserController.uploadFeaturedImage(formdata).then((res) => {
+    await UserController.uploadFeaturedImage(formdata).then((res: any) => {
         if (res && res.status === 200) {
             NotificationManager.success(
                 uploadFeaturedImage ? 'Successfully uploaded!' : 'Successfully removed!',
                 "Success"
             );
             setUploadFeaturedImage(null);
+            if (res.data.featuredImage) {
+              setFeaturedStored(JSON.stringify(getFeaturedObj(featured_name, featured_price, res.data.featuredImage)));
+            }
         }
     }).catch((err) => {
         if (err.response && err.response.data && err.response.data.error) {
@@ -279,13 +306,16 @@ const Home: React.FC<HomeProps> = () => {
       return;
     }
     let formdata = Utility.getFormDataFromObject(data);
-    await UserController.updateFeatured(formdata).then((res) => {
+    await UserController.updateFeatured(formdata).then((res: any) => {
       if (res && res.status === 200) {
         NotificationManager.success(
             'Successfully updated!',
             "Success"
         );
         setEditFeatured(false);
+        if (res.data.featured_name && res.data.featured_price) {
+          setFeaturedStored(JSON.stringify(getFeaturedObj(res.data.featured_name, res.data.featured_price, featuredImage)));
+        }
       }
     }).catch((err) => {
       if (err.response && err.response.data && err.response.data.error) {
@@ -377,8 +407,8 @@ const Home: React.FC<HomeProps> = () => {
                 </>
               ) : (
                 <>
-                  <div className="title">{featured_name || 'Christian Trist'}</div>
-                  <div className="price">${getDollarPrice(featured_price) || '30.00'} <span className="text-dark"> • {featured_price || 0.01} ETH</span></div>
+                  <div className="title">{featured_name}</div>
+                  <div className="price">${getDollarPrice(featured_price)} <span className="text-dark"> • {featured_price} ETH</span></div>
                 </>
               )
             }
