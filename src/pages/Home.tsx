@@ -383,7 +383,7 @@ const Home: React.FC<HomeProps> = () => {
               </div>
             )
           }
-          <Image className="ticket-img" src={featuredImage || ticketImage} alt="ticket"></Image>
+          <Image className="ticket-img" src={featuredImage} alt="ticket"></Image>
           <div className="d-flex flex-column align-items-center ticket-content">
             {
               editFeatured ? (
