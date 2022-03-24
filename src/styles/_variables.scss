@@ -5,12 +5,12 @@ $theme-colors: map-merge($theme-colors, ("primary": $primary));
 
 // Application Variables
 $fonts: (
-  'Roboto-Light':              ( family: 'Roboto-Light',          file: 'Roboto-Light',         weight: 300, style: normal ),
-  'Roboto-Regular':            ( family: 'Roboto-Regular',        file: 'Roboto-Regular',       weight: 400, style: normal ),
-  'Roboto-Thin':               ( family: 'Roboto-Thin',           file: 'Roboto-Thin',          weight: 500, style: normal ),
-  'Roboto-Medium':             ( family: 'Roboto-Medium',         file: 'Roboto-Medium',        weight: 600, style: normal ),
-  'Roboto-Bold':               ( family: 'Roboto-Bold',           file: 'Roboto-Bold',          weight: 700, style: normal ),
-  'Roboto-Black':              ( family: 'Roboto-Black',          file: 'Roboto-Black',         weight: 900, style: normal ),
+  'Roboto-Light':              ( family: 'Roboto',          file: 'Roboto-Light',         weight: 300, style: normal ),
+  'Roboto-Regular':            ( family: 'Roboto',          file: 'Roboto-Regular',       weight: 400, style: normal ),
+  'Roboto-Thin':               ( family: 'Roboto',          file: 'Roboto-Thin',          weight: 500, style: normal ),
+  'Roboto-Medium':             ( family: 'Roboto',          file: 'Roboto-Medium',        weight: 600, style: normal ),
+  'Roboto-Bold':               ( family: 'Roboto',          file: 'Roboto-Bold',          weight: 700, style: normal ),
+  'Roboto-Black':              ( family: 'Roboto',          file: 'Roboto-Black',         weight: 900, style: normal ),
 );
 
 $font-weights: (

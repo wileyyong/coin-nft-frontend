@@ -65,7 +65,7 @@ const Home: React.FC<HomeProps> = () => {
   // const depositWalletShow = () => setShowDepositWallet(true);
   const [nftTokens, setNftTokens] = useState<any[]>([]);
   const [sellers, setSellers] = useState<any[]>([]);
-  const [featuredStored, setFeaturedStored] = useState<any>('');
+  const [featuredStored, setFeaturedStored] = useState<any>(Storage.get('featured') || '');
   const [uploadFeaturedImage, setUploadFeaturedImage] = useState(null);
   const [featuredImage, setFeaturedImage] = useState<any>(null);
   const [editFeatured, setEditFeatured] = useState(false);
@@ -100,6 +100,45 @@ const Home: React.FC<HomeProps> = () => {
       text: "Most liked",
     },
   ];
+
+  useEffect(() => {
+    setFeaturedStored(Storage.get('featured'));
+    const loadData = async () => {
+      setLoading(true);
+      const featuredNFT = await UserController.getFeatured();
+
+      let image: string;
+      const name: string = (featuredNFT && featuredNFT.featured_name) ? featuredNFT.featured_name : '';
+      const price: number = (featuredNFT && featuredNFT.featured_price) ? featuredNFT.featured_price : 0;
+      if (featuredNFT && featuredNFT.featured) {
+        if (featuredNFT.featured.includes("https://")) {
+          image = featuredNFT.featured;
+        } else {
+          image = `${configs.DEPLOY_URL}${featuredNFT.featured}`;
+        }
+      } else {
+        image = '';
+      }
+      if (featuredStored !== JSON.stringify(getFeaturedObj(name, price, image))) {
+        setFeaturedStored(JSON.stringify(getFeaturedObj(name, price, image)));
+      }
+      try {
+        const params = {
+          name: "",
+          bio: "",
+          verified: false
+        };
+        let { users } = await UserController.userSearch(params, 1);
+        users.reverse();
+        setSellers(users);
+        setLoading(false);
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+      }
+    }
+    loadData();
+  }, [])
 
   const onSortOptionClicked = (e: any, value: any) => {
     e.preventDefault();
@@ -163,45 +202,6 @@ const Home: React.FC<HomeProps> = () => {
     }
     loadNftTokens();
   }, []);
-
-  useEffect(() => {
-    setFeaturedStored(Storage.get('featured'));
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const params = {
-          name: "",
-          bio: "",
-          verified: false
-        };
-        let { users } = await UserController.userSearch(params, 1);
-        users.reverse();
-        setSellers(users);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-        setLoading(false);
-      }
-      const featuredNFT = await UserController.getFeatured();
-
-      let image: string;
-      const name: string = (featuredNFT && featuredNFT.featured_name) ? featuredNFT.featured_name : '';
-      const price: number = (featuredNFT && featuredNFT.featured_price) ? featuredNFT.featured_price : 0;
-      if (featuredNFT && featuredNFT.featured) {
-        if (featuredNFT.featured.includes("https://")) {
-          image = featuredNFT.featured;
-        } else {
-          image = `${configs.DEPLOY_URL}${featuredNFT.featured}`;
-        }
-      } else {
-        image = '';
-      }
-      if (featuredStored !== JSON.stringify(getFeaturedObj(name, price, image))) {
-        setFeaturedStored(JSON.stringify(getFeaturedObj(name, price, image)));
-      }
-    }
-    loadData();
-  }, [])
 
   useEffect(() => {
     const setFeature = () => {
