@@ -13,8 +13,9 @@ export const SmallTextTitle = styled.div`
 export const SmallTextTitleGrey = styled.div`
   font-family: Roboto;
   font-weight: 700;
-  font-size: 12px;
-  color: grey;
+  font-size: 14px;
+  color: #171717;
+  display: inline;
 `;
 
 export const NormalTextTitle = styled.div`

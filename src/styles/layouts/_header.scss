@@ -29,6 +29,7 @@
     }
     .navbar-nav {
         padding: 15px 30px;
+        padding-right: 0;
         @include media-breakpoint-down(lg) {
             padding: 15px 20px;
         }
@@ -37,10 +38,13 @@
         }
     }
     .nav-link {
-        color: $black !important;
-        font-size: 18px;
+        color: #909090 !important;
+        font-size: 14px;
         white-space: nowrap;
-
+        font-weight: 700;
+        &.active {
+            color: $black !important;
+        }
         &.active::after {
             display: block;
             content: " ";
@@ -156,17 +160,17 @@
         div.header-avatar {
             display: inline-block;
             background-color: $white;
-            width: 36px;
-            height: 36px;
-            max-width: 36px;
-            max-height: 36px;
+            // width: 36px;
+            // height: 36px;
+            // max-width: 36px;
+            // max-height: 36px;
             position: relative;
             border-radius: 100%;
             margin-right: 5px;
             z-index: 300;
             img {
-                width: 36px;
-                height: 36px;
+                width: 40px;
+                height: 40px;
                 object-fit: cover;
                 border-radius: 36px;
             }
@@ -185,7 +189,7 @@
                 background-color: $white;
                 background-size: cover;
                 background-position: center;
-                display: flex !important;
+                display: block !important;
                 align-items: flex-start;
                 position: absolute;
                 top: 74px;
@@ -196,12 +200,12 @@
                 .navbar-nav {
                     flex-direction: column;
                     margin-left: 0 !important;
-                    margin-bottom: 60px;
-                    .dropdown {
-                        position: absolute;
-                        top: 30px;
-                        right: 100px;
-                    }
+                    // margin-bottom: 60px;
+                    // .dropdown {
+                    //     position: absolute;
+                    //     top: 30px;
+                    //     right: 100px;
+                    // }
                 }
                 .buttons {
                     margin-top: 40px;
@@ -223,4 +227,28 @@
 
 .dropdown-toggle::after {
     display: none;
+}
+
+.txtTitle {
+    display: inline;
+    font-size: 14px;
+    color: #171717;
+}
+
+.b-nav {
+    border: 1px solid #C4C4C4;
+    border-radius: 10px;
+    padding: 4px 12px;
+    .address {
+        padding: 4px 8px;
+        background: #F7F8F9;
+        border-radius: 100px;
+    }
+}
+
+.navbar-brand {
+    margin-top: -16px;
+    @media screen and (max-width: 780px) {
+        margin-top: 0;
+    }
 }

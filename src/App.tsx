@@ -11,6 +11,7 @@ import TokenDetail from "./pages/TokenDetail";
 import UserProfile from "./pages/UserProfile";
 import CreateCollectible from "./pages/CreateCollectible";
 import CollectionDetail from "pages/CollectionDetail";
+import Stakes from "./pages/Stakes";
 import configs from 'configs';
 
 import "./styles/index.scss";
@@ -70,6 +71,9 @@ const App: React.FC<AppProps> = () => {
           </Route>
           <Route path="/collections/:id">
             <CollectionDetail />
+          </Route>
+          <Route exact path="/stake">
+            <Stakes />
           </Route>
         </Switch>
       </Router>
