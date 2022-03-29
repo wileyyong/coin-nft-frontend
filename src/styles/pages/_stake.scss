@@ -204,6 +204,28 @@
 
   
   .stake-intro {
+    margin-top: 320px;
+    @media screen and (max-width: 1700px) {
+        margin-top: 196px;
+    }
+    @media screen and (max-width: 1600px) {
+        margin-top: 140px;
+    }
+    @media screen and (max-width: 1500px) {
+        margin-top: 82px;
+    }
+    @media screen and (max-width: 1400px) {
+        margin-top: 23px;
+    }
+    @media screen and (max-width: 1300px) {
+        margin-top: -33px;
+    }
+    @media screen and (max-width: 1200px) {
+        margin-top: -88px;
+    }
+    @media screen and (max-width: 780px) {
+        margin-top: -20px;
+    }
     padding-top: 63px;
     padding-bottom: 68px;
     background: rgba(196, 196, 196, 0.1);
