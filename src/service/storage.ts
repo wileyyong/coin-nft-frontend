@@ -34,6 +34,10 @@ class Storage {
         localStorage.clear()
     }
 
+    clearWallet() {
+        this.remove(configs.STORAGE.SELECTED_WALLET);
+    }
+
 }
 
 const storage = new Storage();

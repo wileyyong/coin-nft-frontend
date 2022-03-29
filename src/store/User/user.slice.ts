@@ -110,6 +110,7 @@ export const disconnectUserWallet = () => (dispatch: any) => {
     Storage.clearAuthToken();
     dispatch(setToken(null));
     Storage.clearNetworkID();
+    Storage.clearWallet();
     dispatch(setUserWalletAddress(""));
     dispatch(setUserWalletBalance("0"));
   } catch (e) {}
