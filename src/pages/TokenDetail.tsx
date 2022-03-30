@@ -516,7 +516,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
 
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let buyTokenResult = await SmartContract.transferToken(
-                        offer.creator.wallet,
+                        configs.MAIN_ACCOUNT,
                         offer.offer_price
                     )
                     if (buyTokenResult.success) {
@@ -524,7 +524,9 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         let obj: any = {
                             tokenId: token.chain_id,
                             buyerAddress: EthUtil.getAddress(),
-                            engineAddress: engineAddress
+                            sellerAddress: offer.creator.wallet,
+                            engineAddress: engineAddress,
+                            buyPrice: offer.offer_price
                         };
                         buyResult = await TokenController.buyToken(obj);
                     }

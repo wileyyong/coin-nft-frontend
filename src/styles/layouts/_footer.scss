@@ -1,10 +1,10 @@
 .footer-container {
-    margin-right: 80px;
-    margin-left: 80px;
+    padding-right: 80px;
+    padding-left: 80px;
     background: $bg-default;
     @include media-breakpoint-down(sm) {
-        margin-right: 20px;
-        margin-left: 20px;
+        padding-right: 20px;
+        padding-left: 20px;
     }
 
     .footer-top {
@@ -21,8 +21,10 @@
         color: $black;
 
         .logo-image {
-            max-width: 200px;
-            height: auto;
+            width: 213px;
+            height: 75px;
+            background: url("../../assets/imgs/logo.svg") no-repeat;
+            background-size: 100%;
         }
     }
     .item-content {
@@ -57,5 +59,23 @@
         cursor: pointer;
         width: 16px;
         height: 16px;
+    }
+}
+
+[data-theme="dark"] {
+    .footer-container {
+        background: $bgdark;
+        color: $white !important;
+        .item-content {
+            color: $white;
+        }
+        .footer-top {
+            .logo-image {
+                background: url("../../assets/imgs/logodark.png") no-repeat;
+            }
+        }
+        .footer-bottom {
+            opacity: 0.6;
+        }
     }
 }

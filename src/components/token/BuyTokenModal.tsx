@@ -73,7 +73,7 @@ const BuyTokenModal: React.FC<BuyTokenModalProps> = ({
             </FlexJustifyBetweenDiv>
             <FlexJustifyBetweenDiv className="mt-2">
               <div>You will pay</div>
-              <B2NormalTextTitle>{(price + price*serviceFee/100).toFixed(3)} {token.blockchain ? token.blockchain : "ETH"}</B2NormalTextTitle>
+              <B2NormalTextTitle>{price.toFixed(3)} {token.blockchain ? token.blockchain : "ETH"}</B2NormalTextTitle>
             </FlexJustifyBetweenDiv>
             <Button
               variant="primary"

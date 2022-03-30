@@ -101,6 +101,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     const [createNftDialog, setCreateNftDialog] = useState(false);
 
     const [nftFromDB, setNftFromDB] = useState<any>(null);
+    const [approvedNftFromDB, setApprovedNftFromDB] = useState<any>(null);
     const [chainId, setChainId] = useState(null);
 
     const [propertyList, setPropertyList] = useState<propertyInterface[] | []>([]);
@@ -356,19 +357,39 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const approveNft = async () => {
         setCreateNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
-        try {
-            if (chainId) {
-                let result: any = await SmartContract.approve(chainId, contractAddress, engineAddress);
-                if (result) {
-                    dispatch(getWalletBalance());
-                    setCreateNftStatus(NftCreateStatus.APPROVE_SUCCEED);
-                    return;
+        let result: any = approvedNftFromDB;
+        if (!result) {
+            try {
+                let approveObj: any = getPureNftObj();
+                if (nftFromDB.token && nftFromDB.token._id) {
+                    approveObj['tokenId'] = nftFromDB.token._id;
                 }
+                let formData = Utility.getFormDataFromObject(approveObj);
+                result = await NftController.createApprovedNFT(formData);
+                setApprovedNftFromDB(result);
+            } catch (err) {
+                setCreateNftStatus(NftCreateStatus.MINT_FAILED);
             }
-        } catch (err) {
+        }
+        if (result && result.link && result.token) {
+            try {
+                if (chainId) {
+                    let contractResult: any = await SmartContract.approve(chainId, contractAddress, engineAddress);
+                    if (contractResult) {
+                        dispatch(getWalletBalance());
+                        setCreateNftStatus(NftCreateStatus.APPROVE_SUCCEED);
+                        return;
+                    } else {
+                        const res = await NftController.deleteApprovedNFT(result.token._id, loggedInUserInfo._id);
+                        console.log(contractResult.error);
+                        console.log(res);
+                    }
+                }
+            } catch (err) {
+                setCreateNftStatus(NftCreateStatus.APPROVE_FAILED);
+            }
             setCreateNftStatus(NftCreateStatus.APPROVE_FAILED);
         }
-        setCreateNftStatus(NftCreateStatus.APPROVE_FAILED);
     };
 
     const createOffer = async () => {

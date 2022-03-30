@@ -13,6 +13,11 @@
       padding: 0px 10px;
   }
   padding-bottom: 10px;
+  color: $black;
+
+  .btn {
+      color: $white;
+  }
 
   .section-intro {
       position: relative;
@@ -20,10 +25,10 @@
       flex-direction: row;
       align-items: center;
       @include media-breakpoint-down(xl) {
-          height: 700px;
+          height: calc(0.61 * 100vw - 128px);
       }
       @include media-breakpoint-down(lg) {
-          height: 500px;
+          height: calc(0.61 * 100vw - 128px);
       }
       @include media-breakpoint-down(md) {
           height:400px;
@@ -37,7 +42,6 @@
               width: 100%;
           }
           .intro-title {
-              color: $black;
               font-size: $h1-font-size;
               @include media-breakpoint-down(md) {
                   font-size: $h1-font-size;
@@ -75,23 +79,7 @@
                   border-radius: 10px;
                   height: auto;
                   text-align: left;
-                  &.btn-add-wallet {
-                    background-color: $white;
-                    color: $black !important;
-                    border-color: $black;
-                  }
-                  .plus-symbol {
-                    padding: 0px 6px;
-                    border-radius: 50px;
-                    border: 2px solid #1C2124;
-                    font-weight: bold;
-                  }
               }
-
-              .btn-outline-secondary {
-                  color: $secondary;
-              }
-
               .connect-img {
                   width: 40px;
                   height: 40px;
@@ -132,11 +120,15 @@
       }
       .intro-image {
           width: 75%;
-          height: auto;
+          @include media-breakpoint-down(xl) {
+            height: calc(0.61 * 100vw - 128px);
+          }
           position: absolute;
           top: 0;
           right: -64px;
-
+          background-image: url("../../assets/imgs/home-intro.png");
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
           @include media-breakpoint-down('lg') {
               display: none;
           }
@@ -168,92 +160,35 @@
           @include media-breakpoint-down(lg) {
               display: none;
           }
-
-          .ticket-content {
-              background-color: $white;
-              color: $black;
-              .edit-content {
-                  position: absolute;
-                  bottom: 20px;
-                  right: 20px;
-                  font-size: 24px;
-                  color: $secondary;
-                  cursor: pointer;
-                  display: none;
-              }
-              &:hover {
-                  .edit-content {
-                      display: block;
-                  }
-              }
-              .title {
-                  padding-top: 20px;
-                  padding-bottom: 20px;
-                  font-size: 32px;
-                  font-weight: $font-weight-bold;
-              }
-              .price {
-                  color: $primary;
-                  padding-bottom: 20px;
-                  font-size: 20px;
-                  font-weight: $font-weight-bold;
-              }
-          }
       }
   }
 
   
   .stake-intro {
-    margin-top: 320px;
-    @media screen and (max-width: 1700px) {
-        margin-top: 196px;
-    }
-    @media screen and (max-width: 1600px) {
-        margin-top: 140px;
-    }
-    @media screen and (max-width: 1500px) {
-        margin-top: 82px;
-    }
-    @media screen and (max-width: 1400px) {
-        margin-top: 23px;
-    }
-    @media screen and (max-width: 1300px) {
-        margin-top: -33px;
-    }
-    @media screen and (max-width: 1200px) {
-        margin-top: -88px;
-    }
-    @media screen and (max-width: 780px) {
-        margin-top: -20px;
-    }
-    padding-top: 63px;
-    padding-bottom: 68px;
-    background: rgba(196, 196, 196, 0.1);
+    background: linear-gradient(0deg, #F3F3F3 0%, #FCFCFC 100%);
+    margin-left: -64px;
+    width: calc(100% + 128px);
     @include media-breakpoint-down(md) {
       flex-direction: column;
+      width: calc(100% + 20px);
+      margin-left: -10px;
     }
-    &__img{
-      width: 596px;
-      height: 596px;
-      margin-left: -64px;
-      @include media-breakpoint-down(sm) {
-        width: 100%;
-        height: auto;
-      }
+    &__img {
+        @include media-breakpoint-down(md) {
+            width: 70%;
+        }
     }
     &__desc {
-      padding: 83px;
-      img {
-        @include media-breakpoint-down(sm) {
-          width: 100px;
-          height: auto;
+        margin-left: -3%;
+        padding: 200px 120px 0 0;
+        @include media-breakpoint-down(md) {
+          padding: 20px;
+          margin-left: 0;
         }
-      }
     }
     .stake-sen {
       &__title {
         font-size: $font-size-base * 3.75;
-        color: $black;
         font-weight: 700;
         @include media-breakpoint-down(sm) {
           font-size: $font-size-base * 2;
@@ -271,53 +206,28 @@
       &__description {
         padding-top: 24px;
         font-size: $font-size-base;
-        color: $black;
         line-height: 19px;
+        opacity: 0.8;
       }
-    }
-  }
-  .title {
-    font-size: $font-size-base * 3.75;
-    color: $black;
-    padding-top: 80px;
-    font-weight: 600;
-    text-align: center;
-    @include media-breakpoint-down(sm) {
-      font-size: $font-size-base * 2.75;
-    }
-  }
-  .sub-title {
-    font-size: $font-size-base * 3.125;
-    color: $primary;
-    padding-top: 32px;
-    padding-bottom: 16px;
-    font-weight: 600;
-    text-align: center;
-    @include media-breakpoint-down(sm) {
-      font-size: $font-size-base * 2.125;
     }
   }
   .stakes {
       padding-top: 64px;
       &__title {
-          overflow: auto;
-          color: $black;
           font-size: $h4-font-size;
           font-weight: 600;
-          height: 30px;
-          .item-title {
-              float: left;
-          }
           .item-price {
-              float: right;
-              span {
-                  color: $primary;
-              }
+              color: $primary;
+              font-size: $font-size-base * 2;
+          }
+          .item-desc {
+              font-size: $font-size-base * 1.19;
+              font-weight: 400;
+              opacity: 0.6;
           }
       }
       &__contain {
           padding: 0px 24px 52px;
-          background: #FFFFFF;
           box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.24);
           border-radius: 4px;
           margin-bottom: 3px;
@@ -331,10 +241,9 @@
                 width: 50%;
                 float: left;
                 padding: 16px 0;
-                background: #F5F6F7;
                 box-shadow: inset -1px 0px 0px #ECF1FC;
                 font-size: $font-size-base;
-                color: #50575E;
+                opacity: 0.6;
                 font-weight: 600;
                 text-align: center;
                 border-bottom: 4px solid #F5F6F7;
@@ -342,8 +251,7 @@
                     cursor: pointer;
                 }
                 &--active {
-                    background: #fff;
-                    color: $black;
+                    opacity: 1;
                     border-color: $primary;
                 }
               }
@@ -361,24 +269,33 @@
                   border: 1px solid #E1E5EB;
                   border-radius: 3px;
                   width: 100%;
+                  color: $black;
+                  background: rgba(255, 255, 255, 0.2);
                   &:visited, &:focus, &:focus-visible &:target {
                       outline: none;
                   }
                 }
+                .btn {
+                    font-size: $font-size-base * 0.875;
+                    position: absolute;
+                    right: 10px;
+                    top: 10px;
+                }
                 &--prex {
                   border: 1px solid #E1E5EB;
                   border-radius: 3px;
-                  padding: 19px 12px;
+                  padding: 9px;
                   font-size: $font-size-base * 1.125;
                   font-weight: 600;
+                  background: rgba(255, 255, 255, 0.2);
                   input {
                       border: none;
                       padding: 0;
-                      width: 80px;
+                      width: 110px;
+                      background: transparent;
                   }
                   i {
                       font-style: normal;
-                      color: #313131;
                       opacity: 0.6;
                       font-size: $font-size-base * 1.125;
                   }
@@ -394,13 +311,8 @@
                   .btn {
                     font-size: $font-size-base;
                     padding: 14px 78px;
-                    &.btn-primary {
-                        color: $white;
-                    }
                     &.btn-inactive {
-                        color: #50575E;
-                        background: #F5F6F7;
-                        border-color: #F5F6F7;
+                        opacity: 0.6;
                     }
                   }
               }
@@ -408,7 +320,6 @@
           .valupap {
               padding-top: 37px;
               overflow: auto;
-              color: $black;
               font-size: $font-size-base;
               font-weight: 600;
               min-height: 70px;
@@ -438,11 +349,95 @@
               height: 1px;
               background-color: rgba(0, 0, 0, 0.1);
           }
-          .reward-des {
-              color: #313131;
-              font-size: $font-size-base;
-              padding-top: 32px;
+      }
+      &__noitem {
+        text-align: center;
+        background: rgba(196, 196, 196, 0.07);
+      }
+      &__normal {
+          font-weight: 600;
+          font-size: $font-size-base;
+      }
+      .slide {
+          &__item {
+              position: relative;
+              background: rgba(196, 196, 196, 0.07);
+            &--active {
+                border: 1px solid #2BDCB1;
+                &:after {
+                    position: absolute;
+                    content: "";
+                    width: 32px;
+                    height: 32px;
+                    top: 8px;
+                    right: 8px;
+                    border-radius: 30px;
+                    background-image: url("../../assets/imgs/checked.png");
+                }
+            }
+            img {
+                width: 100%;
+            }
+          }
+      }
+      &__returnstake {
+          border: 1px solid $primary;
+          border-left: 0;
+          border-right: 0;
+          .valupap {
+            font-weight: 600;
+            span {
+                font-size: $h4-font-size;
+                color: $primary;
+            }
+            i {
+                font-style: normal;
+                margin-left: 5px;
+                position: relative;
+                top: -3px;
+            }
           }
       }
   }
+}
+.carousel .carousel-control-prev span, 
+.carousel .carousel-control-next span {
+    background-color: $primary;
+}
+
+[data-theme="dark"] {
+    .stake-container {
+        background: $bgdark;
+        color: $white;
+        .intro-image {
+            background-image: url("../../assets/imgs/home-introdark.png");
+        }
+        .stake-intro {
+            background: $bgdark;
+        }
+        .stakes {
+            &__contain {
+                background: $bgdark;
+                box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.9);
+            }
+        }
+        .tab__item {
+            border-color: $bgdark;
+            box-shadow: none;
+            &--active {
+                border-color: $primary;
+            }
+        }
+        .inp {
+            input {
+                color: $white;
+            }
+        }
+        .myitem-card .card-info {
+            background: transparent;
+            .card-title {
+                color: $white;
+            }
+        }
+    }
 }

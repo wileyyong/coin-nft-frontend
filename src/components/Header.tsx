@@ -6,8 +6,13 @@ import { onboard } from "ethereum/OnBoard";
 import logoImg from "assets/imgs/logo.svg";
 import configs from "configs";
 import EthUtil from 'ethereum/EthUtil';
+import logodarkImg from "assets/imgs/logodark.png";
+import Storage from "service/storage";
 
 import PumlIcon from "assets/imgs/puml1.png";
+import MoonIcon from "assets/imgs/moon.png";
+import SunIcon from "assets/imgs/sun.png";
+
 import {
   disconnectUserWallet
 } from "store/User/user.slice";
@@ -18,10 +23,12 @@ import {
   getWalletBalance,
   isAuthenticated,
   getWalletPumlx,
+  getMyInfo
 } from "store/User/user.selector";
 
 import { getWalletBalance as walletBalance, getWalletPumlx as walletPumlx } from "store/User/user.slice";
 import metaMask from "assets/imgs/MetaMask_Fox.png";
+import defaultUser from "assets/imgs/avatar.png";
 
 interface HeaderProps { }
 
@@ -34,8 +41,11 @@ const Header: React.FC<HeaderProps> = () => {
   const isAuth = useAppSelector(isAuthenticated);
   const dispatch = useAppDispatch();
   const network = EthUtil.getNetwork();
+  const userInfo = useAppSelector(getMyInfo);
 
   const [wAddress, setAddress] = useState('');
+  const [mAvatar, setAvatar] = useState(defaultUser);
+  const [theme, setTheme] = useState(Storage.get(configs.STORAGE.THEME) || '');
 
   useEffect(() => {
     dispatch(walletPumlx());
@@ -47,12 +57,22 @@ const Header: React.FC<HeaderProps> = () => {
     getNutAddress();
   });
 
+  useEffect(() => {
+    if (userInfo.avatar && !userInfo.avatar.includes("default.png")) {
+      setAvatar(configs.DEPLOY_URL + userInfo.avatar);
+    }
+  }, [userInfo])
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    Storage.set(configs.STORAGE.THEME, theme);
+  }, [theme])
+
   const getDropdownAvatar = () => {
     return (
       <div className="header-avatar d-flex flex-row align-items-center">
-        <Image className="mr-2" src={metaMask}></Image>
-        <SmallTextTitleGrey className="txtTitle">{parseFloat(balance).toFixed(2)} {getPriceType()}</SmallTextTitleGrey>
-        <SmallTextTitleGrey className="ml-1 address txtTitle">{wAddress}</SmallTextTitleGrey>
+        <Image className="mr-2" src={mAvatar}></Image>
+        <SmallTextTitleGrey className="txtTitle">{userInfo.name}</SmallTextTitleGrey>
       </div>
     );
   };
@@ -94,7 +114,11 @@ const Header: React.FC<HeaderProps> = () => {
           <span />
         </Navbar.Toggle>
         <Navbar.Brand as={Link} to="/">
+        {theme === '' ? (
           <img className="logo" src={logoImg} alt="logo" />
+        ) : (
+          <img className="logo" src={logodarkImg} alt="logo" />
+        )}
         </Navbar.Brand>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav>
@@ -159,7 +183,7 @@ const Header: React.FC<HeaderProps> = () => {
                         eventKey="3"
                         as={Link}
                         to="/create-collectible"
-                        className="mr-lg-3"
+                        className="mr-lg-3 mt-1"
                         active={location.pathname === "/create-collectible"}
                       >
                         Create NFT
@@ -167,13 +191,25 @@ const Header: React.FC<HeaderProps> = () => {
                     </Nav.Item>
                   )
                 }
+                <Nav.Item className="b-nav mr-2 pt-2">
+                  {theme === '' ? (
+                    <Image className="themeicon" src={MoonIcon} width="30" alt="moon" onClick={() => {setTheme("dark")}} />
+                  ): (
+                    <Image className="themeicon" src={SunIcon} width="30" alt="sun" onClick={() => {setTheme("")}} />
+                  )}
+                </Nav.Item>
                 {getPriceType() === 'ETH' && (
                   <Nav.Item className="b-nav">
                     <Image src={PumlIcon} width="40" className='mr-2' />
                     <SmallTextTitleGrey className="txtTitle">{parseFloat(pumlx).toFixed(2)}</SmallTextTitleGrey>
                   </Nav.Item>
                 )}
-                <Nav.Item className="d-flex mr-4 buttons ml-2 b-nav">
+                <Nav.Item className="header-avatar d-flex flex-row align-items-center b-nav ml-2">
+                  <Image className="mr-2" src={metaMask}></Image>
+                  <SmallTextTitleGrey className="txtTitle">{parseFloat(balance).toFixed(2)} {getPriceType()}</SmallTextTitleGrey>
+                  <SmallTextTitleGrey className="ml-1 address txtTitle">{wAddress}</SmallTextTitleGrey>
+                </Nav.Item>
+                <Nav.Item className="d-flex mr-4 buttons ml-2">
                   <NavDropdown
                     title={getDropdownAvatar()}
                     id="header-nav-dropdown"

@@ -36,7 +36,8 @@ const configs = {
     STORAGE: {
         TOKEN: 'auth_token',
         SELECTED_WALLET: 'sellectedWallet',
-        SELECTED_NETWORK: 'networkID'
+        SELECTED_NETWORK: 'networkID',
+        THEME: 'theme'
     },
 
     /* ACCEPT Values */
@@ -54,7 +55,10 @@ const configs = {
     PUML20_ADDRESS: '0xbc75ECc12c77506DCFd70113B15683A9a0768AB4',
 
     /* HDWalletProvider */
-    MAIN_ACCOUNT: '0x64c7Cbb0B194d15e64741Dd002015F846a663E93'
+    MAIN_ACCOUNT: '0x64c7Cbb0B194d15e64741Dd002015F846a663E93',
+
+    /* PumlStaking Address */
+    PUML_STAKING: '0xF06f7A89c3BABFf01dba19eDf1d894B74cA094f5'
 };
 
 export default configs;

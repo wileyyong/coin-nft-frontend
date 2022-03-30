@@ -8,8 +8,16 @@ class NftController {
         return API.post(configs.API.TOKEN_URL, payload).then(res => res.data)
     }
 
+    public static createApprovedNFT(payload: any) {
+        return API.post(`${configs.API.TOKEN_URL}/approvednft`, payload).then(res => res.data)
+    }
+
     public static getList() {
         return API.get(configs.API.TOKEN_URL).then(res => res.data)
+    }
+
+    public static getApprovedList() {
+        return API.get(`${configs.API.TOKEN_URL}/approvednft`).then(res => res.data)
     }
 
     public static getMine() {
@@ -26,6 +34,10 @@ class NftController {
 
     public static delete(id: any, user: any) {
         return API.delete(`${configs.API.TOKEN_URL}/${id}/${user}`).then(res => res.data)
+    }
+
+    public static deleteApprovedNFT(id: any, user: any) {
+        return API.delete(`${configs.API.TOKEN_URL}/approvednft/${id}/${user}`).then(res => res.data)
     }
 
 }

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { connectUserWallet, signInWithWallet } from "store/User/user.slice";
 import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
@@ -75,6 +75,7 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/stake">
             <Stakes />
           </Route>
+          <Redirect exact from="/move" to="/" />
         </Switch>
       </Router>
     </div>
