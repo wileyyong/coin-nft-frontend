@@ -58,7 +58,7 @@ const configs = {
     MAIN_ACCOUNT: '0x64c7Cbb0B194d15e64741Dd002015F846a663E93',
 
     /* PumlStaking Address */
-    PUML_STAKING: '0xF06f7A89c3BABFf01dba19eDf1d894B74cA094f5'
+    PUML_STAKING: '0xD3be09B79985DFcc71faBA3bADAE8C7e162BA525'
 };
 
 export default configs;

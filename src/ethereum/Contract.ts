@@ -266,7 +266,7 @@ class Contract {
     async stakePuml(amount: any, feeward: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.stake(amount, web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.stake(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
 
@@ -280,7 +280,7 @@ class Contract {
     async withdrawPuml(amount: any, feeward: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.withdraw(amount, web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.withdraw(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
 
@@ -322,7 +322,7 @@ class Contract {
     async getReward(amount: any, feeward: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.getReward(amount, feeward).send({
+            const result = await stakeContract.methods.getReward(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
 
@@ -333,44 +333,15 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async Collect2Date() {
+    async getStakeData() {
         if(web3) {
+            console.log("asdfsadf")
             const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.getRewardPaid(EthUtil.getAddress()).call();
+            const result = await stakeContract.methods.getData(EthUtil.getAddress()).call();
 
             return result;
         }
-        return null;
-    }
-
-    async CollectLast() {
-        if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.getLastReward(EthUtil.getAddress()).call();
-
-            return result;
-        }
-        return null;
-    }
-
-    async LastUpdateTime() {
-        if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.userUpdateTime(EthUtil.getAddress()).call();
-
-            return result;
-        }
-        return null;
-    }
-
-    async RewardStored() {
-        if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.getRewardStored(EthUtil.getAddress()).call();
-
-            return result;
-        }
-        return null;
+        return [];
     }
 }
 

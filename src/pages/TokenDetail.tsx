@@ -668,7 +668,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                             </div>
                             <div className="property">
                                 <div className="d-flex flex-row pl-1 pb-3">
-                                    <Image src={imgProperty} className="pr-3"></Image>
+                                    <div className="property-image mr-3"></div>
                                     <div className="property-title">Properties</div>
                                 </div>
                                 <div className="property-body row">

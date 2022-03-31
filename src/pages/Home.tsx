@@ -17,7 +17,7 @@ import {
   FlexAlignCenterDiv,
 } from "components/common/common.styles";
 
-import pumlImage from "assets/imgs/PUML-Logo.png";
+// import pumlImage from "assets/imgs/PUML-Logo.png";
 import homeintroImage from "assets/imgs/home-intro.svg";
 import metamaskImage from "assets/imgs/meta-logo.png";
 import ticketImage from "assets/imgs/ticket.png";
@@ -55,7 +55,7 @@ const Home: React.FC<HomeProps> = () => {
   const isAuth = useAppSelector(isAuthenticated);
   const [showConnectWallet, setShowConnectWallet] = useState(false);
   const connectWalletClose = () => setShowConnectWallet(false);
-  const connectWalletShow = () => setShowConnectWallet(true);
+  // const connectWalletShow = () => setShowConnectWallet(true);
   const [exploreAuctions, setExploreAuctions] = useState<any[]>([]);
   const [explorePageNum, setExplorePageNumber] = useState(1);
   const [exploreLoading, setExploreLoading] = useState(false);
@@ -345,6 +345,7 @@ const Home: React.FC<HomeProps> = () => {
           <p className="intro-type">Market Place</p>
           <div className="intro-desc pt-4">Custom-made characters that will transition to the assets expanded ecosystem <br></br>(media, content, and games)</div>
           <div className="intro-connect-btnGroup pt-4">
+            {/*
             <div className="intro-btn-wallet pb-3">
               <Button className="mr-2 mr-lg-4 btn-primary" onClick={connectWalletShow}>
                 <div className="d-flex flex-row align-items-center">
@@ -353,6 +354,7 @@ const Home: React.FC<HomeProps> = () => {
                 </div>
               </Button>
             </div>
+            */}
             {
               !isAuth ? (
                 <div className="intro-btn-metamask">
@@ -367,7 +369,7 @@ const Home: React.FC<HomeProps> = () => {
             }
           </div>
         </div>
-        <Image className="intro-image" src={homeintroImage}></Image>
+        <div className="intro-image"></div>
         <div className="intro-ticket">
           {
             uploadFeaturedImage ? (

@@ -2,6 +2,7 @@
     padding-top: 60px;
     background-color: $bg-default;
     max-width: 100%;
+    color: $black;
     @include media-breakpoint-down(sm) {
         padding-top: 20px;
     }
@@ -29,7 +30,6 @@
             padding-left: 0px;
         }
         .item-title {
-            color: $black;
             font-size: 40px;
             font-weight: $font-weight-bold;
         }
@@ -62,7 +62,6 @@
                 color: $gray-600;
             }
             .bid-member {
-                color: $black;
                 font-weight: $font-weight-bold;
             }
         }
@@ -76,14 +75,12 @@
                 font-size: 14px;
             }
             .member-name {
-                color: $black;
                 font-size: 16px;
             }
         }
 
         .item-address {
             .address {
-                color: $black;
                 font-size: 16px;
                 font-weight: $font-weight-bold;
             }
@@ -91,12 +88,10 @@
 
         .item-description {
             .title {
-                color: $black;
                 font-size: 16px;
                 font-weight: $font-weight-bold;
             }
             .content {
-                color: $black;
                 font-size: 14px;
             }
         }
@@ -121,7 +116,6 @@
                 }
 
                 & .nav-link.active {
-                    color: $black;
                     border-bottom: 4px solid $primary;
                 }
             }
@@ -141,4 +135,38 @@
             width: 100%;
         }
     }
+    .property-image {
+        width: 16px;
+        height: 16px;
+        background-image: url("../../assets/imgs/property.png");
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+    }
 }
+
+[data-theme="dark"] {
+    .buyitem-container {
+      background: $bgdark;
+      color: $white;
+      .item-info .buyitem-tab .nav-tabs .nav-link {
+        border-bottom: 1px solid $white;
+        &:hover {
+            color: $white;
+        }
+        &.active {
+            border-bottom: 4px solid #65DEC1;
+        }
+      }
+      .property {
+        .property-body {
+            border-color: $white;
+        }
+        .property-title {
+            color: $white;
+        }
+        .property-image {
+            background-image: url("../../assets/imgs/property_white.png");
+        }
+      }
+    }
+  }

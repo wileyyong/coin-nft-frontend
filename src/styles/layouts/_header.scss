@@ -24,8 +24,8 @@
             height: 30px;
         }
     }
-    @include media-breakpoint-down(sm) {
-        padding-top: 15px;
+    @media screen and (max-width: 1290px) {
+        padding: 15px;
     }
     .navbar-nav {
         padding: 15px 30px;
@@ -145,7 +145,7 @@
                 }
             }
         }
-        @include media-breakpoint-down(sm) {
+        @media screen and (max-width: 1290px) {
             display: block;
         }
     }
@@ -177,7 +177,7 @@
         }
     }
     .navbar-collapse {
-        @include media-breakpoint-down(sm)  {
+        @media screen and (max-width: 1290px) {
             display: none !important;
             opacity: 0;
             width: 0;
@@ -244,7 +244,7 @@
         background: rgb(247, 248, 249);
         border-radius: 100px;
     }
-    @include media-breakpoint-down(sm)  {
+    @media screen and (max-width: 1290px)  {
         margin-left: 0 !important;
         margin-top: 10px !important;
     }
@@ -257,7 +257,7 @@
 
 .navbar-brand {
     margin-top: -16px;
-    @media screen and (max-width: 780px) {
+    @media screen and (max-width: 1290px) {
         margin-top: 0;
     }
 }
@@ -283,6 +283,18 @@
         .b-nav {
             .address {
                 background: rgba(247, 248, 249, 0.2);
+            }
+        }
+        .dropdown-menu {
+            background: rgba($color: $white, $alpha: 0.4);
+            a {
+                color: $white;
+                &:hover {
+                    background-color: rgba($color: $white, $alpha: 0.2);
+                }
+                &.active {
+                    background-color: $primary;
+                }
             }
         }
     }

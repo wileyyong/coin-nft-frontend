@@ -1,9 +1,10 @@
 .editprofile-container {
     background-color: $bg-default;
+    color: $black;
     .header {
         font-size: 40px;
         font-weight: bold;
-        color: $black;
+        
     }
     .description {
         color: $gray-600;
@@ -17,20 +18,13 @@
         cursor: pointer;
     }
 
-    .form-control {
-        color: $black;
-    }
-
+    
     .edit-profile {
         align-items: center;
         padding-top: 20px;
         @include media-breakpoint-down(sm) {
             flex-direction: column-reverse;
             align-items: flex-start;
-        }
-
-        .input-group-text {
-            color: $black;
         }
 
         .form {
@@ -56,11 +50,8 @@
             .mail {
                 font-size: 18px;
                 font-weight: bold;
-                color: $black;
             }
-            .desc {
-                color: $black;
-            }
+
             .filetype {
                 color: $gray-600;
             }
@@ -82,8 +73,6 @@
                 }
             }
             .file-uploader {
-                color: $black;
-
                 .email {
                     font-weight: bold;
                     font-size: 18px;
@@ -110,5 +99,23 @@
             color: $white;
             width: 160px;
         }
+    }
+}
+
+[data-theme="dark"] {
+    .editprofile-container {
+      background: $bgdark;
+      color: $white;
+      input, textarea {
+        color: $white !important;
+        background: $bgdark;
+      }
+      input::placeholder, textarea::placeholder{
+        color: $white;
+        opacity: 60%;
+      }
+      .input-group-text {
+        background: rgba($color: $gray, $alpha: 0.7);
+      }
     }
 }

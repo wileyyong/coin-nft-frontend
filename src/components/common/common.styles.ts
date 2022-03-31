@@ -88,7 +88,6 @@ export const MBigTitle = styled.h3`
   font-weight: 700;
   font-size: 42px;
   line-height: 42px;
-  color: rgb(0, 0, 0);
 `;
 
 export const LargeTextTitle = styled.h1`

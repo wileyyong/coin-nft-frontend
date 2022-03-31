@@ -40,6 +40,14 @@ class NftController {
         return API.delete(`${configs.API.TOKEN_URL}/approvednft/${id}/${user}`).then(res => res.data)
     }
 
+    public static stakeToken(payload: any) {
+        return API.post(`${configs.API.TOKEN_URL}/stake`, payload).then(res => res.data)
+    }
+
+    public static getPumlTransFee(payload: any) {
+        return API.post(`${configs.API.TOKEN_URL}/getPumlTransFee`, payload).then(res => res.data)
+    }
+
 }
 
 export default NftController;

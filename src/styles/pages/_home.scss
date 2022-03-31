@@ -1,5 +1,6 @@
 .home-container {
     background: $white;
+    color: $black;
     @include media-breakpoint-down(xl) {
         padding: 0px 64px;
     }
@@ -45,7 +46,6 @@
                 font-weight: $font-weight-bold;
             }
             .intro-type {
-                color: $black;
                 font-size: $h1-font-size * 2;
                 @include media-breakpoint-down(md) {
                     font-size: $h1-font-size;
@@ -132,11 +132,15 @@
         }
         .intro-image {
             width: 75%;
-            height: auto;
+            @include media-breakpoint-down(xl) {
+                height: calc(0.61 * 100vw - 128px);
+            }
             position: absolute;
             top: 0;
             right: -64px;
-
+            background-image: url("../../assets/imgs/home-intro.png");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
             @include media-breakpoint-down('lg') {
                 display: none;
             }
@@ -170,8 +174,6 @@
             }
 
             .ticket-content {
-                background-color: $white;
-                color: $black;
                 .edit-content {
                     position: absolute;
                     bottom: 20px;
@@ -233,7 +235,6 @@
         @include media-breakpoint-down('lg') {
             padding-top: 40px;
         }
-        color: $black;
 
         .section-title {
             padding-top: 40px;
@@ -276,7 +277,6 @@
             .seg-name {
                 font-weight: $font-weight-bold;
                 font-size: 16px;
-                color: $black;
             }
             .seg-type {
                 font-size: 16px;
@@ -297,7 +297,6 @@
     }
 
     .modal-title {
-        color: $black;
         font-size: 24px;
         font-weight: $font-weight-bold;
     }
@@ -319,5 +318,26 @@
             background: transparent;
           }
         }
+    }
+}
+
+[data-theme="dark"] {
+    .home-container {
+      background: $bgdark;
+      color: $white;
+      .text-dark {
+          color: $white !important;
+      }
+      .myitem-card {
+        .card-info {
+            background-color: rgba($color: $white, $alpha: 0.2);
+            .card-title, .eth-price {
+                color: $white;
+            }
+        }
+      }
+      .intro-image {
+        background-image: url("../../assets/imgs/home-introdark.png");
+      }
     }
 }

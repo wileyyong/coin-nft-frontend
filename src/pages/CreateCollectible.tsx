@@ -363,6 +363,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 let approveObj: any = getPureNftObj();
                 if (nftFromDB.token && nftFromDB.token._id) {
                     approveObj['tokenId'] = nftFromDB.token._id;
+                    approveObj['chain_id'] = chainId;
                 }
                 let formData = Utility.getFormDataFromObject(approveObj);
                 result = await NftController.createApprovedNFT(formData);
@@ -567,7 +568,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 ) : (
                     <Row>
                         <Col>
-                            <MBigTitle className="mt-4 text-black">
+                            <MBigTitle className="mt-4">
                                 Create collectible
                             </MBigTitle>
                             <Form noValidate validated={validated} onSubmit={submitForm}>
@@ -623,7 +624,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                             )}
                                         </div>
                                         <FlexJustifyBetweenDiv className="mt-4">
-                                            <BigTitle className="text-black">Put up for sale</BigTitle>
+                                            <BigTitle className="">Put up for sale</BigTitle>
                                             <Form.Check
                                                 type="switch"
                                                 id="put-up-sale-switch"
@@ -632,12 +633,12 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 onChange={(e) => handleChange(e)}
                                             />
                                         </FlexJustifyBetweenDiv>
-                                        <B2NormalTextTitle className="text-gray mt-2">
+                                        <B2NormalTextTitle className="grey-color mt-2">
                                             You will receive bids for this item.
                                         </B2NormalTextTitle>
                                         {collectible.is_auction && (
                                             <div>
-                                                <B1NormalTextTitle className="text-black mt-3">
+                                                <B1NormalTextTitle className=" mt-3">
                                                     Minimum bid price
                                                 </B1NormalTextTitle>
                                                 <Form.Row className="mt-1">
@@ -657,7 +658,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                         </Form.Control.Feedback>
                                                     </Form.Group>
                                                 </Form.Row>
-                                                <B1NormalTextTitle className="text-black">Expiry Date</B1NormalTextTitle>
+                                                <B1NormalTextTitle className="">Expiry Date</B1NormalTextTitle>
                                                 <Form.Row className="mt-1">
                                                     <Form.Group as={Col} md="6">
                                                         <Form.Control
@@ -715,7 +716,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         )}
                                     </Col>
                                     <Col md="6" className="preview-area">
-                                        <BigTitle className="text-black pb-3">PREVIEW</BigTitle>
+                                        <BigTitle className=" pb-3">PREVIEW</BigTitle>
                                         <div className="auction-item p-4">
                                             {loggedInUserInfo && <NftAvatar imagePath={getLoggedInUserAvatar()} className="mb-3 auction-owner-avatar">
                                                 {loggedInUserInfo.verified && <Image style={{ width: 12, height: 12 }} src={verifyBadge} />}
@@ -730,14 +731,14 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 </div>
                                             </div>
 
-                                            <B1NormalTextTitle className="mt-3 text-black">
+                                            <B1NormalTextTitle className="mt-3 ">
                                                 {collectible.name}
                                             </B1NormalTextTitle>
-                                            <NormalTextTitle className="text-black">
+                                            <NormalTextTitle className="">
                                                 Put up for sale
                                             </NormalTextTitle>
                                             <SubDescription className="mt-2"></SubDescription>
-                                            <FlexAlignCenterDiv className="mt-2 text-black">
+                                            <FlexAlignCenterDiv className="mt-2 ">
                                                 {collectible.is_auction ? (
                                                     <NormalTextTitle>
                                                         Bid ~ {collectible.min_bid_price} {network.value}
@@ -751,8 +752,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <BigTitle className="mt-4 text-black">Choose collection</BigTitle>
-                                        <div className="collection-types d-flex mt-4 text-black">
+                                        <BigTitle className="mt-4 ">Choose collection</BigTitle>
+                                        <div className="collection-types d-flex mt-4 ">
                                             <div
                                                 className="choose-collection-item p-4 mr-4 text-center"
                                                 onClick={() => collectionSubmit()}
@@ -780,7 +781,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 );
                                             })}
                                         </div>
-                                        <BigTitle className="mt-4 text-black">Choose categories</BigTitle>
+                                        <BigTitle className="mt-4 ">Choose categories</BigTitle>
                                         <FlexAlignCenterDiv className="category-list mt-4">
                                             {nftCategories.map((eType, index) => {
                                                 return (
@@ -803,7 +804,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 <Form.Row className="mt-4">
                                                     <Form.Group as={Col} md="6">
                                                         <Form.Label>
-                                                            <BigTitle className="text-black">Name</BigTitle>
+                                                            <BigTitle className="">Name</BigTitle>
                                                         </Form.Label>
                                                         <Form.Control
                                                             required
@@ -822,7 +823,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                     </Form.Group>
                                                     <Form.Group as={Col} md="6">
                                                         <Form.Label>
-                                                            <BigTitle className="text-black">Royalties</BigTitle>
+                                                            <BigTitle className="">Royalties</BigTitle>
                                                         </Form.Label>
                                                         <Form.Control
                                                             required
@@ -847,7 +848,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 <Form.Row className="mt-4">
                                                     <Form.Group as={Col} md="12">
                                                         <Form.Label>
-                                                            <BigTitle className="text-black">Description</BigTitle>
+                                                            <BigTitle className="">Description</BigTitle>
                                                         </Form.Label>
                                                         <Form.Control
                                                             as="textarea"
@@ -864,7 +865,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 <Form.Row className="mt-4">
                                                     <Form.Group as={Col} md="12">
                                                         <Form.Label>
-                                                            <BigTitle className="text-black">Properties</BigTitle>
+                                                            <BigTitle className="">Properties</BigTitle>
                                                         </Form.Label>
                                                         <div className="property">
                                                             <div className="property-body row">

@@ -217,4 +217,34 @@
           }
         }
     }
+    .grey-color {
+      opacity: 60%;
+    }
+    input, select, textarea, input:focus, input:visited, textarea:focus, select:focus, select option {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    input::placeholder, textarea::placeholder{
+      color: $black;
+      opacity: 60%;
+    }
+}
+
+[data-theme="dark"] {
+  .create-collectible-container {
+    background: $bgdark;
+    color: $white !important;
+    .blockchain-item, select, input {
+      color: $white !important;
+    }
+    input::placeholder, textarea::placeholder{
+      color: $white;
+      opacity: 60%;
+    }
+    select option {
+      background: rgba(0, 0, 0, 0.7);
+    }
+    .file-uploader .preview .close-btn svg {
+      fill: $white;
+    }
+  }
 }
