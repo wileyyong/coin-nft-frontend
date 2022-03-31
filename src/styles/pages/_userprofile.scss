@@ -1,5 +1,6 @@
 .userprofile-container {
     background-color: $bg-default;
+    color: $black;
     .background-item {
         padding-bottom: 30%;
         background-position: top center;
@@ -9,7 +10,6 @@
     }
 
     .user-name {
-        color: $black;
         font-weight: $font-weight-bold;
         padding-top: 20px;
         font-size: 40px;
@@ -73,8 +73,7 @@
     }
 
     .text-color {
-        color: $black;
-        font-size: 16px;
+       font-size: 16px;
     }
 
     .userprofile-tab {
@@ -99,13 +98,21 @@
             }
             .nav-link:hover {
                 border-bottom: 1px solid $black;
-                color: $black;
             }
 
             & .nav-link.active {
-                color: $black;
                 border-bottom: 4px solid $primary;
             }
+        }
+    }
+}
+
+[data-theme="dark"] {
+    .userprofile-container {
+        background: rgb(32, 32, 32);
+        color: $white;
+        .link-section .nav .nav-link{
+            color: $white;
         }
     }
 }
