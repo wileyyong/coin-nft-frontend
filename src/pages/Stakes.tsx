@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import Layout from "components/Layout";
 import Carousel from 'react-bootstrap/Carousel';
 import { NotificationManager } from "react-notifications";
+import LoadingSpinner from "components/common/LoadingSpinner";
+import { NftCreateStatus } from "model/NftCreateStatus";
+import StakeNftStatusModal from "components/token/StakeNftStatusModal"
 
 import { Button, Image } from "react-bootstrap";
 
@@ -41,7 +44,10 @@ const Stakes: React.FC<StakeProps> = () => {
   const [collectSum, setCollectSum] = useState(0);
   const [balancePumlx, setBalancePumlx] = useState(0);
   const [balanceNft, setBalanceNft] = useState(0);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE)
+  
   const pumlx = useAppSelector(getWalletPumlx);
 
   const getWidth = () => window.innerWidth 
@@ -178,21 +184,20 @@ const Stakes: React.FC<StakeProps> = () => {
     }
   }
 
-  const stakeNft = async (stake: boolean) => {
-    const ids = stake ? unstakeArr : stakeArr;
+  const stakeNft = async () => {
+    const ids = unstakeArr;
     if (ids.length === 0) return;
+
+    setResellNftStatus(NftCreateStatus.CREATEOFFER_PROGRESSING);
+    
     const result = await NftController.stakeToken({
       contract_address: configs.PUML721_ADDRESS,
       chainIds: ids,
-      stake: stake
+      stake: true
     });
     if (result.message) {
       let stakeResult: any;
-      if (stake) {
-        stakeResult = await SmartContract.stakeNFT(ids);
-      } else {
-        stakeResult = await SmartContract.withdrawNFT(ids);
-      }
+      stakeResult = await SmartContract.stakeNFT(ids);
       if (stakeResult.success && stakeResult.transactionHash) {
         loadNft();
         setStakeArr([]);
@@ -201,16 +206,67 @@ const Stakes: React.FC<StakeProps> = () => {
           "Successfully done.",
           "Success"
         );
+        setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
+        setShowStatusModal(false);
       } else {
         console.log(result.error);
         NotificationManager.error("Failed!", "Error");
+        setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
       }
     }
   }
 
+  const approveNft = async () => {
+    setShowStatusModal(true);
+    setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
+
+    const ids = unstakeArr;
+    let approveResult: any;
+    approveResult = await SmartContract.approveStakeNFT(ids);
+
+    if (approveResult.success) {
+      setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
+    } else {
+      setResellNftStatus(NftCreateStatus.APPROVE_FAILED);
+    }
+  }
+
+  const unstakeNft = async () => {
+    const ids = stakeArr;
+    if (ids.length === 0) return;
+
+    setIsLoading(true);
+    
+    const result = await NftController.stakeToken({
+      contract_address: configs.PUML721_ADDRESS,
+      chainIds: ids,
+      stake: false
+    });
+    if (result.message) {
+      let stakeResult: any;
+      stakeResult = await SmartContract.withdrawNFT(ids);
+      if (stakeResult.success && stakeResult.transactionHash) {
+        loadNft();
+        setStakeArr([]);
+        setUnstakeArr([]);
+        NotificationManager.success(
+          "Successfully done.",
+          "Success"
+        );
+        setIsLoading(false);
+      } else {
+        console.log(result.error);
+        NotificationManager.error("Failed!", "Error");
+        setIsLoading(false);
+      }
+    }
+  }
+
+
   const stakePumlx = async () => {
     if (stake <= 0 || stake === '') return;
 
+    setIsLoading(true);
     const stakeResult = await NftController.stakePuml({
       amount: stake, 
       transFee: transFee,
@@ -225,8 +281,10 @@ const Stakes: React.FC<StakeProps> = () => {
           "Successfully staken.",
           "Success"
         );
+        setIsLoading(false);
       } else {
         NotificationManager.error("Failed!", "Error");
+        setIsLoading(false);
       }
     }
   }
@@ -234,6 +292,7 @@ const Stakes: React.FC<StakeProps> = () => {
   const unstakePumlx = async () => {
     if (unstake <= 0 || unstake === '') return;
 
+    setIsLoading(true);
     if (parseFloat(unstake) > balancePumlx) {
       NotificationManager.error("Insufficient staked", "Error");
       return;
@@ -252,9 +311,11 @@ const Stakes: React.FC<StakeProps> = () => {
           "Successfully unstaken.",
           "Success"
         );
+        setIsLoading(false);
       }
     } else {
       NotificationManager.error("Failed!", "Error");
+      setIsLoading(false);
     }
   }
 
@@ -265,6 +326,7 @@ const Stakes: React.FC<StakeProps> = () => {
       return;
     }
 
+    setIsLoading(true);
     const rewardResult = await SmartContract.getReward(collects, transFee);
     if (rewardResult.success && rewardResult.transactionHash) {
       const transferResult = await NftController.rewardPuml({
@@ -278,8 +340,10 @@ const Stakes: React.FC<StakeProps> = () => {
         );
         setCollects(0);
         stakeData();
+        setIsLoading(false);
       } else {
         NotificationManager.error("Collect Failed!", "Error");
+        setIsLoading(false);
       }
     }
   }
@@ -312,6 +376,16 @@ const Stakes: React.FC<StakeProps> = () => {
 
   return (
     <Layout className="stake-container">
+      {isLoading && <LoadingSpinner></LoadingSpinner>}
+      <StakeNftStatusModal
+        show={showStatusModal}
+        onClose={() => {
+          setShowStatusModal(false);
+        }}
+        status={resellNftStatus}
+        approveNft={approveNft}
+        stakeNft={stakeNft}
+      ></StakeNftStatusModal>
       <div className="section-intro">
         <div className="intro-content text-left">
           <p className="intro-title pb-0">Stake PUMLx & earn up to </p>
@@ -547,7 +621,7 @@ const Stakes: React.FC<StakeProps> = () => {
               ))}
             </Carousel>
             {stakeArr.length > 0 && (
-              <button className="btn btn-primary" onClick={() => stakeNft(false)}>
+              <button className="btn btn-primary" onClick={() => unstakeNft()}>
                 <div className="d-flex flex-row align-items-center">
                   <span>Unstake</span>
                 </div>
@@ -597,7 +671,7 @@ const Stakes: React.FC<StakeProps> = () => {
               ))}
             </Carousel>
             {unstakeArr.length > 0 && (
-              <button className="btn btn-primary" onClick={() => stakeNft(true)}>
+              <button className="btn btn-primary" onClick={() => approveNft()}>
                 <div className="d-flex flex-row align-items-center">
                   <span>Stake</span>
                 </div>
