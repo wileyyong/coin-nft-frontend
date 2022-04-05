@@ -18,7 +18,6 @@ import {
 } from "components/common/common.styles";
 
 // import pumlImage from "assets/imgs/PUML-Logo.png";
-import homeintroImage from "assets/imgs/home-intro.svg";
 import metamaskImage from "assets/imgs/meta-logo.png";
 import ticketImage from "assets/imgs/ticket.png";
 

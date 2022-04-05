@@ -103,12 +103,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         let collection: any 
         if (item.collectionsId) collection = await CollectionController.getById(item.collectionsId);
         const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
-        const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
-
+        
         result = await SmartContract721.approve(
           item.chain_id, 
-          contractAddress, 
-          engineAddress
+          contractAddress
         );
 
         if (result) {
@@ -148,8 +146,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         let collection: any 
         if (item.collectionsId) collection = await CollectionController.getById(item.collectionsId);
         const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
-        const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
-
+        
         result = await SmartContract721.createOffer(
           item.chain_id,
           isDirectSale,
@@ -159,8 +156,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           auctionStart,
           duration,
           item.blockchain,
-          contractAddress,
-          engineAddress
+          contractAddress
         );
 
         if (result) {

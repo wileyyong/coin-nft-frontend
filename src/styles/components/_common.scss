@@ -349,6 +349,10 @@
         }
     }
 
+    .collection-item-gray {
+        background: #F9FAFB;
+    }
+
     .title {
         color: $black;
         font-size: 24px;
@@ -530,6 +534,15 @@
                 bottom: 3px;
                 right: 3px;
             }
+        }
+    }
+}
+
+[data-theme="dark"] {
+    .collection-item-gray {
+        background: rgba($color: $white, $alpha: 0.2);
+        .title {
+            color: $white;
         }
     }
 }

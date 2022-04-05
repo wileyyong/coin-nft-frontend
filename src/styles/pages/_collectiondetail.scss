@@ -1,6 +1,7 @@
 .collection-detail-container {
     padding: 0px !important;
     background-color: $bg-default;
+    color: $black;
     .background-item {
         padding-bottom: 30%;
         background-position: center center;
@@ -10,7 +11,6 @@
     }
 
     .user-name {
-        color: $black;
         font-weight: $font-weight-bold;
         padding-top: 20px;
         font-size: 40px;
@@ -132,6 +132,16 @@
     .no-data {
         .no-item {
             max-width: 300px;
+        }
+    }
+}
+
+[data-theme="dark"] {
+    .collection-detail-container {
+        background: $bgdark;
+        color: $white;
+        .link-section .nav .nav-link {
+            color: $white;
         }
     }
 }

@@ -45,7 +45,6 @@ import {
 import EthUtil from 'ethereum/EthUtil';
 import { EthereumNetworkID } from 'model/EthereumNetwork';
 
-import imgProperty from "assets/imgs/property.png";
 import CollectionController from 'controller/CollectionController';
 
 interface TokenDetailProps { }
@@ -265,7 +264,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 let result: any;
                 let collection: any 
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
-                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
+                const engineAddress = '';
 
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let bidTokenResult = await SmartContract.transferToken(
@@ -284,7 +283,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         result = await TokenController.bidToken(obj);
                     }
                 } else {
-                    result = await SmartContract.bid(token.chain_id, price, engineAddress);
+                    result = await SmartContract.bid(token.chain_id, price);
                 }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
@@ -386,12 +385,10 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 let collection: any 
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
                 const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
-                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
-
+                
                 result = await SmartContract.approve(
                     token.chain_id, 
-                    contractAddress, 
-                    engineAddress
+                    contractAddress
                 );
                 if (result) {
                     setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
@@ -423,8 +420,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 let collection: any;
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
                 const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
-                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
-
+                
                 result = await SmartContract.createOffer(
                     token.chain_id,
                     isDirectSale,
@@ -434,8 +430,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     auctionStart,
                     duration,
                     token.blockchain,
-                    contractAddress,
-                    engineAddress
+                    contractAddress
                 );
                 if (result) {
                     dispatch(getWalletBalance());
@@ -512,8 +507,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 let buyResult: any;
                 let collection: any 
                 if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
-                const engineAddress = (collection && collection.collection) ? collection.collection.engine_address : '';
-
+                
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let buyTokenResult = await SmartContract.transferToken(
                         configs.MAIN_ACCOUNT,
@@ -525,7 +519,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                             tokenId: token.chain_id,
                             buyerAddress: EthUtil.getAddress(),
                             sellerAddress: offer.creator.wallet,
-                            engineAddress: engineAddress,
+                            engineAddress: '',
                             buyPrice: offer.offer_price
                         };
                         buyResult = await TokenController.buyToken(obj);
@@ -533,8 +527,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 } else {
                     buyResult = await SmartContract.directBuy(
                         token.chain_id,
-                        offer.offer_price,
-                        engineAddress
+                        offer.offer_price
                     )
                 }
                 if (buyResult.success && buyResult.transactionHash) {

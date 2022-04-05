@@ -196,7 +196,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         return collectible.offer_price
     };
 
-    const getPureCollectionObj = (collection: any, contract_address: string, engine_address: string) => {
+    const getPureCollectionObj = (collection: any, contract_address: string) => {
         return {
             name: collection.name,
             symbol: collection.symbol,
@@ -204,8 +204,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             short: collection.short,
             image: collection.image,
             network: network.key,
-            contract_address: contract_address,
-            engine_address: engine_address
+            contract_address: contract_address
         };
     };
 
@@ -217,24 +216,25 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
         setIsLoading(true);
         let {success, contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
+        // console.log("contractAddress", engineAddress)
         if (contractAddress === '') {
             window.location.reload();
         }
         if (success) {
-            let formData = Utility.getFormDataFromObject(getPureCollectionObj(collection, contractAddress, engineAddress));
+            let formData = Utility.getFormDataFromObject(getPureCollectionObj(collection, contractAddress));
             try {
                 await CollectionController.create(formData);
                 loadCollections();
                 setIsLoading(false);
                 setShowCollectionDialog(false);
                 setContractAddress(contractAddress);
-                setEngineAddress(engineAddress)
                 NotificationManager.success(
                     "Collection is created successfully.",
                     "Success"
                 );
             } catch (err) {
                 setIsLoading(false);
+                console.log(err);
                 NotificationManager.error("Create Collection Failed!", "Error");
             }
         }
@@ -375,7 +375,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         if (result && result.link && result.token) {
             try {
                 if (chainId) {
-                    let contractResult: any = await SmartContract.approve(chainId, contractAddress, engineAddress);
+                    let contractResult: any = await SmartContract.approve(chainId, contractAddress);
                     if (contractResult) {
                         dispatch(getWalletBalance());
                         setCreateNftStatus(NftCreateStatus.APPROVE_SUCCEED);
@@ -414,8 +414,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                     auctionStart,
                     duration,
                     network.value,
-                    contractAddress,
-                    engineAddress
+                    contractAddress
                 );
                 if (result) {
                     dispatch(getWalletBalance());

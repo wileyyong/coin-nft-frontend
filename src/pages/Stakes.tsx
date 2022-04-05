@@ -19,9 +19,8 @@ import { switchNetwork } from "store/User/user.slice";
 import EthUtil from 'ethereum/EthUtil';
 import configs from 'configs';
 
-import { useAppDispatch, useAppSelector } from "store/hooks";
+import { useAppSelector } from "store/hooks";
 import { getWalletPumlx } from "store/User/user.selector";
-import { getWalletPumlx as walletPumlx } from "store/User/user.slice";
 
 interface StakeProps { }
 
@@ -35,7 +34,7 @@ const Stakes: React.FC<StakeProps> = () => {
   const [nftstaked, setNftstaked] = useState<any[]>([]);
   const [stakeArr, setStakeArr] = useState<string[]>([]);
   const [unstakeArr, setUnstakeArr] = useState<string[]>([]);
-  const [transFee, setTransFee] = useState(0);
+  const [transFee, setTransFee] = useState<number>(0);
   const [lastUpdateTime, setLastUpdateTime] = useState(0);
   const [rewardStored, setRewardStored] = useState(0);
   const [lastCollect, setLastCollect] = useState(0);
@@ -182,22 +181,29 @@ const Stakes: React.FC<StakeProps> = () => {
   const stakeNft = async (stake: boolean) => {
     const ids = stake ? unstakeArr : stakeArr;
     if (ids.length === 0) return;
-    let stakeResult: any;
-    if (stake) {
-      stakeResult = await SmartContract.stakeNFT(ids);
-    } else {
-      stakeResult = await SmartContract.withdrawNFT(ids);
-    }
-    if (stakeResult.success && stakeResult.transactionHash) {
-
-      const result = await NftController.stakeToken({
-        chainIds: ids,
-        stake: stake
-      });
-      if (result.message) {
+    const result = await NftController.stakeToken({
+      contract_address: configs.PUML721_ADDRESS,
+      chainIds: ids,
+      stake: stake
+    });
+    if (result.message) {
+      let stakeResult: any;
+      if (stake) {
+        stakeResult = await SmartContract.stakeNFT(ids);
+      } else {
+        stakeResult = await SmartContract.withdrawNFT(ids);
+      }
+      if (stakeResult.success && stakeResult.transactionHash) {
         loadNft();
         setStakeArr([]);
         setUnstakeArr([]);
+        NotificationManager.success(
+          "Successfully done.",
+          "Success"
+        );
+      } else {
+        console.log(result.error);
+        NotificationManager.error("Failed!", "Error");
       }
     }
   }
@@ -205,20 +211,50 @@ const Stakes: React.FC<StakeProps> = () => {
   const stakePumlx = async () => {
     if (stake <= 0 || stake === '') return;
 
-    const stakeResult = await SmartContract.stakePuml(stake, transFee);
+    const stakeResult = await NftController.stakePuml({
+      amount: stake, 
+      transFee: transFee,
+      staker: EthUtil.getAddress()
+    });
     if (stakeResult.success && stakeResult.transactionHash) {
-      setStake(0);
-      stakeData();
+      const transferResult = await SmartContract.transferToken(configs.MAIN_ACCOUNT, stake);
+      if (transferResult.success && transferResult.transactionHash) {
+        setStake(0);
+        stakeData();
+        NotificationManager.success(
+          "Successfully staken.",
+          "Success"
+        );
+      } else {
+        NotificationManager.error("Failed!", "Error");
+      }
     }
   }
 
   const unstakePumlx = async () => {
     if (unstake <= 0 || unstake === '') return;
 
+    if (parseFloat(unstake) > balancePumlx) {
+      NotificationManager.error("Insufficient staked", "Error");
+      return;
+    }
+
     const unstakeResult = await SmartContract.withdrawPuml(unstake, transFee);
     if (unstakeResult.success && unstakeResult.transactionHash) {
-      setUnstake(0);
-      stakeData();
+      const transferResult = await NftController.unstakePuml({
+        amount: unstake,
+        staker: EthUtil.getAddress()
+      });
+      if (transferResult.success && transferResult.transactionHash) {
+        setUnstake(0);
+        stakeData();
+        NotificationManager.success(
+          "Successfully unstaken.",
+          "Success"
+        );
+      }
+    } else {
+      NotificationManager.error("Failed!", "Error");
     }
   }
 
@@ -231,8 +267,20 @@ const Stakes: React.FC<StakeProps> = () => {
 
     const rewardResult = await SmartContract.getReward(collects, transFee);
     if (rewardResult.success && rewardResult.transactionHash) {
-      setCollects(0);
-      stakeData();
+      const transferResult = await NftController.rewardPuml({
+        amount: collects,
+        staker: EthUtil.getAddress()
+      });
+      if (transferResult.success && transferResult.transactionHash) {
+        NotificationManager.success(
+          "Successfully collected.",
+          "Success"
+        );
+        setCollects(0);
+        stakeData();
+      } else {
+        NotificationManager.error("Collect Failed!", "Error");
+      }
     }
   }
 
@@ -241,20 +289,20 @@ const Stakes: React.FC<StakeProps> = () => {
       const trFee = await NftController.getPumlTransFee({
         updatetime: lastUpdateTime
       });
-      setTransFee(trFee * 0.37);
+      setTransFee(trFee.sum * 0.37);
     }
   }
 
   const stakeData = async () => {
     const data = await SmartContract.getStakeData();
     console.log("stakedata", data);
-    if (data.length > 0) {
+    if (data && data.length > 0) {
       setLastUpdateTime(data[0]);
       setRewardStored(data[1]);
       setLastCollect(data[2]);
       setCollectSum(data[3]);
-      setBalancePumlx(data[4]);
-      setBalanceNft(data[5]);
+      setBalancePumlx(data[4] / 1e18);
+      setBalanceNft(data[5] / 1e18);
     }
   }
 
@@ -353,8 +401,8 @@ const Stakes: React.FC<StakeProps> = () => {
           <div className="valupap">
             <div className="valupap__key">Collected to date:</div>
             <div className="valupap__val">
-              <span>{collectSum} <b>PUMLx</b></span>
-              <i>(${getDollarPrice(collectSum)})</i>
+              <span>{rewardStored} <b>PUMLx</b></span>
+              <i>(${getDollarPrice(rewardStored)})</i>
             </div>
           </div>
           <div className="devided"></div>
@@ -373,8 +421,8 @@ const Stakes: React.FC<StakeProps> = () => {
               Earned to date:
             </div>
             <div className="valupap__val">
-              <span>{rewardStored} <b>PUMLx</b></span>
-              <i>(${getDollarPrice(rewardStored)})</i>
+              <span>{collectSum} <b>PUMLx</b></span>
+              <i>(${getDollarPrice(collectSum)})</i>
             </div>
           </div>
         </div>
@@ -571,8 +619,8 @@ const Stakes: React.FC<StakeProps> = () => {
             Total NFT Stake Return:
           </div>
           <div className="valupap">
-            <span>{balanceNft} <b>PUMLx</b></span>
-            <i>(${getDollarPrice(balanceNft)})</i>
+            <span>0 <b>PUMLx</b></span>
+            <i>(${getDollarPrice(0)})</i>
           </div>
         </div>
       </div>

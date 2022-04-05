@@ -1,6 +1,6 @@
 import { abi as engineABI, bytecode as engineBytecode } from './abis/Engine.json';
 import { abi as PUML721ABI, bytecode as PUMLbytecode } from './abis/PumlNFT.json';
-import { abi as PUMLStakingABI } from './abis/PumlxStaking.json';
+import { abi as PUMLStakeABI, bytecode as Stakebytecode } from './abis/PumlStake.json';
 import { abi as iercABI } from './abis/IERC20.json';
 import { web3 } from './OnBoard';
 import configs from 'configs';
@@ -50,8 +50,7 @@ class Contract {
     async createCollection(name: string, symbol: string) {
         if(web3) {
             try{
-                let deploy_contract: any = await new web3.eth.Contract(PUML721ABI);
-                let deploy_engine: any = await new web3.eth.Contract(engineABI);
+                let deploy_contract: any = await new web3.eth.Contract(PUMLStakeABI);
                 let parameter = {
                     from: EthUtil.getAddress()
                 }
@@ -67,16 +66,16 @@ class Contract {
                     return newContractInstance.options.address;
                 });
 
-                const engine_address: string = await deploy_engine.deploy({
-                    data: engineBytecode
-                }).send(parameter, (err: any, transactionHash: any) => {
-                    console.log('Engine Transaction Hash :', transactionHash);
-                }).on('confirmation', () => {
-                }).then((newContractInstance: any) => {
-                    // console.log('Deployed Engine Address : ', newContractInstance.options.address);
-                    return newContractInstance.options.address;
-                });
-                return {success:true, contractAddress: contract_address, engineAddress: engine_address};
+                // const engine_address: string = await deploy_engine.deploy({
+                //     data: Stakebytecode
+                // }).send(parameter, (err: any, transactionHash: any) => {
+                //     console.log('Engine Transaction Hash :', transactionHash);
+                // }).on('confirmation', () => {
+                // }).then((newContractInstance: any) => {
+                //     // console.log('Deployed Engine Address : ', newContractInstance.options.address);
+                //     return newContractInstance.options.address;
+                // });
+                return {success:true, contractAddress: contract_address, engineAddress: 'engine_address'};
 
             }catch(err) {
                 return {success:false, contractAddress: '', engineAddress: ''};
@@ -135,10 +134,10 @@ class Contract {
         return { success: false, error: 'Failed to create NFT!' };
     }
 
-    async approve(tokenId: any, contract_address: string = '', engine_address: string = '') {
+    async approve(tokenId: any, contract_address: string = '') {
         const network = EthUtil.getNetwork();
         const PUML_721_ADDRESS = contract_address !== '' ? contract_address : this.getPuml721Address(network);
-        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             // const bytecode = await new web3.eth.getCode(ENGINE_721_ADDRESS);
             const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
@@ -163,12 +162,11 @@ class Contract {
         startTime: any, 
         duration: any, 
         tokenBlockchain: any,
-        contract_address: string = '',
-        engine_address: string = ''
+        contract_address: string = ''
     ) {
         const network = EthUtil.getNetwork();
         const PUML_721_ADDRESS = contract_address !== '' ? contract_address : this.getPuml721Address(network);
-        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             let buyPrice: number = price;
@@ -213,9 +211,9 @@ class Contract {
         return null;
     }
 
-    async bid(tokenId:any, price: any, engine_address: string = '') {
+    async bid(tokenId:any, price: any) {
         const network = EthUtil.getNetwork();
-        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             let auctionId = await this.getAuctionId(tokenId);
             if(auctionId!==null) {
@@ -232,9 +230,9 @@ class Contract {
         return { success: false, error: 'Failed to bid to this item!' };
     }
 
-    async directBuy(tokenId: any, price: any, engine_address: string = '') {
+    async directBuy(tokenId: any, price: any) {
         const network = EthUtil.getNetwork();
-        const ENGINE_721_ADDRESS = engine_address !== '' ? engine_address : this.getEngine721Address(network);
+        const ENGINE_721_ADDRESS = this.getEngine721Address(network);
         if(web3) {
             const engineContract = new web3.eth.Contract(engineABI, ENGINE_721_ADDRESS);
             const result: any = await engineContract.methods.buy(tokenId, '0x0000000000000000000000000000000000000000').send({
@@ -263,9 +261,9 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async stakePuml(amount: any, feeward: any) {
+    async stakePuml(amount: number, feeward: any) {
         if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
+            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
             const result = await stakeContract.methods.stake(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
@@ -277,9 +275,9 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async withdrawPuml(amount: any, feeward: any) {
+    async withdrawPuml(amount: number, feeward: any) {
         if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
+            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
             const result = await stakeContract.methods.withdraw(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
@@ -291,10 +289,34 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async stakeNFT(tokenIds: any) {
+    async stakeNFT(tokenIds: any, contract_address: string = '' ) {
+        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
+
         if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.stakeNFT(tokenIds).send({
+            const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
+            for (let i = 0; i < tokenIds.length; i++) {
+                await PUMLContract.methods.approve(configs.PUMLSTAKE_ADDRESS, tokenIds[i]).send({
+                    from: EthUtil.getAddress()
+                })
+            }
+            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
+            const result = await stakeContract.methods.stakeNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds).send({
+                from: EthUtil.getAddress()
+            })
+
+
+            if(result.status === true) {
+                return { success: true , transactionHash: result.transactionHash };
+            }
+        }
+        return { success: false, error: 'Failed to buy this item directly!' };
+    }
+
+    async withdrawNFT(tokenIds: any, contract_address: string = '') {
+        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
+        if(web3) {
+            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
+            const result = await stakeContract.methods.withdrawNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds).send({
                 from: EthUtil.getAddress()
             })
 
@@ -305,23 +327,9 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async withdrawNFT(tokenIds: any) {
+    async getReward(amount: number, feeward: any) {
         if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.withdrawNFT(tokenIds).send({
-                from: EthUtil.getAddress()
-            })
-
-            if(result.status === true) {
-                return { success: true , transactionHash: result.transactionHash };
-            }
-        }
-        return { success: false, error: 'Failed to buy this item directly!' };
-    }
-
-    async getReward(amount: any, feeward: any) {
-        if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
+            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
             const result = await stakeContract.methods.getReward(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
@@ -335,14 +343,14 @@ class Contract {
 
     async getStakeData() {
         if(web3) {
-            console.log("asdfsadf")
-            const stakeContract = new web3.eth.Contract(PUMLStakingABI, configs.PUML_STAKING);
-            const result = await stakeContract.methods.getData(EthUtil.getAddress()).call();
+            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
+            const getRewardData = await stakeContract.methods.getRewardData(EthUtil.getAddress()).call();
 
-            return result;
+            return getRewardData;
         }
         return [];
     }
+    
 }
 
 const smartContract = new Contract();
