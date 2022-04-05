@@ -264,7 +264,7 @@ class Contract {
     async stakePuml(amount: number, feeward: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
-            const result = await stakeContract.methods.stake(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.stake(amount, web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
 
@@ -278,7 +278,7 @@ class Contract {
     async withdrawPuml(amount: number, feeward: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
-            const result = await stakeContract.methods.withdraw(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.withdraw(amount, web3.utils.toWei('' + feeward)).send({
                 from: EthUtil.getAddress()
             })
 

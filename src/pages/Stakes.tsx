@@ -365,8 +365,8 @@ const Stakes: React.FC<StakeProps> = () => {
       setRewardStored(data[1]);
       setLastCollect(data[2]);
       setCollectSum(data[3]);
-      setBalancePumlx(data[4] / 1e18);
-      setBalanceNft(data[5] / 1e18);
+      setBalancePumlx(data[4]);
+      setBalanceNft(data[5]);
     }
   }
 
@@ -431,7 +431,7 @@ const Stakes: React.FC<StakeProps> = () => {
       <div className="stakes">
         <div className="stakes__title">
           <div className="item-title">Claim Rewards</div>
-          <div className="item-price mt-3">0.32423233 PUMLX</div>
+          <div className="item-price mt-3">0 PUMLX</div>
           <div className="item-desc mt-3">
             Trading fees collected by our protocol are rewarded to PUMLx stakers
           </div>
@@ -452,7 +452,7 @@ const Stakes: React.FC<StakeProps> = () => {
                   onChange={(e) => handleChange(e)}
               />
               <span className="ml-2">PUMLx</span>
-              <i className="ml-3">($0.00)</i>
+              <i className="ml-3">(${getDollarPrice(collects)})</i>
             </div>
             <div className="inp__btn col-md-4 mt-1">
               <button 
