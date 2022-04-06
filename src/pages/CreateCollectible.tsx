@@ -216,7 +216,8 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
         setIsLoading(true);
         let {success, contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
-        // console.log("contractAddress", engineAddress)
+        // console.log("contractAddress", contractAddress)
+        // console.log("engineAddress", engineAddress)
         if (contractAddress === '') {
             window.location.reload();
         }

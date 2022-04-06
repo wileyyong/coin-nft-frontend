@@ -1,4 +1,5 @@
 import { abi as engineABI, bytecode as engineBytecode } from './abis/Engine.json';
+import { abi as maticEngineABI, bytecode as maticEngineBytecode } from './abis/MaticEngine.json';
 import { abi as PUML721ABI, bytecode as PUMLbytecode } from './abis/PumlNFT.json';
 import { abi as PUMLStakeABI, bytecode as Stakebytecode } from './abis/PumlStake.json';
 import { abi as iercABI } from './abis/IERC20.json';
@@ -50,7 +51,8 @@ class Contract {
     async createCollection(name: string, symbol: string) {
         if(web3) {
             try{
-                let deploy_contract: any = await new web3.eth.Contract(PUMLStakeABI);
+                let deploy_contract: any = await new web3.eth.Contract(PUML721ABI);
+                // let deploy_engine: any = await new web3.eth.Contract(maticEngineABI);
                 let parameter = {
                     from: EthUtil.getAddress()
                 }
@@ -67,7 +69,7 @@ class Contract {
                 });
 
                 // const engine_address: string = await deploy_engine.deploy({
-                //     data: Stakebytecode
+                //     data: maticEngineBytecode
                 // }).send(parameter, (err: any, transactionHash: any) => {
                 //     console.log('Engine Transaction Hash :', transactionHash);
                 // }).on('confirmation', () => {
@@ -294,7 +296,7 @@ class Contract {
         if(web3) {
             const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
             for (let i = 0; i < tokenIds.length; i++) {
-                await PUMLContract.methods.approve(configs.PUMLSTAKE_ADDRESS, tokenIds[i]).send({
+                await PUMLContract.methods.approve(configs.ENGINE721_ADDRESS, tokenIds[i]).send({
                     from: EthUtil.getAddress()
                 })
             }
@@ -307,7 +309,7 @@ class Contract {
         const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
 
         if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
+            const stakeContract = new web3.eth.Contract(engineABI, configs.ENGINE721_ADDRESS);
             const result = await stakeContract.methods.stakeNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds).send({
                 from: EthUtil.getAddress()
             })
@@ -323,7 +325,7 @@ class Contract {
     async withdrawNFT(tokenIds: any, contract_address: string = '') {
         const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
         if(web3) {
-            const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
+            const stakeContract = new web3.eth.Contract(engineABI, configs.ENGINE721_ADDRESS);
             const result = await stakeContract.methods.withdrawNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds).send({
                 from: EthUtil.getAddress()
             })

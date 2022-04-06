@@ -60,6 +60,10 @@ class NftController {
         return API.post(`${configs.API.TOKEN_URL}/rewardPuml`, payload).then(res => res.data)
     }
 
+    public static approveToken(payload: any) {
+        return API.post(`${configs.API.TOKEN_URL}/approveToken`, payload).then(res => res.data)
+    }
+
 }
 
 export default NftController;

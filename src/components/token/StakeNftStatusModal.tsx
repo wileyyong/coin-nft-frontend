@@ -15,7 +15,7 @@ interface StakeNftStatusModalProps {
   status: any;
   onClose?: any;
   approveNft?: any;
-  stakeNft?: any;
+  unstakeNft?: any;
 }
 
 const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
@@ -23,7 +23,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
   status,
   onClose,
   approveNft,
-  stakeNft,
+  unstakeNft,
 }) => {
   return (
     <Modal show={show} onHide={onClose} className="create-nft-status-modal">
@@ -40,7 +40,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
                 )}
               </div>
               <div className="ml-5">
-                <MidTextTitle>Approve NFTs</MidTextTitle>
+                <MidTextTitle>Unstake NFTs</MidTextTitle>
               </div>
             </FlexAlignCenterDiv>
             <Button
@@ -53,7 +53,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
                 status === NftCreateStatus.APPROVE_FAILED ? false : true
               }
               className="start-progressing-btn mt-4 outline-btn"
-              onClick={approveNft}
+              onClick={unstakeNft}
             >
               <span>
                 {status < NftCreateStatus.APPROVE_PROGRESSING && "Start"}
@@ -78,7 +78,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
               </div>
 
               <div className="ml-5">
-                <MidTextTitle>Stake NFT</MidTextTitle>
+                <MidTextTitle>Approve NFTs</MidTextTitle>
               </div>
             </FlexAlignCenterDiv>
             <Button
@@ -95,7 +95,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
                   : true
               }
               className="start-progressing-btn mt-4 outline-btn"
-              onClick={stakeNft}
+              onClick={approveNft}
             >
               <span>
                 {status < NftCreateStatus.CREATEOFFER_PROGRESSING && "Start"}

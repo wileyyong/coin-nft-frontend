@@ -95,7 +95,8 @@ const Stakes: React.FC<StakeProps> = () => {
     for (let token of tokens) {
       if (token.stake) {
         nftstaked.push(token);
-      } else {
+      } 
+      if (!token.stake)  {
         nftunstaked.push(token);
       }
     }
@@ -188,46 +189,72 @@ const Stakes: React.FC<StakeProps> = () => {
     const ids = unstakeArr;
     if (ids.length === 0) return;
 
-    setResellNftStatus(NftCreateStatus.CREATEOFFER_PROGRESSING);
-    
-    const result = await NftController.stakeToken({
-      contract_address: configs.PUML721_ADDRESS,
-      chainIds: ids,
-      stake: true
-    });
-    if (result.message) {
+    try {
+      setIsLoading(true);
       let stakeResult: any;
       stakeResult = await SmartContract.stakeNFT(ids);
       if (stakeResult.success && stakeResult.transactionHash) {
-        loadNft();
-        setStakeArr([]);
-        setUnstakeArr([]);
-        NotificationManager.success(
-          "Successfully done.",
-          "Success"
-        );
-        setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
-        setShowStatusModal(false);
+        const result = await NftController.stakeToken({
+          chainIds: ids,
+          stake: true
+        });
+        if (result.message) {
+          loadNft();
+          setUnstakeArr([]);
+          setIsLoading(false);
+          NotificationManager.success(
+            "Successfully done.",
+            "Success"
+          );
+          
+        } else {
+          setIsLoading(false);
+          console.log(result.error);
+          NotificationManager.error("Failed!", "Error");
+        }
       } else {
-        console.log(result.error);
+        setIsLoading(false);
         NotificationManager.error("Failed!", "Error");
-        setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
       }
+      setIsLoading(false);
+    } catch (err) {
+      NotificationManager.error("Failed!", "Error");
+      setIsLoading(false);
     }
   }
 
   const approveNft = async () => {
-    setShowStatusModal(true);
-    setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
+    const ids = stakeArr;
+    try {
+      setResellNftStatus(NftCreateStatus.CREATEOFFER_PROGRESSING);
+      let approveResult: any;
+      approveResult = await SmartContract.approveStakeNFT(ids);
 
-    const ids = unstakeArr;
-    let approveResult: any;
-    approveResult = await SmartContract.approveStakeNFT(ids);
-
-    if (approveResult.success) {
-      setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
-    } else {
-      setResellNftStatus(NftCreateStatus.APPROVE_FAILED);
+      if (approveResult.success) {
+        const result = await NftController.stakeToken({
+          chainIds: ids,
+          stake: false
+        });
+        if (result.message) {
+          loadNft();
+          setStakeArr([]);
+          setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
+          NotificationManager.success(
+            "Successfully approved NFTs.",
+            "Success"
+          );
+          setShowStatusModal(false);
+        } else {
+          console.log(result.error);
+          NotificationManager.error("Failed!", "Error");
+          setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
+        }
+      } else {
+        console.log(approveResult.error);
+        setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
+      }
+    } catch (err) {
+      NotificationManager.error("Failed!", "Error");
     }
   }
 
@@ -235,30 +262,36 @@ const Stakes: React.FC<StakeProps> = () => {
     const ids = stakeArr;
     if (ids.length === 0) return;
 
-    setIsLoading(true);
-    
-    const result = await NftController.stakeToken({
-      contract_address: configs.PUML721_ADDRESS,
-      chainIds: ids,
-      stake: false
-    });
-    if (result.message) {
-      let stakeResult: any;
-      stakeResult = await SmartContract.withdrawNFT(ids);
-      if (stakeResult.success && stakeResult.transactionHash) {
-        loadNft();
-        setStakeArr([]);
-        setUnstakeArr([]);
-        NotificationManager.success(
-          "Successfully done.",
-          "Success"
-        );
-        setIsLoading(false);
+    try {
+      setShowStatusModal(true);
+      setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
+      
+      const approveResult = await NftController.approveToken({
+        contract_address: configs.PUML721_ADDRESS,
+        chainIds: ids
+      });
+      if (approveResult.success) {
+        let stakeResult: any;
+        stakeResult = await SmartContract.withdrawNFT(ids);
+        if (stakeResult.success && stakeResult.transactionHash) {
+          await NftController.stakeToken({
+            chainIds: ids,
+            stake: null
+          });
+          loadNft();
+          setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
+        } else {
+          NotificationManager.error("Failed!", "Error");
+          setResellNftStatus(NftCreateStatus.APPROVE_FAILED);
+        }
       } else {
-        console.log(result.error);
+        console.log(approveResult.error);
         NotificationManager.error("Failed!", "Error");
-        setIsLoading(false);
+        setResellNftStatus(NftCreateStatus.APPROVE_FAILED);
       }
+    } catch (err) {
+      setShowStatusModal(false);
+      NotificationManager.error("Failed!", "Error");
     }
   }
 
@@ -266,54 +299,68 @@ const Stakes: React.FC<StakeProps> = () => {
   const stakePumlx = async () => {
     if (stake <= 0 || stake === '') return;
 
-    setIsLoading(true);
-    const stakeResult = await NftController.stakePuml({
-      amount: stake, 
-      transFee: transFee,
-      staker: EthUtil.getAddress()
-    });
-    if (stakeResult.success && stakeResult.transactionHash) {
+    try {
+      setIsLoading(true);
+      
       const transferResult = await SmartContract.transferToken(configs.MAIN_ACCOUNT, stake);
       if (transferResult.success && transferResult.transactionHash) {
-        setStake(0);
-        stakeData();
-        NotificationManager.success(
-          "Successfully staken.",
-          "Success"
-        );
-        setIsLoading(false);
+        const stakeResult = await NftController.stakePuml({
+          amount: stake, 
+          transFee: transFee,
+          staker: EthUtil.getAddress()
+        });
+        if (stakeResult.success && stakeResult.transactionHash) {
+          setStake(0);
+          stakeData();
+          NotificationManager.success(
+            "Successfully staken.",
+            "Success"
+          );
+        } else {
+          NotificationManager.error("Failed!", "Error");
+        }
       } else {
         NotificationManager.error("Failed!", "Error");
-        setIsLoading(false);
       }
+      setIsLoading(false);
+    } catch (err) {
+      NotificationManager.error("Failed!", "Error");
+      setIsLoading(false);
     }
   }
 
   const unstakePumlx = async () => {
     if (unstake <= 0 || unstake === '') return;
+    try {
+      setIsLoading(true);
+      if (parseFloat(unstake) > balancePumlx) {
+        NotificationManager.error("Insufficient staked", "Error");
+        return;
+      }
 
-    setIsLoading(true);
-    if (parseFloat(unstake) > balancePumlx) {
-      NotificationManager.error("Insufficient staked", "Error");
-      return;
-    }
-
-    const unstakeResult = await SmartContract.withdrawPuml(unstake, transFee);
-    if (unstakeResult.success && unstakeResult.transactionHash) {
       const transferResult = await NftController.unstakePuml({
         amount: unstake,
         staker: EthUtil.getAddress()
       });
       if (transferResult.success && transferResult.transactionHash) {
-        setUnstake(0);
-        stakeData();
-        NotificationManager.success(
-          "Successfully unstaken.",
-          "Success"
-        );
+        const unstakeResult = await SmartContract.withdrawPuml(unstake, transFee);
+        if (unstakeResult.success && unstakeResult.transactionHash) {
+          setUnstake(0);
+          stakeData();
+          NotificationManager.success(
+            "Successfully unstaken.",
+            "Success"
+          );
+          setIsLoading(false);
+        } else {
+          NotificationManager.error("Failed!", "Error");
+          setIsLoading(false);
+        }
+      } else {
+        NotificationManager.error("Failed!", "Error");
         setIsLoading(false);
       }
-    } else {
+    } catch (err) {
       NotificationManager.error("Failed!", "Error");
       setIsLoading(false);
     }
@@ -384,7 +431,7 @@ const Stakes: React.FC<StakeProps> = () => {
         }}
         status={resellNftStatus}
         approveNft={approveNft}
-        stakeNft={stakeNft}
+        unstakeNft={unstakeNft}
       ></StakeNftStatusModal>
       <div className="section-intro">
         <div className="intro-content text-left">
@@ -671,7 +718,7 @@ const Stakes: React.FC<StakeProps> = () => {
               ))}
             </Carousel>
             {unstakeArr.length > 0 && (
-              <button className="btn btn-primary" onClick={() => approveNft()}>
+              <button className="btn btn-primary" onClick={() => stakeNft()}>
                 <div className="d-flex flex-row align-items-center">
                   <span>Stake</span>
                 </div>
