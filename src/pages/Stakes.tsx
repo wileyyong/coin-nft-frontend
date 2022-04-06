@@ -35,15 +35,17 @@ const Stakes: React.FC<StakeProps> = () => {
   const [shows, setShows] = useState(5);
   const [nftunstaked, setNftunstaked] = useState<any[]>([]);
   const [nftstaked, setNftstaked] = useState<any[]>([]);
-  const [stakeArr, setStakeArr] = useState<string[]>([]);
-  const [unstakeArr, setUnstakeArr] = useState<string[]>([]);
+  const [stakeArr, setStakeArr] = useState<any>({});
+  const [unstakeArr, setUnstakeArr] = useState<any>({});
+  const [stakeAmount, setStakeAmount] = useState<number>(0);
+  const [unstakeAmount, setUnstakeAmount] = useState<number>(0);
   const [transFee, setTransFee] = useState<number>(0);
   const [lastUpdateTime, setLastUpdateTime] = useState(0);
   const [rewardStored, setRewardStored] = useState(0);
   const [lastCollect, setLastCollect] = useState(0);
   const [collectSum, setCollectSum] = useState(0);
   const [balancePumlx, setBalancePumlx] = useState(0);
-  const [balanceNft, setBalanceNft] = useState(0);
+  // const [balanceNft, setBalanceNft] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE)
@@ -93,12 +95,14 @@ const Stakes: React.FC<StakeProps> = () => {
 
     const { tokens } = await NftController.getApprovedList();
     for (let token of tokens) {
-      if (token.stake) {
-        nftstaked.push(token);
-      } 
-      if (!token.stake)  {
-        nftunstaked.push(token);
+      if (token.stake !== null) {
+        if (token.stake) {
+          nftstaked.push(token);
+        } else {
+          nftunstaked.push(token);
+        }
       }
+      
     }
     setNftstaked(nftstaked);
     setNftunstaked(nftunstaked);
@@ -156,29 +160,45 @@ const Stakes: React.FC<StakeProps> = () => {
     }
   };
 
-  const selectStake = (stake: boolean, nft: string) => {
-    let stakearr: string[] = [];
-    let unstakearr: string[] = [];
-    for (let i = 0; i < stakeArr.length; i++) {
-      stakearr.push(stakeArr[i]);
+  const selectStake = (stake: boolean, nft: any) => {
+    let stakearr: any = {};
+    let unstakearr: any = {};
+    for (let key in stakeArr) {
+      stakearr[key] = stakeArr[key];
     }
-    for (let i = 0; i < unstakeArr.length; i++) {
-      unstakearr.push(unstakeArr[i]);
+    for (let key in unstakeArr) {
+      unstakearr[key] = unstakeArr[key];
     }
+
+    const ikey = nft.contract_address !== null ? nft.contract_address : '0x0';
     switch (stake) {
       case true:
-        if (!stakearr.includes(nft)) {
-          stakearr.push(nft);
+        if (ikey in stakearr) {  // check if key in stake array
+          if (!stakearr[ikey].includes(nft.chain_id)) {
+            stakearr[ikey].push(nft.chain_id);
+            setStakeAmount(stakeAmount + 1);
+          } else {
+            stakearr[ikey] = stakearr[ikey].filter((value: any) => value !== nft.chain_id);
+            setStakeAmount(stakeAmount - 1);
+          }
         } else {
-          stakearr = stakearr.filter(value => value !== nft);
+          stakearr[ikey] = [nft.chain_id];
+          setStakeAmount(stakeAmount + 1);
         }
         setStakeArr(stakearr);
         break;
       default:
-        if (!unstakearr.includes(nft)) {
-          unstakearr.push(nft);
+        if (ikey in unstakearr) {  // check if key in stake array
+          if (!unstakearr[ikey].includes(nft.chain_id)) {
+            unstakearr[ikey].push(nft.chain_id);
+            setUnstakeAmount(unstakeAmount + 1);
+          } else {
+            unstakearr[ikey] = unstakearr[ikey].filter((value: any) => value !== nft.chain_id);
+            setUnstakeAmount(unstakeAmount - 1);
+          }
         } else {
-          unstakearr = unstakearr.filter(value => value !== nft);
+          unstakearr[ikey] = [nft.chain_id];
+          setUnstakeAmount(unstakeAmount + 1);
         }
         setUnstakeArr(unstakearr);
         break;
@@ -187,13 +207,12 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const stakeNft = async () => {
     const ids = unstakeArr;
-    if (ids.length === 0) return;
 
     try {
       setIsLoading(true);
       let stakeResult: any;
       stakeResult = await SmartContract.stakeNFT(ids);
-      if (stakeResult.success && stakeResult.transactionHash) {
+      if (stakeResult.success) {
         const result = await NftController.stakeToken({
           chainIds: ids,
           stake: true
@@ -260,25 +279,27 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const unstakeNft = async () => {
     const ids = stakeArr;
-    if (ids.length === 0) return;
 
     try {
       setShowStatusModal(true);
       setResellNftStatus(NftCreateStatus.APPROVE_PROGRESSING);
-      
+
       const approveResult = await NftController.approveToken({
-        contract_address: configs.PUML721_ADDRESS,
         chainIds: ids
       });
       if (approveResult.success) {
         let stakeResult: any;
         stakeResult = await SmartContract.withdrawNFT(ids);
-        if (stakeResult.success && stakeResult.transactionHash) {
+        if (stakeResult.success) {
           await NftController.stakeToken({
             chainIds: ids,
             stake: null
           });
           loadNft();
+          NotificationManager.success(
+            "Successfully unstake NFTs.",
+            "Success"
+          );
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
         } else {
           NotificationManager.error("Failed!", "Error");
@@ -413,7 +434,7 @@ const Stakes: React.FC<StakeProps> = () => {
       setLastCollect(data[2]);
       setCollectSum(data[3]);
       setBalancePumlx(data[4]);
-      setBalanceNft(data[5]);
+      // setBalanceNft(data[5]);
     }
   }
 
@@ -652,9 +673,14 @@ const Stakes: React.FC<StakeProps> = () => {
                         className="myitem-card text-center p-2" 
                         key={index} 
                         style={{width: `${100 / shows}%`}}
-                        onClick={() => selectStake(true, nft.chain_id)}
+                        onClick={() => selectStake(true, nft)}
                       >
-                        <div className={`slide__item ${stakeArr.includes(nft.chain_id) ? "slide__item--active" : ""}`}>
+                        <div className={`slide__item 
+                          ${(nft.contract_address !== null && stakeArr[nft.contract_address] && stakeArr[nft.contract_address].includes(nft.chain_id)) || 
+                            (nft.contract_address === null && stakeArr['0x0'] && stakeArr['0x0'].includes(nft.chain_id))
+                          ? "slide__item--active" 
+                          : ""}`}
+                        >
                           <div style={{ backgroundImage: `url(${nft.media})` }} className="card-image">
                           </div>
                           <div className="card-info pt-3 pb-4">
@@ -667,7 +693,7 @@ const Stakes: React.FC<StakeProps> = () => {
                 </Carousel.Item>
               ))}
             </Carousel>
-            {stakeArr.length > 0 && (
+            {stakeAmount > 0 && (
               <button className="btn btn-primary" onClick={() => unstakeNft()}>
                 <div className="d-flex flex-row align-items-center">
                   <span>Unstake</span>
@@ -688,7 +714,7 @@ const Stakes: React.FC<StakeProps> = () => {
         <div className="stakes__title">
           <div className="item-title">Unstaked  NFT’s ({nftunstaked.length})</div>
           <div className="item-desc mt-3">
-            Earning 0 PUMLx per day
+            Earning 10 PUMLx per day
           </div>
         </div>
         {nftunstaked && nftunstaked.length > 0 ? (
@@ -702,9 +728,14 @@ const Stakes: React.FC<StakeProps> = () => {
                         className="myitem-card text-center p-2" 
                         key={index} 
                         style={{width: `${100 / shows}%`}}
-                        onClick={() => selectStake(false, nft.chain_id)}
+                        onClick={() => selectStake(false, nft)}
                       >
-                        <div className={`slide__item ${unstakeArr.includes(nft.chain_id) ? "slide__item--active" : ""}`}>
+                        <div className={`slide__item 
+                          ${(nft.contract_address !== null && unstakeArr[nft.contract_address] && unstakeArr[nft.contract_address].includes(nft.chain_id)) || 
+                            (nft.contract_address === null && unstakeArr['0x0'] && unstakeArr['0x0'].includes(nft.chain_id))
+                          ? "slide__item--active" 
+                          : ""}`}
+                        >
                           <div style={{ backgroundImage: `url(${nft.media})` }} className="card-image">
                           </div>
                           <div className="card-info pt-3 pb-4">
@@ -717,7 +748,7 @@ const Stakes: React.FC<StakeProps> = () => {
                 </Carousel.Item>
               ))}
             </Carousel>
-            {unstakeArr.length > 0 && (
+            {unstakeAmount > 0 && (
               <button className="btn btn-primary" onClick={() => stakeNft()}>
                 <div className="d-flex flex-row align-items-center">
                   <span>Stake</span>

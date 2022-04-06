@@ -46,6 +46,7 @@ import EthUtil from 'ethereum/EthUtil';
 import { EthereumNetworkID } from 'model/EthereumNetwork';
 
 import CollectionController from 'controller/CollectionController';
+import NftController from "controller/NftController";
 
 interface TokenDetailProps { }
 
@@ -262,10 +263,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 setTransProgressing(true);
 
                 let result: any;
-                let collection: any 
-                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
-                const engineAddress = '';
-
+                
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let bidTokenResult = await SmartContract.transferToken(
                         configs.MAIN_ACCOUNT,
@@ -277,8 +275,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         let obj: any = {
                             tokenChainId: token.chain_id,
                             tokenId: token._id,
-                            bidderAddress: EthUtil.getAddress(),
-                            engineAddress: engineAddress
+                            bidderAddress: EthUtil.getAddress()
                         };
                         result = await TokenController.bidToken(obj);
                     }
@@ -391,6 +388,10 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     contractAddress
                 );
                 if (result) {
+                    await NftController.stakeToken({
+                        chainIds: {[token.contract_address]: token.chain_id},
+                        stake: false
+                    });
                     setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
                     dispatch(getWalletBalance());
                     return;
@@ -505,8 +506,6 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 }
 
                 let buyResult: any;
-                let collection: any 
-                if (token.collectionsId) collection = await CollectionController.getById(token.collectionsId);
                 
                 if (token.blockchain && token.blockchain === 'PUMLx') {
                     let buyTokenResult = await SmartContract.transferToken(
@@ -519,7 +518,6 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                             tokenId: token.chain_id,
                             buyerAddress: EthUtil.getAddress(),
                             sellerAddress: offer.creator.wallet,
-                            engineAddress: '',
                             buyPrice: offer.offer_price
                         };
                         buyResult = await TokenController.buyToken(obj);
@@ -536,6 +534,10 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         price: offer.offer_price,
                         hash: buyResult.transactionHash,
                         copies: 1
+                    });
+                    await NftController.stakeToken({
+                        chainIds: {[token.contract_address]: token.chain_id},
+                        stake: null
                     });
                     NotificationManager.success(
                         "You buy this item successfully.",

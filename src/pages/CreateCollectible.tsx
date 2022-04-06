@@ -113,7 +113,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     });
 
     const [contractAddress, setContractAddress] = useState<string>('');
-    const [engineAddress, setEngineAddress] = useState<string>('');
 
     const expiryDateOptions = [
         {
@@ -215,7 +214,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         }
 
         setIsLoading(true);
-        let {success, contractAddress, engineAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
+        let {success, contractAddress} = await SmartContract.createCollection(collection.name, collection.symbol);
         // console.log("contractAddress", contractAddress)
         // console.log("engineAddress", engineAddress)
         if (contractAddress === '') {
@@ -365,6 +364,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 if (nftFromDB.token && nftFromDB.token._id) {
                     approveObj['tokenId'] = nftFromDB.token._id;
                     approveObj['chain_id'] = chainId;
+                    approveObj['contact_address'] = contractAddress;
                 }
                 let formData = Utility.getFormDataFromObject(approveObj);
                 result = await NftController.createApprovedNFT(formData);
@@ -488,9 +488,6 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         });
         if (cItem.name !== 'PUML' && cItem.contract_address) {
             setContractAddress(cItem.contract_address);
-        }
-        if (cItem.name !== 'PUML' && cItem.engine_address) {
-            setEngineAddress(cItem.engine_address);
         }
     };
 

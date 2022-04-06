@@ -19,6 +19,7 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getMyInfo } from "store/User/user.selector";
 import { getWalletBalance } from "store/User/user.slice";
 import CollectionController from "controller/CollectionController";
+import NftController from "controller/NftController";
 
 interface TokenViewProps {
   item: any;
@@ -110,6 +111,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         );
 
         if (result) {
+          await NftController.stakeToken({
+            chainIds: {[item.contract_address]: item.chain_id},
+            stake: false
+        });
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
           dispatch(getWalletBalance());
           return;

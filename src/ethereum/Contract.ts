@@ -1,7 +1,6 @@
-import { abi as engineABI, bytecode as engineBytecode } from './abis/Engine.json';
-import { abi as maticEngineABI, bytecode as maticEngineBytecode } from './abis/MaticEngine.json';
+import { abi as engineABI } from './abis/Engine.json';
 import { abi as PUML721ABI, bytecode as PUMLbytecode } from './abis/PumlNFT.json';
-import { abi as PUMLStakeABI, bytecode as Stakebytecode } from './abis/PumlStake.json';
+import { abi as PUMLStakeABI } from './abis/PumlStake.json';
 import { abi as iercABI } from './abis/IERC20.json';
 import { web3 } from './OnBoard';
 import configs from 'configs';
@@ -291,48 +290,49 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async approveStakeNFT(tokenIds: any, contract_address: string = '' ) {
-        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
+    async approveStakeNFT(tokenIds: any ) {
         if(web3) {
-            const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
-            for (let i = 0; i < tokenIds.length; i++) {
-                await PUMLContract.methods.approve(configs.ENGINE721_ADDRESS, tokenIds[i]).send({
-                    from: EthUtil.getAddress()
-                })
+            for (let key in tokenIds) {
+                const PUML_721_ADDRESS = key !== '0x0' ? key : configs.PUML721_ADDRESS;
+                for (let i = 0; i < tokenIds[key].length; i++) {
+                    const PUMLContract = new web3.eth.Contract(PUML721ABI, PUML_721_ADDRESS);
+                    await PUMLContract.methods.approve(configs.ENGINE721_ADDRESS, tokenIds[key][i]).send({
+                        from: EthUtil.getAddress()
+                    })
+                }
             }
             return { success: true };
         }
         return { success: false, error: 'Failed to approve stake NFT directly!' };
     }
 
-    async stakeNFT(tokenIds: any, contract_address: string = '' ) {
-        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
+    async stakeNFT(tokenIds: any ) {
 
         if(web3) {
             const stakeContract = new web3.eth.Contract(engineABI, configs.ENGINE721_ADDRESS);
-            const result = await stakeContract.methods.stakeNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds).send({
-                from: EthUtil.getAddress()
-            })
-
-
-            if(result.status === true) {
-                return { success: true , transactionHash: result.transactionHash };
+            for (let key in tokenIds) {
+                const PUML_721_ADDRESS = key !== '0x0' ? key : configs.PUML721_ADDRESS;
+                await stakeContract.methods.stakeNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds[key]).send({
+                    from: EthUtil.getAddress()
+                })
             }
+
+            return { success: true };
         }
         return { success: false, error: 'Failed to stake NFT directly!' };
     }
 
-    async withdrawNFT(tokenIds: any, contract_address: string = '') {
-        const PUML_721_ADDRESS = contract_address !== '' ? contract_address : configs.PUML721_ADDRESS;
+    async withdrawNFT(tokenIds: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(engineABI, configs.ENGINE721_ADDRESS);
-            const result = await stakeContract.methods.withdrawNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds).send({
-                from: EthUtil.getAddress()
-            })
-
-            if(result.status === true) {
-                return { success: true , transactionHash: result.transactionHash };
+            for (let key in tokenIds) {
+                const PUML_721_ADDRESS = (key !== '0x0') ? key : configs.PUML721_ADDRESS;
+                await stakeContract.methods.withdrawNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds[key]).send({
+                    from: EthUtil.getAddress()
+                })
             }
+
+            return { success: true };
         }
         return { success: false, error: 'Failed to buy this item directly!' };
     }

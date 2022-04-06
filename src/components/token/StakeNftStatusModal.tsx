@@ -4,7 +4,6 @@ import { NftCreateStatus } from "model/NftCreateStatus";
 import {
   MidTextTitle,
   BigTitle,
-  B2NormalTextTitle,
   FlexAlignCenterDiv,
   B1NormalTextTitle,
 } from "../common/common.styles";
