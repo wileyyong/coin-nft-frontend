@@ -143,5 +143,11 @@
         .link-section .nav .nav-link {
             color: $white;
         }
+        .myitem-card .card-info {
+            background: rgba($color: $white, $alpha: 0.2);
+            .card-title, .eth-price {
+                color: $white;
+            }
+        }
     }
 }

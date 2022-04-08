@@ -364,7 +364,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 if (nftFromDB.token && nftFromDB.token._id) {
                     approveObj['tokenId'] = nftFromDB.token._id;
                     approveObj['chain_id'] = chainId;
-                    approveObj['contact_address'] = contractAddress;
+                    approveObj['contract_address'] = contractAddress;
                 }
                 let formData = Utility.getFormDataFromObject(approveObj);
                 result = await NftController.createApprovedNFT(formData);
