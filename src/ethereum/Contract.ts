@@ -262,10 +262,10 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async stakePuml(amount: number, feeward: any) {
+    async stakePuml(amount: number, collect: number) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
-            const result = await stakeContract.methods.stake(amount, web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.stake(amount, web3.utils.toWei('' + collect), EthUtil.getAddress()).send({
                 from: EthUtil.getAddress()
             })
 
@@ -276,10 +276,10 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async withdrawPuml(amount: number, feeward: any) {
+    async withdrawPuml(amount: number, collect: number) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
-            const result = await stakeContract.methods.withdraw(amount, web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.withdraw(amount, web3.utils.toWei('' + collect)).send({
                 from: EthUtil.getAddress()
             })
 
@@ -306,13 +306,13 @@ class Contract {
         return { success: false, error: 'Failed to approve stake NFT directly!' };
     }
 
-    async stakeNFT(tokenIds: any ) {
+    async stakeNFT(tokenIds: any, collect: any) {
 
         if(web3) {
             const stakeContract = new web3.eth.Contract(engineABI, configs.ENGINE721_ADDRESS);
             for (let key in tokenIds) {
                 const PUML_721_ADDRESS = key !== '0x0' ? key : configs.PUML721_ADDRESS;
-                await stakeContract.methods.stakeNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds[key]).send({
+                await stakeContract.methods.stakeNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds[key], web3.utils.toWei('' + collect)).send({
                     from: EthUtil.getAddress()
                 })
             }
@@ -322,12 +322,12 @@ class Contract {
         return { success: false, error: 'Failed to stake NFT directly!' };
     }
 
-    async withdrawNFT(tokenIds: any) {
+    async withdrawNFT(tokenIds: any, collect: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(engineABI, configs.ENGINE721_ADDRESS);
             for (let key in tokenIds) {
                 const PUML_721_ADDRESS = (key !== '0x0') ? key : configs.PUML721_ADDRESS;
-                await stakeContract.methods.withdrawNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds[key]).send({
+                await stakeContract.methods.withdrawNFT(PUML_721_ADDRESS, configs.MAIN_ACCOUNT, tokenIds[key], web3.utils.toWei('' + collect)).send({
                     from: EthUtil.getAddress()
                 })
             }
@@ -337,10 +337,10 @@ class Contract {
         return { success: false, error: 'Failed to buy this item directly!' };
     }
 
-    async getReward(amount: number, feeward: any) {
+    async getReward(amount: number, collect: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
-            const result = await stakeContract.methods.getReward(web3.utils.toWei('' + amount), web3.utils.toWei('' + feeward)).send({
+            const result = await stakeContract.methods.getReward(web3.utils.toWei('' + amount), collect).send({
                 from: EthUtil.getAddress()
             })
 
