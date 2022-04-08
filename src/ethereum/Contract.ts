@@ -340,7 +340,7 @@ class Contract {
     async getReward(amount: number, collect: any) {
         if(web3) {
             const stakeContract = new web3.eth.Contract(PUMLStakeABI, configs.PUMLSTAKE_ADDRESS);
-            const result = await stakeContract.methods.getReward(web3.utils.toWei('' + amount), collect).send({
+            const result = await stakeContract.methods.getReward(web3.utils.toWei('' + amount), web3.utils.toWei('' + collect)).send({
                 from: EthUtil.getAddress()
             })
 
