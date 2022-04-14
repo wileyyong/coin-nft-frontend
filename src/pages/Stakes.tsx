@@ -40,15 +40,11 @@ const Stakes: React.FC<StakeProps> = () => {
   const [stakeAmount, setStakeAmount] = useState<number>(0);
   const [unstakeAmount, setUnstakeAmount] = useState<number>(0);
   const [collect, setCollect] = useState<number>(0);
-  // const [userLastUpdateTime, setUserLastUpdateTime] = useState(0);
-  // const [lastUpdateTime, setLastUpdateTime] = useState(0);
-  // const [totalPuml, setTotalPuml] = useState<number>(0);
-  const [rewardStored, setRewardStored] = useState<number>(0);
-  const [lastClaim, setLastClaim] = useState(0);
-  const [claimSum, setClaimSum] = useState(0);
-  // const [balancePumlx, setBalancePumlx] = useState(0);
-  // const [balanceNft, setBalanceNft] = useState(0);
-  const [stakeValue, setStakeValue] = useState<any[]>([]);
+  const [feeCollect, setFeeCollect] = useState<number>(0); 
+  const [lastCollect, setLastCollect] = useState<number>(0);
+  const [collectSum, setCollectSum] = useState<number>(0);
+  const [claimCollect, setClaimCollect] = useState<number>(0);
+  const [stakeValue, setStakeValue] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE)
@@ -151,15 +147,16 @@ const Stakes: React.FC<StakeProps> = () => {
   };
 
   const handleChange = (e: any) => {
+    if (e.target.value < 0) return;
     let fieldName = e.target.name;
     if (fieldName === 'stake') {
-      setStake(e.target.value);
+      setStake(parseFloat(e.target.value));
     }
     if (fieldName === 'unstake') {
-      setUnstake(e.target.value);
+      setUnstake(parseFloat(e.target.value));
     }
     if (fieldName === 'claims') {
-      setClaims(e.target.value);
+      setClaims(parseFloat(e.target.value));
     }
   };
 
@@ -173,7 +170,7 @@ const Stakes: React.FC<StakeProps> = () => {
       unstakearr[key] = unstakeArr[key];
     }
 
-    const ikey = nft.contract_address !== null ? nft.contract_address : '0x0';
+    const ikey = nft.contract_address !== null &&  nft.contract_address !== "" ? nft.contract_address : '0x0';
     switch (stake) {
       case true:
         if (ikey in stakearr) {  // check if key in stake array
@@ -214,7 +211,7 @@ const Stakes: React.FC<StakeProps> = () => {
     try {
       setIsLoading(true);
       let stakeResult: any;
-      stakeResult = await SmartContract.stakeNFT(ids, collect);
+      stakeResult = await SmartContract.stakeNFT(ids, collect, feeCollect);
       if (stakeResult.success) {
         const result = await NftController.stakeToken({
           chainIds: ids,
@@ -240,7 +237,7 @@ const Stakes: React.FC<StakeProps> = () => {
       }
       setIsLoading(false);
     } catch (err) {
-      NotificationManager.error("Failed!", "Error");
+      NotificationManager.error("Failed Try!", "Error");
       setIsLoading(false);
     }
   }
@@ -292,7 +289,7 @@ const Stakes: React.FC<StakeProps> = () => {
       });
       if (approveResult.success) {
         let stakeResult: any;
-        stakeResult = await SmartContract.withdrawNFT(ids, collect);
+        stakeResult = await SmartContract.withdrawNFT(ids, collect, feeCollect);
         if (stakeResult.success) {
           await NftController.stakeToken({
             chainIds: ids,
@@ -332,6 +329,7 @@ const Stakes: React.FC<StakeProps> = () => {
           {
             amount: stake,
             collect: collect,
+            feeward: feeCollect,
             staker: EthUtil.getAddress()
           });
         if (stakeResult.success && stakeResult.transactionHash) {
@@ -358,7 +356,7 @@ const Stakes: React.FC<StakeProps> = () => {
     if (unstake === 0) return;
     try {
       setIsLoading(true);
-      if (unstake > stakeValue[4]) {
+      if (unstake > stakeValue.balances) {
         NotificationManager.error("Insufficient staked", "Error");
         return;
       }
@@ -368,7 +366,7 @@ const Stakes: React.FC<StakeProps> = () => {
         staker: EthUtil.getAddress()
       });
       if (transferResult.success && transferResult.transactionHash) {
-        const unstakeResult = await SmartContract.withdrawPuml(unstake, collect);
+        const unstakeResult = await SmartContract.withdrawPuml(unstake, collect, feeCollect);
         if (unstakeResult.success && unstakeResult.transactionHash) {
           setUnstake(0);
           stakeData();
@@ -391,47 +389,11 @@ const Stakes: React.FC<StakeProps> = () => {
     }
   }
 
-  const getReward = async () => {
-    if (claims === 0) return;
+  const getPumlTransFee = async (startTime: number) => {
 
-    const stored: number = rewardStored + collect;
-    if (claims > stored) {
-      NotificationManager.error("Please collect less than store", "Error");
-      setClaims(0);
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const rewardResult = await SmartContract.getReward(claims, collect);
-      if (rewardResult.success && rewardResult.transactionHash) {
-        const transferResult = await NftController.rewardPuml({
-          amount: claims,
-          staker: EthUtil.getAddress()
-        });
-        if (transferResult.success && transferResult.transactionHash) {
-          NotificationManager.success(
-            "Successfully collected.",
-            "Success"
-          );
-          setClaims(0);
-          stakeData();
-          setIsLoading(false);
-        } else {
-          NotificationManager.error("Collect Failed!", "Error");
-          setIsLoading(false);
-        }
-      }
-    } catch (err) {
-      NotificationManager.error("Failed!", "Error");
-      setIsLoading(false);
-    }
-  }
-
-  const getPumlTransFee = async () => {
-    if (parseFloat(stakeValue[0]) > 0) {
+    if (startTime > 0) {
       const trFee = await NftController.getPumlTransFee({
-        updatetime: parseFloat(stakeValue[0])
+        startTime: startTime
       });
       return trFee.sum * 0.37;
     }
@@ -442,29 +404,90 @@ const Stakes: React.FC<StakeProps> = () => {
     const data = await SmartContract.getStakeData();
     console.log("stakedata", data);
     if (data && data.length > 0) {
-      setRewardStored(data[1] / 1e18);
-      setLastClaim(data[2] / 1e18);
-      setClaimSum(data[3] / 1e18);
-      setStakeValue(data);
+        setStakeValue(data);
     }
   }
 
   useEffect(() => {
     const getCollect = async () => {
       let collect: number = 0;
-      if (stakeValue[0] === 0) return collect;
+      let claimCollect: number = 0;
+      if (stakeValue && Object.keys(stakeValue).length > 0) {
+        if (stakeValue.userLastUpdateTime === 0) return;
 
-      const transFee: number = await getPumlTransFee();
-      if (parseFloat(stakeValue[7]) === 0) {
-        collect = (parseFloat(stakeValue[6]) - parseFloat(stakeValue[0])) * configs.REWARD_RATE * parseFloat(stakeValue[5]) / 86440;
-      } else {
-        collect = (parseFloat(stakeValue[6]) - parseFloat(stakeValue[0])) * configs.REWARD_RATE * (parseFloat(stakeValue[4]) + parseFloat(stakeValue[5])) / 86440
-          + transFee * parseFloat(stakeValue[4]) / parseFloat(stakeValue[7]);
+        const { collects } = await NftController.getPumlFeeCollect({});
+        console.log("collectdata", collects);
+
+        let lastCollect: number = 0;
+        let collectSum: number = 0;
+        if (collects && collects.length > 0) {
+          lastCollect = collects[0].collects;
+          for (let collect of collects) {
+            collectSum += collect.collects;
+          }
+        }
+
+        claimCollect += parseFloat(stakeValue.userFeewardStored) / 1e18;
+        
+
+        if (stakeValue.balances > 0 && stakeValue.totalBalances > 0) {
+          const startTime: number = stakeValue.userLastUpdateTimeFeeward;
+          const transFee: number = await getPumlTransFee(startTime);
+          if (!isNaN(transFee)) { 
+            const feeCollect: number = transFee * stakeValue.balances / stakeValue.totalBalances;
+            setFeeCollect(feeCollect);
+            claimCollect += feeCollect;
+          }
+        }
+
+        setClaimCollect(claimCollect);
+        setLastCollect(lastCollect);
+        setCollectSum(collectSum);
+
+        collect = (stakeValue.lastUpdateTime - parseFloat(stakeValue.userLastUpdateTime)) * configs.REWARD_RATE * (parseFloat(stakeValue.balances) + parseFloat(stakeValue.balancesNFT)) / 86440;
+        if (!isNaN(collect)) setCollect(collect);
       }
-      if (!isNaN(collect)) setCollect(collect);
     }
     getCollect();
   }, [stakeValue])
+
+  const pumlFeeCollect = async () => {
+    if (claims === 0) return;
+
+    if (claims > claimCollect) {
+      NotificationManager.error("Please collect less than Claim Rewards", "Error");
+      setClaims(0);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const transResult = await SmartContract.pumlFeeCollect(feeCollect, claims);
+      if (transResult.success && transResult.transactionHash) {
+        const result = await NftController.pumlFeeCollect({
+          collects: claims
+        });
+        if (result.success) {
+          NotificationManager.success(
+            "Successfully collected.",
+            "Success"
+          );
+          setClaims(0);
+          stakeData();
+          setIsLoading(false);
+        } else {
+          NotificationManager.error("Claim Collect Failed!", "Error");
+          setIsLoading(false);
+        }
+      } else {
+        NotificationManager.error("Claim Collect Failed!", "Error");
+        setIsLoading(false);
+      }
+    } catch (err) {
+      NotificationManager.error("Failed!", "Error");
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Layout className="stake-container">
@@ -523,7 +546,7 @@ const Stakes: React.FC<StakeProps> = () => {
       <div className="stakes">
         <div className="stakes__title">
           <div className="item-title">Claim Rewards</div>
-          <div className="item-price mt-3">{(rewardStored + collect).toFixed(5)} PUMLX</div>
+          <div className="item-price mt-3">{(claimCollect).toFixed(5)} PUMLX</div>
           <div className="item-desc mt-3">
             Trading fees collected by our protocol are rewarded to PUMLx stakers
           </div>
@@ -548,8 +571,9 @@ const Stakes: React.FC<StakeProps> = () => {
             </div>
             <div className="inp__btn col-md-4 mt-1">
               <button 
-                className={`btn btn-primary ${claims === 0 ? "btn-inactive" : ""}`}
-                onClick={getReward}
+                disabled={claims === 0 ? true : false}
+                className="btn btn-primary"
+                onClick={pumlFeeCollect}
               >
                 <div className="d-flex flex-row align-items-center">
                   <span>Collect</span>
@@ -560,15 +584,15 @@ const Stakes: React.FC<StakeProps> = () => {
           <div className="valupap">
             <div className="valupap__key">Last collected</div>
             <div className="valupap__val">
-              <span>{lastClaim} <b>PUMLx</b></span>
-              <i>(${getDollarPrice(lastClaim)})</i>
+              <span>{lastCollect} <b>PUMLx</b></span>
+              <i>(${getDollarPrice(lastCollect)})</i>
             </div>
           </div>
           <div className="valupap">
             <div className="valupap__key">Collected to date:</div>
             <div className="valupap__val">
-              <span>{(rewardStored + collect).toFixed(2)} <b>PUMLx</b></span>
-              <i>(${getDollarPrice(rewardStored + collect)})</i>
+              <span>{(collectSum).toFixed(2)} <b>PUMLx</b></span>
+              <i>(${getDollarPrice(collectSum)})</i>
             </div>
           </div>
           <div className="devided"></div>
@@ -587,8 +611,8 @@ const Stakes: React.FC<StakeProps> = () => {
               Earned to date:
             </div>
             <div className="valupap__val">
-              <span>{claimSum} <b>PUMLx</b></span>
-              <i>(${getDollarPrice(claimSum)})</i>
+              <span>{stakeValue?.userRewardPaid / 1e18 || 0} <b>PUMLx</b></span>
+              <i>(${getDollarPrice(stakeValue?.userRewardPaid / 1e18 || 0)})</i>
             </div>
           </div>
         </div>
@@ -645,7 +669,8 @@ const Stakes: React.FC<StakeProps> = () => {
             <div className="inp__btn col-md-4 mt-1">
               {stakeTab === 'stake' ? (
                 <button 
-                  className={`btn btn-primary ${stake === 0 ? "btn-inactive" : ""}`}
+                  disabled={stake === 0 ? true : false}
+                  className="btn btn-primary"
                   onClick={stakePumlx}
                 >
                   <div className="d-flex flex-row align-items-center">
@@ -654,7 +679,8 @@ const Stakes: React.FC<StakeProps> = () => {
                 </button>
               ) : (
                 <button 
-                  className={`btn btn-primary ${unstake === 0 ? "btn-inactive" : ""}`}
+                  disabled={unstake === 0 ? true : false}
+                  className="btn btn-primary"
                   onClick={unstakePumlx}
                 >
                   <div className="d-flex flex-row align-items-center">
@@ -671,10 +697,10 @@ const Stakes: React.FC<StakeProps> = () => {
             </div>
           </div>
           <div className="valupap">
-            <div className="valupap__key">Your stake compunding:</div>
+            <div className="valupap__key">Your stake compounding:</div>
             <div className="valupap__val">
-              <span>{stakeValue[4]} <b>PUMLx</b></span>
-              <i>(${getDollarPrice(stakeValue[4])})</i>
+              <span>{stakeValue?.balances || 0} <b>PUMLx</b></span>
+              <i>(${getDollarPrice(stakeValue?.balances || 0)})</i>
             </div>
           </div>
         </div>
@@ -700,8 +726,8 @@ const Stakes: React.FC<StakeProps> = () => {
                         onClick={() => selectStake(true, nft)}
                       >
                         <div className={`slide__item 
-                          ${(nft.contract_address !== null && stakeArr[nft.contract_address] && stakeArr[nft.contract_address].includes(nft.chain_id)) || 
-                            (nft.contract_address === null && stakeArr['0x0'] && stakeArr['0x0'].includes(nft.chain_id))
+                          ${(nft.contract_address !== null && nft.contract_address !== "" && stakeArr[nft.contract_address] && stakeArr[nft.contract_address].includes(nft.chain_id)) || 
+                            (stakeArr['0x0'] && stakeArr['0x0'].includes(nft.chain_id))
                           ? "slide__item--active" 
                           : ""}`}
                         >
@@ -729,7 +755,7 @@ const Stakes: React.FC<StakeProps> = () => {
           <div className="stakes__noitem mt-3">
             <Image src={nostakeIcon} />
             <div className="stakes__normal p-3">
-              Currently no NFT’s staked
+              You  have no staked NFT’s
             </div>
           </div>
         )}
@@ -755,8 +781,8 @@ const Stakes: React.FC<StakeProps> = () => {
                         onClick={() => selectStake(false, nft)}
                       >
                         <div className={`slide__item 
-                          ${(nft.contract_address !== null && unstakeArr[nft.contract_address] && unstakeArr[nft.contract_address].includes(nft.chain_id)) || 
-                            (nft.contract_address === null && unstakeArr['0x0'] && unstakeArr['0x0'].includes(nft.chain_id))
+                          ${(nft.contract_address !== null && nft.contract_address !== "" && unstakeArr[nft.contract_address] && unstakeArr[nft.contract_address].includes(nft.chain_id)) || 
+                            (unstakeArr['0x0'] && unstakeArr['0x0'].includes(nft.chain_id))
                           ? "slide__item--active" 
                           : ""}`}
                         >
@@ -784,7 +810,7 @@ const Stakes: React.FC<StakeProps> = () => {
           <div className="stakes__noitem mt-3">
             <Image src={nostakeIcon} />
             <div className="stakes__normal p-3">
-              Currently no NFT’s staked
+              You currently have no NFT’s
             </div>
           </div>
         )}

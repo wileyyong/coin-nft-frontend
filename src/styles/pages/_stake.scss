@@ -51,6 +51,7 @@
           }
           .intro-type {
               background: linear-gradient(94.68deg, #5EC9BF 40.1%, #39A5DA 94.6%);
+              display: inline-block;
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
               font-size: $h1-font-size * 2;
@@ -166,6 +167,7 @@
   
   .stake-intro {
     background: linear-gradient(0deg, #F3F3F3 0%, #FCFCFC 100%);
+    display: inline-block;
     margin-left: -64px;
     width: calc(100% + 128px);
     @include media-breakpoint-down(md) {
@@ -311,9 +313,6 @@
                   .btn {
                     font-size: $font-size-base;
                     padding: 14px 78px;
-                    &.btn-inactive {
-                        opacity: 0.6;
-                    }
                   }
               }
           }

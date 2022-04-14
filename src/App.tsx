@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { connectUserWallet, signInWithWallet } from "store/User/user.slice";
 import { getWalletAddress, isAuthenticated } from "store/User/user.selector";
@@ -12,6 +12,7 @@ import UserProfile from "./pages/UserProfile";
 import CreateCollectible from "./pages/CreateCollectible";
 import CollectionDetail from "pages/CollectionDetail";
 import Stakes from "./pages/Stakes";
+import Move from "./pages/Move";
 import configs from 'configs';
 
 import "./styles/index.scss";
@@ -51,7 +52,7 @@ const App: React.FC<AppProps> = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/buy">
             <Home />
           </Route>
           <Route exact path="/items">
@@ -75,7 +76,9 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/stake">
             <Stakes />
           </Route>
-          <Redirect exact from="/move" to="/" />
+          <Route exact path="/">
+            <Move />
+          </Route>
         </Switch>
       </Router>
     </div>

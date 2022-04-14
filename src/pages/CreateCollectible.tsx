@@ -4,8 +4,6 @@ import { useAppDispatch, useAppSelector } from "store/hooks";
 import { Button, Col, Container, Form, Row, Image } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import imgAvatar from "assets/imgs/avatar.png";
-import EthereumIcon from "assets/imgs/ethereum.svg";
-import PolygonIcon from "assets/imgs/polygon-matic.svg";
 import PumlIcon from "assets/imgs/puml.png";
 import verifyBadge from 'assets/imgs/verify.svg';
 
@@ -577,16 +575,12 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                                 <div className={`col-3 ${network.name === 'Ethereum' ? 'blockchain-item selected' : 'blockchain-item'}`} 
                                                     onClick={() => changeBlockchain({name: 'Ethereum', value: 'ETH', key: configs.ONBOARD_NETWORK_ID})}
                                                 >
-                                                    <div className="blockchain-icon">
-                                                        <Image src={EthereumIcon} />
-                                                    </div>
+                                                    <div className="blockchain-icon"></div>
                                                     <div className="blockchain-name">Ethereum</div>
                                                 </div>
                                                 <div className={`col-3 ${network.name === 'Polygon' ? 'blockchain-item selected' : 'blockchain-item'}`} 
                                                     onClick={() => changeBlockchain({name: 'Polygon', value: 'MATIC', key: configs.ONBOARD_POLYGON_ID})}>
-                                                    <div className="blockchain-icon">
-                                                        <Image src={PolygonIcon} />
-                                                    </div>
+                                                    <div className="blockchain-icon"></div>
                                                     <div className="blockchain-name">Polygon (MATIC)</div>
                                                 </div>
                                                 <div className={`col-3 ${network.name === 'PUMLx' ? 'blockchain-item selected' : 'blockchain-item'}`} 

@@ -170,12 +170,21 @@
           }
           .blockchain-icon {
             width: 40px;
+            height: 50px;
             margin: 0 auto;
             margin-bottom: 5px;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
           }
           &:first-child {
             .blockchain-icon {
               width: 20px;
+              background-image: url("../../assets/imgs/ethereum.svg");
+            }
+          }
+          &:nth-child(2) {
+            .blockchain-icon {
+              background-image: url("../../assets/imgs/polygon-matic.svg");
             }
           }
           img {
@@ -233,6 +242,9 @@
   .create-collectible-container {
     background: $bgdark;
     color: $white !important;
+    .upload-file {
+      color: $white;
+    }
     .blockchain-item, select, input {
       color: $white !important;
     }
@@ -245,6 +257,14 @@
     }
     .file-uploader .preview .close-btn svg {
       fill: $white;
+    }
+    .blockchain-list {
+      .blockchain-item:first-child .blockchain-icon {
+        background-image: url("../../assets/imgs/ethereum_dark.svg");
+      }
+      .blockchain-item:nth-child(2) .blockchain-icon {
+        background-image: url("../../assets/imgs/polygon-matic_dark.svg");
+      }
     }
   }
 }

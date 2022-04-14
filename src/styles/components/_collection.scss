@@ -16,3 +16,20 @@
         }
     }
 }
+[data-theme="dark"] {
+    .create-collection-modal {
+        .modal-header {
+            color: $white;
+        }
+        .modal-body {
+            color: $white;
+        }
+    }
+    input.form-control, select.form-control {
+        background-color: $black;
+        color: $white !important;
+    }
+    input.form-control::placeholder {
+        color: rgba($color: $white, $alpha: 0.7) !important;
+    }
+}

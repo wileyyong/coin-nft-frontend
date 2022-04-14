@@ -64,6 +64,14 @@ class NftController {
         return API.post(`${configs.API.TOKEN_URL}/approveToken`, payload).then(res => res.data)
     }
 
+    public static getPumlFeeCollect(payload: any) {
+        return API.post(`${configs.API.TOKEN_URL}/getPumlFeeCollect`, payload).then(res => res.data)
+    }
+
+    public static pumlFeeCollect(payload: any) {
+        return API.post(`${configs.API.TOKEN_URL}/pumlFeeCollect`, payload).then(res => res.data)
+    }
+
 }
 
 export default NftController;

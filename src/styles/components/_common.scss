@@ -545,4 +545,11 @@
             color: $white;
         }
     }
+    .modal-content {
+        background-color: $black;
+        color: $white;
+        .close {
+            color: $white;
+        }
+    }
 }
