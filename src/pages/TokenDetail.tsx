@@ -284,9 +284,14 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
+                    const contractAddress = token.collections && token.collections.contract_address ? token.collections.contract_address : "";
                     await OfferController.placeBid(offer._id, {
                         price: price,
                         hash: result.transactionHash,
+                    });
+                    await NftController.stakeToken({
+                        chainIds: {[contractAddress]: token.chain_id},
+                        stake: null
                     });
                     loadOffer();
                     NotificationManager.success(
@@ -530,13 +535,14 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 }
                 if (buyResult.success && buyResult.transactionHash) {
                     dispatch(getWalletBalance());
+                    const contractAddress = token.collections && token.collections.contract_address ? token.collections.contract_address : "";
                     await OfferController.directBuy(offer._id, {
                         price: offer.offer_price,
                         hash: buyResult.transactionHash,
                         copies: 1
                     });
                     await NftController.stakeToken({
-                        chainIds: {[token.contract_address]: token.chain_id},
+                        chainIds: {[contractAddress]: token.chain_id},
                         stake: null
                     });
                     NotificationManager.success(
