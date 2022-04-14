@@ -284,14 +284,9 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 }
                 if (result.success && result.transactionHash) {
                     dispatch(getWalletBalance());
-                    const contractAddress = token.collections && token.collections.contract_address ? token.collections.contract_address : "";
                     await OfferController.placeBid(offer._id, {
                         price: price,
                         hash: result.transactionHash,
-                    });
-                    await NftController.stakeToken({
-                        chainIds: {[contractAddress]: token.chain_id},
-                        stake: null
                     });
                     loadOffer();
                     NotificationManager.success(
