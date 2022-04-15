@@ -7,6 +7,7 @@ import { useAppSelector, useAppDispatch } from "store/hooks";
 import { connectUserWallet } from "store/User/user.slice";
 import { getNftCategories } from "store/Nft/nft.selector";
 import Storage from "service/storage";
+import { toast } from 'react-toastify';
 import {
   isAuthenticated,
 } from "store/User/user.selector";
@@ -251,6 +252,7 @@ const Home: React.FC<HomeProps> = () => {
     let formdata = Utility.getFormDataFromObject(data);
     await UserController.uploadFeaturedImage(formdata).then((res: any) => {
         if (res && res.status === 200) {
+            toast.success(uploadFeaturedImage ? 'Successfully uploaded!' : 'Successfully removed!');
             NotificationManager.success(
                 uploadFeaturedImage ? 'Successfully uploaded!' : 'Successfully removed!',
                 "Success"
@@ -262,6 +264,7 @@ const Home: React.FC<HomeProps> = () => {
         }
     }).catch((err) => {
         if (err.response && err.response.data && err.response.data.error) {
+            toast.warning(err.response.data.error);
             NotificationManager.error(
                 err.response.data.error,
                 'Error'
@@ -298,6 +301,7 @@ const Home: React.FC<HomeProps> = () => {
       featured_price
     };
     if (!featured_name || !featured_price) {
+      toast.warning('Please input featured Name and Price.');
       NotificationManager.error(
         'Please input featured Name and Price.',
         'Error'
@@ -307,6 +311,7 @@ const Home: React.FC<HomeProps> = () => {
     let formdata = Utility.getFormDataFromObject(data);
     await UserController.updateFeatured(formdata).then((res: any) => {
       if (res && res.status === 200) {
+        toast.success('Successfully updated!');
         NotificationManager.success(
             'Successfully updated!',
             "Success"
@@ -318,6 +323,7 @@ const Home: React.FC<HomeProps> = () => {
       }
     }).catch((err) => {
       if (err.response && err.response.data && err.response.data.error) {
+        toast.warning(err.response.data.error);
         NotificationManager.error(
             err.response.data.error,
             'Error'

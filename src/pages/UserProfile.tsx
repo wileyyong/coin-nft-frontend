@@ -6,6 +6,7 @@ import { Row, Col, Button, Image, Nav, Tab } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
 import Layout from "components/Layout";
 import TokenView from "components/token/TokenView";
+import { toast } from 'react-toastify';
 import {
     BigTitle,
     NormalTextTitle,
@@ -132,6 +133,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
         if (followedAllow) {
             await UserController.userFollow(userInfo._id).then((res: any) => {
                 if (res.status === 200) {
+                    toast.success("Successfully followed!");
                     NotificationManager.success(
                         'Successfully followed!',
                         "Success"
@@ -144,6 +146,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
         } else {
             await UserController.userUnFollow(userInfo._id).then((res: any) => {
                 if (res.status === 200) {
+                    toast.success("Successfully unfollowed!");
                     NotificationManager.success(
                         'Successfully unfollowed!',
                         "Success"

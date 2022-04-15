@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
+import { toast } from 'react-toastify';
 import {
   B1NormalTextTitle,
   B2NormalTextTitle,
@@ -82,6 +83,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
     const form = e.currentTarget;
     if (form.checkValidity() !== false) {
       if (!isInstantPrice && !isAuction) {
+        toast.warning("Please choose at least one option. (Auction or Direct Sale)");
         NotificationManager.error(
           "Please choose at least one option. (Auction or Direct Sale)",
           "Error"
@@ -89,6 +91,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
         return;
       }
       if (isInstantPrice && newOffer.offer_price === '0') {
+        toast.warning("Please input at least 0.001 of Offer price.");
         NotificationManager.error(
           "Please input at least 0.001 of Offer price.",
           "Error"
@@ -96,6 +99,7 @@ const ResellNftModal: React.FC<ResellNftModalProps> = ({
         return;
       }
       if (isAuction && newOffer.min_bid_price === '0') {
+        toast.warning("Please input at least 0.001 of bid price.");
         NotificationManager.error(
           "Please input at least 0.001 of bid price.",
           "Error"

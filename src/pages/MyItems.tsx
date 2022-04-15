@@ -5,6 +5,7 @@ import { Button, Image, Nav, Tab } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import imgAvatar from "assets/imgs/avatar.png";
+import { toast } from 'react-toastify';
 
 import Layout from "components/Layout";
 import TokenView from "components/token/TokenView";
@@ -136,6 +137,7 @@ const MyItems: React.FC<MyItemProps> = () => {
         let formdata = Utility.getFormDataFromObject(data);
         await UserController.uploadCover(formdata).then((res) => {
             if (res && res.status === 200) {
+                toast.success(uploadCoverImage ? 'Successfully uploaded!' : 'Successfully removed!');
                 NotificationManager.success(
                     uploadCoverImage ? 'Successfully uploaded!' : 'Successfully removed!',
                     "Success"
@@ -144,6 +146,7 @@ const MyItems: React.FC<MyItemProps> = () => {
             }
         }).catch((err) => {
             if (err.response && err.response.data && err.response.data.error) {
+                toast.warning(err.response.data.error);
                 NotificationManager.error(
                     err.response.data.error,
                     'Error'

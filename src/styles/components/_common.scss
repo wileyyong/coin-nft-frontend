@@ -553,3 +553,20 @@
         }
     }
 }
+.Toastify__toast {
+    color: $white !important;
+    font-weight: 600;
+    svg {
+        fill: $white !important;
+    }
+    &--success {
+        background: rgba($primary, 0.9) !important;
+    }
+    &--warning {
+        background: rgba($orange, 0.9) !important;
+    }
+}
+.Toastify__close-button--light {
+    opacity: 1 !important;
+    color: $white !important;
+}

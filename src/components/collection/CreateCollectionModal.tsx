@@ -4,6 +4,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { B1NormalTextTitle, BigTitle } from "../common/common.styles";
 import FileUploader from "../common/uploader/FileUploader";
 import configs from "configs";
+import { toast } from 'react-toastify';
 
 interface CreateCollectionModalProps {
   handleClose?: any;
@@ -31,6 +32,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
     const form = e.currentTarget;
     if (form.checkValidity() !== false) {
       if(!collection.image) {
+        toast.warning("No Image File!");
         NotificationManager.error("No Image File!", "Error");
         return;
       }

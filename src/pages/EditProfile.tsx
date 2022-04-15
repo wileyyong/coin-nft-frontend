@@ -17,6 +17,7 @@ import { getMyInfo, connectUserWallet } from "store/User/user.slice";
 import Utility from "service/utility";
 import { getWalletAddress } from "store/User/user.selector";
 import AvatarUploader from "components/common/uploader/AvatarUploader";
+import { toast } from 'react-toastify';
 
 interface EditProfileProps { }
 
@@ -77,6 +78,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         };
 
         if (!displayName) {
+            toast.warning("Display name is required!");
             NotificationManager.error(
                 "Display name is required!",
                 "Error"
@@ -86,6 +88,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
 
         var emailPattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (email && !emailPattern.test(email)) {
+            toast.warning('Considered as not valid email');
             NotificationManager.error(
                 'Considered as not valid email',
                 'Error'
@@ -96,6 +99,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         let formdata = setting.avatar ? Utility.getFormDataFromObject(setting) : setting;
         await UserController.userSettings(formdata).then((res) => {
             if (res && res.status === 200) {
+                toast.success('Profile Successfully updated!');
                 NotificationManager.success(
                     'Profile Successfully updated!',
                     "Success"
@@ -105,6 +109,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
         }).catch((err) => {
             if (err.response && err.response.data && err.response.data.error) {
                 console.log(err.response);
+                toast.warning(err.response.data.error);
                 NotificationManager.error(
                     err.response.data.error,
                     'Error'

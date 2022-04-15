@@ -6,6 +6,7 @@ import { NotificationManager } from "react-notifications";
 import imgAvatar from "assets/imgs/avatar.png";
 import PumlIcon from "assets/imgs/puml.png";
 import verifyBadge from 'assets/imgs/verify.svg';
+import { toast } from 'react-toastify';
 
 import {
     B1NormalTextTitle,
@@ -226,6 +227,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                 setIsLoading(false);
                 setShowCollectionDialog(false);
                 setContractAddress(contractAddress);
+                toast.success("Collection is created successfully.");
                 NotificationManager.success(
                     "Collection is created successfully.",
                     "Success"
@@ -233,6 +235,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             } catch (err) {
                 setIsLoading(false);
                 console.log(err);
+                toast.warning("Create Collection Failed!");
                 NotificationManager.error("Create Collection Failed!", "Error");
             }
         }
@@ -257,11 +260,13 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
         const form = e.currentTarget;
         if (form.checkValidity() !== false) {
             if (!collectible.media) {
+                toast.warning("No Media File!");
                 NotificationManager.error("No Media File!", "Error");
                 return;
             }
 
             if (!selectedCategories.length) {
+                toast.warning("Please select at least one category!");
                 NotificationManager.error(
                     "Please select at least one category!",
                     "Error"
@@ -502,6 +507,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
 
     const onAddProperty = () => {
         if (!propertyKey || !propertyValue) {
+            toast.warning("Please input property key and value!");
             NotificationManager.error(
                 "Please input property key and value!",
                 "Error"

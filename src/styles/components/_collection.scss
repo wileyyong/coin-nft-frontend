@@ -16,6 +16,39 @@
         }
     }
 }
+.puml-scan {
+    .modal-body {
+        color: $black;
+        text-align: center;
+        font-weight: 600;
+        .title {
+            font-size: $h4-font-size;
+            text-align: left;
+        }
+        .qr-div {
+            margin-top: 26px;
+            border: 1px solid $black;
+            padding-top: 25px;
+            font-weight: 600;
+            border-radius: 7px;
+            canvas {
+                padding: 12px;
+                background: $white;
+            }
+            &__alt {
+                margin-top: 26px;
+                font-size: $h5-font-size;
+                border-top: 1px dashed $black;
+                border-radius: 7px;
+                padding: 14px;
+            }
+        }
+        .btn-primary {
+            margin-top: 60px;
+            color: $white;
+        }
+    }
+}
 [data-theme="dark"] {
     .create-collection-modal {
         .modal-header {
@@ -31,5 +64,19 @@
     }
     input.form-control::placeholder {
         color: rgba($color: $white, $alpha: 0.7) !important;
+    }
+    .puml-scan {
+        .modal-body {
+            color: $white;
+            .qr-div {
+                border: 1px solid $white;
+                canvas {
+                    background: $white;
+                }
+                &__alt {
+                    border-top: 1px dashed $white;
+                }
+            }
+        }
     }
 }

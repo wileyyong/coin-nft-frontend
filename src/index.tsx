@@ -5,11 +5,13 @@ import { store } from './store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import { NotificationContainer } from "react-notifications";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
     <Provider store={store}>
+      <ToastContainer />
       <App />
-      <NotificationContainer />
     </Provider>,
   document.getElementById('root')
 );

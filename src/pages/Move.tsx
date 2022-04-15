@@ -5,7 +5,9 @@ import Carousel from 'react-bootstrap/Carousel';
 import LoadingSpinner from "components/common/LoadingSpinner";
 import MoveModal from 'components/token/MoveModal';
 import MoveSuccessModal from 'components/token/MoveSuccessModal';
+import PumlScanModal from 'components/user/PumlScanModal';
 import { NotificationManager } from "react-notifications";
+import { toast } from 'react-toastify';
 
 import { Button, Image } from "react-bootstrap";
 
@@ -16,6 +18,7 @@ import watchIcon from "assets/imgs/watch.png";
 import nostakeIcon from "assets/imgs/nostake.png";
 
 import NftController from "controller/NftController";
+import UserController from "controller/UserController";
 import SmartContract from "ethereum/Contract";
 
 import { switchNetwork } from "store/User/user.slice";
@@ -24,8 +27,10 @@ import configs from 'configs';
 
 import { useAppSelector } from "store/hooks";
 import { getWalletAddress, isAuthenticated, getMyInfo } from "store/User/user.selector";
+import { setInterval } from 'timers';
 
 interface MoveProps { }
+
 
 const Move: React.FC<MoveProps> = () => {
 
@@ -45,7 +50,9 @@ const Move: React.FC<MoveProps> = () => {
   const [showMoveModal, setShowMoveModal] = useState(false);
   const [status, setStatus] = useState<number>(0);
   const [showMoveSuccessModal, setShowMoveSuccessModal] = useState(false);
-  const [feeCollect, setFeeCollect] = useState<number>(0); 
+  const [feeCollect, setFeeCollect] = useState<number>(0);
+  const [isConnectPuml, setIsConnectPuml] = useState<boolean>(false);
+  const [showScanModal, setShowScanModal] = useState(false);
 
   const getWidth = () => window.innerWidth 
   || document.documentElement.clientWidth 
@@ -82,12 +89,23 @@ const Move: React.FC<MoveProps> = () => {
         }
       }
       switchNet();
-      loadNft();
+      const qrConnect = async () => {
+        const connect = await UserController.qrConnect({ethAddress: walletAddress});
+        if (connect.success) {
+          setIsConnectPuml(true);
+          loadNft();
+        }
+      }
+      qrConnect();
+    } else {
+      setIsConnectPuml(false);
     }
   }, [isAuth, walletAddress]); 
-  
+
   window.onload = function() {
-    loadNft();
+    if (isAuth && walletAddress && isConnectPuml){
+      loadNft();
+    }
   }
 
   const loadNft = async () => {
@@ -174,11 +192,13 @@ const Move: React.FC<MoveProps> = () => {
       setShowMoveModal(true);
     } else {
       if (leftHours > 0) {
+        toast.warning("Be able to claim once per day");
         NotificationManager.error("Be able to claim once per day", "Error");
         setClaims(0);
         return;
       }
       if (claims > stored) {
+        toast.warning("Please claim less than the reward stored");
         NotificationManager.error("Please claim less than the reward stored", "Error");
         setClaims(0);
         return;
@@ -199,11 +219,13 @@ const Move: React.FC<MoveProps> = () => {
             setShowMoveSuccessModal(true);
   
           } else {
+            toast.warning("Collect Failed!");
             NotificationManager.error("Collect Failed!", "Error");
             setIsLoading(false);
           }
         }
       } catch (err) {
+        toast.warning("Failed!");
         NotificationManager.error("Failed!", "Error");
         setIsLoading(false);
       }
@@ -243,12 +265,21 @@ const Move: React.FC<MoveProps> = () => {
     getCollect();
   }, [stakeValue])
 
+  const connectPuml = () => {
+    if (isAuth && walletAddress) {
+      setShowScanModal(true);
+    } else {
+      toast.warning("Please connect metamask wallet.");
+      NotificationManager.error("Please connect metamask wallet.", "Error");
+    }
+  }
+
   return (
     <Layout className="move-container">
       {isLoading && <LoadingSpinner></LoadingSpinner>}
       <div className="section-intro">
         <div className="intro-content text-left">
-          {isAuth && walletAddress ? (
+          {isConnectPuml ? (
             <>
               <p className="intro-title pb-0">Welcome back,</p>
               <p className="intro-type">{userInfo.name}</p>
@@ -289,7 +320,7 @@ const Move: React.FC<MoveProps> = () => {
                 Scan the QR code to connect your steps and earn PUMLx.
               </p>
               <div className="intro-btn-wallet intro-btn-wallet--connect">
-                <Button className="btn-primary">
+                <Button className="btn-primary" onClick={connectPuml}>
                   <div className="d-flex flex-row align-items-center">
                     <span>Connect PUML Wallet</span>
                   </div>
@@ -303,7 +334,7 @@ const Move: React.FC<MoveProps> = () => {
           <Image className="ticket-img" src={puml} alt="ticket"></Image>
         </div>
       </div>
-      {isAuth && walletAddress ? (
+      {isConnectPuml ? (
         <div className="moves">
           <div className="moves__title">
             <div className="item-title">Staked  NFT’s ({nftstaked.length})</div>
@@ -390,6 +421,13 @@ const Move: React.FC<MoveProps> = () => {
         reward={claims}
         rewardDollar={getDollarPrice(claims)}
       ></MoveSuccessModal>
+      <PumlScanModal
+        show={showScanModal}
+        handleClose={() => {
+          setShowScanModal(false);
+        }}
+        wallet={walletAddress}
+      ></PumlScanModal>
     </Layout >
   );
 };

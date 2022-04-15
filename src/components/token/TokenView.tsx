@@ -20,6 +20,7 @@ import { getMyInfo } from "store/User/user.selector";
 import { getWalletBalance } from "store/User/user.slice";
 import CollectionController from "controller/CollectionController";
 import NftController from "controller/NftController";
+import { toast } from 'react-toastify';
 
 interface TokenViewProps {
   item: any;
@@ -182,6 +183,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
           setShowStatusModal(false);
           resaleSucced();
+          toast.success("Offer is created successfully.");
           NotificationManager.success(
             "Offer is created successfully.",
             "Success"

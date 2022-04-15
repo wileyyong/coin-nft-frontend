@@ -5,7 +5,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import { NotificationManager } from "react-notifications";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import { NftCreateStatus } from "model/NftCreateStatus";
-import StakeNftStatusModal from "components/token/StakeNftStatusModal"
+import StakeNftStatusModal from "components/token/StakeNftStatusModal";
+import { toast } from 'react-toastify';
 
 import { Button, Image } from "react-bootstrap";
 
@@ -221,6 +222,7 @@ const Stakes: React.FC<StakeProps> = () => {
           loadNft();
           setUnstakeArr([]);
           setIsLoading(false);
+          toast.success("Successfully done.");
           NotificationManager.success(
             "Successfully done.",
             "Success"
@@ -229,14 +231,17 @@ const Stakes: React.FC<StakeProps> = () => {
         } else {
           setIsLoading(false);
           console.log(result.error);
+          toast.warning("Failed");
           NotificationManager.error("Failed!", "Error");
         }
       } else {
         setIsLoading(false);
+        toast.warning("Failed");
         NotificationManager.error("Failed!", "Error");
       }
       setIsLoading(false);
     } catch (err) {
+      toast.warning("Failed");
       NotificationManager.error("Failed Try!", "Error");
       setIsLoading(false);
     }
@@ -258,6 +263,7 @@ const Stakes: React.FC<StakeProps> = () => {
           loadNft();
           setStakeArr([]);
           setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
+          toast.success("Successfully approved NFTs.");
           NotificationManager.success(
             "Successfully approved NFTs.",
             "Success"
@@ -265,6 +271,7 @@ const Stakes: React.FC<StakeProps> = () => {
           setShowStatusModal(false);
         } else {
           console.log(result.error);
+          toast.warning("Failed");
           NotificationManager.error("Failed!", "Error");
           setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
         }
@@ -273,6 +280,7 @@ const Stakes: React.FC<StakeProps> = () => {
         setResellNftStatus(NftCreateStatus.CREATEOFFER_FAILED);
       }
     } catch (err) {
+      toast.warning("Failed");
       NotificationManager.error("Failed!", "Error");
     }
   }
@@ -296,22 +304,26 @@ const Stakes: React.FC<StakeProps> = () => {
             stake: null
           });
           loadNft();
+          toast.success("Successfully unstake NFTs.");
           NotificationManager.success(
             "Successfully unstake NFTs.",
             "Success"
           );
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
         } else {
+          toast.warning("Failed");
           NotificationManager.error("Failed!", "Error");
           setResellNftStatus(NftCreateStatus.APPROVE_FAILED);
         }
       } else {
         console.log(approveResult.error);
+        toast.warning("Failed");
         NotificationManager.error("Failed!", "Error");
         setResellNftStatus(NftCreateStatus.APPROVE_FAILED);
       }
     } catch (err) {
       setShowStatusModal(false);
+      toast.warning("Failed");
       NotificationManager.error("Failed!", "Error");
     }
   }
@@ -335,19 +347,23 @@ const Stakes: React.FC<StakeProps> = () => {
         if (stakeResult.success && stakeResult.transactionHash) {
           setStake(0);
           stakeData();
+          toast.success("Successfully staken.");
           NotificationManager.success(
             "Successfully staken.",
             "Success"
           );
         } else {
-          NotificationManager.error("Faileddd!", "Error");
+          toast.warning("Failed");
+          NotificationManager.error("Failed!", "Error");
         }
       } else {
+        toast.warning("Failed");
         NotificationManager.error("Failed!", "Error");
       }
       setIsLoading(false);
     } catch (err) {
-      NotificationManager.error("Failedfsdfdsd!", "Error");
+      toast.warning("Failed");
+      NotificationManager.error("Failed!", "Error");
       setIsLoading(false);
     }
   }
@@ -357,6 +373,7 @@ const Stakes: React.FC<StakeProps> = () => {
     try {
       setIsLoading(true);
       if (unstake > stakeValue.balances) {
+        toast.warning("Insufficient staked");
         NotificationManager.error("Insufficient staked", "Error");
         return;
       }
@@ -370,20 +387,24 @@ const Stakes: React.FC<StakeProps> = () => {
         if (unstakeResult.success && unstakeResult.transactionHash) {
           setUnstake(0);
           stakeData();
+          toast.success("Successfully unstaken.");
           NotificationManager.success(
             "Successfully unstaken.",
             "Success"
           );
           setIsLoading(false);
         } else {
+          toast.warning("Failed!");
           NotificationManager.error("Failed!", "Error");
           setIsLoading(false);
         }
       } else {
+        toast.warning("Failed!");
         NotificationManager.error("Failed!", "Error");
         setIsLoading(false);
       }
     } catch (err) {
+      toast.warning("Failed!");
       NotificationManager.error("Failed!", "Error");
       setIsLoading(false);
     }
@@ -455,6 +476,7 @@ const Stakes: React.FC<StakeProps> = () => {
     if (claims === 0) return;
 
     if (claims > claimCollect) {
+      toast.warning("Please collect less than Claim Rewards");
       NotificationManager.error("Please collect less than Claim Rewards", "Error");
       setClaims(0);
       return;
@@ -468,6 +490,7 @@ const Stakes: React.FC<StakeProps> = () => {
           collects: claims
         });
         if (result.success) {
+          toast.success("Successfully collected.");
           NotificationManager.success(
             "Successfully collected.",
             "Success"
@@ -476,14 +499,17 @@ const Stakes: React.FC<StakeProps> = () => {
           stakeData();
           setIsLoading(false);
         } else {
+          toast.warning("Claim Collect Failed!");
           NotificationManager.error("Claim Collect Failed!", "Error");
           setIsLoading(false);
         }
       } else {
+        toast.warning("Claim Collect Failed!");
         NotificationManager.error("Claim Collect Failed!", "Error");
         setIsLoading(false);
       }
     } catch (err) {
+      toast.warning("Failed!");
       NotificationManager.error("Failed!", "Error");
       setIsLoading(false);
     }
@@ -504,7 +530,7 @@ const Stakes: React.FC<StakeProps> = () => {
       <div className="section-intro">
         <div className="intro-content text-left">
           <p className="intro-title pb-0">Stake PUMLx & earn up to </p>
-          <p className="intro-type">180.55% APR</p>
+          <p className="intro-type">180.55% APY</p>
           <div className="intro-connect-btnGroup pt-4">
             <div className="intro-btn-wallet pb-3">
               <Button className="mr-2 mr-lg-4 btn-primary">

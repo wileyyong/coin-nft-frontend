@@ -48,6 +48,9 @@ class UserController {
     public static userSearch(params: any, page: number) {
         return API.post(`/users/search${page === 1 ? '' : '?page='+page}`, params).then(res => res.data);
     }
+    public static qrConnect(payload: any) {
+        return API.post(`${configs.API.USERS_URL}/qrconnect`, payload).then(res => res.data);
+    }
 }
 
 export default UserController;

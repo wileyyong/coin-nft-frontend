@@ -27,6 +27,7 @@ import ResellNftModal from "components/token/ResellNftModal";
 import ResellNftStatusModal from "components/token/ResellNftStatusModal";
 import { NftCreateStatus } from "model/NftCreateStatus";
 import ShareNFTModal from "components/token/ShareNFTModal";
+import { toast } from 'react-toastify';
 
 import { useAppDispatch, useAppSelector } from "store/hooks";
 import { getETHUSDTCurrency, getNftServiceFee, getMATICUSDTCurrency } from "store/Nft/nft.selector";
@@ -196,6 +197,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         if (!likeDisable) {
             let res = await TokenController.setLike(id);
             if (res.status === 200) {
+                toast.success("Successfully liked!");
                 NotificationManager.success("Successfully liked!", "Success");
                 setLikes(likes + 1);
                 setLikeDisable(true);
@@ -203,6 +205,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         } else {
             let res = await TokenController.setUnLike(id);
             if (res.status === 200) {
+                toast.success("Successfully unliked!");
                 NotificationManager.success("Successfully unliked!", "Success");
                 setLikes(likes - 1);
                 setLikeDisable(false);
@@ -289,12 +292,14 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         hash: result.transactionHash,
                     });
                     loadOffer();
+                    toast.success("You bid to this item successfully.");
                     NotificationManager.success(
                         "You bid to this item successfully.",
                         "Success"
                     );
                 } else {
                     console.log("error", result.error);
+                    toast.warning("You failed to bid this item.");
                     NotificationManager.error("You failed to bid this item.", "Error");
                 }
                 setTransProgressing(false);
@@ -302,6 +307,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             }
         } catch (err) {
             setTransProgressing(false);
+            toast.warning("You failed to bid this item.");
             NotificationManager.error("You failed to bid this item.", "Error");
         }
     };
@@ -313,6 +319,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         }
 
         if (isOwner() && userInfo && isOwner().user && isOwner().user._id === userInfo._id) {
+            toast.warning("You already owned this item.");
             NotificationManager.info("You already owned this item.", "Info");
             return false;
         }
@@ -449,6 +456,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
                     setShowStatusModal(false);
                     loadOffer();
+                    toast.success("Offer is created successfully.");
                     NotificationManager.success(
                         "Offer is created successfully.",
                         "Success"
@@ -540,6 +548,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         chainIds: {[contractAddress]: token.chain_id},
                         stake: null
                     });
+                    toast.success("You buy this item successfully.");
                     NotificationManager.success(
                         "You buy this item successfully.",
                         "Success"
@@ -548,6 +557,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     loadOffer();
                 } else {
                     console.log("error", buyResult.error);
+                    toast.warning("You failed to buy this item directly.");
                     NotificationManager.error(
                         "You failed to buy this item directly.",
                         "Error"
@@ -556,6 +566,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                 setTransProgressing(false);
             }
         } catch (err) {
+            toast.warning("You failed to buy this item directly.");
             NotificationManager.error(
                 "You failed to buy this item directly.",
                 "Error"
