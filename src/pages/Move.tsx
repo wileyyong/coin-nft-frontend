@@ -73,16 +73,18 @@ const Move: React.FC<MoveProps> = () => {
   }, []);
 
   useEffect(() => {
-    const switchNet = async () => {
-      const networkID = EthUtil.getNetwork();
-      if (networkID !== configs.ONBOARD_NETWORK_ID) {
-          await switchNetwork(configs.ONBOARD_NETWORK_ID);
-          window.location.reload();
+    if (isAuth && walletAddress){
+      const switchNet = async () => {
+        const networkID = EthUtil.getNetwork();
+        if (networkID && networkID !== configs.ONBOARD_NETWORK_ID) {
+            await switchNetwork(configs.ONBOARD_NETWORK_ID);
+            window.location.reload();
+        }
       }
+      switchNet();
+      loadNft();
     }
-    switchNet();
-    loadNft();
-  }, []); 
+  }, [isAuth, walletAddress]); 
   
   window.onload = function() {
     loadNft();
@@ -91,7 +93,7 @@ const Move: React.FC<MoveProps> = () => {
   const loadNft = async () => {
     let nftstaked: any[] = [];
     let status: number = 0;
-
+    
     const { tokens } = await NftController.getApprovedList();
     if (tokens.length > 0) status = 1;
 
@@ -113,7 +115,7 @@ const Move: React.FC<MoveProps> = () => {
     const data = await SmartContract.getStakeData();
     console.log("stakedata", data);
     if (data && Object.keys(data).length > 0) {
-      const leftHours = 24 - (data.lastUpdateTime - data.userLastUpdateTime) / 86440;
+      const leftHours = 24 - (data.lastUpdateTime - data.userLastUpdateTime) / 3600;
       if (data.userLastUpdateTime > 0) setLeftHours(Math.ceil(leftHours));
 
       setRewardStored(data.userRewardStored / 1e18);
