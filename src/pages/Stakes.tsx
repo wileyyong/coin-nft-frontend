@@ -669,7 +669,7 @@ const Stakes: React.FC<StakeProps> = () => {
                     placeholder="Enter Quantity"
                     onChange={(e) => handleChange(e)}
                   />
-                  <button className="btn btn-primary">
+                  <button className="btn btn-primary" onClick= {() => {setStake(pumlx)}}>
                     <div className="d-flex flex-row align-items-center">
                       <span>Max</span>
                     </div>
@@ -684,7 +684,7 @@ const Stakes: React.FC<StakeProps> = () => {
                     placeholder="Enter Quantity"
                     onChange={(e) => handleChange(e)}
                   />
-                  <button className="btn btn-primary">
+                  <button className="btn btn-primary" onClick= {() => {setUnstake(stakeValue?.balances || 0)}}>
                     <div className="d-flex flex-row align-items-center">
                       <span>Max</span>
                     </div>

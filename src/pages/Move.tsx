@@ -27,9 +27,42 @@ import configs from 'configs';
 
 import { useAppSelector } from "store/hooks";
 import { getWalletAddress, isAuthenticated, getMyInfo } from "store/User/user.selector";
-import { setInterval } from 'timers';
+import { setInterval, clearInterval } from 'timers';
 
 interface MoveProps { }
+
+const MoveToEarn = (props: any) => {
+  useEffect(() => {
+    if (props.isAuth && props.walletAddress){
+      const qrConnect = async () => {
+        const connect = await UserController.qrConnect({ethAddress: props.walletAddress});
+        if (connect.success) {
+          props.handleIsConnect(true);
+          props.handleLoadNft();
+        }
+      }
+      const cons = setInterval(qrConnect, 1000)
+      return () => {
+        clearInterval(cons);
+      }
+    }
+  }, [])
+  return (
+    <>
+      <p className="intro-type intro-type--italy">Move to Earn</p>
+      <p className="intro-title intro-title--bottom">
+        Scan the QR code to connect your steps and earn PUMLx.
+      </p>
+      <div className="intro-btn-wallet intro-btn-wallet--connect">
+        <Button className="btn-primary" onClick={props.handleConnectPuml}>
+          <div className="d-flex flex-row align-items-center">
+            <span>Connect PUML Wallet</span>
+          </div>
+        </Button>
+      </div>
+    </>
+  )
+};
 
 
 const Move: React.FC<MoveProps> = () => {
@@ -89,22 +122,22 @@ const Move: React.FC<MoveProps> = () => {
         }
       }
       switchNet();
-      const qrConnect = async () => {
-        const connect = await UserController.qrConnect({ethAddress: walletAddress});
-        if (connect.success) {
-          setIsConnectPuml(true);
-          loadNft();
-        }
-      }
-      qrConnect();
     } else {
       setIsConnectPuml(false);
     }
   }, [isAuth, walletAddress]); 
 
   window.onload = function() {
-    if (isAuth && walletAddress && isConnectPuml){
-      loadNft();
+    if (isAuth && walletAddress){
+      const qrConnect = async () => {
+        const connect = await UserController.qrConnect({ethAddress: walletAddress});
+        if (connect.success) {
+          setIsConnectPuml(true);
+          loadNft();
+          clearInterval(cons);
+        }
+      }
+      const cons = setInterval(qrConnect, 1000);
     }
   }
 
@@ -133,9 +166,10 @@ const Move: React.FC<MoveProps> = () => {
     const data = await SmartContract.getStakeData();
     console.log("stakedata", data);
     if (data && Object.keys(data).length > 0) {
+      if (data.userLastUpdateTime > 0) {
       const leftHours = 24 - (data.lastUpdateTime - data.userLastUpdateTime) / 3600;
-      if (data.userLastUpdateTime > 0) setLeftHours(Math.ceil(leftHours));
-
+        if (leftHours > 0) setLeftHours(Math.ceil(leftHours));
+      }  
       setRewardStored(data.userRewardStored / 1e18);
       setStakeValue(data);
     }
@@ -272,7 +306,7 @@ const Move: React.FC<MoveProps> = () => {
       toast.warning("Please connect metamask wallet.");
       NotificationManager.error("Please connect metamask wallet.", "Error");
     }
-  }
+  }  
 
   return (
     <Layout className="move-container">
@@ -314,19 +348,13 @@ const Move: React.FC<MoveProps> = () => {
               </div>
             </>
           ) : (
-            <>
-              <p className="intro-type intro-type--italy">Move to Earn</p>
-              <p className="intro-title intro-title--bottom">
-                Scan the QR code to connect your steps and earn PUMLx.
-              </p>
-              <div className="intro-btn-wallet intro-btn-wallet--connect">
-                <Button className="btn-primary" onClick={connectPuml}>
-                  <div className="d-flex flex-row align-items-center">
-                    <span>Connect PUML Wallet</span>
-                  </div>
-                </Button>
-              </div>
-            </>
+            <MoveToEarn
+              isAuth = {isAuth}
+              walletAddress = {walletAddress} 
+              handleIsConnect = {setIsConnectPuml}
+              handleLoadNft = {loadNft}
+              handleConnectPuml = {connectPuml}
+            />
           )}
         </div>
         <div className="intro-image"></div>

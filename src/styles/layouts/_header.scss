@@ -42,6 +42,7 @@
         font-size: 14px;
         white-space: nowrap;
         font-weight: 700;
+        padding-left: 0 !important;
         &.active {
             color: $black !important;
         }
