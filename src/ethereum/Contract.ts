@@ -1,6 +1,6 @@
-import { abi as engineABI, bytecode as enginebytecode } from './abis/Engine.json';
+import { abi as engineABI } from './abis/Engine.json';
 import { abi as PUML721ABI, bytecode as PUMLbytecode } from './abis/PumlNFT.json';
-import { abi as PUMLStakeABI, bytecode as stakebytecode } from './abis/PumlStake.json';
+import { abi as PUMLStakeABI } from './abis/PumlStake.json';
 import { abi as iercABI } from './abis/IERC20.json';
 import { web3 } from './OnBoard';
 import configs from 'configs';

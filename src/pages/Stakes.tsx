@@ -17,6 +17,7 @@ import maskIcon from "assets/imgs/mask.png";
 import nostakeIcon from "assets/imgs/nostake.png";
 
 import NftController from "controller/NftController";
+import UserController from "controller/UserController";
 import SmartContract from "ethereum/Contract";
 
 import { switchNetwork } from "store/User/user.slice";
@@ -48,7 +49,8 @@ const Stakes: React.FC<StakeProps> = () => {
   const [stakeValue, setStakeValue] = useState<any>();
   const [isLoading, setIsLoading] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
-  const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE)
+  const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE);
+  const [apy, setApy] = useState(0);
   
   const pumlx = useAppSelector(getWalletPumlx);
 
@@ -86,6 +88,7 @@ const Stakes: React.FC<StakeProps> = () => {
       }
     }
     switchNet();
+    loadApy();
     loadNft();
   }, []);  
 
@@ -107,6 +110,11 @@ const Stakes: React.FC<StakeProps> = () => {
     setNftstaked(nftstaked);
     setNftunstaked(nftunstaked);
     stakeData();
+  }
+
+  const loadApy = async () => {
+    const { apy } = await UserController.getApy();
+    if (apy) setApy(apy)
   }
 
   useEffect(() => {
@@ -530,7 +538,7 @@ const Stakes: React.FC<StakeProps> = () => {
       <div className="section-intro">
         <div className="intro-content text-left">
           <p className="intro-title pb-0">Stake PUMLx & earn up to </p>
-          <p className="intro-type">180.55% APY</p>
+          <p className="intro-type">{apy} APY</p>
           <div className="intro-connect-btnGroup pt-4">
             <div className="intro-btn-wallet pb-3">
               <Button className="mr-2 mr-lg-4 btn-primary">

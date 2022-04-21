@@ -1,4 +1,5 @@
 const {BigNumber} = require('bignumber.js');
+const md5 = require('md5');
 
 export const removeEndingZero = function (value) {
     const regex = /^[^.]+?(?=\.0*$)|^[^.]+?\..*?(?=0*$)|^[^.]*$/g;
@@ -82,4 +83,9 @@ export const isBiggerValue = function(a,b) {
 
 export const isLessValue = function(a,b) {
     return new BigNumber(a).isLessThan(BigNumber(b));
+}
+
+export const cryptMD5 = function(data) {
+    console.log("asdfsdf", data)
+    return md5(data);
 }

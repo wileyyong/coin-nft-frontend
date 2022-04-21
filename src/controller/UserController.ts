@@ -1,5 +1,6 @@
 
 import API from 'service/api';
+import mobileAPI from 'service/mobileapi';
 import configs from "configs";
 
 class UserController {
@@ -50,6 +51,15 @@ class UserController {
     }
     public static qrConnect(payload: any) {
         return API.post(`${configs.API.USERS_URL}/qrconnect`, payload).then(res => res.data);
+    }
+    public static getApy() {
+        return API.get(`/apy`).then(res => res.data);
+    }
+    public static postApy(payload: any) {
+        return API.post(`/apy`, payload).then(res => res.data);
+    }
+    public static getDailySteps(payload: any) {
+        return mobileAPI.post(`${configs.API.PUMLUSER_URL}/getDailySteps`, payload).then(res => res.data);
     }
 }
 

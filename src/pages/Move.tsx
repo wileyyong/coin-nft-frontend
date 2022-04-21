@@ -8,6 +8,7 @@ import MoveSuccessModal from 'components/token/MoveSuccessModal';
 import PumlScanModal from 'components/user/PumlScanModal';
 import { NotificationManager } from "react-notifications";
 import { toast } from 'react-toastify';
+import { cryptMD5 } from 'service/number';
 
 import { Button, Image } from "react-bootstrap";
 
@@ -37,6 +38,9 @@ const MoveToEarn = (props: any) => {
       const qrConnect = async () => {
         const connect = await UserController.qrConnect({ethAddress: props.walletAddress});
         if (connect.success) {
+          if (connect.user && connect.user.userId) {
+            props.handleGetDailySteps(parseFloat(connect.user.userId));
+          }
           props.handleIsConnect(true);
           props.handleLoadNft();
         }
@@ -86,6 +90,8 @@ const Move: React.FC<MoveProps> = () => {
   const [feeCollect, setFeeCollect] = useState<number>(0);
   const [isConnectPuml, setIsConnectPuml] = useState<boolean>(false);
   const [showScanModal, setShowScanModal] = useState(false);
+  const [steps, setSteps] = useState(0);
+
 
   const getWidth = () => window.innerWidth 
   || document.documentElement.clientWidth 
@@ -132,12 +138,33 @@ const Move: React.FC<MoveProps> = () => {
       const qrConnect = async () => {
         const connect = await UserController.qrConnect({ethAddress: walletAddress});
         if (connect.success) {
+          if (connect.user && connect.user.userId) {
+            dailySteps(parseFloat(connect.user.userId));
+          }
           setIsConnectPuml(true);
           loadNft();
           clearInterval(cons);
         }
       }
       const cons = setInterval(qrConnect, 1000);
+    }
+  }
+
+  const dailySteps = async (userId: number) => {
+    const timeDate: string = 
+      new Date().getFullYear() + "-" + 
+      ("0" + (new Date().getMonth() + 1)).substr(-2) + "-" +
+      ("0" + new Date().getDate()).substr(-2) + "T" + 
+      ("0" + new Date().getHours()).substr(-2) + ":" +
+      ("0" + new Date().getMinutes()).substr(-2) + ":" +
+      ("0" + new Date().getSeconds()).substr(-2) + ".SSSZ";
+    const getDailySteps = await UserController.getDailySteps({
+      pumlUserId: userId,
+      timeUpdate: timeDate,
+      updateKey: cryptMD5(timeDate + userId.toString() + "K0YHykvCmo3qlVd1jBFNU7jRdXREuDKo9d7OH5gzIyfF5JyRzCzdkv2QoOm8AKvB")
+    });
+    if (getDailySteps && getDailySteps.nSteps) {
+      setSteps(getDailySteps.nSteps);
     }
   }
 
@@ -320,7 +347,7 @@ const Move: React.FC<MoveProps> = () => {
               <p className="intro-title intro-title--bottom">
                 Claim your PUML Steps
               </p>
-              <p className="intro-steps">{(rewardStored + collect).toFixed(5)} Steps</p>
+              <p className="intro-steps">{steps.toFixed(5)} Steps</p>
               <div className="inp">
                 <div className="inp__input inp__input--prex col-md-8">
                   <img className="mr-3" src={puml1} width={42} alt="ethIcon" />
@@ -354,6 +381,7 @@ const Move: React.FC<MoveProps> = () => {
               handleIsConnect = {setIsConnectPuml}
               handleLoadNft = {loadNft}
               handleConnectPuml = {connectPuml}
+              handleGetDailySteps = {dailySteps}
             />
           )}
         </div>

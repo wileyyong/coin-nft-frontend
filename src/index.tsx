@@ -4,7 +4,7 @@ import App from './App';
 import { store } from './store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-import { NotificationContainer } from "react-notifications";
+// import { NotificationContainer } from "react-notifications";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
