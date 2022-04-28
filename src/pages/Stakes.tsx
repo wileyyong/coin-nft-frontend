@@ -431,7 +431,6 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const stakeData = async () => {
     const data = await SmartContract.getStakeData();
-    console.log("stakedata", data);
     if (data && data.length > 0) {
         setStakeValue(data);
     }
@@ -445,7 +444,6 @@ const Stakes: React.FC<StakeProps> = () => {
         if (stakeValue.userLastUpdateTime === 0) return;
 
         const { collects } = await NftController.getPumlFeeCollect({});
-        console.log("collectdata", collects);
 
         let lastCollect: number = 0;
         let collectSum: number = 0;
