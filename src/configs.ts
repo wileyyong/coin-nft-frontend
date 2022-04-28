@@ -31,7 +31,7 @@ const configs = {
         TOKEN_URL: "tokens",
         MY_TOKEN_URL: "tokens/my",
         MOBILE_API: "https://connect2.puml.io/api/",
-        PUMLUSER_URL: "Pumluser"
+        PUMLUSER_URL: "Pumlusers"
     },
     
     /* STORAGE Values */

@@ -154,7 +154,7 @@ const Move: React.FC<MoveProps> = () => {
     const timeDate: string = 
       new Date().getFullYear() + "-" + 
       ("0" + (new Date().getMonth() + 1)).substr(-2) + "-" +
-      ("0" + new Date().getDate()).substr(-2) + "T" + 
+      ("0" + new Date().getDate()).substr(-2) + "'T'" + 
       ("0" + new Date().getHours()).substr(-2) + ":" +
       ("0" + new Date().getMinutes()).substr(-2) + ":" +
       ("0" + new Date().getSeconds()).substr(-2) + ".SSSZ";
@@ -347,7 +347,7 @@ const Move: React.FC<MoveProps> = () => {
               <p className="intro-title intro-title--bottom">
                 Claim your PUML Steps
               </p>
-              <p className="intro-steps">{steps.toFixed(5)} Steps</p>
+              <p className="intro-steps">{steps.toFixed(2)} Steps</p>
               <div className="inp">
                 <div className="inp__input inp__input--prex col-md-8">
                   <img className="mr-3" src={puml1} width={42} alt="ethIcon" />
