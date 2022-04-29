@@ -45,6 +45,7 @@ const MoveToEarn = (props: any) => {
           props.handleLoadNft();
         }
       }
+      qrConnect();
       const cons = setInterval(qrConnect, 5000)
       return () => {
         clearInterval(cons);
@@ -146,6 +147,7 @@ const Move: React.FC<MoveProps> = () => {
           clearInterval(cons);
         }
       }
+      qrConnect();
       const cons = setInterval(qrConnect, 5000);
     }
   }
