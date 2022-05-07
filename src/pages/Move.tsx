@@ -46,7 +46,7 @@ const MoveToEarn = (props: any) => {
         }
       }
       qrConnect();
-      const cons = setInterval(qrConnect, 5000)
+      const cons = setInterval(qrConnect, 3000)
       return () => {
         clearInterval(cons);
       }
@@ -148,7 +148,7 @@ const Move: React.FC<MoveProps> = () => {
         }
       }
       qrConnect();
-      const cons = setInterval(qrConnect, 5000);
+      const cons = setInterval(qrConnect, 3000);
     }
   }
 
