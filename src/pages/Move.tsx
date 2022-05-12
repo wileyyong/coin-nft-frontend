@@ -9,26 +9,21 @@ import PumlScanModal from 'components/user/PumlScanModal';
 import { NotificationManager } from "react-notifications";
 import { toast } from 'react-toastify';
 import { cryptMD5 } from 'service/number';
-
 import { Button, Image } from "react-bootstrap";
-
+import { switchNetwork } from "store/User/user.slice";
+import EthUtil from 'ethereum/EthUtil';
+import SmartContract from "ethereum/Contract";
+import configs from 'configs';
+import NftController from "controller/NftController";
+import UserController from "controller/UserController";
+import { useAppSelector } from "store/hooks";
+import { getWalletAddress, isAuthenticated, getMyInfo } from "store/User/user.selector";
+import { setInterval, clearInterval } from 'timers';
 
 import puml from "assets/imgs/puml2.png";
 import puml1 from "assets/imgs/puml1.png";
 import watchIcon from "assets/imgs/watch.png";
 import nostakeIcon from "assets/imgs/nostake.png";
-
-import NftController from "controller/NftController";
-import UserController from "controller/UserController";
-import SmartContract from "ethereum/Contract";
-
-import { switchNetwork } from "store/User/user.slice";
-import EthUtil from 'ethereum/EthUtil';
-import configs from 'configs';
-
-import { useAppSelector } from "store/hooks";
-import { getWalletAddress, isAuthenticated, getMyInfo } from "store/User/user.selector";
-import { setInterval, clearInterval } from 'timers';
 
 interface MoveProps { }
 
