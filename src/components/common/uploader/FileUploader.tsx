@@ -4,6 +4,8 @@ import { Button } from "react-bootstrap";
 import Utility from "service/utility";
 import { B2NormalTextTitle } from "../common.styles";
 import { FaWindowClose } from "react-icons/fa";
+import { NotificationManager } from "react-notifications";
+import { toast } from 'react-toastify';
 
 interface FileUploaderProps {
   title: any;
@@ -29,18 +31,34 @@ const FileUploader: React.FC<FileUploaderProps> = ({
 
   const fileChanged = (e: any) => {
     const file = e.target.files[0];
-    setFile(file);
 
     var reader = new FileReader();
+    const image = new Image();
     reader.addEventListener(
       "load",
       () => {
-        if (setPreview) setPreview(reader.result || "");
-        setFilePreview(reader.result || "");
+        if (typeof reader.result === 'string') {
+          image.src = reader.result;
+        }
       },
       false
     );
-    
+
+    image.onload = async function() {
+      const width = image.width;
+      const height = image.height;
+      const ratio = width / height;
+
+      if (width >= 320 && width <=  1080 && ratio >= 0.8 && ratio <= 1.91) {
+        setFile(file);
+        if (setPreview) setPreview(image.src || "");
+        setFilePreview(image.src || "");
+      } else {
+        NotificationManager.error("Please upload proper image", "Error");
+        toast.warning("Please upload proper image");
+      }
+    };
+
     let isImg = Utility.isFileImage(file);
     setIsImage(isImg);
 

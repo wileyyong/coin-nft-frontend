@@ -601,7 +601,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
                                         <div className="upload-file">
                                             <div className="title mb-4">Upload file</div>
                                             <FileUploader
-                                                title="PNG, JPEG, GIF, WEBP, MP4 or MP3. Max 30MB."
+                                                title="PNG, JPEG, GIF, WEBP, MP4 or MP3. Max 30MB. WIDTH BETWEEN 320 AND 1080PIXELS, WIDTH/HEIGHT BETWEEN 1.91:1 AND 4:5"
                                                 accept={configs.NFT_FILE_ACCEPT}
                                                 setFile={(e: any) => setNftFile(e)}
                                                 setPreview={(e: any) => setPreview(e)}
