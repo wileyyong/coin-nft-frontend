@@ -5,7 +5,7 @@ import Utility from "service/utility";
 import { B2NormalTextTitle } from "../common.styles";
 import { FaWindowClose } from "react-icons/fa";
 import { NotificationManager } from "react-notifications";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import storage from "service/firebaseConfig";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -20,15 +20,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({
   title,
   setFile,
   setPreview,
-  accept,
+  accept
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const [filePreview, setFilePreview] = useState<any>(null);
-  const [fileAccept] = useState(
-    accept || "audio/*,video/*,image/*"
-  );
+  const [fileAccept] = useState(accept || "audio/*,video/*,image/*");
   const [isImage, setIsImage] = useState(true);
 
   const fileChanged = (e: any) => {
@@ -39,35 +37,35 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     reader.addEventListener(
       "load",
       () => {
-        if (typeof reader.result === 'string') {
+        if (typeof reader.result === "string") {
           image.src = reader.result;
         }
       },
       false
     );
-	
-	const storageRef = ref(storage, `/${file.name}`);
 
-    image.onload = async function() {
+    const storageRef = ref(storage, `/${file.name}`);
+
+    image.onload = async function () {
       const width = image.width;
       const height = image.height;
       const ratio = width / height;
 
-      if (width >= 320 && width <=  1080 && ratio >= 0.8 && ratio <= 1.91) {
+      if (width >= 320 && width <= 1080 && ratio >= 0.8 && ratio <= 1.91) {
         const uploadTask = uploadBytesResumable(storageRef, file);
         uploadTask.on(
-            "state_changed",
-            (snapshot) => {},
-            (err) => console.log(err),
-            () => {
-              getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-                setFilePreview(url);
-                if (setPreview) {
-                  setPreview(url);
-                }
-                setFile(url);
-              });
-            }
+          "state_changed",
+          (snapshot) => {},
+          (err) => console.log(err),
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+              setFilePreview(url);
+              if (setPreview) {
+                setPreview(url);
+              }
+              setFile(url);
+            });
+          }
         );
       } else {
         NotificationManager.error("Please upload proper image", "Error");
@@ -81,6 +79,19 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     if (isImg) {
       reader.readAsDataURL(file);
     } else {
+      // setFilePreview(URL.createObjectURL(file));
+      // videoRef?.current?.load();
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => console.log(err),
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+            setFile(url);
+          });
+        }
+      );
       setFilePreview(URL.createObjectURL(file));
       videoRef?.current?.load();
     }
@@ -96,7 +107,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     setIsImage(true);
     if (setPreview) setPreview("");
     let fInputElement = fileInputRef?.current;
-    if(fInputElement) fInputElement.value = '';
+    if (fInputElement) fInputElement.value = "";
   };
 
   useEffect(() => {
@@ -122,11 +133,18 @@ const FileUploader: React.FC<FileUploaderProps> = ({
         <div className="preview">
           {isImage ? (
             <img src={filePreview} alt="previewImage" />
-          ) : ( 
-            <video width="340" src={filePreview} autoPlay loop controls  ref={videoRef}>
-              <source  type="video/mp4"></source>
-              <source  type="video/webm"></source>
-              <source  type="video/ogg"></source>
+          ) : (
+            <video
+              width="340"
+              src={filePreview}
+              autoPlay
+              loop
+              controls
+              ref={videoRef}
+            >
+              <source type="video/mp4"></source>
+              <source type="video/webm"></source>
+              <source type="video/ogg"></source>
               Your browser does not support HTML5 video.
             </video>
           )}
