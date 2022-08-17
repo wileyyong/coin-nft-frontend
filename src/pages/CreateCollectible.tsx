@@ -169,17 +169,18 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     }
 
     const setNftFile = (file: any) => {
-        if (file) {
-            setCollectible({ ...collectible, media: file });
-            if (Utility.isFileImage(file)) {
-                setIsNftImage(true);
-            } else {
-                setIsNftImage(false);
-            }
-        } else {
-            setIsNftImage(true);
-            setCollectible({ ...collectible, media: "" });
-        }
+		setCollectible({ ...collectible, media: file });
+        //if (file) {
+            //setCollectible({ ...collectible, media: file });
+            //if (Utility.isFileImage(file)) {
+                //setIsNftImage(true);
+            //} else {
+                //setIsNftImage(false);
+            //}
+        //} else {
+            //setIsNftImage(true);
+            //setCollectible({ ...collectible, media: "" });
+        //}
     };
 
     const setPreview = (e: any) => {

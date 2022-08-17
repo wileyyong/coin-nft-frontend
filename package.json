@@ -21,6 +21,7 @@
     "bignumber.js": "^9.0.1",
     "bnc-onboard": "^1.27.0",
     "bootstrap": "^4.6.0",
+    "firebase": "^9.9.2",
     "jest": "26.6.0",
     "md5": "^2.3.0",
     "mdi-react": "^7.5.0",

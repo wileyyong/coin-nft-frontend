@@ -6,6 +6,8 @@ import { B2NormalTextTitle } from "../common.styles";
 import { FaWindowClose } from "react-icons/fa";
 import { NotificationManager } from "react-notifications";
 import { toast } from 'react-toastify';
+import storage from "service/firebaseConfig";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 interface FileUploaderProps {
   title: any;
@@ -43,6 +45,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       },
       false
     );
+	
+	const storageRef = ref(storage, `/${file.name}`);
 
     image.onload = async function() {
       const width = image.width;
@@ -50,9 +54,21 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       const ratio = width / height;
 
       if (width >= 320 && width <=  1080 && ratio >= 0.8 && ratio <= 1.91) {
-        setFile(file);
-        if (setPreview) setPreview(image.src || "");
-        setFilePreview(image.src || "");
+        const uploadTask = uploadBytesResumable(storageRef, file);
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {},
+            (err) => console.log(err),
+            () => {
+              getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                setFilePreview(url);
+                if (setPreview) {
+                  setPreview(url);
+                }
+                setFile(url);
+              });
+            }
+        );
       } else {
         NotificationManager.error("Please upload proper image", "Error");
         toast.warning("Please upload proper image");
