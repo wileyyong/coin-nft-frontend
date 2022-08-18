@@ -67,8 +67,11 @@ const configs = {
   PUMLSTAKE_ADDRESS: "0x94b44Bf384d333bD063573A1Ac6E12429527F545",
   REWARD_RATE: 10,
 
-  /* Firebase storage bucket */
-  FIREBASE_STORAGE_BUCKET: "blockchain-79483.appspot.com"
+  /* Pinata */
+  PINATA_API_KEY: "7ee8721f543f5901db86",
+  PINATA_SECRET_API_KEY:
+    "c2fb20820e03eee1578cfe2c32b9439c74315a898c6929f49c6b08be1d5fdaf5",
+  PINATA_GATEWAY: "https://puml2022.mypinata.cloud"
 };
 
 export default configs;

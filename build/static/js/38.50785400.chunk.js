@@ -1,2 +1,0 @@
-(this["webpackJsonppuml-nft-frontend"]=this["webpackJsonppuml-nft-frontend"]||[]).push([[38],{1676:function(n,t){},1696:function(n,t){},1710:function(n,t){},1716:function(n,t){}}]);
-//# sourceMappingURL=38.50785400.chunk.js.map

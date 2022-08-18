@@ -6,8 +6,8 @@ import { B2NormalTextTitle } from "../common.styles";
 import { FaWindowClose } from "react-icons/fa";
 import { NotificationManager } from "react-notifications";
 import { toast } from "react-toastify";
-import storage from "service/firebaseConfig";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import axios from "axios";
+import configs from "configs";
 
 interface FileUploaderProps {
   title: any;
@@ -44,7 +44,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       false
     );
 
-    const storageRef = ref(storage, `/${file.name}`);
+    let data = new FormData();
+    data.append("file", file);
 
     image.onload = async function () {
       const width = image.width;
@@ -52,21 +53,28 @@ const FileUploader: React.FC<FileUploaderProps> = ({
       const ratio = width / height;
 
       if (width >= 320 && width <= 1080 && ratio >= 0.8 && ratio <= 1.91) {
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        uploadTask.on(
-          "state_changed",
-          (snapshot) => {},
-          (err) => console.log(err),
-          () => {
-            getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-              setFilePreview(url);
+        axios
+          .post("https://api.pinata.cloud/pinning/pinFileToIPFS", data, {
+            headers: {
+              "Content-Type": `multipart/form-data`,
+              pinata_api_key: configs.PINATA_API_KEY,
+              pinata_secret_api_key: configs.PINATA_SECRET_API_KEY
+            }
+          })
+          .then(function (response) {
+            if (response && response.data && response.data.IpfsHash) {
+              const imgURL =
+                configs.PINATA_GATEWAY + "/ipfs/" + response.data.IpfsHash;
+              setFilePreview(imgURL);
               if (setPreview) {
-                setPreview(url);
+                setPreview(imgURL);
               }
-              setFile(url);
-            });
-          }
-        );
+              setFile(imgURL);
+            }
+          })
+          .catch(function (error) {
+            console.log("err", error);
+          });
       } else {
         NotificationManager.error("Please upload proper image", "Error");
         toast.warning("Please upload proper image");
@@ -79,19 +87,25 @@ const FileUploader: React.FC<FileUploaderProps> = ({
     if (isImg) {
       reader.readAsDataURL(file);
     } else {
-      // setFilePreview(URL.createObjectURL(file));
-      // videoRef?.current?.load();
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {},
-        (err) => console.log(err),
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-            setFile(url);
-          });
-        }
-      );
+      axios
+        .post("https://api.pinata.cloud/pinning/pinFileToIPFS", data, {
+          headers: {
+            "Content-Type": `multipart/form-data`,
+            pinata_api_key: configs.PINATA_API_KEY,
+            pinata_secret_api_key: configs.PINATA_SECRET_API_KEY
+          }
+        })
+        .then(function (response) {
+          if (response && response.data && response.data.IpfsHash) {
+            const mediaURL =
+              configs.PINATA_GATEWAY + "/ipfs/" + response.data.IpfsHash;
+
+            setFile(mediaURL);
+          }
+        })
+        .catch(function (error) {
+          console.log("err", error);
+        });
       setFilePreview(URL.createObjectURL(file));
       videoRef?.current?.load();
     }
