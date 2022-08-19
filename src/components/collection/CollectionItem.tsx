@@ -1,6 +1,6 @@
 import React from "react";
-import configs from 'configs';
-import { useHistory } from 'react-router-dom';
+import configs from "configs";
+import { useHistory } from "react-router-dom";
 import { B1NormalTextTitle, NftAvatar } from "../common/common.styles";
 
 interface CollectionItemProps {
@@ -14,13 +14,14 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
       if (item.image.includes("https://")) return item.image;
       return `${configs.DEPLOY_URL}${item.image}`;
     }
-      return `${configs.DEPLOY_URL}/content/collection/puml.png`;
-  }
+    return `${configs.DEPLOY_URL}/content/collection/puml.png`;
+  };
 
   const collectionCreatorImgUrl = () => {
-    if(item.creator && item.creator.avatar) return `${configs.DEPLOY_URL}${item.creator.avatar}`;
-    return '';
-  }
+    if (item.creator && item.creator.avatar)
+      return `${configs.DEPLOY_URL}${item.creator.avatar}`;
+    return "";
+  };
 
   const pushLink = () => {
     if (item.collections && item.creator) {
@@ -28,16 +29,24 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
     } else {
       history.push(`/collections/${item._id}`);
     }
-  }
+  };
 
   return (
     <div className="mx-3 collection-item" onClick={() => pushLink()}>
-      <div className="collection-item-bg pos-relative" style={{backgroundImage: `url("${collectionImgUrl()}")`}}>
-          {!collectionImgUrl() ? <div className="no-thumbnail"></div> : '' }
-          <NftAvatar imagePath={collectionCreatorImgUrl()} className="nft-avatar"></NftAvatar>
+      <div
+        className="collection-item-bg pos-relative"
+        style={{ backgroundImage: `url("${collectionImgUrl()}")` }}
+      >
+        {!collectionImgUrl() ? <div className="no-thumbnail"></div> : ""}
+        <NftAvatar
+          imagePath={collectionCreatorImgUrl()}
+          className="nft-avatar"
+        ></NftAvatar>
       </div>
       <div className="collection-item-gray d-flex flex-column align-items-center pt-1 pb-2">
-        <B1NormalTextTitle className="mt-4 text-center title pt-2">{item.name}</B1NormalTextTitle>
+        <B1NormalTextTitle className="mt-4 text-center title pt-2">
+          {item.name}
+        </B1NormalTextTitle>
         {/* <SubDescription className="mt-1 text-center sub-title pt-2 pb-2 font-size-sm" style={{minHeight: 35}}>{item.description}</SubDescription> */}
       </div>
     </div>
