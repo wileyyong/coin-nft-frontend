@@ -69,7 +69,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({
               if (setPreview) {
                 setPreview(imgURL);
               }
-              setFile(imgURL);
+              setFile({
+                url: imgURL,
+                type: file.name.split(".").pop().toLowerCase()
+              });
             }
           })
           .catch(function (error) {
@@ -100,7 +103,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({
             const mediaURL =
               configs.PINATA_GATEWAY + "/ipfs/" + response.data.IpfsHash;
 
-            setFile(mediaURL);
+            setFile({
+              url: mediaURL,
+              type: file.name.split(".").pop().toLowerCase()
+            });
           }
         })
         .catch(function (error) {

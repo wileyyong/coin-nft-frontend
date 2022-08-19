@@ -4,7 +4,7 @@ import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import { B1NormalTextTitle, BigTitle } from "../common/common.styles";
 import FileUploader from "../common/uploader/FileUploader";
 import configs from "configs";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 interface CreateCollectionModalProps {
   handleClose?: any;
@@ -23,7 +23,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
     short: "",
     description: "",
     symbol: "",
-    name: "",
+    name: ""
   });
 
   const handleSubmit = (e: any) => {
@@ -31,7 +31,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
     e.stopPropagation();
     const form = e.currentTarget;
     if (form.checkValidity() !== false) {
-      if(!collection.image) {
+      if (!collection.image) {
         toast.warning("No Image File!");
         NotificationManager.error("No Image File!", "Error");
         return;
@@ -44,8 +44,8 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
   const handleChange = (e: any) => {
     let fieldName = e.target.name;
     let fleldVal = e.target.value;
-    setCollection({...collection, [fieldName]: fleldVal});
-  }
+    setCollection({ ...collection, [fieldName]: fleldVal });
+  };
 
   return (
     <Modal show={show} onHide={handleClose} className="create-collection-modal">
@@ -61,16 +61,15 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
               <FileUploader
                 title="We recommend an image of at least 400x400. Max 30MB. Gifs work too."
                 accept={configs.IMG_FILE_ACCEPT}
-                setFile={(e: any) => {
-                  setCollection({ ...collection, image: e });
+                setFile={(file: any) => {
+                  setCollection({ ...collection, image: file ? file.url : "" });
                 }}
               ></FileUploader>
               <Form.Row className="mt-4">
                 <Form.Group as={Col} md="12">
                   <Form.Label>
                     <BigTitle>
-                      Display Name{" "}
-                      <span className="text-gray">(Required)</span>
+                      Display Name <span className="text-gray">(Required)</span>
                     </BigTitle>
                   </Form.Label>
                   <Form.Control
@@ -78,7 +77,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                     type="text"
                     placeholder="Enter collection name"
                     name="name"
-                    onChange={(e)=>handleChange(e)}
+                    onChange={(e) => handleChange(e)}
                   />
                   <Form.Control.Feedback type="invalid">
                     Please input valid name
@@ -92,8 +91,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                 <Form.Group as={Col} md="12">
                   <Form.Label>
                     <BigTitle>
-                      Symbol{" "}
-                      <span className="text-gray">(Required)</span>
+                      Symbol <span className="text-gray">(Required)</span>
                     </BigTitle>
                   </Form.Label>
                   <Form.Control
@@ -101,7 +99,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                     type="text"
                     placeholder="Enter collection symbol"
                     name="symbol"
-                    onChange={(e)=>handleChange(e)}
+                    onChange={(e) => handleChange(e)}
                   />
                   <Form.Control.Feedback type="invalid">
                     Please input valid symbol
@@ -112,15 +110,14 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                 <Form.Group as={Col} md="12">
                   <Form.Label>
                     <BigTitle>
-                      Description{" "}
-                      <span className="text-gray">(Optional)</span>
+                      Description <span className="text-gray">(Optional)</span>
                     </BigTitle>
                   </Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Spread some words about your collection"
                     name="description"
-                    onChange={(e)=>handleChange(e)}
+                    onChange={(e) => handleChange(e)}
                   />
                 </Form.Group>
               </Form.Row>
@@ -133,7 +130,7 @@ const CreateCollectionModal: React.FC<CreateCollectionModalProps> = ({
                     type="text"
                     placeholder="Enter short url"
                     name="short"
-                    onChange={(e)=>handleChange(e)}
+                    onChange={(e) => handleChange(e)}
                   />
                   <B1NormalTextTitle className="mt-2 text-gray">
                     Will be used as public URL
