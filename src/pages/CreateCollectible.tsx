@@ -221,12 +221,11 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     }
 
     setIsLoading(true);
-    let { success, contractAddress } = await SmartContract.createCollection(
-      collection.name,
-      collection.symbol
-    );
-    // console.log("contractAddress", contractAddress)
-    // console.log("engineAddress", engineAddress)
+    let { success, contractAddress, engineAddress, stakeAddress } =
+      await SmartContract.createCollection(collection.name, collection.symbol);
+    // console.log("contractAddress", contractAddress);
+    // console.log("engineAddress", engineAddress);
+    // console.log("stakeAddress", stakeAddress);
     if (contractAddress === "") {
       window.location.reload();
     }
