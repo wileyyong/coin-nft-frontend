@@ -430,10 +430,10 @@ const Stakes: React.FC<StakeProps> = () => {
           startTime: stakeValue.userLastUpdateTime
         });
         setFeeCollect(tradingFee);
-        setLastCollect(stakeValue.userLastCollect);
+        setLastCollect(stakeValue.userLastCollect / 1e18);
         const collected = await SmartContract.collectStored(tradingFee);
         setClaimCollect(collected / 1e18);
-        setCollectSum((collected + stakeValue.userRewardStored) / 1e18);
+        setCollectSum(collected / 1e18 + stakeValue.userRewardStored / 1e18);
       }
     };
     getCollect();
@@ -586,7 +586,7 @@ const Stakes: React.FC<StakeProps> = () => {
             <div className="valupap__key">Last collected</div>
             <div className="valupap__val">
               <span>
-                {lastCollect} <b>PUMLx</b>
+                {lastCollect.toFixed(5)} <b>PUMLx</b>
               </span>
               <i>(${getDollarPrice(lastCollect)})</i>
             </div>
@@ -595,7 +595,7 @@ const Stakes: React.FC<StakeProps> = () => {
             <div className="valupap__key">Collected to date:</div>
             <div className="valupap__val">
               <span>
-                {collectSum.toFixed(2)} <b>PUMLx</b>
+                {collectSum.toFixed(5)} <b>PUMLx</b>
               </span>
               <i>(${getDollarPrice(collectSum)})</i>
             </div>
