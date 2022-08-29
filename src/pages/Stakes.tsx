@@ -227,7 +227,7 @@ const Stakes: React.FC<StakeProps> = () => {
     try {
       setIsLoading(true);
       let stakeResult: any;
-      stakeResult = await SmartContract.stakeNFT(ids, collect, feeCollect);
+      stakeResult = await SmartContract.stakeNFT(ids, feeCollect);
       if (stakeResult.success) {
         const result = await NftController.stakeToken({
           chainIds: ids,
@@ -305,7 +305,7 @@ const Stakes: React.FC<StakeProps> = () => {
       });
       if (approveResult.success) {
         let stakeResult: any;
-        stakeResult = await SmartContract.withdrawNFT(ids, collect, feeCollect);
+        stakeResult = await SmartContract.withdrawNFT(ids, feeCollect);
         if (stakeResult.success) {
           await NftController.stakeToken({
             chainIds: ids,
@@ -340,11 +340,7 @@ const Stakes: React.FC<StakeProps> = () => {
       setIsLoading(true);
 
       // const transferResult = await SmartContract.transferToken(configs.MAIN_ACCOUNT, stake);
-      const transferResult = await SmartContract.stakePuml(
-        stake,
-        collect,
-        feeCollect
-      );
+      const transferResult = await SmartContract.stakePuml(stake, feeCollect);
       if (transferResult.success && transferResult.transactionHash) {
         // const stakeResult = await NftController.stakePuml(
         //   {
@@ -391,7 +387,6 @@ const Stakes: React.FC<StakeProps> = () => {
       // if (transferResult.success && transferResult.transactionHash) {
       const unstakeResult = await SmartContract.withdrawPuml(
         unstake,
-        collect,
         feeCollect
       );
       if (unstakeResult.success && unstakeResult.transactionHash) {
@@ -417,18 +412,8 @@ const Stakes: React.FC<StakeProps> = () => {
     }
   };
 
-  const getPumlTransFee = async (startTime: number) => {
-    if (startTime > 0) {
-      const trFee = await NftController.getPumlTransFee({
-        startTime: startTime
-      });
-      return trFee.sum * 0.37;
-    }
-    return 0;
-  };
-
   const stakeData = async () => {
-    const data = await SmartContract.getStakeData();
+    const data = await SmartContract.getUserData();
     if (data && data.length > 0) {
       setStakeValue(data);
     }
@@ -436,53 +421,25 @@ const Stakes: React.FC<StakeProps> = () => {
 
   useEffect(() => {
     const getCollect = async () => {
-      let collect: number = 0;
-      let claimCollect: number = 0;
       if (stakeValue && Object.keys(stakeValue).length > 0) {
+        console.log(stakeValue);
         if (stakeValue.userLastUpdateTime === 0) return;
 
-        const { collects } = await NftController.getPumlFeeCollect({});
-
-        let lastCollect: number = 0;
-        let collectSum: number = 0;
-        if (collects && collects.length > 0) {
-          lastCollect = collects[0].collects;
-          for (let collect of collects) {
-            collectSum += collect.collects;
-          }
-        }
-
-        claimCollect += parseFloat(stakeValue.userFeewardStored) / 1e18;
-
-        if (stakeValue.balances > 0 && stakeValue.totalBalances > 0) {
-          const startTime: number = stakeValue.userLastUpdateTimeFeeward;
-          const transFee: number = await getPumlTransFee(startTime);
-          if (!isNaN(transFee)) {
-            const feeCollect: number =
-              (transFee * stakeValue.balances) / stakeValue.totalBalances;
-            setFeeCollect(feeCollect);
-            claimCollect += feeCollect;
-          }
-        }
-
-        setClaimCollect(claimCollect);
-        setLastCollect(lastCollect);
-        setCollectSum(collectSum);
-
-        collect =
-          ((stakeValue.lastUpdateTime -
-            parseFloat(stakeValue.userLastUpdateTime)) *
-            configs.REWARD_RATE *
-            (parseFloat(stakeValue.balances) +
-              parseFloat(stakeValue.balancesNFT))) /
-          86440;
-        if (!isNaN(collect)) setCollect(collect);
+        const { tradingFee } = await NftController.getPumlTradingFee({
+          user: EthUtil.getAddress(),
+          startTime: stakeValue.userLastUpdateTime
+        });
+        setFeeCollect(tradingFee);
+        setLastCollect(stakeValue.userLastCollect);
+        const collected = await SmartContract.collectStored(tradingFee);
+        setClaimCollect(collected / 1e18);
+        setCollectSum((collected + stakeValue.userRewardStored) / 1e18);
       }
     };
     getCollect();
   }, [stakeValue]);
 
-  const pumlFeeCollect = async () => {
+  const rewardCollect = async () => {
     if (claims === 0) return;
 
     if (claims > claimCollect) {
@@ -497,25 +454,27 @@ const Stakes: React.FC<StakeProps> = () => {
 
     setIsLoading(true);
     try {
-      const transResult = await SmartContract.pumlFeeCollect(
-        feeCollect,
-        claims
-      );
+      const transResult = await SmartContract.collect(claims, feeCollect);
       if (transResult.success && transResult.transactionHash) {
-        const result = await NftController.pumlFeeCollect({
-          collects: claims
-        });
-        if (result.success) {
-          toast.success("Successfully collected.");
-          NotificationManager.success("Successfully collected.", "Success");
-          setClaims(0);
-          stakeData();
-          setIsLoading(false);
-        } else {
-          toast.warning("Claim Collect Failed!");
-          NotificationManager.error("Claim Collect Failed!", "Error");
-          setIsLoading(false);
-        }
+        // const result = await NftController.pumlFeeCollect({
+        //   collects: claims
+        // });
+        // if (result.success) {
+        //   toast.success("Successfully collected.");
+        //   NotificationManager.success("Successfully collected.", "Success");
+        //   setClaims(0);
+        //   stakeData();
+        //   setIsLoading(false);
+        // } else {
+        //   toast.warning("Claim Collect Failed!");
+        //   NotificationManager.error("Claim Collect Failed!", "Error");
+        //   setIsLoading(false);
+        // }
+        toast.success("Successfully collected.");
+        NotificationManager.success("Successfully collected.", "Success");
+        setClaims(0);
+        stakeData();
+        setIsLoading(false);
       } else {
         toast.warning("Claim Collect Failed!");
         NotificationManager.error("Claim Collect Failed!", "Error");
@@ -615,7 +574,7 @@ const Stakes: React.FC<StakeProps> = () => {
               <button
                 disabled={claims === 0 ? true : false}
                 className="btn btn-primary"
-                onClick={pumlFeeCollect}
+                onClick={rewardCollect}
               >
                 <div className="d-flex flex-row align-items-center">
                   <span>Collect</span>

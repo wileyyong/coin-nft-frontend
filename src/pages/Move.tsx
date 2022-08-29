@@ -1,37 +1,43 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import Layout from "components/Layout";
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from "react-bootstrap/Carousel";
 import LoadingSpinner from "components/common/LoadingSpinner";
-import MoveModal from 'components/token/MoveModal';
-import MoveSuccessModal from 'components/token/MoveSuccessModal';
-import PumlScanModal from 'components/user/PumlScanModal';
+import MoveModal from "components/token/MoveModal";
+import MoveSuccessModal from "components/token/MoveSuccessModal";
+import PumlScanModal from "components/user/PumlScanModal";
 import { NotificationManager } from "react-notifications";
-import { toast } from 'react-toastify';
-import { cryptMD5 } from 'service/number';
+import { toast } from "react-toastify";
+import { cryptMD5 } from "service/number";
 import { Button, Image } from "react-bootstrap";
 import { switchNetwork } from "store/User/user.slice";
-import EthUtil from 'ethereum/EthUtil';
+import EthUtil from "ethereum/EthUtil";
 import SmartContract from "ethereum/Contract";
-import configs from 'configs';
+import configs from "configs";
 import NftController from "controller/NftController";
 import UserController from "controller/UserController";
 import { useAppSelector } from "store/hooks";
-import { getWalletAddress, isAuthenticated, getMyInfo } from "store/User/user.selector";
-import { setInterval, clearInterval } from 'timers';
+import {
+  getWalletAddress,
+  isAuthenticated,
+  getMyInfo
+} from "store/User/user.selector";
+import { setInterval, clearInterval } from "timers";
 
 import puml from "assets/imgs/puml2.png";
 import puml1 from "assets/imgs/puml1.png";
 import watchIcon from "assets/imgs/watch.png";
 import nostakeIcon from "assets/imgs/nostake.png";
 
-interface MoveProps { }
+interface MoveProps {}
 
 const MoveToEarn = (props: any) => {
   useEffect(() => {
-    if (props.isAuth && props.walletAddress){
+    if (props.isAuth && props.walletAddress) {
       const qrConnect = async () => {
-        const connect = await UserController.qrConnect({ethAddress: props.walletAddress});
+        const connect = await UserController.qrConnect({
+          ethAddress: props.walletAddress
+        });
         if (connect.success) {
           if (connect.user && connect.user.userId) {
             props.handleGetDailySteps(parseFloat(connect.user.userId));
@@ -39,14 +45,15 @@ const MoveToEarn = (props: any) => {
           props.handleIsConnect(true);
           props.handleLoadNft();
         }
-      }
+      };
       qrConnect();
-      const cons = setInterval(qrConnect, 3000)
+      const cons = setInterval(qrConnect, 3000);
       return () => {
         clearInterval(cons);
-      }
+      };
     }
-  }, [])
+    props.handleLoadNft();
+  }, []);
   return (
     <>
       <p className="intro-type intro-type--italy">Move to Earn</p>
@@ -61,12 +68,10 @@ const MoveToEarn = (props: any) => {
         </Button>
       </div>
     </>
-  )
+  );
 };
 
-
 const Move: React.FC<MoveProps> = () => {
-
   const walletAddress = useAppSelector(getWalletAddress);
   const isAuth = useAppSelector(isAuthenticated);
 
@@ -88,15 +93,14 @@ const Move: React.FC<MoveProps> = () => {
   const [showScanModal, setShowScanModal] = useState(false);
   const [steps, setSteps] = useState(0);
 
-
-  const getWidth = () => window.innerWidth 
-  || document.documentElement.clientWidth 
-  || document.body.clientWidth;
+  const getWidth = () =>
+    window.innerWidth ||
+    document.documentElement.clientWidth ||
+    document.body.clientWidth;
 
   let [width, setWidth] = useState(getWidth());
 
   useEffect(() => {
-
     let timeoutId: any = null;
     const resizeListener = () => {
       // prevent execution of previous setTimeout
@@ -105,34 +109,36 @@ const Move: React.FC<MoveProps> = () => {
       timeoutId = setTimeout(() => setWidth(getWidth()), 150);
     };
     // set resize listener
-    window.addEventListener('resize', resizeListener);
+    window.addEventListener("resize", resizeListener);
 
     // clean up function
     return () => {
       // remove resize listener
-      window.removeEventListener('resize', resizeListener);
-    }
+      window.removeEventListener("resize", resizeListener);
+    };
   }, []);
 
   useEffect(() => {
-    if (isAuth && walletAddress){
+    if (isAuth && walletAddress) {
       const switchNet = async () => {
         const networkID = EthUtil.getNetwork();
         if (networkID && networkID !== configs.ONBOARD_NETWORK_ID) {
-            await switchNetwork(configs.ONBOARD_NETWORK_ID);
-            window.location.reload();
+          await switchNetwork(configs.ONBOARD_NETWORK_ID);
+          window.location.reload();
         }
-      }
+      };
       switchNet();
     } else {
       setIsConnectPuml(false);
     }
-  }, [isAuth, walletAddress]); 
+  }, [isAuth, walletAddress]);
 
-  window.onload = function() {
-    if (isAuth && walletAddress){
+  window.onload = function () {
+    if (isAuth && walletAddress) {
       const qrConnect = async () => {
-        const connect = await UserController.qrConnect({ethAddress: walletAddress});
+        const connect = await UserController.qrConnect({
+          ethAddress: walletAddress
+        });
         if (connect.success) {
           if (connect.user && connect.user.userId) {
             dailySteps(parseFloat(connect.user.userId));
@@ -141,34 +147,44 @@ const Move: React.FC<MoveProps> = () => {
           loadNft();
           clearInterval(cons);
         }
-      }
+      };
       qrConnect();
       const cons = setInterval(qrConnect, 3000);
     }
-  }
+  };
 
   const dailySteps = async (userId: number) => {
-    const timeDate: string = 
-      new Date().getFullYear() + "-" + 
-      ("0" + (new Date().getMonth() + 1)).substr(-2) + "-" +
-      ("0" + new Date().getDate()).substr(-2) + "'T'" + 
-      ("0" + new Date().getHours()).substr(-2) + ":" +
-      ("0" + new Date().getMinutes()).substr(-2) + ":" +
-      ("0" + new Date().getSeconds()).substr(-2) + ".SSSZ";
+    const timeDate: string =
+      new Date().getFullYear() +
+      "-" +
+      ("0" + (new Date().getMonth() + 1)).substr(-2) +
+      "-" +
+      ("0" + new Date().getDate()).substr(-2) +
+      "'T'" +
+      ("0" + new Date().getHours()).substr(-2) +
+      ":" +
+      ("0" + new Date().getMinutes()).substr(-2) +
+      ":" +
+      ("0" + new Date().getSeconds()).substr(-2) +
+      ".SSSZ";
     const getDailySteps = await UserController.getDailySteps({
       pumlUserId: userId,
       timeUpdate: timeDate,
-      updateKey: cryptMD5(timeDate + userId.toString() + "K0YHykvCmo3qlVd1jBFNU7jRdXREuDKo9d7OH5gzIyfF5JyRzCzdkv2QoOm8AKvB")
+      updateKey: cryptMD5(
+        timeDate +
+          userId.toString() +
+          "K0YHykvCmo3qlVd1jBFNU7jRdXREuDKo9d7OH5gzIyfF5JyRzCzdkv2QoOm8AKvB"
+      )
     });
     if (getDailySteps && getDailySteps.nSteps) {
       setSteps(getDailySteps.nSteps);
     }
-  }
+  };
 
   const loadNft = async () => {
     let nftstaked: any[] = [];
     let status: number = 0;
-    
+
     const { tokens } = await NftController.getApprovedList();
     if (tokens.length > 0) status = 1;
 
@@ -176,7 +192,7 @@ const Move: React.FC<MoveProps> = () => {
       if (token.stake !== null) {
         if (token.stake) {
           nftstaked.push(token);
-        } 
+        }
       }
     }
     if (nftstaked.length > 0) status = 2;
@@ -184,20 +200,21 @@ const Move: React.FC<MoveProps> = () => {
     setNftstaked(nftstaked);
     setStatus(status);
     stakeData();
-  }
+  };
 
   const stakeData = async () => {
-    const data = await SmartContract.getStakeData();
+    const data = await SmartContract.getUserData();
     console.log("stakedata", data);
     if (data && Object.keys(data).length > 0) {
       if (data.userLastUpdateTime > 0) {
-      const leftHours = 24 - (data.lastUpdateTime - data.userLastUpdateTime) / 3600;
+        const leftHours =
+          24 - (data.lastUpdateTime - data.userLastUpdateTime) / 3600;
         if (leftHours > 0) setLeftHours(Math.ceil(leftHours));
-      }  
+      }
       setRewardStored(data.userRewardStored / 1e18);
       setStakeValue(data);
     }
-  }
+  };
 
   useEffect(() => {
     if (width > 1600) {
@@ -222,12 +239,12 @@ const Move: React.FC<MoveProps> = () => {
       let groups = [];
       var i = 0;
       while (i < nfts.length) {
-        groups.push(nfts.slice(i, i += shows));
+        groups.push(nfts.slice(i, (i += shows)));
       }
       return groups;
     }
     return [];
-  }
+  };
 
   const handleChange = (e: any) => {
     if (e.target.value < 0) return;
@@ -235,7 +252,7 @@ const Move: React.FC<MoveProps> = () => {
   };
 
   const getDollarPrice = (value: any) => {
-    let dollarPrice:any = 0;
+    let dollarPrice: any = 0;
     if (value) {
       dollarPrice = (value * 0.05).toFixed(2);
     }
@@ -257,30 +274,37 @@ const Move: React.FC<MoveProps> = () => {
       }
       if (claims > stored) {
         toast.warning("Please claim less than the reward stored");
-        NotificationManager.error("Please claim less than the reward stored", "Error");
+        NotificationManager.error(
+          "Please claim less than the reward stored",
+          "Error"
+        );
         setClaims(0);
         return;
       }
-  
+
       setIsLoading(true);
       try {
-        const rewardResult = await SmartContract.getReward(claims, collect, feeCollect);
+        const rewardResult = await SmartContract.claim(claims, feeCollect);
         if (rewardResult.success && rewardResult.transactionHash) {
-          const transferResult = await NftController.rewardPuml({
-            amount: claims,
-            staker: EthUtil.getAddress()
-          });
-          if (transferResult.success && transferResult.transactionHash) {
-            setClaims(0);
-            stakeData();
-            setIsLoading(false);
-            setShowMoveSuccessModal(true);
-  
-          } else {
-            toast.warning("Collect Failed!");
-            NotificationManager.error("Collect Failed!", "Error");
-            setIsLoading(false);
-          }
+          // const transferResult = await NftController.rewardPuml({
+          //   amount: claims,
+          //   staker: EthUtil.getAddress()
+          // });
+          // if (transferResult.success && transferResult.transactionHash) {
+          setClaims(0);
+          stakeData();
+          setIsLoading(false);
+          setShowMoveSuccessModal(true);
+
+          // } else {
+          //   toast.warning("Collect Failed!");
+          //   NotificationManager.error("Collect Failed!", "Error");
+          //   setIsLoading(false);
+          // }
+        } else {
+          toast.warning("Claim Failed!");
+          NotificationManager.error("Claim Failed!", "Error");
+          setIsLoading(false);
         }
       } catch (err) {
         toast.warning("Failed!");
@@ -288,40 +312,25 @@ const Move: React.FC<MoveProps> = () => {
         setIsLoading(false);
       }
     }
-  }
-
-  const getPumlTransFee = async (startTime: number) => {
-
-    if (startTime > 0) {
-      const trFee = await NftController.getPumlTransFee({
-        startTime: startTime
-      });
-      return trFee.sum * 0.37;
-    }
-    return 0;
-  }
+  };
 
   useEffect(() => {
     const getCollect = async () => {
-      let collect: number = 0;
       if (stakeValue && Object.keys(stakeValue).length > 0) {
         if (stakeValue.userLastUpdateTime === 0) return;
 
-        collect = (stakeValue.lastUpdateTime - parseFloat(stakeValue.userLastUpdateTime)) * configs.REWARD_RATE * (parseFloat(stakeValue.balances) + parseFloat(stakeValue.balancesNFT)) / 86440;
-        if (!isNaN(collect)) setCollect(collect);
+        const { tradingFee } = await NftController.getPumlTradingFee({
+          user: EthUtil.getAddress(),
+          startTime: stakeValue.userLastUpdateTime
+        });
+        setFeeCollect(tradingFee);
 
-        if (stakeValue.balances > 0 && stakeValue.totalBalances > 0) {
-          const startTime: number = stakeValue.userLastUpdateTimeFeeward;
-          const transFee: number = await getPumlTransFee(startTime);
-          if (!isNaN(transFee)) { 
-            const feeCollect: number = transFee * stakeValue.balances / stakeValue.totalBalances;
-            setFeeCollect(feeCollect);
-          }
-        }
+        const collected = await SmartContract.collectStored(tradingFee);
+        setCollect(collected / 1e18);
       }
-    }
+    };
     getCollect();
-  }, [stakeValue])
+  }, [stakeValue]);
 
   const connectPuml = () => {
     if (isAuth && walletAddress) {
@@ -330,7 +339,7 @@ const Move: React.FC<MoveProps> = () => {
       toast.warning("Please connect metamask wallet.");
       NotificationManager.error("Please connect metamask wallet.", "Error");
     }
-  }  
+  };
 
   return (
     <Layout className="move-container">
@@ -349,15 +358,15 @@ const Move: React.FC<MoveProps> = () => {
                 <div className="inp__input inp__input--prex col-md-8">
                   <img className="mr-3" src={puml1} width={42} alt="ethIcon" />
                   <input
-                      type="number"
-                      name="claims"
-                      value={claims}
-                      onChange={(e) => handleChange(e)}
+                    type="number"
+                    name="claims"
+                    value={claims}
+                    onChange={(e) => handleChange(e)}
                   />
                   <i className="ml-3">(${getDollarPrice(claims)})</i>
                 </div>
                 <div className="inp__btn col-md-4 mt-1">
-                  <button 
+                  <button
                     disabled={claims === 0 ? true : false}
                     className="btn btn-primary"
                     onClick={getClaim}
@@ -368,17 +377,17 @@ const Move: React.FC<MoveProps> = () => {
               </div>
               <div className="time">
                 <span className="time__left">{leftHours} hours &nbsp;</span>
-                remaining  to claim today’s steps.
+                remaining to claim today’s steps.
               </div>
             </>
           ) : (
             <MoveToEarn
-              isAuth = {isAuth}
-              walletAddress = {walletAddress} 
-              handleIsConnect = {setIsConnectPuml}
-              handleLoadNft = {loadNft}
-              handleConnectPuml = {connectPuml}
-              handleGetDailySteps = {dailySteps}
+              isAuth={isAuth}
+              walletAddress={walletAddress}
+              handleIsConnect={setIsConnectPuml}
+              handleLoadNft={loadNft}
+              handleConnectPuml={connectPuml}
+              handleGetDailySteps={dailySteps}
             />
           )}
         </div>
@@ -390,61 +399,64 @@ const Move: React.FC<MoveProps> = () => {
       {isConnectPuml ? (
         <div className="moves">
           <div className="moves__title">
-            <div className="item-title">Staked  NFT’s ({nftstaked.length})</div>
-            <div className="item-desc mt-3">
-              Earning 10 PUMLx per day
-            </div>
+            <div className="item-title">Staked NFT’s ({nftstaked.length})</div>
+            <div className="item-desc mt-3">Earning 10 PUMLx per day</div>
           </div>
           {nftstaked && nftstaked.length > 0 ? (
             <>
               <Carousel interval={null} className="w-100">
-                {getGroup(nftstaked) && getGroup(nftstaked).length > 0 && getGroup(nftstaked).map((group, idx) => (
-                  <Carousel.Item key={idx}>
-                    <div className="w-100 d-flex">
-                      {group.map((nft: any, index: number) => (
-                        <div 
-                          className="myitem-card text-center p-2" 
-                          key={index} 
-                          style={{width: `${100 / shows}%`}}
-                        >
-                          <div className="slide__item">
-                            <div style={{ backgroundImage: `url(${nft.media})` }} className="card-image">
-                            </div>
-                            <div className="card-info pt-3 pb-4">
-                              <div className="card-title">{nft.name}</div>
+                {getGroup(nftstaked) &&
+                  getGroup(nftstaked).length > 0 &&
+                  getGroup(nftstaked).map((group, idx) => (
+                    <Carousel.Item key={idx}>
+                      <div className="w-100 d-flex">
+                        {group.map((nft: any, index: number) => (
+                          <div
+                            className="myitem-card text-center p-2"
+                            key={index}
+                            style={{ width: `${100 / shows}%` }}
+                          >
+                            <div className="slide__item">
+                              <div
+                                style={{ backgroundImage: `url(${nft.media})` }}
+                                className="card-image"
+                              ></div>
+                              <div className="card-info pt-3 pb-4">
+                                <div className="card-title">{nft.name}</div>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  </Carousel.Item>
-                ))}
+                        ))}
+                      </div>
+                    </Carousel.Item>
+                  ))}
               </Carousel>
             </>
           ) : (
             <div className="moves__noitem mt-3">
               <Image src={nostakeIcon} />
-              <div className="moves__normal p-3">
-                You  have no staked NFT’s
-              </div>
+              <div className="moves__normal p-3">You have no staked NFT’s</div>
             </div>
           )}
         </div>
-      ): (
+      ) : (
         <div className="move-intro d-flex">
           <div className="col-md-6">
-            <Image className="move-intro__img" src={watchIcon} alt="mask"></Image>
+            <Image
+              className="move-intro__img"
+              src={watchIcon}
+              alt="mask"
+            ></Image>
           </div>
           <div className="move-intro__desc col-md-6">
             <div className="move-sen">
-              <div className="move-sen__title">
-                Get Started
-              </div>
-              <div className="move-sen__subtitle">
-                How does PUMLx work? 
-              </div>
+              <div className="move-sen__title">Get Started</div>
+              <div className="move-sen__subtitle">How does PUMLx work?</div>
               <div className="move-sen__description">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Blandit est ac nulla faucibus proin nisl augue. Vestibulum sem scelerisque suspendisse praesent pretium non. At mattis bibendum ut sed praesent. 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Blandit
+                est ac nulla faucibus proin nisl augue. Vestibulum sem
+                scelerisque suspendisse praesent pretium non. At mattis bibendum
+                ut sed praesent.
               </div>
               <div className="step-div">
                 <ul className="move-sen__step">
@@ -481,7 +493,7 @@ const Move: React.FC<MoveProps> = () => {
         }}
         wallet={walletAddress}
       ></PumlScanModal>
-    </Layout >
+    </Layout>
   );
 };
 

@@ -378,19 +378,14 @@ class Contract {
     return { success: false };
   }
 
-  async stakePuml(amount: number, collect: number, feeCollect: number) {
+  async stakePuml(amount: number, feeward: number) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
       );
       const result = await stakeContract.methods
-        .stake(
-          amount,
-          web3.utils.toWei("" + collect),
-          web3.utils.toWei("" + feeCollect),
-          web3.utils.toWei("" + amount)
-        )
+        .stake(amount, web3.utils.toWei("" + amount), feeward)
         .send({
           from: EthUtil.getAddress()
         });
@@ -402,19 +397,14 @@ class Contract {
     return { success: false, error: "Failed to stake puml!" };
   }
 
-  async withdrawPuml(amount: number, collect: number, feeCollect: number) {
+  async withdrawPuml(amount: number, feeward: number) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
       );
       const result = await stakeContract.methods
-        .withdraw(
-          amount,
-          web3.utils.toWei("" + collect),
-          web3.utils.toWei("" + feeCollect),
-          web3.utils.toWei("" + amount)
-        )
+        .withdraw(amount, web3.utils.toWei("" + amount), feeward)
         .send({
           from: EthUtil.getAddress()
         });
@@ -447,7 +437,7 @@ class Contract {
     return { success: false, error: "Failed to approve stake NFT directly!" };
   }
 
-  async stakeNFT(tokenIds: any, collect: any, feeCollect: any) {
+  async stakeNFT(tokenIds: any, feeward: any) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         engineABI,
@@ -460,8 +450,7 @@ class Contract {
             PUML_721_ADDRESS,
             configs.MAIN_ACCOUNT,
             tokenIds[key],
-            web3.utils.toWei("" + collect),
-            web3.utils.toWei("" + feeCollect)
+            feeward
           )
           .send({
             from: EthUtil.getAddress()
@@ -473,7 +462,7 @@ class Contract {
     return { success: false, error: "Failed to stake NFT directly!" };
   }
 
-  async withdrawNFT(tokenIds: any, collect: any, feeCollect: any) {
+  async withdrawNFT(tokenIds: any, feeward: any) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         engineABI,
@@ -486,8 +475,7 @@ class Contract {
             PUML_721_ADDRESS,
             configs.MAIN_ACCOUNT,
             tokenIds[key],
-            web3.utils.toWei("" + collect),
-            web3.utils.toWei("" + feeCollect)
+            feeward
           )
           .send({
             from: EthUtil.getAddress()
@@ -499,18 +487,14 @@ class Contract {
     return { success: false, error: "Failed to buy this item directly!" };
   }
 
-  async getReward(amount: number, collect: any, feeCollect: any) {
+  async claim(amount: number, feeward: number) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
       );
       const result = await stakeContract.methods
-        .getReward(
-          web3.utils.toWei("" + amount),
-          web3.utils.toWei("" + collect),
-          web3.utils.toWei("" + feeCollect)
-        )
+        .claim(web3.utils.toWei("" + amount), feeward)
         .send({
           from: EthUtil.getAddress()
         });
@@ -522,32 +506,29 @@ class Contract {
     return { success: false, error: "Failed to buy this item directly!" };
   }
 
-  async getStakeData() {
+  async getUserData() {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
       );
-      const getRewardData = await stakeContract.methods
-        .getRewardData(EthUtil.getAddress())
+      const getUserData = await stakeContract.methods
+        .getUserData(EthUtil.getAddress())
         .call();
 
-      return getRewardData;
+      return getUserData;
     }
     return [];
   }
 
-  async pumlFeeCollect(feeward: any, collects: any) {
+  async collect(amount: number, feeward: number) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
       );
       const result = await stakeContract.methods
-        .getCollect(
-          web3.utils.toWei("" + feeward),
-          web3.utils.toWei("" + collects)
-        )
+        .collect(web3.utils.toWei("" + amount), feeward)
         .send({
           from: EthUtil.getAddress()
         });
@@ -557,6 +538,21 @@ class Contract {
       }
     }
     return { success: false, error: "Failed to collect directly!" };
+  }
+
+  async collectStored(feeward: number) {
+    if (web3) {
+      const stakeContract = new web3.eth.Contract(
+        PUMLStakeABI,
+        configs.PUMLSTAKE_ADDRESS
+      );
+      const collectStored = await stakeContract.methods
+        .collectPerUser(EthUtil.getAddress(), feeward)
+        .call();
+
+      return collectStored;
+    }
+    return 0;
   }
 }
 
