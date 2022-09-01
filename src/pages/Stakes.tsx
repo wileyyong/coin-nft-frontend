@@ -335,29 +335,23 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const stakePumlx = async () => {
     if (stake === 0) return;
-
     try {
-      setIsLoading(true);
+      const { user } = await UserController.userStats(EthUtil.getAddress());
+      const pumlxApproved = user && user.pumlxApproved ? 1 : 0;
 
-      // const transferResult = await SmartContract.transferToken(configs.MAIN_ACCOUNT, stake);
-      const transferResult = await SmartContract.stakePuml(stake, feeCollect);
+      setIsLoading(true);
+      const transferResult = await SmartContract.stakePuml(
+        stake,
+        feeCollect,
+        pumlxApproved
+      );
       if (transferResult.success && transferResult.transactionHash) {
-        // const stakeResult = await NftController.stakePuml(
-        //   {
-        //     amount: stake,
-        //     collect: collect,
-        //     feeward: feeCollect,
-        //     staker: EthUtil.getAddress()
-        //   });
-        // if (stakeResult.success && stakeResult.transactionHash) {
         setStake(0);
         stakeData();
+        const result = await UserController.pumlxApproved(EthUtil.getAddress());
+        console.log(result);
         toast.success("Successfully staken.");
         NotificationManager.success("Successfully staken.", "Success");
-        // } else {
-        //   toast.warning("Failed");
-        //   NotificationManager.error("Failed!", "Error");
-        // }
       } else {
         toast.warning("Failed");
         NotificationManager.error("Failed!", "Error");
@@ -380,11 +374,6 @@ const Stakes: React.FC<StakeProps> = () => {
         return;
       }
 
-      // const transferResult = await NftController.unstakePuml({
-      //   amount: unstake,
-      //   staker: EthUtil.getAddress()
-      // });
-      // if (transferResult.success && transferResult.transactionHash) {
       const unstakeResult = await SmartContract.withdrawPuml(
         unstake,
         feeCollect
@@ -400,11 +389,6 @@ const Stakes: React.FC<StakeProps> = () => {
         NotificationManager.error("Failed!", "Error");
         setIsLoading(false);
       }
-      // } else {
-      //   toast.warning("Failed!");
-      //   NotificationManager.error("Failed!", "Error");
-      //   setIsLoading(false);
-      // }
     } catch (err) {
       toast.warning("Failed!");
       NotificationManager.error("Failed!", "Error");

@@ -5,6 +5,7 @@ import imgAvatar from "assets/imgs/avatar.png";
 
 import SmartContract from "ethereum/Contract";
 import OfferController from "controller/OfferController";
+import UserController from "controller/UserController";
 import React, { useEffect, useState, useRef, Fragment } from "react";
 import { Row, Col, Button, Container, Image } from "react-bootstrap";
 import { NotificationManager } from "react-notifications";
@@ -306,7 +307,17 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           var bidPrice = 0.000011;
           var bids = offer.bids;
           bidPrice += 0.000001 * bids.length;
-          result = await SmartContract.bid(token.chain_id, bidPrice, price);
+          const pumlxApproved = userInfo && userInfo.pumlxApproved ? 1 : 0;
+          result = await SmartContract.bid(
+            token.chain_id,
+            bidPrice,
+            price,
+            pumlxApproved
+          );
+          const approvedresult = await UserController.pumlxApproved(
+            EthUtil.getAddress()
+          );
+          console.log(approvedresult);
         } else {
           result = await SmartContract.bid(token.chain_id, price);
         }

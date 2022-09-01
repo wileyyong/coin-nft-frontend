@@ -294,12 +294,23 @@ class Contract {
     return null;
   }
 
-  async bid(tokenId: any, price: any, token?: any) {
+  async bid(tokenId: any, price: any, token?: any, pumlxApproved?: any) {
     const network = EthUtil.getNetwork();
     const ENGINE_721_ADDRESS = this.getEngine721Address(network);
     if (web3) {
       let auctionId = await this.getAuctionId(tokenId);
       let isPUML = token ? token : 0;
+      if (isPUML && !pumlxApproved) {
+        const pumlContract = new web3.eth.Contract(
+          iercABI,
+          configs.PUML20_ADDRESS
+        );
+        await pumlContract.methods
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 1000))
+          .send({
+            from: EthUtil.getAddress()
+          });
+      }
       if (auctionId !== null) {
         const engineContract = new web3.eth.Contract(
           engineABI,
@@ -378,8 +389,19 @@ class Contract {
     return { success: false };
   }
 
-  async stakePuml(amount: number, feeward: number) {
+  async stakePuml(amount: number, feeward: number, pumlxApproved: number) {
     if (web3) {
+      const pumlContract = new web3.eth.Contract(
+        iercABI,
+        configs.PUML20_ADDRESS
+      );
+      if (!pumlxApproved) {
+        await pumlContract.methods
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 1000))
+          .send({
+            from: EthUtil.getAddress()
+          });
+      }
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
@@ -387,8 +409,7 @@ class Contract {
       const result = await stakeContract.methods
         .stake(amount, web3.utils.toWei("" + amount), feeward)
         .send({
-          from: EthUtil.getAddress(),
-          gas: 130000
+          from: EthUtil.getAddress()
         });
 
       if (result.status === true) {
@@ -407,8 +428,7 @@ class Contract {
       const result = await stakeContract.methods
         .withdraw(amount, web3.utils.toWei("" + amount), feeward)
         .send({
-          from: EthUtil.getAddress(),
-          gas: 130000
+          from: EthUtil.getAddress()
         });
 
       if (result.status === true) {
