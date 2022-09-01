@@ -335,6 +335,10 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const stakePumlx = async () => {
     if (stake === 0) return;
+    if (stake > 1000) {
+      toast.warning("Max stake value is 1000");
+      return;
+    }
     try {
       const { user } = await UserController.userStats(EthUtil.getAddress());
       const pumlxApproved = user && user.pumlxApproved ? 1 : 0;
@@ -645,7 +649,7 @@ const Stakes: React.FC<StakeProps> = () => {
                   <button
                     className="btn btn-primary"
                     onClick={() => {
-                      setStake(pumlx);
+                      setStake(1000);
                     }}
                   >
                     <div className="d-flex flex-row align-items-center">
