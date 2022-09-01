@@ -387,7 +387,8 @@ class Contract {
       const result = await stakeContract.methods
         .stake(amount, web3.utils.toWei("" + amount), feeward)
         .send({
-          from: EthUtil.getAddress()
+          from: EthUtil.getAddress(),
+          gas: 130000
         });
 
       if (result.status === true) {
@@ -406,7 +407,8 @@ class Contract {
       const result = await stakeContract.methods
         .withdraw(amount, web3.utils.toWei("" + amount), feeward)
         .send({
-          from: EthUtil.getAddress()
+          from: EthUtil.getAddress(),
+          gas: 130000
         });
 
       if (result.status === true) {
