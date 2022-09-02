@@ -431,17 +431,19 @@ const Stakes: React.FC<StakeProps> = () => {
 
         const monthDiff = getMonthDifference(startDate, now);
         let rewardPerMonth = 0;
-        if (monthDiff === 0) {
-          rewardPerMonth =
-            configs.START_REWARD +
-            configs.START_PUMLX * configs.CHANGE_PER_PERIOD;
-        } else {
-          rewardPerMonth = configs.START_REWARD;
-          for (let i = 0; i < monthDiff; i++) {
-            rewardPerMonth +=
-              configs.START_PUMLX *
-              Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
-              configs.CHANGE_PER_PERIOD;
+        if (startDate.getTime() < now.getTime()) {
+          if (monthDiff === 0) {
+            rewardPerMonth =
+              configs.START_REWARD +
+              configs.START_PUMLX * configs.CHANGE_PER_PERIOD;
+          } else {
+            rewardPerMonth = configs.START_REWARD;
+            for (let i = 0; i < monthDiff; i++) {
+              rewardPerMonth +=
+                configs.START_PUMLX *
+                Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
+                configs.CHANGE_PER_PERIOD;
+            }
           }
         }
 
