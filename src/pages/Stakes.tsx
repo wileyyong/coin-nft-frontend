@@ -426,15 +426,32 @@ const Stakes: React.FC<StakeProps> = () => {
         if (stakeValue.totalBalancesNFT > 0) {
           collectRate += stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
         }
-        const balanceOfPumlx: any = await SmartContract.balanceOfPuml(
-          configs.PUMLSTAKE_ADDRESS
-        );
+        const now = new Date();
+        const startDate = new Date("2022-10-01");
+
+        const monthDiff = getMonthDifference(startDate, now);
+        let rewardPerMonth = 0;
+        if (monthDiff === 0) {
+          rewardPerMonth =
+            configs.START_REWARD +
+            configs.START_PUMLX * configs.CHANGE_PER_PERIOD;
+        } else {
+          rewardPerMonth = configs.START_REWARD;
+          for (let i = 0; i < monthDiff; i++) {
+            rewardPerMonth +=
+              configs.START_PUMLX *
+              Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
+              configs.CHANGE_PER_PERIOD;
+          }
+        }
+
+        console.log(rewardPerMonth);
+
         const collected =
-          (((collectRate * balanceOfPumlx.balance) / 2372500) *
-            6500 *
-            (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime)) /
-          86400;
-        setClaimCollect(collected / 1e18);
+          ((collectRate * rewardPerMonth) / 30 / 86400) *
+          (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime);
+
+        setClaimCollect(collected);
         setCollectSum(stakeValue.userRewardStored / 1e18);
       }
     };
@@ -487,6 +504,14 @@ const Stakes: React.FC<StakeProps> = () => {
       NotificationManager.error("Failed!", "Error");
       setIsLoading(false);
     }
+  };
+
+  const getMonthDifference = (startDate: Date, endDate: Date) => {
+    return (
+      endDate.getMonth() -
+      startDate.getMonth() +
+      12 * (endDate.getFullYear() - startDate.getFullYear())
+    );
   };
 
   return (

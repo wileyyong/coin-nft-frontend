@@ -71,7 +71,12 @@ const configs = {
   PINATA_API_KEY: "7ee8721f543f5901db86",
   PINATA_SECRET_API_KEY:
     "c2fb20820e03eee1578cfe2c32b9439c74315a898c6929f49c6b08be1d5fdaf5",
-  PINATA_GATEWAY: "https://puml.mypinata.cloud"
+  PINATA_GATEWAY: "https://puml.mypinata.cloud",
+
+  /* Stake initialize */
+  START_PUMLX: 100000000,
+  START_REWARD: 4109589.04,
+  CHANGE_PER_PERIOD: 0.041
 };
 
 export default configs;
