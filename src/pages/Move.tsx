@@ -325,7 +325,22 @@ const Move: React.FC<MoveProps> = () => {
         });
         setFeeCollect(tradingFee);
 
-        const collected = await SmartContract.collectStored(tradingFee);
+        let collectRate = tradingFee;
+        if (stakeValue.totalBalances > 0) {
+          collectRate += stakeValue.balances / stakeValue.totalBalances;
+        }
+        if (stakeValue.totalBalancesNFT > 0) {
+          collectRate += stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
+        }
+        const balanceOfPumlx: any = await SmartContract.balanceOfPuml(
+          configs.PUMLSTAKE_ADDRESS
+        );
+        const collected =
+          (((collectRate * balanceOfPumlx.balance) / 2372500) *
+            6500 *
+            (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime)) /
+          86400;
+
         setCollect(collected / 1e18);
       }
     };

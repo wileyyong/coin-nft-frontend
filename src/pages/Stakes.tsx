@@ -227,7 +227,7 @@ const Stakes: React.FC<StakeProps> = () => {
     try {
       setIsLoading(true);
       let stakeResult: any;
-      stakeResult = await SmartContract.stakeNFT(ids, feeCollect);
+      stakeResult = await SmartContract.stakeNFT(ids, claimCollect);
       if (stakeResult.success) {
         const result = await NftController.stakeToken({
           chainIds: ids,
@@ -305,7 +305,7 @@ const Stakes: React.FC<StakeProps> = () => {
       });
       if (approveResult.success) {
         let stakeResult: any;
-        stakeResult = await SmartContract.withdrawNFT(ids, feeCollect);
+        stakeResult = await SmartContract.withdrawNFT(ids, claimCollect);
         if (stakeResult.success) {
           await NftController.stakeToken({
             chainIds: ids,
@@ -346,7 +346,7 @@ const Stakes: React.FC<StakeProps> = () => {
       setIsLoading(true);
       const transferResult = await SmartContract.stakePuml(
         stake,
-        feeCollect,
+        claimCollect,
         pumlxApproved
       );
       if (transferResult.success && transferResult.transactionHash) {
@@ -380,7 +380,7 @@ const Stakes: React.FC<StakeProps> = () => {
 
       const unstakeResult = await SmartContract.withdrawPuml(
         unstake,
-        feeCollect
+        claimCollect
       );
       if (unstakeResult.success && unstakeResult.transactionHash) {
         setUnstake(0);
@@ -419,9 +419,23 @@ const Stakes: React.FC<StakeProps> = () => {
         });
         setFeeCollect(tradingFee);
         setLastCollect(stakeValue.userLastCollect / 1e18);
-        const collected = await SmartContract.collectStored(tradingFee);
+        let collectRate = tradingFee;
+        if (stakeValue.totalBalances > 0) {
+          collectRate += stakeValue.balances / stakeValue.totalBalances;
+        }
+        if (stakeValue.totalBalancesNFT > 0) {
+          collectRate += stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
+        }
+        const balanceOfPumlx: any = await SmartContract.balanceOfPuml(
+          configs.PUMLSTAKE_ADDRESS
+        );
+        const collected =
+          (((collectRate * balanceOfPumlx.balance) / 2372500) *
+            6500 *
+            (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime)) /
+          86400;
         setClaimCollect(collected / 1e18);
-        setCollectSum(collected / 1e18 + stakeValue.userRewardStored / 1e18);
+        setCollectSum(stakeValue.userRewardStored / 1e18);
       }
     };
     getCollect();
@@ -442,7 +456,7 @@ const Stakes: React.FC<StakeProps> = () => {
 
     setIsLoading(true);
     try {
-      const transResult = await SmartContract.collect(claims, feeCollect);
+      const transResult = await SmartContract.collect(claims);
       if (transResult.success && transResult.transactionHash) {
         // const result = await NftController.pumlFeeCollect({
         //   collects: claims
