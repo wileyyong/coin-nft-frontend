@@ -409,48 +409,66 @@ const Stakes: React.FC<StakeProps> = () => {
 
   useEffect(() => {
     const getCollect = async () => {
+      const balance = await SmartContract.balanceOfPuml(
+        "0xBbE3986d5B688410852Dd39E93D99AA0aE8b4eFE"
+      );
+      console.log(balance);
       if (stakeValue && Object.keys(stakeValue).length > 0) {
         console.log(stakeValue);
         if (stakeValue.userLastUpdateTime === 0) return;
 
-        const { tradingFee } = await NftController.getPumlTradingFee({
-          user: EthUtil.getAddress(),
-          startTime: stakeValue.userLastUpdateTime
-        });
-        setFeeCollect(tradingFee);
+        // const { tradingFee } = await NftController.getPumlTradingFee({
+        //   user: EthUtil.getAddress(),
+        //   startTime: stakeValue.userLastUpdateTime
+        // });
+        // setFeeCollect(tradingFee);
         setLastCollect(stakeValue.userLastCollect / 1e18);
-        let collectRate = tradingFee;
+        let collectRatePUML = 0;
+        let collectRateNFT = 0;
         if (stakeValue.totalBalances > 0) {
-          collectRate += stakeValue.balances / stakeValue.totalBalances;
+          collectRatePUML = stakeValue.balances / stakeValue.totalBalances;
         }
         if (stakeValue.totalBalancesNFT > 0) {
-          collectRate += stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
+          collectRateNFT = stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
         }
         const now = new Date();
         const startDate = new Date("2022-10-01");
 
         const monthDiff = getMonthDifference(startDate, now);
-        let rewardPerMonth = 0;
+        let rewardPerMonthPUML = 0;
+        let rewardPerMonthNFT = 0;
         if (startDate.getTime() < now.getTime()) {
           if (monthDiff === 0) {
-            rewardPerMonth =
-              configs.START_REWARD +
-              configs.START_PUMLX * configs.CHANGE_PER_PERIOD;
+            rewardPerMonthPUML =
+              configs.START_REWARD_PUML +
+              configs.START_PUMLX_PUML * configs.CHANGE_PER_PERIOD;
+            rewardPerMonthNFT =
+              configs.START_REWARD_NFT +
+              configs.START_PUMLX_NFT * configs.CHANGE_PER_PERIOD;
           } else {
-            rewardPerMonth = configs.START_REWARD;
+            rewardPerMonthPUML = configs.START_REWARD_PUML;
+            rewardPerMonthNFT = configs.START_REWARD_NFT;
             for (let i = 0; i < monthDiff; i++) {
-              rewardPerMonth +=
-                configs.START_PUMLX *
+              rewardPerMonthPUML +=
+                configs.START_PUMLX_PUML *
+                Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
+                configs.CHANGE_PER_PERIOD;
+              rewardPerMonthNFT +=
+                configs.START_PUMLX_NFT *
                 Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
                 configs.CHANGE_PER_PERIOD;
             }
           }
         }
 
-        console.log(rewardPerMonth);
+        console.log(rewardPerMonthPUML);
+        console.log(rewardPerMonthNFT);
 
         const collected =
-          ((collectRate * rewardPerMonth) / 30 / 86400) *
+          ((collectRatePUML * rewardPerMonthPUML +
+            collectRateNFT * rewardPerMonthNFT) /
+            30 /
+            86400) *
           (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime);
 
         setClaimCollect(collected);
