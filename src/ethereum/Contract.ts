@@ -294,7 +294,7 @@ class Contract {
     return null;
   }
 
-  async bid(tokenId: any, price: any, pumlxApproved: any, token?: any) {
+  async bid(tokenId: any, price: any, pumlxApproved: number, token?: any) {
     const network = EthUtil.getNetwork();
     const ENGINE_721_ADDRESS = this.getEngine721Address(network);
     if (web3) {
@@ -330,7 +330,12 @@ class Contract {
     return { success: false, error: "Failed to bid to this item!" };
   }
 
-  async directBuy(tokenId: any, price: any, pumlxApproved: any, token?: any) {
+  async directBuy(
+    tokenId: any,
+    price: any,
+    pumlxApproved: number,
+    token?: any
+  ) {
     const network = EthUtil.getNetwork();
     const ENGINE_721_ADDRESS = this.getEngine721Address(network);
     if (web3) {

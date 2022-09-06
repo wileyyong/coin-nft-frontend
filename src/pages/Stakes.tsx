@@ -409,10 +409,10 @@ const Stakes: React.FC<StakeProps> = () => {
 
   useEffect(() => {
     const getCollect = async () => {
-      const balance = await SmartContract.balanceOfPuml(
-        "0xBbE3986d5B688410852Dd39E93D99AA0aE8b4eFE"
-      );
-      console.log(balance);
+      // const balance = await SmartContract.balanceOfPuml(
+      //   "0xBbE3986d5B688410852Dd39E93D99AA0aE8b4eFE"
+      // );
+      // console.log(balance);
       if (stakeValue && Object.keys(stakeValue).length > 0) {
         console.log(stakeValue);
         if (stakeValue.userLastUpdateTime === 0) return;
