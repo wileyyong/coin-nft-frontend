@@ -3,7 +3,7 @@ import {
   B1NormalTextTitle,
   FlexAlignCenterDiv,
   NormalTextTitle,
-  SmallTextTitleGrey,
+  SmallTextTitleGrey
 } from "../common/common.styles";
 import configs from "configs";
 import { Button } from "react-bootstrap";
@@ -20,7 +20,9 @@ import { getMyInfo } from "store/User/user.selector";
 import { getWalletBalance } from "store/User/user.slice";
 import CollectionController from "controller/CollectionController";
 import NftController from "controller/NftController";
-import { toast } from 'react-toastify';
+import UserController from "controller/UserController";
+import { toast } from "react-toastify";
+import EthUtil from "ethereum/EthUtil";
 
 interface TokenViewProps {
   item: any;
@@ -43,7 +45,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   });
 
   const getTokenThumbnail = () => {
-    let media = item.media_type ? item.media_type.toLowerCase() : '';
+    let media = item.media_type ? item.media_type.toLowerCase() : "";
     if (
       media.includes("mp3") ||
       media.includes("mp4") ||
@@ -102,20 +104,21 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
     try {
       if (item.chain_id) {
         let result: any;
-        let collection: any 
-        if (item.collectionsId) collection = await CollectionController.getById(item.collectionsId);
-        const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
-        
-        result = await SmartContract721.approve(
-          item.chain_id, 
-          contractAddress
-        );
+        let collection: any;
+        if (item.collectionsId)
+          collection = await CollectionController.getById(item.collectionsId);
+        const contractAddress =
+          collection && collection.collection
+            ? collection.collection.contract_address
+            : "";
+
+        result = await SmartContract721.approve(item.chain_id, contractAddress);
 
         if (result) {
           await NftController.stakeToken({
-            chainIds: {[item.contract_address]: item.chain_id},
+            chainIds: { [item.contract_address]: item.chain_id },
             stake: false
-        });
+          });
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);
           dispatch(getWalletBalance());
           return;
@@ -143,16 +146,20 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           isDirectSale && !isAuction
             ? 0
             : DateTimeService.getDurationSecondsWithTwoDates(
-              "now",
-              resellFormData.current.expiry_date
-            );
+                "now",
+                resellFormData.current.expiry_date
+              );
 
         let result: any;
 
-        let collection: any 
-        if (item.collectionsId) collection = await CollectionController.getById(item.collectionsId);
-        const contractAddress = (collection && collection.collection) ? collection.collection.contract_address : '';
-        
+        let collection: any;
+        if (item.collectionsId)
+          collection = await CollectionController.getById(item.collectionsId);
+        const contractAddress =
+          collection && collection.collection
+            ? collection.collection.contract_address
+            : "";
+
         result = await SmartContract721.createOffer(
           item.chain_id,
           isDirectSale,
@@ -172,7 +179,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           //   return;
           // }
           let offerObj: any = {
-            token_id: item._id,
+            token_id: item._id
           };
 
           if (offerPrice > 0) offerObj["offer_price"] = offerPrice;
@@ -227,7 +234,9 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         {item.collections ? item.collections.name : "PUML"}
       </SmallTextTitleGrey>
 
-      {hasResellPermission() && item.offer && item.offer.status === 'expired' ? (
+      {hasResellPermission() &&
+      item.offer &&
+      item.offer.status === "expired" ? (
         <Button
           variant="primary"
           className="full-width mt-3 outline-btn"
@@ -244,7 +253,10 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
               {item.offer.type === "auction" ? (
                 "Not for Sale"
               ) : (
-                <>From {item.offer.offer_price} {item.blockchain ? item.blockchain : "ETH"}</>
+                <>
+                  From {item.offer.offer_price}{" "}
+                  {item.blockchain ? item.blockchain : "ETH"}
+                </>
               )}
             </NormalTextTitle>
             <FlexAlignCenterDiv className="mt-1">
@@ -252,9 +264,17 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
                 item.offer.type === "both") && (
                 <NormalTextTitle className="faint-color">
                   {getCurrentBidPrice() ? (
-                    <>Current Bid {getCurrentBidPrice()} {item.blockchain ? item.blockchain : "ETH"}</>
+                    <>
+                      Current Bid {getCurrentBidPrice()}{" "}
+                      {item.blockchain ? item.blockchain : "ETH"}
+                    </>
+                  ) : item.offer.type !== "direct" ? (
+                    <>
+                      Minimum Bid {item.offer.min_bid}{" "}
+                      {item.blockchain ? item.blockchain : "ETH"}
+                    </>
                   ) : (
-                    item.offer.type !== 'direct' ? <>Minimum Bid {item.offer.min_bid} {item.blockchain ? item.blockchain : "ETH"}</> : ''
+                    ""
                   )}
                 </NormalTextTitle>
               )}

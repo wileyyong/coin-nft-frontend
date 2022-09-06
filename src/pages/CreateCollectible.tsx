@@ -30,6 +30,7 @@ import CreateCollectionModal from "components/collection/CreateCollectionModal";
 import { getMyInfo } from "store/User/user.selector";
 import Utility from "service/utility";
 import CollectionController from "controller/CollectionController";
+import UserController from "controller/UserController";
 import LoadingSpinner from "components/common/LoadingSpinner";
 import configs from "configs";
 import {
@@ -459,6 +460,11 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
             offerObj["min_bid"] = collectible.min_bid_price;
 
           await OfferController.create(offerObj);
+
+          const approvedresult = await UserController.pumlxApproved(
+            EthUtil.getAddress()
+          );
+          console.log(approvedresult);
 
           setCreateNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
           setCreateNftDialog(false);

@@ -294,13 +294,13 @@ class Contract {
     return null;
   }
 
-  async bid(tokenId: any, price: any, token?: any, pumlxApproved?: any) {
+  async bid(tokenId: any, price: any, pumlxApproved: any, token?: any) {
     const network = EthUtil.getNetwork();
     const ENGINE_721_ADDRESS = this.getEngine721Address(network);
     if (web3) {
       let auctionId = await this.getAuctionId(tokenId);
       let isPUML = token ? token : 0;
-      if (isPUML && !pumlxApproved) {
+      if (!pumlxApproved) {
         const pumlContract = new web3.eth.Contract(
           iercABI,
           configs.PUML20_ADDRESS
@@ -330,11 +330,22 @@ class Contract {
     return { success: false, error: "Failed to bid to this item!" };
   }
 
-  async directBuy(tokenId: any, price: any, token?: any) {
+  async directBuy(tokenId: any, price: any, pumlxApproved: any, token?: any) {
     const network = EthUtil.getNetwork();
     const ENGINE_721_ADDRESS = this.getEngine721Address(network);
     if (web3) {
       let isPUML = token ? token : 0;
+      if (!pumlxApproved) {
+        const pumlContract = new web3.eth.Contract(
+          iercABI,
+          configs.PUML20_ADDRESS
+        );
+        await pumlContract.methods
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 1000))
+          .send({
+            from: EthUtil.getAddress()
+          });
+      }
       const engineContract = new web3.eth.Contract(
         engineABI,
         ENGINE_721_ADDRESS

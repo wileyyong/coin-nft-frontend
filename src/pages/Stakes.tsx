@@ -437,29 +437,29 @@ const Stakes: React.FC<StakeProps> = () => {
         const monthDiff = getMonthDifference(startDate, now);
         let rewardPerMonthPUML = 0;
         let rewardPerMonthNFT = 0;
-        if (startDate.getTime() < now.getTime()) {
-          if (monthDiff === 0) {
-            rewardPerMonthPUML =
-              configs.START_REWARD_PUML +
-              configs.START_PUMLX_PUML * configs.CHANGE_PER_PERIOD;
-            rewardPerMonthNFT =
-              configs.START_REWARD_NFT +
-              configs.START_PUMLX_NFT * configs.CHANGE_PER_PERIOD;
-          } else {
-            rewardPerMonthPUML = configs.START_REWARD_PUML;
-            rewardPerMonthNFT = configs.START_REWARD_NFT;
-            for (let i = 0; i < monthDiff; i++) {
-              rewardPerMonthPUML +=
-                configs.START_PUMLX_PUML *
-                Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
-                configs.CHANGE_PER_PERIOD;
-              rewardPerMonthNFT +=
-                configs.START_PUMLX_NFT *
-                Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
-                configs.CHANGE_PER_PERIOD;
-            }
+        // if (startDate.getTime() < now.getTime()) {
+        if (monthDiff === 0) {
+          rewardPerMonthPUML =
+            configs.START_REWARD_PUML +
+            configs.START_PUMLX_PUML * configs.CHANGE_PER_PERIOD;
+          rewardPerMonthNFT =
+            configs.START_REWARD_NFT +
+            configs.START_PUMLX_NFT * configs.CHANGE_PER_PERIOD;
+        } else {
+          rewardPerMonthPUML = configs.START_REWARD_PUML;
+          rewardPerMonthNFT = configs.START_REWARD_NFT;
+          for (let i = 0; i < monthDiff; i++) {
+            rewardPerMonthPUML +=
+              configs.START_PUMLX_PUML *
+              Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
+              configs.CHANGE_PER_PERIOD;
+            rewardPerMonthNFT +=
+              configs.START_PUMLX_NFT *
+              Math.pow(1 - configs.CHANGE_PER_PERIOD, i) *
+              configs.CHANGE_PER_PERIOD;
           }
         }
+        // }
 
         console.log(rewardPerMonthPUML);
         console.log(rewardPerMonthNFT);

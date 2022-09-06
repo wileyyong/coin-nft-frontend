@@ -97,7 +97,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [properties, setProperties] = useState([]);
-  const [network, setNetwork] = useState<any>(EthereumNetworkID.RinkebyNetwork);
+  const [network, setNetwork] = useState<any>(EthereumNetworkID.GoerliNetwork);
 
   const resellFormData = useRef({
     min_bid_price: 0,
@@ -161,7 +161,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
       if (token.blockchain) {
         switch (token.blockchain) {
           case "ETH":
-            setNetwork(EthereumNetworkID.RinkebyNetwork);
+            setNetwork(EthereumNetworkID.GoerliNetwork);
             break;
           case "MATIC":
             setNetwork(EthereumNetworkID.MumbaiNetwork);
@@ -288,6 +288,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         setTransProgressing(true);
 
         let result: any;
+        const pumlxApproved = userInfo && userInfo.pumlxApproved ? 1 : 0;
 
         if (token.blockchain && token.blockchain === "PUMLx") {
           // let bidTokenResult = await SmartContract.transferToken(
@@ -307,20 +308,26 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           var bidPrice = 0.000011;
           var bids = offer.bids;
           bidPrice += 0.000001 * bids.length;
-          const pumlxApproved = userInfo && userInfo.pumlxApproved ? 1 : 0;
+
           result = await SmartContract.bid(
             token.chain_id,
             bidPrice,
+            pumlxApproved,
+            price
+          );
+        } else {
+          result = await SmartContract.bid(
+            token.chain_id,
             price,
             pumlxApproved
           );
-          const approvedresult = await UserController.pumlxApproved(
-            EthUtil.getAddress()
-          );
-          console.log(approvedresult);
-        } else {
-          result = await SmartContract.bid(token.chain_id, price);
         }
+
+        const approvedresult = await UserController.pumlxApproved(
+          EthUtil.getAddress()
+        );
+        console.log(approvedresult);
+
         if (result.success && result.transactionHash) {
           dispatch(getWalletBalance());
           await OfferController.placeBid(offer._id, {
@@ -570,6 +577,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         }
 
         let buyResult: any;
+        const pumlxApproved = userInfo && userInfo.pumlxApproved ? 1 : 0;
 
         if (token.blockchain && token.blockchain === "PUMLx") {
           // let buyTokenResult = await SmartContract.transferToken(
@@ -590,12 +598,14 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           buyResult = await SmartContract.directBuy(
             token.chain_id,
             buyPrice,
+            pumlxApproved,
             offer.offer_price
           );
         } else {
           buyResult = await SmartContract.directBuy(
             token.chain_id,
-            offer.offer_price
+            offer.offer_price,
+            pumlxApproved
           );
         }
         if (buyResult.success && buyResult.transactionHash) {
@@ -613,6 +623,12 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             chainIds: { [contractAddress]: token.chain_id },
             stake: null
           });
+
+          const approvedresult = await UserController.pumlxApproved(
+            EthUtil.getAddress()
+          );
+          console.log(approvedresult);
+
           if (token.blockchain && token.blockchain === "PUMLx") {
             let obj: any = {
               buyerAddress: EthUtil.getAddress(),
