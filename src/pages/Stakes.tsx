@@ -354,7 +354,7 @@ const Stakes: React.FC<StakeProps> = () => {
         stakeData();
         const result = await UserController.pumlxApproved(EthUtil.getAddress());
         console.log(result);
-        toast.success("Successfully staken.");
+        toast.success("Stake Successful.");
         NotificationManager.success("Successfully staken.", "Success");
       } else {
         toast.warning("Failed");
