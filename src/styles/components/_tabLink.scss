@@ -1,0 +1,31 @@
+.link-section {
+  border-bottom: 1px solid rgba($primary, 0.68);
+  @include media-breakpoint-down('sm') {
+    padding: 0 10px;
+  }
+  .nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    .nav-link {
+      color: $black;
+      white-space: nowrap;
+      position: relative;
+      padding-right: 10px;
+      span {
+        margin-left: 10px;
+        padding: 0 5px;
+        border-radius: 25px;
+        background-color: $gray;
+        color: $white;
+        line-height: 25px;
+        font-size: 16px;
+        &.fill-count {
+          background-color: $purple;
+        }
+      }
+    }
+  }
+  .nav-link.active {
+    color: $primary !important;
+  }
+}
