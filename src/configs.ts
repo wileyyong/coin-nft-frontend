@@ -4,7 +4,7 @@ const configs = {
   DEPLOY_URL: "https://napi.pumlx.com",
   /* Wallet Info */
   ONBOARD_API_KEY: process.env.REACT_APP_ONBOARD_API_KEY,
-  ONBOARD_NETWORK_ID: EthereumNetworkID.RinkebyNetwork,
+  ONBOARD_NETWORK_ID: EthereumNetworkID.GoerliNetwork,
   ONBOARD_POLYGON_ID: EthereumNetworkID.MumbaiNetwork,
   FORTMATIC_KEY:
     "pk_test_737DD7FC0782E5A0" /* live(Mainnet) pk_live_ECF4039B2C85FB79*/,
@@ -12,7 +12,8 @@ const configs = {
   INFURA_KEY: "a6699e4ad89f4c4187e807f0709a360c",
   WALLET_APP_URL: "",
   CONTACT_EMAIL: "general@puml.com",
-  RPC_URL: "https://rinkeby.infura.io/v3/a6699e4ad89f4c4187e807f0709a360c",
+  // RPC_URL: "https://rinkeby.infura.io/v3/a6699e4ad89f4c4187e807f0709a360c",
+  RPC_URL: "https://goerli.infura.io/v3/a6699e4ad89f4c4187e807f0709a360c",
   POLYGON_RPC_URL:
     "https://rpc-mumbai.maticvigil.com/" /* https://polygon-rpc.com/ */,
   POLYGON_BLOCK_EXPLORER:
@@ -51,14 +52,14 @@ const configs = {
   IMG_FILE_ACCEPT: "image/gif,image/png,image/jpeg,image/jpg,image/webp",
 
   /* Smart Contract */
-  PUML721_ADDRESS: "0x9c5b9a130EfC9FbAC2349Fd9D54be3042Ed6DbEC",
-  ENGINE721_ADDRESS: "0x442a63A25b630e91c8550fbE10CDDfB6Bd3378bc",
+  PUML721_ADDRESS: "0x690253669604bCeA6801aa7dF12D1Babe518cF69",
+  ENGINE721_ADDRESS: "0x576c20Aa01c85BCFb6B3562e120A129C72c374Ed",
   MATIC_PUML721_ADDRESS: "0xC4E8B16e46e49759492854C65589ab38d8188eDf",
   MATIC_ENGINE721_ADDRESS: "0xa25eEBA53Ab5B19be3195724f25eeB3498773bb9",
   // ADMIN_ADDRESS: process.env.ADMIN_ADDRESS,
   ADMIN_ADDRESS: "0xe15f2992EA8b06cAA2dA8f2291B72DC739DddFC1",
   // PUMLx contract address
-  PUML20_ADDRESS: "0xbc75ECc12c77506DCFd70113B15683A9a0768AB4",
+  PUML20_ADDRESS: "0xB2e408bc3E7674De7c589F4f8E5471C81F09F5c6",
 
   /* HDWalletProvider */
   MAIN_ACCOUNT: "0xF9b99c56364f1D69AA4196B0957E6372ee6f9713",
@@ -66,7 +67,7 @@ const configs = {
   SERVICE_FEE_REVENUE: "0xC8616CD6e90c2a770cDB66eA777E5dA6bb57832f",
 
   /* PumlStaking Address */
-  PUMLSTAKE_ADDRESS: "0x810a15471236a37B6Ce98Dd3DfB799e1285Dee09",
+  PUMLSTAKE_ADDRESS: "0x498b29ed7dEB6B41d128DA5E02ca68cFe24fEb2e",
   REWARD_RATE: 10,
 
   /* Pinata */
