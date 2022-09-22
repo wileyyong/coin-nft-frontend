@@ -222,11 +222,22 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
     }
 
     setIsLoading(true);
-    let { success, contractAddress, engineAddress, stakeAddress } =
-      await SmartContract.createCollection(collection.name, collection.symbol);
+    let {
+      success,
+      contractAddress,
+      engineAddress,
+      stakeAddress,
+      pumlPoolAddress,
+      nftPoolAddress
+    } = await SmartContract.createCollection(
+      collection.name,
+      collection.symbol
+    );
     // console.log("contractAddress", contractAddress);
     // console.log("engineAddress", engineAddress);
     // console.log("stakeAddress", stakeAddress);
+    // console.log("pumlPoolAddress", pumlPoolAddress);
+    // console.log("nftPoolAddress", nftPoolAddress);
     if (contractAddress === "") {
       window.location.reload();
     }
@@ -389,6 +400,7 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
           approveObj["tokenId"] = nftFromDB.token._id;
           approveObj["chain_id"] = chainId;
           approveObj["contract_address"] = contractAddress;
+          approveObj["stake"] = false;
         }
         let formData = Utility.getFormDataFromObject(approveObj);
         result = await NftController.createApprovedNFT(formData);

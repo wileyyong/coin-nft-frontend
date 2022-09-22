@@ -59,32 +59,6 @@ class NftController {
       (res) => res.data
     );
   }
-
-  // public static stakePuml(payload: any) {
-  //     return API.post(`${configs.API.TOKEN_URL}/stakePuml`, payload).then(res => res.data)
-  // }
-
-  // public static unstakePuml(payload: any) {
-  //     return API.post(`${configs.API.TOKEN_URL}/unstakePuml`, payload).then(res => res.data)
-  // }
-
-  // public static rewardPuml(payload: any) {
-  //     return API.post(`${configs.API.TOKEN_URL}/rewardPuml`, payload).then(res => res.data)
-  // }
-
-  public static approveToken(payload: any) {
-    return API.post(`${configs.API.TOKEN_URL}/approveToken`, payload).then(
-      (res) => res.data
-    );
-  }
-
-  // public static getPumlFeeCollect(payload: any) {
-  //     return API.post(`${configs.API.TOKEN_URL}/getPumlFeeCollect`, payload).then(res => res.data)
-  // }
-
-  // public static pumlFeeCollect(payload: any) {
-  //     return API.post(`${configs.API.TOKEN_URL}/pumlFeeCollect`, payload).then(res => res.data)
-  // }
 }
 
 export default NftController;

@@ -116,7 +116,8 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
 
         if (result) {
           await NftController.stakeToken({
-            chainIds: { [item.contract_address]: item.chain_id },
+            contractAddress: item.contract_address,
+            chainId: item.chain_id,
             stake: false
           });
           setResellNftStatus(NftCreateStatus.APPROVE_SUCCEED);

@@ -283,34 +283,34 @@ const Move: React.FC<MoveProps> = () => {
       }
 
       setIsLoading(true);
-      try {
-        const rewardResult = await SmartContract.claim(claims, feeCollect);
-        if (rewardResult.success && rewardResult.transactionHash) {
-          // const transferResult = await NftController.rewardPuml({
-          //   amount: claims,
-          //   staker: EthUtil.getAddress()
-          // });
-          // if (transferResult.success && transferResult.transactionHash) {
-          setClaims(0);
-          stakeData();
-          setIsLoading(false);
-          setShowMoveSuccessModal(true);
+      // try {
+      //   const rewardResult = await SmartContract.claim(claims, feeCollect);
+      //   if (rewardResult.success && rewardResult.transactionHash) {
+      //     // const transferResult = await NftController.rewardPuml({
+      //     //   amount: claims,
+      //     //   staker: EthUtil.getAddress()
+      //     // });
+      //     // if (transferResult.success && transferResult.transactionHash) {
+      //     setClaims(0);
+      //     stakeData();
+      //     setIsLoading(false);
+      //     setShowMoveSuccessModal(true);
 
-          // } else {
-          //   toast.warning("Collect Failed!");
-          //   NotificationManager.error("Collect Failed!", "Error");
-          //   setIsLoading(false);
-          // }
-        } else {
-          toast.warning("Claim Failed!");
-          NotificationManager.error("Claim Failed!", "Error");
-          setIsLoading(false);
-        }
-      } catch (err) {
-        toast.warning("Failed!");
-        NotificationManager.error("Failed!", "Error");
-        setIsLoading(false);
-      }
+      //     // } else {
+      //     //   toast.warning("Collect Failed!");
+      //     //   NotificationManager.error("Collect Failed!", "Error");
+      //     //   setIsLoading(false);
+      //     // }
+      //   } else {
+      //     toast.warning("Claim Failed!");
+      //     NotificationManager.error("Claim Failed!", "Error");
+      //     setIsLoading(false);
+      //   }
+      // } catch (err) {
+      //   toast.warning("Failed!");
+      //   NotificationManager.error("Failed!", "Error");
+      //   setIsLoading(false);
+      // }
     }
   };
 

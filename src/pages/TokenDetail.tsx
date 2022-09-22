@@ -621,7 +621,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           });
           await NftController.stakeToken({
             chainIds: { [contractAddress]: token.chain_id },
-            stake: null
+            stake: false
           });
 
           const approvedresult = await UserController.pumlxApproved(

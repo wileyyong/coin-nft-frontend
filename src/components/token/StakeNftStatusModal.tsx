@@ -5,7 +5,7 @@ import {
   MidTextTitle,
   BigTitle,
   FlexAlignCenterDiv,
-  B1NormalTextTitle,
+  B1NormalTextTitle
 } from "../common/common.styles";
 import { FaCheck } from "react-icons/fa";
 
@@ -14,7 +14,7 @@ interface StakeNftStatusModalProps {
   status: any;
   onClose?: any;
   approveNft?: any;
-  unstakeNft?: any;
+  stakeNft?: any;
 }
 
 const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
@@ -22,7 +22,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
   status,
   onClose,
   approveNft,
-  unstakeNft,
+  stakeNft
 }) => {
   return (
     <Modal show={show} onHide={onClose} className="create-nft-status-modal">
@@ -39,7 +39,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
                 )}
               </div>
               <div className="ml-5">
-                <MidTextTitle>Unstake NFTs</MidTextTitle>
+                <MidTextTitle>Approve NFTs</MidTextTitle>
               </div>
             </FlexAlignCenterDiv>
             <Button
@@ -52,7 +52,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
                 status === NftCreateStatus.APPROVE_FAILED ? false : true
               }
               className="start-progressing-btn mt-4 outline-btn"
-              onClick={unstakeNft}
+              onClick={approveNft}
             >
               <span>
                 {status < NftCreateStatus.APPROVE_PROGRESSING && "Start"}
@@ -77,7 +77,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
               </div>
 
               <div className="ml-5">
-                <MidTextTitle>Approve NFTs</MidTextTitle>
+                <MidTextTitle>Stake NFTs</MidTextTitle>
               </div>
             </FlexAlignCenterDiv>
             <Button
@@ -94,7 +94,7 @@ const StakeNftStatusModal: React.FC<StakeNftStatusModalProps> = ({
                   : true
               }
               className="start-progressing-btn mt-4 outline-btn"
-              onClick={approveNft}
+              onClick={stakeNft}
             >
               <span>
                 {status < NftCreateStatus.CREATEOFFER_PROGRESSING && "Start"}
