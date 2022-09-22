@@ -1,7 +1,7 @@
 import { EthereumNetworkID } from "./model/EthereumNetwork";
 
 const configs = {
-  DEPLOY_URL: "https://nftapi.puml.io",
+  DEPLOY_URL: "https://napi.pumlx.com",
   /* Wallet Info */
   ONBOARD_API_KEY: process.env.REACT_APP_ONBOARD_API_KEY,
   ONBOARD_NETWORK_ID: EthereumNetworkID.GoerliNetwork,
