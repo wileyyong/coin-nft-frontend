@@ -5,47 +5,47 @@ interface NftAvatarProps {
 }
 
 export const SmallTextTitle = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 12px;
 `;
 
 export const SmallTextTitleGrey = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 12px;
   color: grey;
 `;
 
 export const NormalTextTitle = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 14px;
 `;
 
 export const B1NormalTextTitle = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 16px;
   line-height: 22px;
 `;
 
 export const B1NormalTextTitleGrey = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 16px;
   opacity: 60%;
 `;
 
 export const B2NormalTextTitle = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-medium;
   font-weight: 500;
   font-size: 18px;
   line-height: 21px;
 `;
 
 export const B2NormalTextTitleGrey = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-medium;
   font-weight: 500;
   font-size: 18px;
   line-height: 21px;
@@ -53,21 +53,21 @@ export const B2NormalTextTitleGrey = styled.div`
 `;
 
 export const B3NormalTextTitle = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 20px;
   line-height: 28px;
 `;
 
 export const MidTextTitle = styled.h4`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: bold;
   font-size: 24px;
   line-height: 30px;
 `;
 
 export const BigTitle = styled.h2`
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: bold;
   font-size: 30px;
   line-height: 30px;
@@ -75,7 +75,7 @@ export const BigTitle = styled.h2`
 
 export const BigTitleWithBottomLine = styled.h3`
   color: black;
-  font-family: Roboto;
+  font-family: Rubik-bold;
   font-weight: bold;
   font-size: 30px;
   line-height: 30px;
@@ -84,26 +84,26 @@ export const BigTitleWithBottomLine = styled.h3`
 `;
 
 export const MBigTitle = styled.h3`
-  font-family: "Roboto";
+  font-family: Rubik-bold;
   font-weight: 700;
   font-size: 42px;
   line-height: 42px;
 `;
 
 export const LargeTextTitle = styled.h1`
-  font-family: "Roboto";
+  font-family: Rubik-medium;
   font-weight: 500;
   font-size: 62px;
 `;
 
 export const SuperLargeTextTitle = styled.h1`
-  font-family: "Roboto";
+  font-family: Rubik-medium;
   font-weight: 500;
   font-size: 74px;
 `;
 
 export const SubDescription = styled.div`
-  font-family: Roboto;
+  font-family: Rubik-regular;
   font-weight: normal;
   font-size: 12px;
   line-height: 19px;
@@ -137,8 +137,8 @@ export const FilterIcon = styled.div`
 `;
 
 export const NftAvatar = styled.div<NftAvatarProps>`
-  width: 60px;
-  height: 60px;
+  width: 54px;
+  height: 54px;
   background: linear-gradient(rgb(196, 196, 196) 0%, rgb(254, 254, 254) 100%);
   background-image: url(${(props) => props.imagePath});
   background-size: 100% 100%;

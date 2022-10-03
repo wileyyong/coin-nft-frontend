@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 import { Button, Image } from "react-bootstrap";
 
 import puml from "assets/imgs/puml2.png";
+import stakeImg from "assets/imgs/stake.png";
 import puml1 from "assets/imgs/puml1.png";
 import maskIcon from "assets/imgs/mask.png";
 import nostakeIcon from "assets/imgs/nostake.png";
@@ -493,17 +494,17 @@ const Stakes: React.FC<StakeProps> = () => {
           <p className="intro-type">{apy} APY</p>
           <div className="intro-connect-btnGroup pt-4">
             <div className="intro-btn-wallet pb-3">
-              <Button className="mr-2 mr-lg-4 btn-primary">
+              <Button className="mr-2 mr-lg-4">
                 <div className="d-flex flex-row align-items-center">
-                  <span>Buy PUMLx</span>
+                  <span>Buy $PUMLx</span>
                 </div>
               </Button>
             </div>
           </div>
         </div>
-        <div className="intro-image"></div>
         <div className="intro-ticket">
-          <Image className="ticket-img" src={puml} alt="ticket"></Image>
+          <div className="blur-bg"></div>
+          <Image className="ticket-img" src={stakeImg} alt="ticket" />
         </div>
       </div>
       <div className="stake-intro d-flex">

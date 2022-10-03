@@ -407,11 +407,13 @@ const Home: React.FC<HomeProps> = () => {
     <Layout className="home-container" ref={layoutView}>
       <div className="section-intro">
         <div className="intro-content text-left">
-          <p className="intro-title pb-0">PUML NFT </p>
-          <p className="intro-type">Market Place</p>
-          <div className="intro-desc pt-4">
-            Custom-made characters that will transition to the assets expanded
-            ecosystem <br></br>(media, content, and games)
+          <div className="intro-border">
+            <p className="intro-title pb-0">PUML NFT </p>
+            <p className="intro-type">Market Place</p>
+            <div className="intro-desc pt-4">
+              Custom-made characters that will transition to the assets expanded
+              ecosystem (media, content, and games)
+            </div>
           </div>
           <div className="intro-connect-btnGroup pt-4">
             {/*
@@ -444,7 +446,6 @@ const Home: React.FC<HomeProps> = () => {
             )}
           </div>
         </div>
-        <div className="intro-image"></div>
         <div className="intro-ticket">
           {uploadFeaturedImage ? (
             <div
@@ -494,7 +495,7 @@ const Home: React.FC<HomeProps> = () => {
                 <div className="title">{featured_name}</div>
                 <div className="price">
                   ${getDollarPrice(featured_price)}{" "}
-                  <span className="text-dark"> • {featured_price} ETH</span>
+                  <span className="pl-3"> {featured_price} ETH</span>
                 </div>
               </>
             )}
@@ -623,7 +624,7 @@ const Home: React.FC<HomeProps> = () => {
             />
             <FormControl
               type="text"
-              placeholder="Search by item"
+              placeholder="Search athletes"
               className="ml-sm-2"
               value={searchKey}
               onChange={(e) => setSearchKey(e.target.value)}

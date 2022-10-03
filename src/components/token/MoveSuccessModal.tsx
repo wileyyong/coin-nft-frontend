@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { Button, Image, Modal } from "react-bootstrap";
-import puml from "assets/imgs/puml2.png";
+import puml from "assets/imgs/success-puml.png";
 
 interface MoveSuccessModalProps {
   handleClose?: any;
@@ -15,8 +15,7 @@ const MoveSuccessModal: React.FC<MoveSuccessModalProps> = ({
   handleClose,
   reward,
   rewardDollar
-}) => {  
-
+}) => {
   return (
     <Modal show={show} onHide={handleClose} className="move-success">
       <Modal.Header closeButton></Modal.Header>
@@ -25,7 +24,9 @@ const MoveSuccessModal: React.FC<MoveSuccessModalProps> = ({
         <div className="note">Success! You have claimed:</div>
         <div className="reward">{reward} PUMLx</div>
         <div className="reward-dollar">${rewardDollar} AUD</div>
-        <Button className="btn-primary" onClick={handleClose}>Done</Button>
+        <Button className="btn-primary" onClick={handleClose}>
+          Done
+        </Button>
       </Modal.Body>
     </Modal>
   );

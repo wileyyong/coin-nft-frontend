@@ -62,7 +62,7 @@
   .section-2 {
     margin-top: 104px;
     .title {
-      font-family: Roboto;
+      font-family: Rubik-bold;
       font-weight: 700;
       font-size: 42px;
       line-height: 50px;
@@ -117,6 +117,10 @@
       }
     }
 
+    .auction-item {
+      background-color: rgba(80, 255, 212, 0.2);
+    }
+
     .notice-view {
       margin-top: 80px;
       @include media-breakpoint-down("md") {
@@ -142,15 +146,14 @@
     background: $bgdark;
     color: $white;
     .link-section .nav .nav-link {
-      color: $white !important;
       &.active {
-        color: #65DEC1 !important;
+        color: #65dec1 !important;
       }
     }
     .auction-item {
-      background: rgba($color: $white, $alpha: 0.3);
+      background: rgba(80, 255, 212, 0.2);
       .token-collection-name {
-        color: rgba($color: $white, $alpha: 0.6)
+        color: rgba($color: $white, $alpha: 0.6);
       }
     }
   }

@@ -1,7 +1,11 @@
 import React from "react";
 import configs from "configs";
 import { useHistory } from "react-router-dom";
-import { B1NormalTextTitle, NftAvatar } from "../common/common.styles";
+import {
+  B1NormalTextTitle,
+  NftAvatar,
+  B2NormalTextTitle
+} from "../common/common.styles";
 
 interface CollectionItemProps {
   item: any;
@@ -47,6 +51,9 @@ const CollectionItem: React.FC<CollectionItemProps> = ({ item }) => {
         <B1NormalTextTitle className="mt-4 text-center title pt-2">
           {item.name}
         </B1NormalTextTitle>
+        <div className="mt-1 text-center collection-symbol mb-3">
+          {item.symbol}
+        </div>
         {/* <SubDescription className="mt-1 text-center sub-title pt-2 pb-2 font-size-sm" style={{minHeight: 35}}>{item.description}</SubDescription> */}
       </div>
     </div>

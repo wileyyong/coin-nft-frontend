@@ -215,8 +215,8 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
   };
 
   return (
-    <div className="token-view auction-item mr-4 p-4">
-      <div className="token-img-area mt-2">
+    <div className="token-view auction-item mr-4">
+      <div className="token-img-area">
         <div className="pre-token-img" onClick={tokenViewClicked}>
           {item.media ? (
             <img src={getTokenThumbnail()} alt="tokenImage" />
@@ -225,11 +225,11 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           )}
         </div>
       </div>
-      <B1NormalTextTitle className="mt-3" onClick={tokenViewClicked}>
+      <B1NormalTextTitle className="pl-3 mt-3" onClick={tokenViewClicked}>
         {item.name}
       </B1NormalTextTitle>
       <SmallTextTitleGrey
-        className="token-collection-name"
+        className="token-collection-name pl-3"
         onClick={tokenViewClicked}
       >
         {item.collections ? item.collections.name : "PUML"}
@@ -240,7 +240,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
       item.offer.status === "expired" ? (
         <Button
           variant="primary"
-          className="full-width mt-3 outline-btn"
+          className="full-width  mt-3 outline-btn"
           onClick={() => {
             setShowResellDialog(true);
           }}
@@ -249,7 +249,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
         </Button>
       ) : (
         item.offer && (
-          <div onClick={tokenViewClicked}>
+          <div onClick={tokenViewClicked} className="pl-3 mb-3">
             <NormalTextTitle>
               {item.offer.type === "auction" ? (
                 "Not for Sale"

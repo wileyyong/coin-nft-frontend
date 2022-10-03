@@ -150,7 +150,7 @@ const CollectionDetail: React.FC<CollectionDetailProps> = () => {
         </SmallTextTitleGrey>
       </div>
       <Tab.Container defaultActiveKey="owned" id="items_tabs">
-        <div className="link-section px-md-5">
+        <div className="link-section mx-md-5">
           <Nav defaultActiveKey="owned">
             {categories.map((category, index) => (
               <Nav.Item key={index} onClick={() => onSelectType(category.path)}>

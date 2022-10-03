@@ -25,6 +25,7 @@ import {
 import { setInterval, clearInterval } from "timers";
 
 import puml from "assets/imgs/puml2.png";
+import stakeImg from "assets/imgs/stake.png";
 import puml1 from "assets/imgs/puml1.png";
 import watchIcon from "assets/imgs/watch.png";
 import nostakeIcon from "assets/imgs/nostake.png";
@@ -62,9 +63,7 @@ const MoveToEarn = (props: any) => {
       </p>
       <div className="intro-btn-wallet intro-btn-wallet--connect">
         <Button className="btn-primary" onClick={props.handleConnectPuml}>
-          <div className="d-flex flex-row align-items-center">
-            <span>Connect PUML Wallet</span>
-          </div>
+          Connect PUML Wallet
         </Button>
       </div>
     </>
@@ -359,7 +358,7 @@ const Move: React.FC<MoveProps> = () => {
   return (
     <Layout className="move-container">
       {isLoading && <LoadingSpinner></LoadingSpinner>}
-      <div className="section-intro">
+      <div className={`section-intro ${isConnectPuml ? "welcome-claim" : ""}`}>
         <div className="intro-content text-left">
           {isConnectPuml ? (
             <>
@@ -406,9 +405,9 @@ const Move: React.FC<MoveProps> = () => {
             />
           )}
         </div>
-        <div className="intro-image"></div>
         <div className="intro-ticket">
-          <Image className="ticket-img" src={puml} alt="ticket"></Image>
+          <div className="blur-bg"></div>
+          <Image className="ticket-img" src={stakeImg} alt="ticket"></Image>
         </div>
       </div>
       {isConnectPuml ? (

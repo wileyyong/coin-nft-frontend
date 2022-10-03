@@ -48,7 +48,7 @@ $cyan:    #E9F9F6 !default;
 $gray:    #777681 !default;
 $steel:   #36539C !default;
 $silver:  #DCE0E8 !default;
-$bgdark:  #202020 !default;
+$bgdark:  #000C13 !default;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -276,8 +276,8 @@ $embed-responsive-aspect-ratios: join(
 // Font, line-height, and color for body text, headings, and more.
 
 // stylelint-disable value-keyword-case
-$font-family-sans-serif:      Roboto !default;
-$font-family-monospace:       Roboto !default;
+$font-family-sans-serif:      Rubik-semibold !default;
+$font-family-monospace:       Rubik-semibold !default;
 $font-family-base:            $font-family-sans-serif !default;
 // stylelint-enable value-keyword-case
 

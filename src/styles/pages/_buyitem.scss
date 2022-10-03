@@ -1,172 +1,265 @@
 .buyitem-container {
-    padding-top: 60px;
-    background-color: $bg-default;
-    max-width: 100%;
-    color: $black;
-    @include media-breakpoint-down(sm) {
-        padding-top: 20px;
+  background-color: $bg-default;
+  max-width: 100%;
+  color: $black;
+  padding: 60px 30px;
+  overflow: auto;
+  & > div {
+    float: left;
+  }
+  @include media-breakpoint-down(sm) {
+    padding-top: 20px;
+  }
+  .property {
+    background: linear-gradient(0deg, #ffffff 0%, #fcfcfc 100%);
+    border: 2px solid #2bdcb1;
+  }
+  .property-header {
+    padding: 20px;
+    background: rgba(51, 255, 205, 0.2);
+  }
+  .property-body {
+    padding: 15px 16px 26px;
+    overflow: auto;
+    & > div {
+      float: left;
     }
-    .media {
-        padding: 10px;
-        border-radius: 10px;
-        width: 100%;
-        background-origin: border-box;
-        background-clip: content-box, border-box;
-        box-shadow: 2px 1000px 1px $primary inset;
-        // max-height: 750px;
-        object-fit: cover;
-    }
-    .member-image {
-        max-width: 50px;
-        height: 50px;
-        border-radius: 50px;
-    }
-
-    .item-info {
-        width: 50%;
-        padding-left: 40px;
-        @include media-breakpoint-down(lg) {
-            width: 100%;
-            padding-left: 0px;
-        }
-        .item-title {
-            font-size: 40px;
-            font-weight: $font-weight-bold;
-        }
-
-        .item-price {
-            font-size: 16px;
-            .for-sale {
-                color: $gray-600;
-            }
-            .price-puml {
-                color: $primary;
-                font-weight: $font-weight-bold;
-            }
-        }
-
-        .item-price1 {
-            font-size: 14px;
-            .for-sale {
-                color: $gray-600;
-            }
-            .price-puml {
-                color: $primary;
-                font-weight: $font-weight-bold;
-            }
-        }
-
-        .item-bid {
-            font-size: 14px;
-            .bid-attr {
-                color: $gray-600;
-            }
-            .bid-member {
-                font-weight: $font-weight-bold;
-            }
-        }
-
-        .item-members {
-            cursor: pointer;
-            font-weight: $font-weight-bold;
-
-            .member-type {
-                color: $gray-600;
-                font-size: 14px;
-            }
-            .member-name {
-                font-size: 16px;
-            }
-        }
-
-        .item-address {
-            .address {
-                font-size: 16px;
-                font-weight: $font-weight-bold;
-            }
-        }
-
-        .item-description {
-            .title {
-                font-size: 16px;
-                font-weight: $font-weight-bold;
-            }
-            .content {
-                font-size: 14px;
-            }
-        }
-
-        .buyitem-tab {
-            padding-bottom: 40px;
-            .nav-tabs {
-                border-bottom: 1px solid $black;
-                .nav-link {
-                    color: $gray-600;
-                    font-weight: bold;
-                    background-color: transparent;
-                    border-top: 0;
-                    border-right: 0;
-                    border-left: 0;
-                    padding-right: 20px;
-                    padding-left: 20px;
-                }
-                .nav-link:hover {
-                    border-bottom: 1px solid $black;
-                    color: black;
-                }
-
-                & .nav-link.active {
-                    border-bottom: 4px solid $primary;
-                }
-            }
-        }
-        .history-list {
-            overflow-y: auto;
-            max-height: 400px;
-        }
-        .history-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .btn-primary {
-            color: $white;
-            border-radius: 4px;
-            width: 100%;
-        }
-    }
-    .property-image {
-        width: 16px;
-        height: 16px;
-        background-image: url("../../assets/imgs/property.png");
-        background-size: 100% 100%;
-        background-repeat: no-repeat;
-    }
-}
-
-[data-theme="dark"] {
-    .buyitem-container {
-      background: $bgdark;
-      color: $white;
-      .item-info .buyitem-tab .nav-tabs .nav-link {
-        border-bottom: 1px solid $white;
-        &:hover {
-            color: $white;
-        }
-        &.active {
-            border-bottom: 4px solid #65DEC1;
-        }
+    .property-item {
+      background: rgba(51, 255, 205, 0.2);
+      border: 1px solid #3eddb6;
+      border-radius: 4px;
+      text-align: center;
+      padding: 15px 19px;
+      .field {
+        font-size: 14px;
+        text-transform: uppercase;
+        color: #878787;
       }
-      .property {
-        .property-body {
-            border-color: $white;
-        }
-        .property-title {
-            color: $white;
-        }
-        .property-image {
-            background-image: url("../../assets/imgs/property_white.png");
-        }
+      .value {
+        font-size: 18px;
+        color: #171717;
       }
     }
   }
+  .media {
+    // padding: 10px;
+    // border-radius: 10px;
+    width: 100%;
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    // box-shadow: 2px 1000px 1px $primary inset;
+    // max-height: 750px;
+    object-fit: cover;
+  }
+  .member-image {
+    max-width: 50px;
+    height: 50px;
+    border-radius: 50px;
+  }
+
+  .item-info {
+    width: 50%;
+    padding-left: 40px;
+    @include media-breakpoint-down(lg) {
+      width: 100%;
+      padding-left: 0px;
+    }
+    .item-title {
+      font-size: 40px;
+      font-weight: $font-weight-bold;
+    }
+
+    .item-price {
+      font-size: 16px;
+      .for-sale {
+        color: $gray-600;
+      }
+      .price-puml {
+        color: $primary;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .item-price1 {
+      font-size: 14px;
+      .for-sale {
+        color: $gray-600;
+      }
+      .price-puml {
+        color: $primary;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .item-bid {
+      font-size: 14px;
+      .bid-attr {
+        color: $gray-600;
+      }
+      .bid-member {
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .item-members {
+      cursor: pointer;
+      font-weight: $font-weight-bold;
+
+      .member-type {
+        color: $gray-600;
+        font-size: 14px;
+      }
+      .member-name {
+        font-size: 16px;
+      }
+    }
+
+    .item-address {
+      .address {
+        font-size: 16px;
+        font-weight: $font-weight-bold;
+      }
+    }
+
+    .item-description {
+      .title {
+        font-size: 16px;
+        font-weight: $font-weight-bold;
+      }
+      .content {
+        font-size: 14px;
+        font-family: Rubik-regular;
+        color: #000;
+      }
+    }
+
+    .buyitem-tab {
+      padding-bottom: 70px;
+      .nav-tabs {
+        box-shadow: 0px 1px 0px #2bdcb1;
+        border: 0;
+        .nav-link {
+          color: $gray-600;
+          font-weight: bold;
+          background-color: transparent;
+          border: 0;
+          border-right: 0;
+          border-left: 0;
+          padding: 12px 32px;
+        }
+        .nav-link:hover {
+          color: black;
+        }
+
+        & .nav-link.active {
+          color: black;
+          border-bottom: 4px solid $primary;
+        }
+      }
+    }
+    .history-list {
+      overflow-y: auto;
+      max-height: 400px;
+    }
+    .history-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .btn-primary {
+      color: $white;
+      border-radius: 4px;
+      width: 100%;
+    }
+  }
+  .property-image {
+    width: 16px;
+    height: 16px;
+    background-image: url("../../assets/imgs/property.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+  }
+  .end-details {
+    background: linear-gradient(
+      0deg,
+      rgba(43, 220, 177, 0.3) 0%,
+      rgba(252, 252, 252, 0.3) 100%
+    );
+    padding: 15px 21px;
+    padding-top: 30px;
+    margin-left: -15px;
+    width: calc(100% + 30px);
+    .high-bidder {
+      font-size: 14px;
+      line-height: 17px;
+      color: #7c7c7c;
+      margin-bottom: 6px;
+      .bidder-name {
+        color: #000;
+      }
+    }
+    .high-bidprice {
+      color: #878787;
+      font-size: 16px;
+      line-height: 19px;
+    }
+  }
+}
+
+[data-theme="dark"] {
+  .buyitem-container {
+    background: $bgdark;
+    color: $white;
+    .item-description {
+      .content {
+        color: rgba(255, 255, 255, 0.8);
+      }
+    }
+    .property {
+      background: #0e2630;
+      border: 0;
+      .property-header {
+        background: #0e2630;
+        box-shadow: 0px 1px 0px #ffffff;
+      }
+      .property-body {
+        .property-item {
+          border: 0;
+        }
+        .field {
+          color: #3eddb6;
+        }
+        .value {
+          color: $white;
+        }
+      }
+      .property-title {
+        color: $white;
+      }
+      .property-image {
+        background-image: url("../../assets/imgs/property_white.png");
+      }
+    }
+    .buyitem-tab {
+      padding-bottom: 40px;
+      .nav-tabs {
+        background: #0e2630;
+        box-shadow: 0px 1px 0px #171717;
+        .nav-link:hover {
+          color: #fff;
+        }
+        & .nav-link.active {
+          color: #fff;
+          border-bottom: 4px solid $primary;
+        }
+      }
+    }
+    .end-details {
+      background: #0e2630;
+      padding-top: 15px;
+      .bidder-name {
+        color: #fff;
+      }
+    }
+  }
+}

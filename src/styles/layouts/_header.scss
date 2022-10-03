@@ -41,8 +41,10 @@
     color: #909090 !important;
     font-size: 14px;
     white-space: nowrap;
-    font-weight: 700;
+    font-family: Rubik-medium;
+    font-weight: 500;
     padding-left: 0 !important;
+    color: #909090;
     &.active {
       color: $black !important;
     }
@@ -244,6 +246,8 @@
     padding: 4px 8px;
     background: rgb(247, 248, 249);
     border-radius: 100px;
+    font-size: 11px;
+    font-family: Rubik-medium;
   }
   @media screen and (max-width: 1290px) {
     margin-left: 0 !important;
@@ -269,7 +273,7 @@
 
 [data-theme="dark"] {
   .header-container {
-    background: rgb(32, 32, 32);
+    background: #0e2630;
     color: $white;
     .txtTitle {
       color: #f7f8f9;
@@ -277,6 +281,10 @@
     .nav-link {
       color: #dee7fa !important;
       opacity: 0.8;
+      font-family: Rubik-medium;
+      font-weight: 500 !important;
+      font-size: 14px;
+      color: #909090;
       &.active {
         color: $white !important;
       }
@@ -287,11 +295,11 @@
       }
     }
     .dropdown-menu {
-      background: rgba($color: $white, $alpha: 0.4);
+      background: #0e2630;
       a {
         color: $white;
         &:hover {
-          background-color: rgba($color: $white, $alpha: 0.2);
+          background-color: #000c13;
         }
         &.active {
           background-color: $primary;

@@ -13,11 +13,11 @@ const Footer = () => {
           <div className="logo-image"></div>
         </div>
         <div className="d-flex flex-wrap justify-content-center">
-          <div className="item-content font-weight-bold">Top Sellers</div>
-          <div className="item-content font-weight-bold">Hot Collections</div>
-          <div className="item-content font-weight-bold">Explore</div>
-          <div className="item-content font-weight-bold">Privacy Policy</div>
-          <div className="item-content font-weight-bold">Terms and Condtions</div>
+          <div className="item-content">Top Sellers</div>
+          <div className="item-content">Hot Collections</div>
+          <div className="item-content">Explore</div>
+          <div className="item-content">Privacy Policy</div>
+          <div className="item-content">Terms and Condtions</div>
         </div>
         <hr className="divider" />
 
@@ -29,7 +29,6 @@ const Footer = () => {
             <Image className="link-img mr-4" src={image3} alt="alt"></Image>
           </div>
         </div>
-
       </div>
     </footer>
   );

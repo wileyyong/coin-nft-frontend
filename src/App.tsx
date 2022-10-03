@@ -13,14 +13,18 @@ import CreateCollectible from "./pages/CreateCollectible";
 import CollectionDetail from "pages/CollectionDetail";
 import Stakes from "./pages/Stakes";
 import Move from "./pages/Move";
-import configs from 'configs';
+import configs from "configs";
 
 import "./styles/index.scss";
 
-import { getNftCategories, getETHUSDTCurrency, getMATICUSDTCurrency } from "store/Nft/nft.slice";
-import { getMyInfo } from 'store/User/user.slice';
+import {
+  getNftCategories,
+  getETHUSDTCurrency,
+  getMATICUSDTCurrency
+} from "store/Nft/nft.slice";
+import { getMyInfo } from "store/User/user.slice";
 
-interface AppProps { }
+interface AppProps {}
 declare let window: any;
 
 const App: React.FC<AppProps> = () => {
@@ -29,7 +33,10 @@ const App: React.FC<AppProps> = () => {
   const isAuth = useAppSelector(isAuthenticated);
   useEffect(() => {
     if (window && window.ethereum && window.ethereum.networkVersion) {
-      localStorage.setItem(configs.STORAGE.SELECTED_NETWORK, window.ethereum.networkVersion);
+      localStorage.setItem(
+        configs.STORAGE.SELECTED_NETWORK,
+        window.ethereum.networkVersion
+      );
     }
   }, []);
   useEffect(() => {
@@ -52,7 +59,7 @@ const App: React.FC<AppProps> = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/buy">
+          <Route exact path="/">
             <Home />
           </Route>
           <Route exact path="/items">
@@ -76,7 +83,7 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/stake">
             <Stakes />
           </Route>
-          <Route exact path="/">
+          <Route exact path="/move">
             <Move />
           </Route>
         </Switch>

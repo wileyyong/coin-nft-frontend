@@ -1,13 +1,13 @@
 .link-section {
-  border-bottom: 1px solid rgba($primary, 0.68);
-  @include media-breakpoint-down('sm') {
+  border-bottom: 2px solid #2bdcb1;
+  @include media-breakpoint-down("sm") {
     padding: 0 10px;
   }
   .nav {
     flex-wrap: nowrap;
     overflow-x: auto;
     .nav-link {
-      color: $black;
+      color: #717171;
       white-space: nowrap;
       position: relative;
       padding-right: 10px;
@@ -26,6 +26,21 @@
     }
   }
   .nav-link.active {
-    color: $primary !important;
+    color: $black !important;
+    background: rgba(43, 220, 177, 0.4);
+    box-shadow: 0px 4px 0px #2bdcb1;
+  }
+}
+
+[data-theme="dark"] {
+  .link-section {
+    .nav-link {
+      color: #717171;
+      &.active {
+        color: $white !important;
+        background: #0e2630;
+      }
+      background: #0e2630;
+    }
   }
 }

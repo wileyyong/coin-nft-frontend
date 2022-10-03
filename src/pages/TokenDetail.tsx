@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import itemLogo from "assets/imgs/puml-logo-footer.png";
+import itemLogo from "assets/imgs/puml.png";
 import imgAvatar from "assets/imgs/avatar.png";
 
 import SmartContract from "ethereum/Contract";
@@ -58,6 +58,7 @@ import { EthereumNetworkID } from "model/EthereumNetwork";
 
 import CollectionController from "controller/CollectionController";
 import NftController from "controller/NftController";
+import { BiBorderRadius } from "react-icons/bi";
 
 interface TokenDetailProps {}
 
@@ -667,7 +668,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
   const Details = () => (
     <div className="d-flex flex-column pt-2">
       <div className="d-flex flex-row align-items-center item-address pr-2 pb-3">
-        <Image src={itemLogo} className="member-image"></Image>
+        <Image src={itemLogo} className="member-image mr-2"></Image>
         <div className="address">{token._id}</div>
       </div>
       {owner && (
@@ -694,8 +695,13 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           </div>
         )}
       </div>
+      <div className="item-description">
+        <div className="title">Description</div>
+        <div className="content mt-2 mb-4">{token.description}</div>
+      </div>
     </div>
   );
+
   const Bid = () => (
     <div>
       {bidHistory.length > 0 ? (
@@ -703,7 +709,6 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           return (
             <Fragment key={index}>
               <BidHistoryItem item={bidItem} token={token} />
-              <DivideLine key={`line_${index}`}></DivideLine>
             </Fragment>
           );
         })
@@ -739,138 +744,134 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           <LoadingSpinner />
         </div>
       ) : (
-        <Container className="buyitem-container">
-          <div className="row">
-            <div className="col-12 col-md-6 col-lg-6 col-xl-5 pb-4">
-              <div className="featured-media w-100">
-                {isPicture() ? (
-                  <img
-                    id="token-img"
-                    ref={tokenImgEl}
-                    className="media my-4"
+        <div className="buyitem-container">
+          <div className="col-12 col-md-6 col-lg-6 col-xl-5 pb-4">
+            <div className="featured-media w-100">
+              {isPicture() ? (
+                <img
+                  id="token-img"
+                  ref={tokenImgEl}
+                  className="media"
+                  src={getTokenMedia()}
+                  alt="tokenImage"
+                />
+              ) : (
+                token &&
+                token.media && (
+                  <video
+                    ref={tokenVideoEl}
                     src={getTokenMedia()}
-                    alt="tokenImage"
-                  />
-                ) : (
-                  token &&
-                  token.media && (
-                    <video
-                      ref={tokenVideoEl}
-                      src={getTokenMedia()}
-                      className="media my-4"
-                      loop
-                      autoPlay
-                      controls
-                    >
-                      <source type="video/mp4"></source>
-                      <source type="video/webm"></source>
-                      <source type="video/ogg"></source>
-                      Your browser does not support HTML5 video.
-                    </video>
-                  )
-                )}
-              </div>
-              <div className="property">
-                <div className="d-flex flex-row pl-1 pb-3">
-                  <div className="property-image mr-3"></div>
-                  <div className="property-title">Properties</div>
-                </div>
-                <div className="property-body row">
-                  {properties &&
-                    properties.length > 0 &&
-                    properties.map((it, index) => (
-                      <div
-                        className="flex-fill col-12 col-md-4 pt-2"
-                        key={index}
-                      >
-                        <div className="property-item">
-                          <div className="field pb-2">{it["trait_type"]}</div>
-                          <div className="value">{it && it["value"]}</div>
-                        </div>
-                      </div>
-                    ))}
-                </div>
-              </div>
-              {isDirectSale() && (
-                <>
-                  {offer &&
-                    offer.status === "pending" &&
-                    (owner &&
-                    owner.user &&
-                    owner.user.wallet !== walletAddress ? (
-                      <Button
-                        variant="primary"
-                        className="mt-4 buy-now w-50 text-white"
-                        onClick={() => {
-                          onDirectBuyClicked();
-                        }}
-                      >
-                        <span>Buy Now</span>
-                      </Button>
-                    ) : (
-                      ""
-                    ))}
-                  <div className="my-5 d-block">
-                    <span className="o-5">Service Fee</span>&nbsp;&nbsp;
-                    {serviceFee}%<br></br>
-                    {owner && owner.user && owner.user._id === userInfo._id && (
-                      <>
-                        <span className="o-5">You will receive</span>
-                        &nbsp;&nbsp;
-                        {getOfferPriceWithServiceFee()}
-                        &nbsp; {token.blockchain ? token.blockchain : "ETH"}
-                        &nbsp;&nbsp;
-                        <span className="o-5">
-                          (${getDollarPrice(getOfferPriceWithServiceFee())})
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </>
+                    className="media"
+                    loop
+                    autoPlay
+                    controls
+                  >
+                    <source type="video/mp4"></source>
+                    <source type="video/webm"></source>
+                    <source type="video/ogg"></source>
+                    Your browser does not support HTML5 video.
+                  </video>
+                )
               )}
             </div>
-            <div className="col-12 col-md-6 col-lg-7 col-xl-8 d-flex flex-column flex-fill item-info">
-              <div className="item-title pb-4 d-flex align-items-center">
-                {token.name}
-                <div className="font-size-lg">
-                  <div
-                    className={
-                      likeDisable
-                        ? "liked-action disabled ml-5"
-                        : "liked-action ml-5"
-                    }
-                    onClick={() => onLiked(token._id)}
-                  >
-                    {likes ? <AiFillHeart /> : <AiOutlineHeart />}
-                    <span>{likes || 0}</span>
-                  </div>
+            <div className="property">
+              <div className="d-flex property-header flex-row">
+                <div className="property-image mr-3"></div>
+                <div className="property-title">Properties</div>
+              </div>
+              <div className="property-body">
+                {properties &&
+                  properties.length > 0 &&
+                  properties.map((it, index) => (
+                    <div className="flex-fill col-12 col-md-4 pt-2" key={index}>
+                      <div className="property-item">
+                        <div className="field pb-2">{it["trait_type"]}</div>
+                        <div className="value">{it && it["value"]}</div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+            {isDirectSale() && (
+              <>
+                {offer &&
+                  offer.status === "pending" &&
+                  (owner &&
+                  owner.user &&
+                  owner.user.wallet !== walletAddress ? (
+                    <Button
+                      variant="primary"
+                      className="mt-4 buy-now w-50 text-white"
+                      onClick={() => {
+                        onDirectBuyClicked();
+                      }}
+                    >
+                      <span>Buy Now</span>
+                    </Button>
+                  ) : (
+                    ""
+                  ))}
+                <div className="my-5 d-block">
+                  <span className="o-5">Service Fee</span>&nbsp;&nbsp;
+                  {serviceFee}%<br></br>
+                  {owner && owner.user && owner.user._id === userInfo._id && (
+                    <>
+                      <span className="o-5">You will receive</span>
+                      &nbsp;&nbsp;
+                      {getOfferPriceWithServiceFee()}
+                      &nbsp; {token.blockchain ? token.blockchain : "ETH"}
+                      &nbsp;&nbsp;
+                      <span className="o-5">
+                        (${getDollarPrice(getOfferPriceWithServiceFee())})
+                      </span>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+          <div className="col-12 col-md-6 col-lg-7 col-xl-8 d-flex flex-column flex-fill item-info">
+            <div className="item-title pb-4 d-flex align-items-center">
+              {token.name}
+              <div className="font-size-lg">
+                <div
+                  className={
+                    likeDisable
+                      ? "liked-action disabled ml-5"
+                      : "liked-action ml-5"
+                  }
+                  onClick={() => onLiked(token._id)}
+                >
+                  {likes ? <AiFillHeart /> : <AiOutlineHeart />}
+                  <span>{likes || 0}</span>
                 </div>
               </div>
-              {offer && offer.min_bid && (
-                <div className="item-price pb-4">
-                  <span className="for-sale">For Sale • Highest Bid </span>
-                  <span className="text-dark">
-                    {offer ? `${offer.min_bid}` : ""}{" "}
-                    {token.blockchain ? token.blockchain : "ETH"} •{" "}
-                  </span>
-                  <span className="price-puml">
-                    {offer ? `$${getDollarPrice(offer.min_bid)} ` : " "}
-                  </span>
-                </div>
-              )}
-              {offer && offer.offer_price && (
-                <div className="item-price pb-4">
-                  <span className="for-sale">For Sale • Direct buy Price </span>
-                  <span className="text-dark">
-                    {offer ? `${offer.offer_price}` : ""}{" "}
-                    {token.blockchain ? token.blockchain : "ETH"} •{" "}
-                  </span>
-                  <span className="price-puml">
-                    {offer ? `$${getDollarPrice(offer.offer_price)} ` : " "}
-                  </span>
-                </div>
-              )}
-              {token && token.categories && (
+            </div>
+            {offer && offer.min_bid && (
+              <div className="item-price pb-4">
+                <span className="for-sale">For Sale • Highest Bid </span>
+                <span>
+                  {offer ? `${offer.min_bid}` : ""}{" "}
+                  {token.blockchain ? token.blockchain : "ETH"} •{" "}
+                </span>
+                <span className="price-puml">
+                  {offer ? `$${getDollarPrice(offer.min_bid)} ` : " "}
+                </span>
+              </div>
+            )}
+            {offer && offer.offer_price && (
+              <div className="item-price pb-4">
+                <span className="for-sale">For Sale • Direct buy Price </span>
+                <span>
+                  {offer ? `${offer.offer_price}` : ""}{" "}
+                  {token.blockchain ? token.blockchain : "ETH"} •{" "}
+                </span>
+                <span className="price-puml">
+                  {offer ? `$${getDollarPrice(offer.offer_price)} ` : " "}
+                </span>
+              </div>
+            )}
+            {/*{token && token.categories && (
                 <div className="d-flex mt-3 flex-wrap">
                   {token.categories.map((category: any, index: number) => {
                     return (
@@ -880,41 +881,44 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     );
                   })}
                 </div>
-              )}
-              <div className="d-flex flex-row flex-wrap mb-3">
-                {creator && (
-                  <div
-                    className="d-flex flex-row align-items-center item-members pr-4"
-                    onClick={() => history.push(`/users/${creator.wallet}`)}
-                  >
-                    <Image
-                      src={configs.DEPLOY_URL + creator.avatar}
-                      className="member-image mr-2"
-                    ></Image>
-                    <div className="d-flex flex-column pt-2">
-                      <div className="member-type pb-1">Creator</div>
-                      <div className="member-name">{creator.name}</div>
-                    </div>
-                  </div>
-                )}
-                <FlexAlignCenterDiv
-                  className="pointer-cursor d-flex align-items-center"
-                  onClick={() =>
-                    token.collections
-                      ? history.push(`/collections/${token.collections._id}`)
-                      : ""
-                  }
+                )}*/}
+            <div className="d-flex flex-row flex-wrap mb-3">
+              {creator && (
+                <div
+                  className="d-flex flex-row align-items-center item-members pr-4"
+                  onClick={() => history.push(`/users/${creator.wallet}`)}
                 >
-                  <NftAvatar
-                    className="mr-3"
-                    imagePath={getCollectionImgPath()}
-                  ></NftAvatar>
-                  <B1NormalTextTitle style={{ width: "calc(100% - 76px)" }}>
+                  <Image
+                    src={configs.DEPLOY_URL + creator.avatar}
+                    className="member-image mr-2"
+                  ></Image>
+                  <div className="d-flex flex-column pt-2">
+                    <div className="member-type pb-1">Creator</div>
+                    <div className="member-name">{creator.name}</div>
+                  </div>
+                </div>
+              )}
+              <div
+                className="d-flex flex-row align-items-center item-members pr-4"
+                onClick={() =>
+                  token.collections
+                    ? history.push(`/collections/${token.collections._id}`)
+                    : ""
+                }
+              >
+                <NftAvatar
+                  className="mr-3"
+                  imagePath={getCollectionImgPath()}
+                ></NftAvatar>
+                <div className="d-flex flex-column pt-2">
+                  <div className="member-type pb-1">Collection</div>
+                  <div className="member-name">
                     {token.collections ? token.collections.name : "PUML"}
-                  </B1NormalTextTitle>
-                </FlexAlignCenterDiv>
+                  </div>
+                </div>
               </div>
-              {sizeObj && (
+            </div>
+            {/*{sizeObj && (
                 <div className="mr-3 mr-md-5">
                   <B3NormalTextTitle>Size</B3NormalTextTitle>
                   <p>
@@ -927,46 +931,45 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                   <B3NormalTextTitle>Time</B3NormalTextTitle>
                   <p>{timeObj.duration} sec</p>
                 </div>
-              )}
-              <div className="item-description">
-                <div className="title">Description</div>
-                <div className="content pt-1">
-                  <ReadMore maxChars={250} text={token.description} />
-                </div>
-              </div>
-              <div className="buyitem-tab pt-2">
-                <Tabs
-                  className="mt-4"
-                  selectedTab={selectedTab}
-                  onClick={setSelectedTab}
-                  tabs={tabs}
-                />
-              </div>
+              )}*/}
+            <div className="buyitem-tab pt-2 mb-2">
+              <Tabs
+                className="mt-4"
+                selectedTab={selectedTab}
+                onClick={setSelectedTab}
+                tabs={tabs}
+              />
+            </div>
+            <div className="end-details">
               {isAuction() && (
-                <Row className="auction-end-details pb-3">
-                  <Col md="6" className="highest-bidder">
+                <div className="auction-end-details">
+                  <div className="highest-bidder">
                     {highestBidder ? (
                       <>
-                        <MidTextTitle>
-                          <span className="text-gray">Highest bid by</span>{" "}
-                          <span style={{ whiteSpace: "pre-wrap" }}>
-                            {highestBidder.user ? highestBidder.user.name : ""}
-                          </span>
-                        </MidTextTitle>
-                        <div className="bid-history-item d-flex mt-3 mb-2">
-                          <NftAvatar
-                            imagePath={getAvatar("highestBidder")}
-                            className="mr-3"
-                          ></NftAvatar>
+                        <div className="bid-history-item d-flex">
                           <div>
-                            <B2NormalTextTitle>
+                            <img
+                              src={getAvatar("highestBidder")}
+                              width={55}
+                              style={{ borderRadius: "55%" }}
+                              className="mr-3"
+                            />
+                          </div>
+                          <div>
+                            <div className="high-bidder">
+                              Highest bid by
+                              <span className="bidder-name pl-2">
+                                {highestBidder.user
+                                  ? highestBidder.user.name
+                                  : ""}
+                              </span>
+                            </div>
+                            <div className="high-bidprice">
                               {highestBidder.price}{" "}
                               {token.blockchain ? token.blockchain : "ETH"}{" "}
-                              •&nbsp;
-                            </B2NormalTextTitle>
-                            <B1NormalTextTitle className="faint-color">
-                              ${getDollarPrice(highestBidder.price)}
-                            </B1NormalTextTitle>
+                              •&nbsp;${getDollarPrice(highestBidder.price)} for
+                              1 edition
+                            </div>
                           </div>
                         </div>
                       </>
@@ -975,8 +978,8 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                     ) : (
                       <MidTextTitle>No bidders on this auction.</MidTextTitle>
                     )}
-                  </Col>
-                  <Col md="6" className="pl-md-4">
+                  </div>
+                  <div className="pl-md-4">
                     {offer && offer.status === "completed" && (
                       <MidTextTitle className="mt-3">
                         Auction Ended
@@ -987,7 +990,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                         Auction Expired
                       </MidTextTitle>
                     )}
-                    {offer && offer.status === "pending" && !isExpired() && (
+                    {/*{offer && offer.status === "pending" && !isExpired() && (
                       <>
                         <MidTextTitle className="faint-color">
                           Auction ends
@@ -1023,17 +1026,17 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                           ""
                         )}
                       </>
-                    )}
-                  </Col>
-                </Row>
+                        )}*/}
+                  </div>
+                </div>
               )}
-              <div className="row pt-2">
+              <div className="row">
                 {isOwner() &&
                 isOwner().user.wallet !== walletAddress &&
                 !isBidder()
                   ? !isExpired() &&
                     isAuction() && (
-                      <div className="col-12 col-sm-6">
+                      <div className="col-12 col-sm-6 pt-4">
                         <Button
                           className="btn-primary mr-2 mb-2"
                           onClick={() => onPlaceBidClicked()}
@@ -1045,7 +1048,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                   : isOwner() &&
                     isOwner().user.wallet === walletAddress &&
                     (!offer || offer.status !== "pending") && (
-                      <div className="col-12 col-sm-6">
+                      <div className="col-12 col-sm-6 pt-4">
                         <Button
                           className="btn-primary mr-2 mb-2"
                           onClick={() => {
@@ -1057,7 +1060,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
                       </div>
                     )}
                 {owner && owner.user.wallet === walletAddress && (
-                  <div className="col-12 col-sm-6">
+                  <div className="col-12 col-sm-6 pt-4">
                     <Button
                       className="btn-gray mr-2"
                       onClick={() => {
@@ -1071,7 +1074,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
               </div>
             </div>
           </div>
-        </Container>
+        </div>
       )}
       {showBuyTokenModal && offer && (
         <BuyTokenModal
