@@ -63,7 +63,7 @@ const MoveToEarn = (props: any) => {
       </p>
       <div className="intro-btn-wallet intro-btn-wallet--connect">
         <Button className="btn-primary" onClick={props.handleConnectPuml}>
-          Connect PUML Wallet
+          Connect your account
         </Button>
       </div>
     </>
