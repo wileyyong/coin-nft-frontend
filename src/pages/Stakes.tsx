@@ -494,11 +494,9 @@ const Stakes: React.FC<StakeProps> = () => {
           <p className="intro-type">{apy} APY</p>
           <div className="intro-connect-btnGroup pt-4">
             <div className="intro-btn-wallet pb-3">
-              <Button className="mr-2 mr-lg-4">
-                <div className="d-flex flex-row align-items-center">
-                  <span>Buy $PUMLx</span>
-                </div>
-              </Button>
+              <a href="https://pumlx.com" className="mr-2 mr-lg-4 buy-pumlx">
+                Buy $PUMLx
+              </a>
             </div>
           </div>
         </div>

@@ -61,27 +61,12 @@
           //align-items: center;
           //justify-content: center;
         }
-        .btn {
-          padding: 14px 56px;
-          background: #4bb7cd;
-          border-radius: 4px;
-          border: 0;
-          @include media-breakpoint-down(sm) {
-            margin-bottom: 10px;
-          }
-          height: auto;
-          text-align: left;
-          &:active,
-          &:focus {
-            outline: none;
-            box-shadow: none;
-          }
-        }
         .connect-img {
           width: 40px;
           height: 40px;
         }
         .intro-btn-wallet {
+          margin: 30px 0;
           @include media-breakpoint-down(md) {
             padding-right: 20px;
           }
@@ -92,8 +77,22 @@
           @include media-breakpoint-down(xs) {
             width: 100%;
           }
-          > .btn-primary {
-            color: $white;
+          a {
+            padding: 14px 56px;
+            background: #4bb7cd;
+            border-radius: 4px;
+            border: 0;
+            color: $white !important;
+            @include media-breakpoint-down(sm) {
+              margin-bottom: 10px;
+            }
+            height: auto;
+            text-align: left;
+            &:active,
+            &:focus {
+              outline: none;
+              box-shadow: none;
+            }
           }
         }
         .intro-btn-metamask {

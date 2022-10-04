@@ -62,6 +62,11 @@ const MoveToEarn = (props: any) => {
         Scan the QR code to connect your steps and earn PUMLx.
       </p>
       <div className="intro-btn-wallet intro-btn-wallet--connect">
+        {!props.walletAddress && (
+          <a href="https://pumlx.com" className="mr-2 mr-lg-4 buy-pumlx">
+            Buy $PUMLx
+          </a>
+        )}
         <Button className="btn-primary" onClick={props.handleConnectPuml}>
           Connect your account
         </Button>
