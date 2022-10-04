@@ -59,7 +59,7 @@ const App: React.FC<AppProps> = () => {
     <div className="App">
       <Router>
         <Switch>
-          <Route exact path="/">
+          <Route exact path="/buy">
             <Home />
           </Route>
           <Route exact path="/items">
@@ -83,7 +83,7 @@ const App: React.FC<AppProps> = () => {
           <Route exact path="/stake">
             <Stakes />
           </Route>
-          <Route exact path="/move">
+          <Route exact path="/">
             <Move />
           </Route>
         </Switch>

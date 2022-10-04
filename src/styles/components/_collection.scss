@@ -17,6 +17,9 @@
   }
 }
 .puml-scan {
+  .modal-dialog {
+    max-width: 420px;
+  }
   .modal-body {
     color: $black;
     text-align: center;
@@ -27,7 +30,7 @@
     }
     .qr-div {
       margin-top: 26px;
-      border: 1px solid $black;
+      border: 1px solid #2bdcb1;
       padding-top: 25px;
       font-weight: 600;
       border-radius: 7px;
@@ -38,7 +41,7 @@
       &__alt {
         margin-top: 26px;
         font-size: $h5-font-size;
-        border-top: 1px dashed $black;
+        border-top: 1px dashed #2bdcb1;
         border-radius: 7px;
         padding: 14px;
       }

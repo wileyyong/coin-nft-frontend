@@ -139,22 +139,11 @@ const Header: React.FC<HeaderProps> = () => {
                 className="mr-lg-3"
                 active={location.pathname === "/"}
               >
-                Home
+                Move to Earn
               </Nav.Link>
             </Nav.Item>
             {isAuth && walletAddress && (
               <Fragment>
-                <Nav.Item>
-                  <Nav.Link
-                    eventKey="2"
-                    as={Link}
-                    to="/items"
-                    className="mr-lg-3"
-                    active={location.pathname === "/items"}
-                  >
-                    My NFTs
-                  </Nav.Link>
-                </Nav.Item>
                 <Nav.Item>
                   <Nav.Link
                     eventKey="1"
@@ -170,11 +159,22 @@ const Header: React.FC<HeaderProps> = () => {
                   <Nav.Link
                     eventKey="1"
                     as={Link}
-                    to="/move"
+                    to="/buy"
                     className="mr-lg-3"
-                    active={location.pathname === "/move"}
+                    active={location.pathname === "/buy"}
                   >
-                    Move to Earn
+                    Buy Athelete NFT’s
+                  </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Nav.Link
+                    eventKey="2"
+                    as={Link}
+                    to="/items"
+                    className="mr-lg-3"
+                    active={location.pathname === "/items"}
+                  >
+                    My NFTs
                   </Nav.Link>
                 </Nav.Item>
               </Fragment>
