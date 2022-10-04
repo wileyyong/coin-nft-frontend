@@ -56,7 +56,7 @@ const MoveToEarn = (props: any) => {
     props.handleLoadNft();
   }, []);
   return (
-    <>
+    <div className="move-earn">
       <p className="intro-type intro-type--italy">Move to Earn</p>
       <p className="intro-title intro-title--bottom">
         Scan the QR code to connect your steps and earn PUMLx.
@@ -71,7 +71,7 @@ const MoveToEarn = (props: any) => {
           Connect your account
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -366,7 +366,7 @@ const Move: React.FC<MoveProps> = () => {
       <div className={`section-intro ${isConnectPuml ? "welcome-claim" : ""}`}>
         <div className="intro-content text-left">
           {isConnectPuml ? (
-            <>
+            <div className="move-earn">
               <p className="intro-title pb-0">Welcome back,</p>
               <p className="intro-type">{userInfo.name}</p>
               <p className="intro-title intro-title--bottom">
@@ -398,7 +398,7 @@ const Move: React.FC<MoveProps> = () => {
                 <span className="time__left">{leftHours} hours &nbsp;</span>
                 remaining to claim today’s steps.
               </div>
-            </>
+            </div>
           ) : (
             <MoveToEarn
               isAuth={isAuth}

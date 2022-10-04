@@ -490,13 +490,15 @@ const Stakes: React.FC<StakeProps> = () => {
 
       <div className="section-intro">
         <div className="intro-content text-left">
-          <p className="intro-title pb-0">Stake PUMLx & earn up to </p>
-          <p className="intro-type">{apy} APY</p>
-          <div className="intro-connect-btnGroup pt-4">
-            <div className="intro-btn-wallet pb-3">
-              <a href="https://pumlx.com" className="mr-2 mr-lg-4 buy-pumlx">
-                Buy $PUMLx
-              </a>
+          <div className="intro-content__content">
+            <p className="intro-title pb-0">Stake PUMLx & earn up to </p>
+            <p className="intro-type">{apy} APY</p>
+            <div className="intro-connect-btnGroup pt-4">
+              <div className="intro-btn-wallet pb-3">
+                <a href="https://pumlx.com" className="mr-2 mr-lg-4 buy-pumlx">
+                  Buy $PUMLx
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -613,7 +615,7 @@ const Stakes: React.FC<StakeProps> = () => {
         </div>
       </div>
       <div className="stakes">
-        <div className="stakes__title">
+        <div className="stakes__title mb-2">
           <div className="item-title">Stake PUMLx</div>
         </div>
         <div className="valupap">

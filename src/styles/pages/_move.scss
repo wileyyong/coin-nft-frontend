@@ -33,6 +33,10 @@
         padding-top: 20px;
         padding-bottom: 20px;
       }
+      .move-earn {
+        max-width: 473px;
+        margin: auto;
+      }
       .intro-title {
         font-size: $h4-font-size;
         @include media-breakpoint-down(md) {
@@ -52,10 +56,10 @@
         background: linear-gradient(94.68deg, #5ec9bf 40.1%, #39a5da 94.6%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-size: $h1-font-size * 2;
+        font-size: 64px;
         display: inline-block;
         @include media-breakpoint-down(md) {
-          font-size: $h1-font-size;
+          font-size: 50px;
         }
         font-weight: $font-weight-bold;
         &--italy {
@@ -128,10 +132,7 @@
             font-size: $font-size-base * 1.125;
             font-weight: 600;
             background: rgba(255, 255, 255, 0.2);
-            @include media-breakpoint-down(md) {
-              width: 60%;
-              margin-bottom: 5px;
-            }
+
             input {
               border: none;
               padding: 0;
@@ -184,6 +185,7 @@
       }
     }
     .intro-ticket {
+      margin: 0 auto;
       padding-top: 90px;
       width: 100%;
       max-width: 430px;

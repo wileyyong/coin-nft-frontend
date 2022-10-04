@@ -46,6 +46,7 @@
         width: 100%;
       }
       .intro-border {
+        margin: auto;
         border: 8px solid #ffffff;
         box-shadow: 0px 0px 23px 3px #4ac4ff, inset 0px 0px 2px 2px #4ac4ff;
         border-radius: 45px;
@@ -163,6 +164,7 @@
     //   }
     // }
     .intro-ticket {
+      margin: auto;
       padding-top: 90px;
       width: 100%;
       max-width: 430px;
