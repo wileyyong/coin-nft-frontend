@@ -67,6 +67,9 @@
     color: rgba($color: $white, $alpha: 0.7) !important;
   }
   .puml-scan {
+    .modal-dialog {
+      max-width: 420px;
+    }
     .modal-content {
       background: #0e2630;
       box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
@@ -75,12 +78,12 @@
     .modal-body {
       color: $white;
       .qr-div {
-        border: 1px solid $white;
+        border: 1px solid #2bdcb1;
         canvas {
           background: $white;
         }
         &__alt {
-          border-top: 1px dashed $white;
+          border-top: 1px dashed #2bdcb1;
         }
       }
     }

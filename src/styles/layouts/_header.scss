@@ -52,9 +52,10 @@
       display: block;
       content: " ";
       margin-top: 10px;
-      border-top: 2px solid $primary;
-      border-bottom: 2px solid $primary;
-      border-radius: 3px;
+      height: 6px;
+      width: 100%;
+      background: #2bdcb1;
+      border-radius: 2px;
     }
   }
 
@@ -226,6 +227,26 @@
       left: 0px;
     }
   }
+  .connect-wallet {
+    font-size: 14px;
+    color: #fcfcfc;
+    padding: 16px;
+    padding-left: 45px;
+    background: #2bdcb1;
+    border-radius: 4px;
+    border: 0;
+    margin-right: 50px;
+    position: relative;
+    &:before {
+      position: absolute;
+      content: "";
+      left: 14px;
+      top: 11px;
+      width: 24px;
+      height: 24px;
+      background: url("../../assets/imgs/wallet.png");
+    }
+  }
 }
 
 .dropdown-toggle::after {
@@ -239,7 +260,7 @@
 }
 
 .b-nav {
-  border: 1px solid #c4c4c4;
+  border: 2px solid #2bdcb1;
   border-radius: 10px;
   padding: 4px 12px;
   .address {

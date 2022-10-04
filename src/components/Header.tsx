@@ -13,7 +13,7 @@ import PumlIcon from "assets/imgs/puml1.png";
 import MoonIcon from "assets/imgs/moon.png";
 import SunIcon from "assets/imgs/sun.png";
 
-import { disconnectUserWallet } from "store/User/user.slice";
+import { disconnectUserWallet, connectUserWallet } from "store/User/user.slice";
 import { SmallTextTitleGrey } from "./common/common.styles";
 
 import {
@@ -87,6 +87,10 @@ const Header: React.FC<HeaderProps> = () => {
     dispatch(disconnectUserWallet());
     document.querySelector(".navbar-collapse")?.classList.remove("show");
     document.querySelector(".navbar-toggler")?.classList.add("collapsed");
+  };
+
+  const connectMetaMask = () => {
+    dispatch(connectUserWallet());
   };
 
   const getPriceType = () => {
@@ -177,7 +181,32 @@ const Header: React.FC<HeaderProps> = () => {
             )}
           </Nav>
           <Nav className="ml-auto">
-            {isAuth && walletAddress && (
+            <Fragment>
+              <Nav.Item className="b-nav mr-2 pt-2">
+                {theme === "" ? (
+                  <Image
+                    className="themeicon"
+                    src={MoonIcon}
+                    width="30"
+                    alt="moon"
+                    onClick={() => {
+                      setTheme("dark");
+                    }}
+                  />
+                ) : (
+                  <Image
+                    className="themeicon"
+                    src={SunIcon}
+                    width="30"
+                    alt="sun"
+                    onClick={() => {
+                      setTheme("");
+                    }}
+                  />
+                )}
+              </Nav.Item>
+            </Fragment>
+            {isAuth && walletAddress ? (
               <Fragment>
                 {walletAddress === configs.ADMIN_ADDRESS.toLowerCase() && (
                   <Nav.Item>
@@ -192,29 +221,7 @@ const Header: React.FC<HeaderProps> = () => {
                     </Nav.Link>
                   </Nav.Item>
                 )}
-                <Nav.Item className="b-nav mr-2 pt-2">
-                  {theme === "" ? (
-                    <Image
-                      className="themeicon"
-                      src={MoonIcon}
-                      width="30"
-                      alt="moon"
-                      onClick={() => {
-                        setTheme("dark");
-                      }}
-                    />
-                  ) : (
-                    <Image
-                      className="themeicon"
-                      src={SunIcon}
-                      width="30"
-                      alt="sun"
-                      onClick={() => {
-                        setTheme("");
-                      }}
-                    />
-                  )}
-                </Nav.Item>
+
                 {getPriceType() === "ETH" && (
                   <Nav.Item className="b-nav">
                     <Image src={PumlIcon} width="40" className="mr-2" />
@@ -246,6 +253,15 @@ const Header: React.FC<HeaderProps> = () => {
                     </NavDropdown.Item>
                   </NavDropdown>
                 </Nav.Item>
+              </Fragment>
+            ) : (
+              <Fragment>
+                <button
+                  className="connect-wallet"
+                  onClick={() => connectMetaMask()}
+                >
+                  Connect Wallet
+                </button>
               </Fragment>
             )}
           </Nav>

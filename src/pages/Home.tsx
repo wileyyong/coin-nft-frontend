@@ -425,7 +425,7 @@ const Home: React.FC<HomeProps> = () => {
                 </div>
               </Button>
             </div>
-            */}
+            
             {!isAuth ? (
               <div className="intro-btn-metamask">
                 <Button
@@ -444,6 +444,7 @@ const Home: React.FC<HomeProps> = () => {
             ) : (
               ""
             )}
+            */}
           </div>
         </div>
         <div className="intro-ticket">
