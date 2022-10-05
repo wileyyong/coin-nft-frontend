@@ -331,7 +331,7 @@ class Contract {
           configs.PUML20_ADDRESS
         );
         await pumlContract.methods
-          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 1000))
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 100000))
           .send({
             from: EthUtil.getAddress()
           });
@@ -371,7 +371,7 @@ class Contract {
           configs.PUML20_ADDRESS
         );
         await pumlContract.methods
-          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 1000))
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 100000))
           .send({
             from: EthUtil.getAddress()
           });
@@ -438,7 +438,7 @@ class Contract {
       );
       if (!pumlxApproved) {
         await pumlContract.methods
-          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 1000))
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 100000))
           .send({
             from: EthUtil.getAddress()
           });
