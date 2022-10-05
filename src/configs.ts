@@ -78,7 +78,7 @@ const configs = {
   PUML_ETH_POOL: 1000000,
   PUML_ETH_FIRST_POOL: 500000,
   NFT_ETH_POOL: 300000,
-  NFT_ETH_FIRST_POOL: 150000
+  NFT_ETH_FIRST_POOL: 500000
 };
 
 export default configs;

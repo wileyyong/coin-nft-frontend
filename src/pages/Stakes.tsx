@@ -178,13 +178,15 @@ const Stakes: React.FC<StakeProps> = () => {
     if (token === "pumlx") {
       if (totalAmount > 0) {
         collected =
-          (((amount / totalAmount) * rewardPumlxRate) / 6500 / 30 / 86400) *
+          (((((amount / totalAmount) * rewardPumlxRate) / 6500 / 30) * 6500) /
+            86400) *
           (new Date().getTime() / 1000 - lastUpdateTime);
       }
     } else {
       if (totalAmount > 0) {
         collected =
-          (((amount / totalAmount) * rewardNftRate) / 6500 / 30 / 86400) *
+          (((((amount / totalAmount) * rewardNftRate) / 6500 / 30) * 6500) /
+            86400) *
           (new Date().getTime() / 1000 - lastUpdateTime);
       }
     }

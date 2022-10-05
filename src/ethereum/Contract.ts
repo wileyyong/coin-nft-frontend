@@ -114,7 +114,7 @@ class Contract {
         // const stake_address: string = await deploy_stake
         //   .deploy({
         //     data: Stakebytecode,
-        //     arguments: [puml_pool_address, nft_pool_address]
+        //     arguments: [configs.PUML_POOL_ADDRESS, configs.NFT_POOL_ADDRESS]
         //   })
         //   .send(parameter, (err: any, transactionHash: any) => {
         //     console.log("Contact Transaction Hash :", transactionHash);
