@@ -185,7 +185,7 @@ const Stakes: React.FC<StakeProps> = () => {
       if (totalAmount > 0) {
         collected =
           (((amount / totalAmount) * rewardNftRate) / 6500 / 30 / 86400) *
-          (new Date().getTime() / 1000 - lastUpdateTimeNFT);
+          (new Date().getTime() / 1000 - lastUpdateTime);
       }
     }
 
