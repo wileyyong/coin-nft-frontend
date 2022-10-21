@@ -2,7 +2,7 @@ import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit";
 import {
   UserReducerState,
   USER_INITIAL_STATE,
-  initCollectionItems,
+  initCollectionItems
 } from "./user.state";
 import Storage from "service/storage";
 import UserController from "controller/UserController";
@@ -48,8 +48,8 @@ export const userSlice = createSlice({
     },
     setMyTokens(state: Draft<UserReducerState>, action: PayloadAction<any>) {
       state.myTokens = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export const { reducer, actions } = userSlice;
@@ -64,7 +64,7 @@ export const {
   setToken,
   setMyInfo,
   setMyCollection,
-  setMyTokens,
+  setMyTokens
 } = actions;
 
 export const signInWithWallet = (payload: any) => async (dispatch: any) => {
@@ -126,7 +126,7 @@ export const connectUserWallet = () => async (dispatch: any) => {
       const walletCheck = await onboard.walletCheck();
       if (walletCheck) {
         const currentState = onboard.getState();
-        const wallet = currentState.wallet
+        const wallet = currentState.wallet;
         if (currentState.address) {
           Storage.set(configs.STORAGE.SELECTED_NETWORK, currentState.network);
           Storage.set(configs.STORAGE.SELECTED_WALLET, wallet.name);
@@ -142,10 +142,10 @@ export const switchNetwork = async (net: number) => {
   try {
     await web3.currentProvider.request({
       method: "wallet_switchEthereumChain",
-      params: [{ chainId: `0x${net.toString(16)}` }],
+      params: [{ chainId: `0x${net.toString(16)}` }]
     });
     Storage.set(configs.STORAGE.SELECTED_NETWORK, `${net}`);
-  } catch (err : any) {
+  } catch (err: any) {
     if (err && net === configs.ONBOARD_POLYGON_ID) {
       if (err.code === 4902) {
         try {
@@ -159,13 +159,13 @@ export const switchNetwork = async (net: number) => {
                 nativeCurrency: {
                   name: "Matic",
                   symbol: "Matic",
-                  decimals: 18,
+                  decimals: 18
                 },
-                blockExplorerUrls: [`${configs.POLYGON_BLOCK_EXPLORER}`],
-              },
-            ],
+                blockExplorerUrls: [`${configs.POLYGON_BLOCK_EXPLORER}`]
+              }
+            ]
           });
-        } catch (error : any) {
+        } catch (error: any) {
           alert(error && error.message);
         }
       }
@@ -178,24 +178,24 @@ export const switchNetwork = async (net: number) => {
             params: [
               {
                 chainId: `0x${net.toString(16)}`,
-                chainName: "Rinkeby Test Network",
+                chainName: "Goerli Test Network",
                 rpcUrls: [`${configs.RPC_URL}`],
                 nativeCurrency: {
                   name: "ETH",
                   symbol: "ETH",
-                  decimals: 18,
+                  decimals: 18
                 },
-                blockExplorerUrls: [`${configs.BLOCK_EXPLORER}`],
-              },
-            ],
+                blockExplorerUrls: [`${configs.BLOCK_EXPLORER}`]
+              }
+            ]
           });
-        } catch (error : any) {
+        } catch (error: any) {
           alert(error && error.message);
         }
       }
     }
   }
-}
+};
 
 export const getMyInfo = (payload: string) => async (dispatch: any) => {
   try {

@@ -71,19 +71,19 @@ class Contract {
           from: EthUtil.getAddress()
         };
 
-        const contract_address: string = await deploy_contract
-          .deploy({
-            data: PUMLbytecode,
-            arguments: [name, symbol]
-          })
-          .send(parameter, (err: any, transactionHash: any) => {
-            console.log("Contact Transaction Hash :", transactionHash);
-          })
-          .on("confirmation", () => {})
-          .then((newContractInstance: any) => {
-            // console.log('Deployed Contract Address : ', newContractInstance.options.address);
-            return newContractInstance.options.address;
-          });
+        // const contract_address: string = await deploy_contract
+        //   .deploy({
+        //     data: PUMLbytecode,
+        //     arguments: [name, symbol]
+        //   })
+        //   .send(parameter, (err: any, transactionHash: any) => {
+        //     console.log("Contact Transaction Hash :", transactionHash);
+        //   })
+        //   .on("confirmation", () => {})
+        //   .then((newContractInstance: any) => {
+        //     // console.log('Deployed Contract Address : ', newContractInstance.options.address);
+        //     return newContractInstance.options.address;
+        //   });
 
         // const puml_pool_address: string = await deploy_pool
         //   .deploy({
@@ -114,7 +114,11 @@ class Contract {
         // const stake_address: string = await deploy_stake
         //   .deploy({
         //     data: Stakebytecode,
-        //     arguments: [configs.PUML_POOL_ADDRESS, configs.NFT_POOL_ADDRESS]
+        //     arguments: [
+        //       configs.PUML_POOL_ADDRESS,
+        //       configs.NFT_POOL_ADDRESS,
+        //       configs.FEE_POOL_ADDRESS
+        //     ]
         //   })
         //   .send(parameter, (err: any, transactionHash: any) => {
         //     console.log("Contact Transaction Hash :", transactionHash);
@@ -125,23 +129,23 @@ class Contract {
         //     return newContractInstance.options.address;
         //   });
 
-        // const engine_address: string = await deploy_engine
-        //   .deploy({
-        //     data: Enginebytecode,
-        //     arguments: [stake_address]
-        //   })
-        //   .send(parameter, (err: any, transactionHash: any) => {
-        //     console.log("Engine Transaction Hash :", transactionHash);
-        //   })
-        //   .on("confirmation", () => {})
-        //   .then((newContractInstance: any) => {
-        //     // console.log('Deployed Engine Address : ', newContractInstance.options.address);
-        //     return newContractInstance.options.address;
-        //   });
+        const engine_address: string = await deploy_engine
+          .deploy({
+            data: Enginebytecode,
+            arguments: [configs.PUMLSTAKE_ADDRESS, configs.FEE_POOL_ADDRESS]
+          })
+          .send(parameter, (err: any, transactionHash: any) => {
+            console.log("Engine Transaction Hash :", transactionHash);
+          })
+          .on("confirmation", () => {})
+          .then((newContractInstance: any) => {
+            // console.log('Deployed Engine Address : ', newContractInstance.options.address);
+            return newContractInstance.options.address;
+          });
         return {
           success: true,
-          contractAddress: contract_address,
-          engineAddress: "engine_address",
+          contractAddress: "contract_address",
+          engineAddress: engine_address,
           stakeAddress: "stake_address",
           pumlPoolAddress: "puml_pool_address",
           nftPoolAddress: "nft_pool_address"
@@ -524,8 +528,19 @@ class Contract {
     return { success: false, error: "Failed to stake NFT directly!" };
   }
 
-  async withdrawNFT(tokenIds: any) {
+  async withdrawNFT(tokenIds: any, claimAmount: number, pumlxApproved: number) {
     if (web3) {
+      const pumlContract = new web3.eth.Contract(
+        iercABI,
+        configs.PUML20_ADDRESS
+      );
+      if (!pumlxApproved) {
+        await pumlContract.methods
+          .approve(configs.PUMLSTAKE_ADDRESS, web3.utils.toWei("" + 100000))
+          .send({
+            from: EthUtil.getAddress()
+          });
+      }
       const engineContract = new web3.eth.Contract(
         engineABI,
         configs.ENGINE721_ADDRESS
@@ -533,7 +548,11 @@ class Contract {
       for (let key in tokenIds) {
         const PUML_721_ADDRESS = key !== "0x0" ? key : configs.PUML721_ADDRESS;
         await engineContract.methods
-          .withdrawNFT(PUML_721_ADDRESS, tokenIds[key])
+          .withdrawNFT(
+            PUML_721_ADDRESS,
+            tokenIds[key],
+            web3.utils.toWei("" + claimAmount)
+          )
           .send({
             from: EthUtil.getAddress()
           });
@@ -544,14 +563,17 @@ class Contract {
     return { success: false, error: "Failed to buy this item directly!" };
   }
 
-  async collectNftReward(collectAmount: number) {
+  async collectFeeReward(collectAmount: number, totalCollectAmount: number) {
     if (web3) {
       const stakeContract = new web3.eth.Contract(
         PUMLStakeABI,
         configs.PUMLSTAKE_ADDRESS
       );
       const result = await stakeContract.methods
-        .collectNftReward(web3.utils.toWei("" + collectAmount))
+        .collecFeetReward(
+          web3.utils.toWei("" + collectAmount),
+          web3.utils.toWei("" + totalCollectAmount)
+        )
         .send({
           from: EthUtil.getAddress()
         });

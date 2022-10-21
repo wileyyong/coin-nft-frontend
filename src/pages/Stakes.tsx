@@ -4,14 +4,10 @@ import Layout from "components/Layout";
 import Carousel from "react-bootstrap/Carousel";
 import { NotificationManager } from "react-notifications";
 import LoadingSpinner from "components/common/LoadingSpinner";
-import { NftCreateStatus } from "model/NftCreateStatus";
-import StakeNftStatusModal from "components/token/StakeNftStatusModal";
-import UnstakeNftStatusModal from "components/token/UnstakeNftStatusModal";
 import { toast } from "react-toastify";
 
 import { Button, Image } from "react-bootstrap";
 
-import puml from "assets/imgs/puml2.png";
 import stakeImg from "assets/imgs/stake.png";
 import puml1 from "assets/imgs/puml1.png";
 import maskIcon from "assets/imgs/mask.png";
@@ -22,6 +18,7 @@ import UserController from "controller/UserController";
 import SmartContract from "ethereum/Contract";
 
 import { switchNetwork } from "store/User/user.slice";
+import { getETHUSDTCurrency } from "store/Nft/nft.selector";
 import EthUtil from "ethereum/EthUtil";
 import configs from "configs";
 
@@ -44,10 +41,14 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const [lastUpdateTime, setLastUpdateTime] = useState(0);
   const [lastUpdateTimeNFT, setLastUpdateTimeNFT] = useState(0);
+  const [lastUpdateTimeFee, setLastUpdateTimeFee] = useState(0);
   const [reward, setReward] = useState(0);
   const [lastReward, setLastReward] = useState(0);
+  const [nftReward, setNFTReward] = useState(0);
+  const [lastNFTReward, setLastNFTReward] = useState(0);
   const [collect, setCollect] = useState<number>(0);
   const [lastCollect, setLastCollect] = useState<number>(0);
+  const [remainCollect, setRemainCollect] = useState<number>(0);
   const [stakedPumlxBalance, setStakedPumlxBalance] = useState<number>(0);
   const [totalStakedPumlxBalance, setTotalStakedPumlxBalance] =
     useState<number>(0);
@@ -55,15 +56,16 @@ const Stakes: React.FC<StakeProps> = () => {
   const [totalStakedNftBalance, setTotalStakedNftBalance] = useState<number>(0);
   const [compoundingPumlxReward, setCompoudingPumlxReward] = useState(0);
   const [compoundingNftReward, setCompoudingNftReward] = useState(0);
+  const [compoundingFeeReward, setCompoudingFeeReward] = useState(0);
+  const [meFee, setMeFee] = useState(0);
+  const [totalFee, setTotalFee] = useState(0);
 
   const [shows, setShows] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
-  const [showStatusStakeModal, setShowStatusStakeModal] = useState(false);
-  const [showStatusUnstakeModal, setShowStatusUnstakeModal] = useState(false);
-  const [resellNftStatus, setResellNftStatus] = useState(NftCreateStatus.NONE);
   const [apy, setApy] = useState(0);
 
   const pumlx = useAppSelector(getWalletPumlx);
+  const ethDollarPrice = useAppSelector(getETHUSDTCurrency);
 
   const getWidth = () =>
     window.innerWidth ||
@@ -104,14 +106,18 @@ const Stakes: React.FC<StakeProps> = () => {
       if (data && data.length > 0) {
         setLastUpdateTime(parseFloat(data.userLastUpdateTime));
         setLastUpdateTimeNFT(parseFloat(data.userLastUpdateTimeNFT));
+        setLastUpdateTimeFee(parseFloat(data.userLastUpdateTimeFee));
         setStakedPumlxBalance(parseFloat(data.balances));
         setTotalStakedPumlxBalance(parseFloat(data.totalBalances));
         setStakedNftBalance(parseFloat(data.balancesNFT));
         setTotalStakedNftBalance(parseFloat(data.totalBalancesNFT));
         setReward(parseFloat(data.userReward) / 1e18);
         setLastReward(parseFloat(data.userLastReward) / 1e18);
+        setNFTReward(parseFloat(data.userNFTReward) / 1e18);
+        setLastNFTReward(parseFloat(data.userLastNFTReward) / 1e18);
         setCollect(parseFloat(data.userCollect) / 1e18);
         setLastCollect(parseFloat(data.userLastCollect) / 1e18);
+        setRemainCollect(parseFloat(data.userRemainCollect) / 1e18);
       }
       console.log(data);
     };
@@ -134,17 +140,39 @@ const Stakes: React.FC<StakeProps> = () => {
         stakedNftBalance,
         totalStakedNftBalance
       );
+      const compoundingFee = await compound("fee", meFee, totalFee);
       setCompoudingPumlxReward(compoundingPumlx);
       setCompoudingNftReward(compoundingNft);
+      setCompoudingFeeReward(compoundingFee);
     };
+
     setCompound();
   }, [
     lastUpdateTime,
+    lastUpdateTimeNFT,
     stakedPumlxBalance,
     stakedNftBalance,
     totalStakedPumlxBalance,
-    totalStakedNftBalance
+    totalStakedNftBalance,
+    meFee,
+    totalFee
   ]);
+
+  useEffect(() => {
+    const transactionFee = async () => {
+      const lastDate = lastUpdateTimeFee ? lastUpdateTimeFee : 0;
+      const { meFeeAmount, totalFeeAmount } =
+        await NftController.transactionFee({
+          date: lastDate * 1000,
+          address: EthUtil.getAddress(),
+          ethDollarPrice
+        });
+      setMeFee(meFeeAmount);
+      setTotalFee(totalFeeAmount);
+    };
+
+    transactionFee();
+  }, [lastUpdateTimeFee]);
 
   const compound = async (
     token: string,
@@ -170,6 +198,12 @@ const Stakes: React.FC<StakeProps> = () => {
       startRewardNft +
       (configs.NFT_ETH_POOL - parseFloat(poolNft.balance) / 1e18);
 
+    const poolFee: any = await SmartContract.balanceOfPuml(
+      configs.FEE_POOL_ADDRESS
+    );
+    console.log("poolFee", poolFee);
+    const rewardFeeRate = configs.FEE_ETH_REWARD_RATE;
+
     console.log(rewardPumlxRate);
     console.log(rewardNftRate);
 
@@ -182,12 +216,18 @@ const Stakes: React.FC<StakeProps> = () => {
             86400) *
           (new Date().getTime() / 1000 - lastUpdateTime);
       }
-    } else {
+    } else if (token === "nft") {
       if (totalAmount > 0) {
         collected =
           (((((amount / totalAmount) * rewardNftRate) / 6500 / 30) * 6500) /
             86400) *
-          (new Date().getTime() / 1000 - lastUpdateTime);
+          (new Date().getTime() / 1000 - lastUpdateTimeNFT);
+      }
+    } else {
+      if (totalAmount > 0) {
+        collected =
+          (((amount / totalAmount) * rewardFeeRate * 6500) / 86400) *
+          (new Date().getTime() / 1000 - lastUpdateTimeFee);
       }
     }
 
@@ -363,7 +403,20 @@ const Stakes: React.FC<StakeProps> = () => {
 
     try {
       setIsLoading(true);
-      const unstakeResult = await SmartContract.withdrawNFT(ids);
+      const claimAmount = await compound(
+        "nft",
+        ids.length,
+        totalStakedNftBalance
+      );
+
+      const { user } = await UserController.userStats(EthUtil.getAddress());
+      const pumlxApproved = user && user.pumlxApproved ? 1 : 0;
+
+      const unstakeResult = await SmartContract.withdrawNFT(
+        ids,
+        claimAmount,
+        pumlxApproved
+      );
       if (unstakeResult.success) {
         const result = await NftController.stakeToken({
           chainIds: ids,
@@ -462,13 +515,16 @@ const Stakes: React.FC<StakeProps> = () => {
     }
   };
 
-  const collectNftReward = async () => {
+  const collectFeeReward = async () => {
     try {
       setIsLoading(true);
-      if (collectPumlx > compoundingNftReward) {
+      if (collectPumlx > compoundingFeeReward + remainCollect) {
         toast.success("Insufficient compounding reward amount");
       }
-      const collectResult = await SmartContract.collectNftReward(collectPumlx);
+      const collectResult = await SmartContract.collectFeeReward(
+        collectPumlx,
+        compoundingFeeReward + remainCollect
+      );
       if (collectResult.success && collectResult.transactionHash) {
         setCollectPumlx(0);
         toast.success("Collect Successful.");
@@ -538,16 +594,23 @@ const Stakes: React.FC<StakeProps> = () => {
         <div className="stakes__title">
           <div className="item-title">Claim Rewards</div>
           <div className="item-price mt-3">
-            {(compoundingPumlxReward + compoundingNftReward).toFixed(3)} PUMLX
+            {(
+              compoundingPumlxReward +
+              compoundingNftReward +
+              compoundingFeeReward
+            ).toFixed(3)}{" "}
+            PUMLX
           </div>
           <div className="item-desc mt-3">
-            Trading fees collected by our protocol are rewarded to PUMLx stakers
+            Rewards are calculated from the number staked PUMLX + staked NFT’s +
+            Trading Fees
           </div>
         </div>
         <div className="stakes__contain">
           <div className="valupap">
             <div className="valupap__key">
-              Rewards are calculated from the number staked NFTs
+              Trading fees collected by our protocol are rewarded to PUMLx
+              stakers
             </div>
           </div>
           <div className="inp">
@@ -566,7 +629,7 @@ const Stakes: React.FC<StakeProps> = () => {
               <button
                 disabled={collectPumlx === 0 ? true : false}
                 className="btn btn-primary"
-                onClick={collectNftReward}
+                onClick={collectFeeReward}
               >
                 <div className="d-flex flex-row align-items-center">
                   <span>Collect</span>
@@ -606,12 +669,11 @@ const Stakes: React.FC<StakeProps> = () => {
             <div className="valupap__val valupap__val--gray">Compounding</div>
           </div>
           <div className="valupap">
-            <div className="valupap__key">Earned to date:</div>
             <div className="valupap__val">
               <span>
-                {compoundingNftReward.toFixed(3)} <b>PUMLx</b>
+                {(compoundingFeeReward + remainCollect).toFixed(3)} <b>PUMLx</b>
               </span>
-              <i>(${getDollarPrice(compoundingNftReward)})</i>
+              <i>(${getDollarPrice(compoundingFeeReward)})</i>
             </div>
           </div>
         </div>
@@ -620,11 +682,7 @@ const Stakes: React.FC<StakeProps> = () => {
         <div className="stakes__title mb-2">
           <div className="item-title">Stake PUMLx</div>
         </div>
-        <div className="valupap">
-          <div className="valupap__key">
-            Rewards are calculated from the number staked PUMLx
-          </div>
-        </div>
+
         <div className="stakes__contain">
           <div className="tab">
             <div
@@ -728,7 +786,7 @@ const Stakes: React.FC<StakeProps> = () => {
               </span>
             </div>
           </div>
-          <div className="valupap">
+          {/*<div className="valupap">
             <div className="valupap__key">Last reward:</div>
             <div className="valupap__val">
               <span>
@@ -744,7 +802,7 @@ const Stakes: React.FC<StakeProps> = () => {
               </span>
               <i>(${getDollarPrice(reward)})</i>
             </div>
-          </div>
+          </div>*/}
           <div className="valupap">
             <div className="valupap__key">Your stake compounding:</div>
             <div className="valupap__val">
@@ -885,6 +943,15 @@ const Stakes: React.FC<StakeProps> = () => {
             </div>
           </div>
         )}
+      </div>
+      <div className="nft-reward">
+        <div className="nft-reward__key">Total NFT Stake Return:</div>
+        <div className="nft-reward__val">
+          <span>
+            {compoundingNftReward.toFixed(3)} <b>PUMLx</b>
+          </span>
+          <i>(${getDollarPrice(compoundingNftReward)})</i>
+        </div>
       </div>
     </Layout>
   );

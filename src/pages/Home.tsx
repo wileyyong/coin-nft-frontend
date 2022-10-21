@@ -106,6 +106,9 @@ const Home: React.FC<HomeProps> = () => {
     setFeaturedStored(Storage.get("featured"));
     const loadData = async () => {
       setLoading(true);
+      let { offers } = await OfferController.getList("live");
+      setNftTokens(offers);
+
       const featuredNFT = await UserController.getFeatured();
 
       let image: string;
@@ -207,16 +210,6 @@ const Home: React.FC<HomeProps> = () => {
   }, [sellers]);
 
   useEffect(() => {
-    const loadNftTokens = async () => {
-      setLoading(true);
-      let { offers } = await OfferController.getList("live");
-      setNftTokens(offers);
-      setLoading(false);
-    };
-    loadNftTokens();
-  }, []);
-
-  useEffect(() => {
     const setFeature = () => {
       setFeaturedImage(
         featuredStored ? JSON.parse(featuredStored).featuredImage : ticketImage
@@ -233,10 +226,6 @@ const Home: React.FC<HomeProps> = () => {
     };
     setFeature();
   }, [featuredStored]);
-
-  const connectMetaMask = () => {
-    dispatch(connectUserWallet());
-  };
 
   const fileChanged = (e: any) => {
     const file = e.target.files[0];

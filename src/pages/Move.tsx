@@ -318,38 +318,38 @@ const Move: React.FC<MoveProps> = () => {
     }
   };
 
-  useEffect(() => {
-    const getCollect = async () => {
-      if (stakeValue && Object.keys(stakeValue).length > 0) {
-        if (stakeValue.userLastUpdateTime === 0) return;
+  // useEffect(() => {
+  //   const getCollect = async () => {
+  //     if (stakeValue && Object.keys(stakeValue).length > 0) {
+  //       if (stakeValue.userLastUpdateTime === 0) return;
 
-        const { tradingFee } = await NftController.getPumlTradingFee({
-          user: EthUtil.getAddress(),
-          startTime: stakeValue.userLastUpdateTime
-        });
-        setFeeCollect(tradingFee);
+  //       const { tradingFee } = await NftController.getPumlTradingFee({
+  //         user: EthUtil.getAddress(),
+  //         startTime: stakeValue.userLastUpdateTime
+  //       });
+  //       setFeeCollect(tradingFee);
 
-        let collectRate = tradingFee;
-        if (stakeValue.totalBalances > 0) {
-          collectRate += stakeValue.balances / stakeValue.totalBalances;
-        }
-        if (stakeValue.totalBalancesNFT > 0) {
-          collectRate += stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
-        }
-        const balanceOfPumlx: any = await SmartContract.balanceOfPuml(
-          configs.PUMLSTAKE_ADDRESS
-        );
-        const collected =
-          (((collectRate * balanceOfPumlx.balance) / 2372500) *
-            6500 *
-            (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime)) /
-          86400;
+  //       let collectRate = tradingFee;
+  //       if (stakeValue.totalBalances > 0) {
+  //         collectRate += stakeValue.balances / stakeValue.totalBalances;
+  //       }
+  //       if (stakeValue.totalBalancesNFT > 0) {
+  //         collectRate += stakeValue.balancesNFT / stakeValue.totalBalancesNFT;
+  //       }
+  //       const balanceOfPumlx: any = await SmartContract.balanceOfPuml(
+  //         configs.PUMLSTAKE_ADDRESS
+  //       );
+  //       const collected =
+  //         (((collectRate * balanceOfPumlx.balance) / 2372500) *
+  //           6500 *
+  //           (new Date().getTime() / 1000 - stakeValue.userLastUpdateTime)) /
+  //         86400;
 
-        setCollect(collected / 1e18);
-      }
-    };
-    getCollect();
-  }, [stakeValue]);
+  //       setCollect(collected / 1e18);
+  //     }
+  //   };
+  //   getCollect();
+  // }, [stakeValue]);
 
   const connectPuml = () => {
     if (isAuth && walletAddress) {

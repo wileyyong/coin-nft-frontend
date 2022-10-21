@@ -142,43 +142,42 @@ const Header: React.FC<HeaderProps> = () => {
                 Move to Earn
               </Nav.Link>
             </Nav.Item>
-            {isAuth && walletAddress && (
-              <Fragment>
-                <Nav.Item>
-                  <Nav.Link
-                    eventKey="1"
-                    as={Link}
-                    to="/stake"
-                    className="mr-lg-3"
-                    active={location.pathname === "/stake"}
-                  >
-                    Stake to Earn
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link
-                    eventKey="1"
-                    as={Link}
-                    to="/buy"
-                    className="mr-lg-3"
-                    active={location.pathname === "/buy"}
-                  >
-                    Buy Athelete NFT’s
-                  </Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link
-                    eventKey="2"
-                    as={Link}
-                    to="/items"
-                    className="mr-lg-3"
-                    active={location.pathname === "/items"}
-                  >
-                    My NFTs
-                  </Nav.Link>
-                </Nav.Item>
-              </Fragment>
-            )}
+
+            <Fragment>
+              <Nav.Item>
+                <Nav.Link
+                  eventKey="1"
+                  as={Link}
+                  to="/stake"
+                  className="mr-lg-3"
+                  active={location.pathname === "/stake"}
+                >
+                  Stake to Earn
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  eventKey="1"
+                  as={Link}
+                  to="/buy"
+                  className="mr-lg-3"
+                  active={location.pathname === "/buy"}
+                >
+                  Buy Athelete NFT’s
+                </Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link
+                  eventKey="2"
+                  as={Link}
+                  to="/items"
+                  className="mr-lg-3"
+                  active={location.pathname === "/items"}
+                >
+                  My NFTs
+                </Nav.Link>
+              </Nav.Item>
+            </Fragment>
           </Nav>
           <Nav className="ml-auto">
             <Fragment>

@@ -581,20 +581,6 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
         const pumlxApproved = userInfo && userInfo.pumlxApproved ? 1 : 0;
 
         if (token.blockchain && token.blockchain === "PUMLx") {
-          // let buyTokenResult = await SmartContract.transferToken(
-          //   configs.MAIN_ACCOUNT,
-          //   offer.offer_price
-          // );
-          // if (buyTokenResult.success) {
-          //   dispatch(getWalletPumlx());
-          //   let obj: any = {
-          //     tokenId: token.chain_id,
-          //     buyerAddress: EthUtil.getAddress(),
-          //     sellerAddress: offer.creator.wallet,
-          //     buyPrice: offer.offer_price
-          //   };
-          //   buyResult = await TokenController.buyToken(obj);
-          // }
           var buyPrice = 0.000011;
           buyResult = await SmartContract.directBuy(
             token.chain_id,
@@ -625,42 +611,31 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             stake: false
           });
 
-          const approvedresult = await UserController.pumlxApproved(
-            EthUtil.getAddress()
-          );
-          console.log(approvedresult);
+          await UserController.pumlxApproved(EthUtil.getAddress());
 
-          if (token.blockchain && token.blockchain === "PUMLx") {
-            let obj: any = {
-              buyerAddress: EthUtil.getAddress(),
-              sellerAddress: offer.creator.wallet,
-              buyPrice: offer.offer_price
-            };
-            await TokenController.buyToken(obj);
-          }
-          toast.success("You buy this item successfully.");
-          NotificationManager.success(
-            "You buy this item successfully.",
-            "Success"
-          );
+          // if (token.blockchain && token.blockchain === "PUMLx") {
+          let obj: any = {
+            buyerAddress: EthUtil.getAddress(),
+            sellerAddress: offer.creator.wallet,
+            buyPrice: offer.offer_price,
+            token: token.blockchain
+          };
+          await TokenController.buyToken(obj);
+          // }
+          toast.success("Buy NFT successful.");
+          NotificationManager.success("Buy NFT successful.", "Success");
           setShowBuyTokenModal(false);
           loadOffer();
         } else {
           console.log("error", buyResult.error);
-          toast.warning("You failed to buy this item directly.");
-          NotificationManager.error(
-            "You failed to buy this item directly.",
-            "Error"
-          );
+          toast.warning("Failed to buy NFT.");
+          NotificationManager.error("Failed to buy NFT..", "Error");
         }
         setTransProgressing(false);
       }
     } catch (err) {
-      toast.warning("You failed to buy this item directly.");
-      NotificationManager.error(
-        "You failed to buy this item directly.",
-        "Error"
-      );
+      toast.warning("Failed to buy NFT.");
+      NotificationManager.error("Failed to buy NFT.", "Error");
       setTransProgressing(false);
     }
   };

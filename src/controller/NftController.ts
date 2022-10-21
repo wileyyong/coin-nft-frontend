@@ -54,10 +54,9 @@ class NftController {
     );
   }
 
-  public static getPumlTradingFee(payload: any) {
-    return API.post(`${configs.API.TOKEN_URL}/getPumlTradingFee`, payload).then(
-      (res) => res.data
-    );
+  public static transactionFee(payload: any) {
+    let url = configs.API.TOKEN_URL;
+    return API.post(`${url}/transactionFee`, payload).then((res) => res.data);
   }
 }
 
