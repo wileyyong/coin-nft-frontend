@@ -234,36 +234,36 @@ const CreateCollectible: React.FC<CreateCollectibleProps> = () => {
       collection.symbol
     );
     // console.log("contractAddress", contractAddress);
-    console.log("engineAddress", engineAddress);
+    // console.log("engineAddress", engineAddress);
     // console.log("stakeAddress", stakeAddress);
     // console.log("pumlPoolAddress", pumlPoolAddress);
     // console.log("nftPoolAddress", nftPoolAddress);
-    // if (contractAddress === "") {
-    //   window.location.reload();
-    // }
-    // if (success) {
-    //   let formData = Utility.getFormDataFromObject(
-    //     getPureCollectionObj(collection, contractAddress)
-    //   );
-    //   try {
-    //     await CollectionController.create(formData);
-    //     loadCollections();
-    //     setIsLoading(false);
-    //     setShowCollectionDialog(false);
-    //     setContractAddress(contractAddress);
-    //     toast.success("Collection is created successfully.");
-    //     NotificationManager.success(
-    //       "Collection is created successfully.",
-    //       "Success"
-    //     );
-    //   } catch (err) {
-    //     setIsLoading(false);
-    //     console.log(err);
-    //     toast.warning("Create Collection Failed!");
-    //     NotificationManager.error("Create Collection Failed!", "Error");
-    //   }
-    // }
-    // window.location.reload();
+    if (contractAddress === "") {
+      window.location.reload();
+    }
+    if (success) {
+      let formData = Utility.getFormDataFromObject(
+        getPureCollectionObj(collection, contractAddress)
+      );
+      try {
+        await CollectionController.create(formData);
+        loadCollections();
+        setIsLoading(false);
+        setShowCollectionDialog(false);
+        setContractAddress(contractAddress);
+        toast.success("Collection is created successfully.");
+        NotificationManager.success(
+          "Collection is created successfully.",
+          "Success"
+        );
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
+        toast.warning("Create Collection Failed!");
+        NotificationManager.error("Create Collection Failed!", "Error");
+      }
+    }
+    window.location.reload();
   };
 
   const collectionSubmit = async () => {

@@ -480,13 +480,14 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const unstakePumlx = async () => {
     try {
-      setIsLoading(true);
       if (unstakePumlxAmount > stakedPumlxBalance) {
         toast.warning("Insufficient staked");
         NotificationManager.error("Insufficient staked", "Error");
         setIsLoading(false);
         return;
       }
+
+      setIsLoading(true);
 
       const claimAmount = await compound(
         "pumlx",
@@ -517,10 +518,11 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const collectFeeReward = async () => {
     try {
-      setIsLoading(true);
       if (collectPumlx > compoundingFeeReward + remainCollect) {
         toast.success("Insufficient compounding reward amount");
+        return;
       }
+      setIsLoading(true);
       const collectResult = await SmartContract.collectFeeReward(
         collectPumlx,
         compoundingFeeReward + remainCollect

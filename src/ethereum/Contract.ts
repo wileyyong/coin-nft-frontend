@@ -71,19 +71,19 @@ class Contract {
           from: EthUtil.getAddress()
         };
 
-        // const contract_address: string = await deploy_contract
-        //   .deploy({
-        //     data: PUMLbytecode,
-        //     arguments: [name, symbol]
-        //   })
-        //   .send(parameter, (err: any, transactionHash: any) => {
-        //     console.log("Contact Transaction Hash :", transactionHash);
-        //   })
-        //   .on("confirmation", () => {})
-        //   .then((newContractInstance: any) => {
-        //     // console.log('Deployed Contract Address : ', newContractInstance.options.address);
-        //     return newContractInstance.options.address;
-        //   });
+        const contract_address: string = await deploy_contract
+          .deploy({
+            data: PUMLbytecode,
+            arguments: [name, symbol]
+          })
+          .send(parameter, (err: any, transactionHash: any) => {
+            console.log("Contact Transaction Hash :", transactionHash);
+          })
+          .on("confirmation", () => {})
+          .then((newContractInstance: any) => {
+            // console.log('Deployed Contract Address : ', newContractInstance.options.address);
+            return newContractInstance.options.address;
+          });
 
         // const puml_pool_address: string = await deploy_pool
         //   .deploy({
@@ -113,12 +113,7 @@ class Contract {
 
         // const stake_address: string = await deploy_stake
         //   .deploy({
-        //     data: Stakebytecode,
-        //     arguments: [
-        //       configs.PUML_POOL_ADDRESS,
-        //       configs.NFT_POOL_ADDRESS,
-        //       configs.FEE_POOL_ADDRESS
-        //     ]
+        //     data: Stakebytecode
         //   })
         //   .send(parameter, (err: any, transactionHash: any) => {
         //     console.log("Contact Transaction Hash :", transactionHash);
@@ -129,23 +124,23 @@ class Contract {
         //     return newContractInstance.options.address;
         //   });
 
-        const engine_address: string = await deploy_engine
-          .deploy({
-            data: Enginebytecode,
-            arguments: [configs.PUMLSTAKE_ADDRESS, configs.FEE_POOL_ADDRESS]
-          })
-          .send(parameter, (err: any, transactionHash: any) => {
-            console.log("Engine Transaction Hash :", transactionHash);
-          })
-          .on("confirmation", () => {})
-          .then((newContractInstance: any) => {
-            // console.log('Deployed Engine Address : ', newContractInstance.options.address);
-            return newContractInstance.options.address;
-          });
+        // const engine_address: string = await deploy_engine
+        //   .deploy({
+        //     data: Enginebytecode,
+        //     arguments: [configs.PUMLSTAKE_ADDRESS]
+        //   })
+        //   .send(parameter, (err: any, transactionHash: any) => {
+        //     console.log("Engine Transaction Hash :", transactionHash);
+        //   })
+        //   .on("confirmation", () => {})
+        //   .then((newContractInstance: any) => {
+        //     // console.log('Deployed Engine Address : ', newContractInstance.options.address);
+        //     return newContractInstance.options.address;
+        //   });
         return {
           success: true,
-          contractAddress: "contract_address",
-          engineAddress: engine_address,
+          contractAddress: contract_address,
+          engineAddress: "engine_address",
           stakeAddress: "stake_address",
           pumlPoolAddress: "puml_pool_address",
           nftPoolAddress: "nft_pool_address"
@@ -369,7 +364,7 @@ class Contract {
     const ENGINE_721_ADDRESS = this.getEngine721Address(network);
     if (web3) {
       let isPUML = token ? token : 0;
-      if (!pumlxApproved) {
+      if (isPUML > 0 && !pumlxApproved) {
         const pumlContract = new web3.eth.Contract(
           iercABI,
           configs.PUML20_ADDRESS
@@ -570,7 +565,7 @@ class Contract {
         configs.PUMLSTAKE_ADDRESS
       );
       const result = await stakeContract.methods
-        .collecFeetReward(
+        .collectFeeReward(
           web3.utils.toWei("" + collectAmount),
           web3.utils.toWei("" + totalCollectAmount)
         )
