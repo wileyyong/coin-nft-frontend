@@ -82,7 +82,7 @@ const configs = {
   NFT_ETH_FIRST_POOL: 150000,
   FEE_ETH_POOL: 101000,
   FEE_ETH_FIRST_POOL: 50000,
-  FEE_ETH_REWARD_RATE: 0.0138
+  FEE_ETH_REWARD_RATE: 0.02107
 };
 
 export default configs;
