@@ -59,6 +59,7 @@ const Stakes: React.FC<StakeProps> = () => {
   const [compoundingFeeReward, setCompoudingFeeReward] = useState(0);
   const [meFee, setMeFee] = useState(0);
   const [totalFee, setTotalFee] = useState(0);
+  const [firstFeeTime, setFirstFeeTime] = useState(0);
 
   const [shows, setShows] = useState(5);
   const [isLoading, setIsLoading] = useState(false);
@@ -155,18 +156,20 @@ const Stakes: React.FC<StakeProps> = () => {
     totalStakedPumlxBalance,
     totalStakedNftBalance,
     meFee,
-    totalFee
+    totalFee,
+    firstFeeTime
   ]);
 
   useEffect(() => {
     const transactionFee = async () => {
       const lastDate = lastUpdateTimeFee ? lastUpdateTimeFee : 0;
-      const { meFeeAmount, totalFeeAmount } =
+      const { meFeeAmount, totalFeeAmount, timestamp } =
         await NftController.transactionFee({
           date: lastDate * 1000,
           address: EthUtil.getAddress(),
           ethDollarPrice
         });
+      setFirstFeeTime(timestamp / 1000);
       setMeFee(meFeeAmount);
       setTotalFee(totalFeeAmount);
     };
@@ -225,9 +228,11 @@ const Stakes: React.FC<StakeProps> = () => {
       }
     } else {
       if (totalAmount > 0) {
+        const time = lastUpdateTimeFee > 0 ? lastUpdateTimeFee : firstFeeTime;
         collected =
           (((amount / totalAmount) * rewardFeeRate * 6500) / 86400) *
-          (new Date().getTime() / 1000 - lastUpdateTimeFee);
+          (new Date().getTime() / 1000 - time);
+        console.log("ddd", collected);
       }
     }
 
