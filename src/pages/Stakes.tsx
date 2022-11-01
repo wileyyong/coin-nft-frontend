@@ -230,11 +230,10 @@ const Stakes: React.FC<StakeProps> = () => {
       }
     } else {
       if (totalAmount > 0) {
-        const time = lastUpdateTimeFee > 0 ? lastUpdateTimeFee : firstFeeTime;
+        // const time = lastUpdateTimeFee > 0 ? lastUpdateTimeFee : firstFeeTime;
         collected =
           (((amount / totalAmount) * rewardFeeRate * 6500) / 86400) *
-          (new Date().getTime() / 1000 - time);
-        console.log("ddd", collected);
+          (new Date().getTime() / 1000 - firstFeeTime);
       }
     }
 
