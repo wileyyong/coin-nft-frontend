@@ -155,6 +155,7 @@ const Stakes: React.FC<StakeProps> = () => {
     stakedNftBalance,
     totalStakedPumlxBalance,
     totalStakedNftBalance,
+    collect,
     meFee,
     totalFee,
     firstFeeTime
@@ -524,14 +525,14 @@ const Stakes: React.FC<StakeProps> = () => {
 
   const collectFeeReward = async () => {
     try {
-      if (collectPumlx > compoundingFeeReward - collect) {
+      if (collectPumlx > compoundingFeeReward) {
         toast.success("Insufficient compounding reward amount");
         return;
       }
       setIsLoading(true);
       const collectResult = await SmartContract.collectFeeReward(
         collectPumlx,
-        compoundingFeeReward - collect
+        compoundingFeeReward
       );
       if (collectResult.success && collectResult.transactionHash) {
         setCollectPumlx(0);
@@ -679,7 +680,7 @@ const Stakes: React.FC<StakeProps> = () => {
           <div className="valupap">
             <div className="valupap__val">
               <span>
-                {(compoundingFeeReward - collect).toFixed(3)} <b>PUMLx</b>
+                {compoundingFeeReward.toFixed(3)} <b>PUMLx</b>
               </span>
               <i>(${getDollarPrice(compoundingFeeReward)})</i>
             </div>
