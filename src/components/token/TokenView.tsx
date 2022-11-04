@@ -191,11 +191,7 @@ const TokenView: React.FC<TokenViewProps> = ({ item, user, resaleSucced }) => {
           setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
           setShowStatusModal(false);
           resaleSucced();
-          toast.success("Offer is created successfully.");
-          NotificationManager.success(
-            "Offer is created successfully.",
-            "Success"
-          );
+          toast.success("Offer successful.");
         }
       }
     } catch (err) {

@@ -210,7 +210,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     if (!likeDisable) {
       let res = await TokenController.setLike(id);
       if (res.status === 200) {
-        toast.success("Successfully liked!");
+        toast.success("Like Successful!");
         NotificationManager.success("Successfully liked!", "Success");
         setLikes(likes + 1);
         setLikeDisable(true);
@@ -218,8 +218,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
     } else {
       let res = await TokenController.setUnLike(id);
       if (res.status === 200) {
-        toast.success("Successfully unliked!");
-        NotificationManager.success("Successfully unliked!", "Success");
+        toast.success("Unlike Successful!");
         setLikes(likes - 1);
         setLikeDisable(false);
       }
@@ -336,23 +335,21 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
             hash: result.transactionHash
           });
           loadOffer();
-          toast.success("You bid to this item successfully.");
+          toast.success("Bid successful.");
           NotificationManager.success(
             "You bid to this item successfully.",
             "Success"
           );
         } else {
           console.log("error", result.error);
-          toast.warning("You failed to bid this item.");
-          NotificationManager.error("You failed to bid this item.", "Error");
+          toast.warning("Bid Failed.");
         }
         setTransProgressing(false);
         setShowPlaceBidModal(false);
       }
     } catch (err) {
       setTransProgressing(false);
-      toast.warning("You failed to bid this item.");
-      NotificationManager.error("You failed to bid this item.", "Error");
+      toast.warning("Bid Failed.");
     }
   };
 
@@ -368,7 +365,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
       isOwner().user &&
       isOwner().user._id === userInfo._id
     ) {
-      toast.warning("You already owned this item.");
+      toast.warning("Already owned this item.");
       NotificationManager.info("You already owned this item.", "Info");
       return false;
     }
@@ -515,7 +512,7 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           setResellNftStatus(NftCreateStatus.CREATEOFFER_SUCCEED);
           setShowStatusModal(false);
           loadOffer();
-          toast.success("Offer is created successfully.");
+          toast.success("Offer successful.");
           NotificationManager.success(
             "Offer is created successfully.",
             "Success"
@@ -622,19 +619,19 @@ const TokenDetail: React.FC<TokenDetailProps> = () => {
           };
           await TokenController.buyToken(obj);
           // }
-          toast.success("Buy NFT successful.");
+          toast.success("Buy successful.");
           NotificationManager.success("Buy NFT successful.", "Success");
           setShowBuyTokenModal(false);
           loadOffer();
         } else {
           console.log("error", buyResult.error);
-          toast.warning("Failed to buy NFT.");
+          toast.warning("Buy Failed.");
           NotificationManager.error("Failed to buy NFT..", "Error");
         }
         setTransProgressing(false);
       }
     } catch (err) {
-      toast.warning("Failed to buy NFT.");
+      toast.warning("Buy Failed.");
       NotificationManager.error("Failed to buy NFT.", "Error");
       setTransProgressing(false);
     }

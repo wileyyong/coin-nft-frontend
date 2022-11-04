@@ -155,8 +155,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     if (followedAllow) {
       await UserController.userFollow(userInfo._id).then((res: any) => {
         if (res.status === 200) {
-          toast.success("Successfully followed!");
-          NotificationManager.success("Successfully followed!", "Success");
+          toast.success("Follow Successful");
           setFollowedAllow(false);
           categories[6].count += 1;
           setFollowers(followers + 1);
@@ -165,7 +164,7 @@ const UserProfile: React.FC<UserProfileProps> = () => {
     } else {
       await UserController.userUnFollow(userInfo._id).then((res: any) => {
         if (res.status === 200) {
-          toast.success("Successfully unfollowed!");
+          toast.success("Unfollow Successful.");
           NotificationManager.success("Successfully unfollowed!", "Success");
           setFollowedAllow(true);
           categories[6].count -= 1;

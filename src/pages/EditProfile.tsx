@@ -95,11 +95,7 @@ const EditProfile: React.FC<EditProfileProps> = () => {
     await UserController.userSettings(formdata)
       .then((res) => {
         if (res && res.status === 200) {
-          toast.success("Profile Successfully updated!");
-          NotificationManager.success(
-            "Profile Successfully updated!",
-            "Success"
-          );
+          toast.success("Profile Update Successful");
           dispatch(getMyInfo(walletAddress));
         }
       })
