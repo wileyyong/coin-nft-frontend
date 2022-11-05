@@ -45,7 +45,10 @@ const Header: React.FC<HeaderProps> = () => {
 
   const [wAddress, setAddress] = useState("");
   const [mAvatar, setAvatar] = useState(defaultUser);
-  const [theme, setTheme] = useState(Storage.get(configs.STORAGE.THEME) || "");
+
+  const [theme, setTheme] = useState(
+    Storage.get(configs.STORAGE.THEME) || "dark"
+  );
 
   useEffect(() => {
     dispatch(walletPumlx());
@@ -182,7 +185,7 @@ const Header: React.FC<HeaderProps> = () => {
           <Nav className="ml-auto">
             <Fragment>
               <Nav.Item className="b-nav mr-2 pt-2">
-                {theme === "" ? (
+                {theme === "white" ? (
                   <Image
                     className="themeicon"
                     src={MoonIcon}
@@ -199,7 +202,7 @@ const Header: React.FC<HeaderProps> = () => {
                     width="30"
                     alt="sun"
                     onClick={() => {
-                      setTheme("");
+                      setTheme("white");
                     }}
                   />
                 )}
