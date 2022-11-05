@@ -38,9 +38,9 @@
         margin: auto;
       }
       .intro-title {
-        font-size: $h4-font-size;
+        font-size: 20px;
         @include media-breakpoint-down(md) {
-          font-size: $h4-font-size;
+          font-size: 20px;
           padding-top: 0px;
         }
         font-weight: $font-weight-bold;
@@ -85,7 +85,9 @@
           width: 100%;
         }
         > .btn-primary {
-          color: #303537;
+          color: #0e2630;
+          font-size: 16px;
+          font-family: Rubik-semibold;
         }
         &--connect {
           margin-top: 40px;
@@ -448,17 +450,17 @@
 
 [data-theme="dark"] {
   .move-container {
-    background: $bgdark;
+    background: #051626;
     color: $white;
     .section-intro {
-      background: #000c13;
+      background: #051626;
 
       &.welcome-claim {
-        background: $bgdark;
+        background: #051626;
       }
     }
     .move-intro {
-      background: $bgdark;
+      background: #051626;
       .move-sen__step li:before {
         background-color: $black;
       }

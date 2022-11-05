@@ -429,22 +429,22 @@
 
 [data-theme="dark"] {
   .stake-container {
-    background: $bgdark;
+    background: #051626;
     color: $white;
     .section-intro {
-      background: #000c13;
+      background: #051626;
     }
     .stake-intro {
-      background: $bgdark;
+      background: #051626;
     }
     .stakes {
       &__contain {
-        background: $bgdark;
+        background: #051626;
         box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.9);
       }
     }
     .tab__item {
-      border-color: $bgdark;
+      border-color: #051626;
       box-shadow: none;
       &--active {
         border-color: $primary;

@@ -30,6 +30,7 @@ import {
 } from "store/User/user.slice";
 import metaMask from "assets/imgs/MetaMask_Fox.png";
 import defaultUser from "assets/imgs/avatar.png";
+import ConnectWallet from "components/common/modal/ConnectWalletModal";
 
 interface HeaderProps {}
 
@@ -182,8 +183,9 @@ const Header: React.FC<HeaderProps> = () => {
               </Nav.Item>
             </Fragment>
           </Nav>
+
           <Nav className="ml-auto">
-            <Fragment>
+            {/*<Fragment>
               <Nav.Item className="b-nav mr-2 pt-2">
                 {theme === "white" ? (
                   <Image
@@ -207,7 +209,7 @@ const Header: React.FC<HeaderProps> = () => {
                   />
                 )}
               </Nav.Item>
-            </Fragment>
+                </Fragment>*/}
             {isAuth && walletAddress ? (
               <Fragment>
                 {walletAddress === configs.ADMIN_ADDRESS.toLowerCase() && (

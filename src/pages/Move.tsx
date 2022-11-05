@@ -59,7 +59,7 @@ const MoveToEarn = (props: any) => {
     <div className="move-earn">
       <p className="intro-type intro-type--italy">Move to Earn</p>
       <p className="intro-title intro-title--bottom">
-        Scan the QR code to connect your steps and earn PUMLx.
+        Scan the QR code to connect your PUML Wallet and claim PUMLx.
       </p>
       <div className="intro-btn-wallet intro-btn-wallet--connect">
         {!props.walletAddress && (

@@ -743,10 +743,6 @@ const Home: React.FC<HomeProps> = () => {
         )}
       </div>
 
-      <ConnectWallet
-        show={showConnectWallet}
-        handleClose={connectWalletClose}
-      ></ConnectWallet>
       <DepositWallet
         show={showDepositWallet}
         handleClose={depositWalletClose}
